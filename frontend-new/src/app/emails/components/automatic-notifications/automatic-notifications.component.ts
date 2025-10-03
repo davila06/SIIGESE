@@ -1,0 +1,169 @@
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { 
+  NotificationService, 
+  NotificationResult, 
+  CobroVencido, 
+  PolizaVencimiento, 
+  NotificationStatistics 
+} from '../../services/notification.service';
+
+@Component({
+    selector: 'app-automatic-notifications',
+    templateUrl: './automatic-notifications.component.html',
+    styleUrls: ['./automatic-notifications.component.scss'],
+    standalone: false
+})
+export class AutomaticNotificationsComponent implements OnInit {
+  statistics: NotificationStatistics | null = null;
+  overduePayments: CobroVencido[] = [];
+  expiringPolicies: PolizaVencimiento[] = [];
+  
+  isLoading = false;
+  daysBeforeExpiration = 30;
+  
+  displayedColumnsOverdue = ['numeroPoliza', 'clienteNombre', 'montoVencido', 'diasMora', 'actions'];
+  displayedColumnsExpiring = ['numeroPoliza', 'clienteNombre', 'fechaVencimiento', 'diasHastaVencimiento', 'montoAsegurado'];
+
+  constructor(
+    private notificationService: NotificationService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
+  ) { }
+
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  loadData(): void {
+    this.isLoading = true;
+    
+    // Cargar estadísticas
+    this.notificationService.getNotificationStatistics(this.daysBeforeExpiration).subscribe({
+      next: (stats) => {
+        this.statistics = stats;
+      },
+      error: (error) => {
+        console.error('Error cargando estadísticas:', error);
+        this.showMessage('Error cargando estadísticas');
+      }
+    });
+
+    // Cargar cobros vencidos
+    this.notificationService.getOverduePayments().subscribe({
+      next: (cobros) => {
+        this.overduePayments = cobros;
+      },
+      error: (error) => {
+        console.error('Error cargando cobros vencidos:', error);
+        this.showMessage('Error cargando cobros vencidos');
+      }
+    });
+
+    // Cargar pólizas por vencer
+    this.notificationService.getExpiringPolicies(this.daysBeforeExpiration).subscribe({
+      next: (polizas) => {
+        this.expiringPolicies = polizas;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error cargando pólizas por vencer:', error);
+        this.showMessage('Error cargando pólizas por vencer');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  processOverduePayments(): void {
+    this.isLoading = true;
+    this.notificationService.processOverduePayments().subscribe({
+      next: (result: NotificationResult) => {
+        this.handleNotificationResult(result, 'Cobros Vencidos');
+        this.loadData(); // Recargar datos
+      },
+      error: (error) => {
+        console.error('Error procesando cobros vencidos:', error);
+        this.showMessage('Error procesando cobros vencidos');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  processExpiringPolicies(): void {
+    this.isLoading = true;
+    this.notificationService.processExpiringPolicies(this.daysBeforeExpiration).subscribe({
+      next: (result: NotificationResult) => {
+        this.handleNotificationResult(result, 'Pólizas por Vencer');
+        this.loadData(); // Recargar datos
+      },
+      error: (error) => {
+        console.error('Error procesando pólizas por vencer:', error);
+        this.showMessage('Error procesando pólizas por vencer');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  processAllNotifications(): void {
+    this.isLoading = true;
+    this.notificationService.processAllNotifications(this.daysBeforeExpiration).subscribe({
+      next: (result: NotificationResult) => {
+        this.handleNotificationResult(result, 'Todas las Notificaciones');
+        this.loadData(); // Recargar datos
+      },
+      error: (error) => {
+        console.error('Error procesando todas las notificaciones:', error);
+        this.showMessage('Error procesando todas las notificaciones');
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onDaysChange(): void {
+    this.loadData();
+  }
+
+  private handleNotificationResult(result: NotificationResult, type: string): void {
+    this.isLoading = false;
+    
+    if (result.success) {
+      let message = `${type} procesadas exitosamente.\n`;
+      if (result.overduePaymentsSent > 0) {
+        message += `Cobros vencidos: ${result.overduePaymentsSent} enviados`;
+        if (result.overduePaymentsFailed > 0) {
+          message += `, ${result.overduePaymentsFailed} fallidos`;
+        }
+        message += '\n';
+      }
+      if (result.expiringPoliciesSent > 0) {
+        message += `Pólizas por vencer: ${result.expiringPoliciesSent} enviadas`;
+        if (result.expiringPoliciesFailed > 0) {
+          message += `, ${result.expiringPoliciesFailed} fallidas`;
+        }
+      }
+      
+      this.showMessage(message, 'success');
+    } else {
+      this.showMessage(`Error: ${result.message}`, 'error');
+    }
+  }
+
+  private showMessage(message: string, type: 'success' | 'error' | 'info' = 'info'): void {
+    this.snackBar.open(message, 'Cerrar', {
+      duration: 5000,
+      panelClass: type === 'success' ? 'success-snackbar' : type === 'error' ? 'error-snackbar' : ''
+    });
+  }
+
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('es-AR', {
+      style: 'currency',
+      currency: 'ARS'
+    }).format(amount);
+  }
+
+  formatDate(date: Date): string {
+    return new Intl.DateTimeFormat('es-AR').format(new Date(date));
+  }
+}

@@ -1,0 +1,219 @@
+<div class="automatic-notifications-container">
+  <mat-card class="header-card">
+    <mat-card-header>
+      <mat-card-title>🔔 Notificaciones Automáticas</mat-card-title>
+      <mat-card-subtitle>Gestión de cobros vencidos y pólizas por vencer</mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <!-- Configuración -->
+  <mat-card class="config-card">
+    <mat-card-content>
+      <div class="config-section">
+        <mat-form-field appearance="outline">
+          <mat-label>Días antes del vencimiento</mat-label>
+          <input matInput type="number" [(ngModel)]="daysBeforeExpiration" 
+                 (change)="onDaysChange()" min="1" max="365">
+          <mat-hint>Días de anticipación para notificar pólizas por vencer</mat-hint>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Estadísticas -->
+  <div class="statistics-grid" *ngIf="statistics">
+    <mat-card class="stat-card overdue">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">warning</mat-icon>
+          <div class="stat-details">
+            <h3>{{ statistics.overduePaymentsCount }}</h3>
+            <p>Cobros Vencidos</p>
+            <small>{{ formatCurrency(statistics.totalOverdueAmount) }}</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card expiring">
+      <mat-card-content>
+        <div class="stat-content">
+          <mat-icon class="stat-icon">schedule</mat-icon>
+          <div class="stat-details">
+            <h3>{{ statistics.expiringPoliciesCount }}</h3>
+            <p>Pólizas por Vencer</p>
+            <small>{{ formatCurrency(statistics.totalInsuredAmount) }} asegurado</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Botones de Acción -->
+  <mat-card class="actions-card">
+    <mat-card-content>
+      <div class="action-buttons">
+        <button mat-raised-button color="warn" 
+                (click)="processOverduePayments()" 
+                [disabled]="isLoading"
+                class="action-btn">
+          <mat-icon>email</mat-icon>
+          Enviar Cobros Vencidos
+          <span *ngIf="statistics"> ({{ statistics.overduePaymentsCount }})</span>
+        </button>
+
+        <button mat-raised-button color="accent" 
+                (click)="processExpiringPolicies()" 
+                [disabled]="isLoading"
+                class="action-btn">
+          <mat-icon>schedule_send</mat-icon>
+          Enviar Pólizas por Vencer
+          <span *ngIf="statistics"> ({{ statistics.expiringPoliciesCount }})</span>
+        </button>
+
+        <button mat-raised-button color="primary" 
+                (click)="processAllNotifications()" 
+                [disabled]="isLoading"
+                class="action-btn">
+          <mat-icon>send</mat-icon>
+          Procesar Todas
+        </button>
+
+        <button mat-stroked-button 
+                (click)="loadData()" 
+                [disabled]="isLoading"
+                class="action-btn">
+          <mat-icon>refresh</mat-icon>
+          Actualizar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabla de Cobros Vencidos -->
+  <mat-card class="table-card" *ngIf="overduePayments.length > 0">
+    <mat-card-header>
+      <mat-card-title>⚠️ Cobros Vencidos</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="overduePayments" class="overdue-table">
+          <ng-container matColumnDef="numeroPoliza">
+            <th mat-header-cell *matHeaderCellDef>Póliza</th>
+            <td mat-cell *matCellDef="let cobro">{{ cobro.numeroPoliza }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="clienteNombre">
+            <th mat-header-cell *matHeaderCellDef>Cliente</th>
+            <td mat-cell *matCellDef="let cobro">
+              <div>
+                <strong>{{ cobro.clienteNombre }}</strong>
+                <br>
+                <small>{{ cobro.clienteEmail }}</small>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="montoVencido">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let cobro">
+              <span class="amount-overdue">{{ formatCurrency(cobro.montoVencido) }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="diasMora">
+            <th mat-header-cell *matHeaderCellDef>Días de Mora</th>
+            <td mat-cell *matCellDef="let cobro">
+              <mat-chip [class]="cobro.diasMora > 30 ? 'severe-overdue' : 'overdue'">
+                {{ cobro.diasMora }} días
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let cobro">
+              <button mat-icon-button color="primary" 
+                      matTooltip="Ver detalles del cobro">
+                <mat-icon>visibility</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsOverdue"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsOverdue;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabla de Pólizas por Vencer -->
+  <mat-card class="table-card" *ngIf="expiringPolicies.length > 0">
+    <mat-card-header>
+      <mat-card-title>📅 Pólizas por Vencer</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-container">
+        <table mat-table [dataSource]="expiringPolicies" class="expiring-table">
+          <ng-container matColumnDef="numeroPoliza">
+            <th mat-header-cell *matHeaderCellDef>Póliza</th>
+            <td mat-cell *matCellDef="let poliza">{{ poliza.numeroPoliza }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="clienteNombre">
+            <th mat-header-cell *matHeaderCellDef>Cliente</th>
+            <td mat-cell *matCellDef="let poliza">
+              <div>
+                <strong>{{ poliza.clienteNombre }}</strong>
+                <br>
+                <small>{{ poliza.clienteEmail }}</small>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaVencimiento">
+            <th mat-header-cell *matHeaderCellDef>Vencimiento</th>
+            <td mat-cell *matCellDef="let poliza">{{ formatDate(poliza.fechaVencimiento) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="diasHastaVencimiento">
+            <th mat-header-cell *matHeaderCellDef>Días Restantes</th>
+            <td mat-cell *matCellDef="let poliza">
+              <mat-chip [class]="poliza.diasHastaVencimiento <= 7 ? 'urgent' : 'warning'">
+                {{ poliza.diasHastaVencimiento }} días
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="montoAsegurado">
+            <th mat-header-cell *matHeaderCellDef>Monto Asegurado</th>
+            <td mat-cell *matCellDef="let poliza">
+              <span class="amount-insured">{{ formatCurrency(poliza.montoAsegurado) }}</span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsExpiring"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsExpiring;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Loading Spinner -->
+  <div class="loading-container" *ngIf="isLoading">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Procesando notificaciones...</p>
+  </div>
+
+  <!-- Empty State -->
+  <mat-card *ngIf="!isLoading && overduePayments.length === 0 && expiringPolicies.length === 0" 
+            class="empty-state">
+    <mat-card-content>
+      <div class="empty-content">
+        <mat-icon class="empty-icon">check_circle</mat-icon>
+        <h3>¡Todo al día!</h3>
+        <p>No hay cobros vencidos ni pólizas próximas a vencer.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

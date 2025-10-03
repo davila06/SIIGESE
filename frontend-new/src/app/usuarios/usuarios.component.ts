@@ -10,9 +10,10 @@ import { AuthService } from '../services/auth.service';
 import { User, CreateUser, UpdateUser, Role } from '../interfaces/user.interface';
 
 @Component({
-  selector: 'app-usuarios',
-  templateUrl: './usuarios.component.html',
-  styleUrls: ['./usuarios.component.scss']
+    selector: 'app-usuarios',
+    templateUrl: './usuarios.component.html',
+    styleUrls: ['./usuarios.component.scss'],
+    standalone: false
 })
 export class UsuariosComponent implements OnInit, AfterViewInit {
   @ViewChild('formSection') formSection!: ElementRef;

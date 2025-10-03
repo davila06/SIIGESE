@@ -14,9 +14,10 @@ import {
 import { ReclamosService } from '../../services/reclamos.service';
 
 @Component({
-  selector: 'app-reclamos-dashboard',
-  templateUrl: './reclamos-dashboard.component.html',
-  styleUrls: ['./reclamos-dashboard.component.scss']
+    selector: 'app-reclamos-dashboard',
+    templateUrl: './reclamos-dashboard.component.html',
+    styleUrls: ['./reclamos-dashboard.component.scss'],
+    standalone: false
 })
 export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -4,17 +4,19 @@ import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService, User } from './services/auth.service';
+import { TitleService } from './services/title.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sidenav', { static: false }) sidenav!: MatSidenav;
   @ViewChild('sidenavContent', { static: false }) sidenavContent!: ElementRef;
 
-  title = 'SINSEG - Sistema de Seguros';
+  title = 'SIIGESE - Sistema Integral de Gestión de Seguros';
   currentUser$: Observable<User | null>;
   isCollapsed = false;
   isMobile = false;
@@ -23,13 +25,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private titleService: TitleService
   ) {
     this.currentUser$ = this.authService.currentUser$;
     this.checkScreenSize();
   }
 
   ngOnInit(): void {
+    // Inicializar el servicio de título para actualizaciones automáticas
+    this.titleService.updateTitle(this.router.url);
+    
     // Verificar autenticación al iniciar la app
     this.currentUser$.pipe(takeUntil(this.destroy$)).subscribe(user => {
       if (!user && !this.router.url.includes('login')) {
@@ -101,5 +107,26 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAdmin(): boolean {
     return this.authService.hasAnyRole(['Admin']);
+  }
+
+  getCurrentModule(): string {
+    const url = this.router.url;
+    const segments = url.split('/').filter(segment => segment);
+    
+    if (segments.length === 0) return 'Dashboard';
+    
+    const moduleMap: { [key: string]: string } = {
+      'polizas': 'Gestión de Pólizas',
+      'clientes': 'Gestión de Clientes', 
+      'cobros': 'Gestión de Cobros',
+      'emails': 'Sistema de Emails',
+      'reclamos': 'Gestión de Reclamos',
+      'usuarios': 'Gestión de Usuarios',
+      'reportes': 'Reportes',
+      'configuracion': 'Configuración',
+      'dashboard': 'Dashboard'
+    };
+
+    return moduleMap[segments[0]] || 'SIIGESE';
   }
 }

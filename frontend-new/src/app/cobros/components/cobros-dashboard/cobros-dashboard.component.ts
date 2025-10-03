@@ -12,9 +12,10 @@ import {
 import { CobrosService } from '../../services/cobros.service';
 
 @Component({
-  selector: 'app-cobros-dashboard',
-  templateUrl: './cobros-dashboard.component.html',
-  styleUrls: ['./cobros-dashboard.component.scss']
+    selector: 'app-cobros-dashboard',
+    templateUrl: './cobros-dashboard.component.html',
+    styleUrls: ['./cobros-dashboard.component.scss'],
+    standalone: false
 })
 export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;

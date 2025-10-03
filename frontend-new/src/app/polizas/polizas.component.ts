@@ -10,9 +10,10 @@ import { Poliza, CreatePoliza, DataUploadResult } from '../interfaces/user.inter
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-polizas',
-  templateUrl: './polizas.component.html',
-  styleUrls: ['./polizas.component.scss']
+    selector: 'app-polizas',
+    templateUrl: './polizas.component.html',
+    styleUrls: ['./polizas.component.scss'],
+    standalone: false
 })
 export class PolizasComponent implements OnInit, AfterViewInit {
   @ViewChild('fileInput') fileInput!: ElementRef;

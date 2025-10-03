@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 // Angular Material Modules
@@ -35,51 +35,44 @@ import { LoginComponent } from './auth/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    PolizasComponent,
-    LoginComponent,
-    UsuariosComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    FormsModule,
-    
-    // Angular Material
-    MatButtonModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatTableModule,
-    MatIconModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatDividerModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatButtonToggleModule,
-    MatTooltipModule,
-    MatPaginatorModule,
-    MatSortModule,
-    MatChipsModule,
-    MatCheckboxModule,
-    MatDialogModule,
-    MatSidenavModule,
-    MatListModule
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        PolizasComponent,
+        LoginComponent,
+        UsuariosComponent
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        FormsModule,
+        // Angular Material
+        MatButtonModule,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatTableModule,
+        MatIconModule,
+        MatSnackBarModule,
+        MatProgressSpinnerModule,
+        MatDividerModule,
+        MatToolbarModule,
+        MatMenuModule,
+        MatButtonToggleModule,
+        MatTooltipModule,
+        MatPaginatorModule,
+        MatSortModule,
+        MatChipsModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatSidenavModule,
+        MatListModule], providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
+        },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }

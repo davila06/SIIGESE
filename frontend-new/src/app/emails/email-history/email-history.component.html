@@ -1,0 +1,162 @@
+<div class="email-history-container">
+  <div class="header">
+    <h1>📋 Historial de Emails</h1>
+    <p>Consulte todos los emails enviados, su estado y detalles</p>
+  </div>
+
+  <mat-card class="history-card">
+    <mat-card-header>
+      <mat-icon>history</mat-icon>
+      <mat-card-title>Historial de Envíos</mat-card-title>
+      <mat-card-subtitle>Lista completa de emails enviados por el sistema</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtros y acciones -->
+      <div class="filters-actions">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Buscar emails</mat-label>
+          <input matInput 
+                 (keyup)="applyFilter($event)" 
+                 placeholder="Buscar por email, asunto, tipo..."
+                 #input>
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="refreshHistory()"
+                  [disabled]="loading">
+            <mat-icon>refresh</mat-icon>
+            Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading indicator -->
+      <div class="loading-container" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Cargando historial de emails...</p>
+      </div>
+
+      <!-- Tabla de emails -->
+      <div class="table-container" *ngIf="!loading">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- Fecha de envío -->
+          <ng-container matColumnDef="sentAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+            <td mat-cell *matCellDef="let email">
+              <div class="date-cell">
+                <span class="date">{{ email.sentAt | date:'dd/MM/yyyy' }}</span>
+                <span class="time">{{ email.sentAt | date:'HH:mm' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Email destinatario -->
+          <ng-container matColumnDef="toEmail">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Destinatario</th>
+            <td mat-cell *matCellDef="let email">
+              <div class="recipient-cell">
+                <strong>{{ email.toEmail }}</strong>
+                <span *ngIf="email.toName" class="recipient-name">{{ email.toName }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Nombre destinatario -->
+          <ng-container matColumnDef="toName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+            <td mat-cell *matCellDef="let email">{{ email.toName || '-' }}</td>
+          </ng-container>
+
+          <!-- Asunto -->
+          <ng-container matColumnDef="subject">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Asunto</th>
+            <td mat-cell *matCellDef="let email" class="subject-cell">
+              <span [title]="email.subject">{{ email.subject }}</span>
+            </td>
+          </ng-container>
+
+          <!-- Tipo de email -->
+          <ng-container matColumnDef="emailType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+            <td mat-cell *matCellDef="let email">
+              <mat-chip [color]="emailTypeColors[email.emailType]" selected>
+                {{ getEmailTypeLabel(email.emailType) }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Estado -->
+          <ng-container matColumnDef="isSuccess">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td mat-cell *matCellDef="let email">
+              <div class="status-cell">
+                <mat-icon [color]="getStatusColor(email.isSuccess)">
+                  {{ getStatusIcon(email.isSuccess) }}
+                </mat-icon>
+                <span [class]="email.isSuccess ? 'success-text' : 'error-text'">
+                  {{ email.isSuccess ? 'Enviado' : 'Error' }}
+                </span>
+                <span *ngIf="!email.isSuccess && email.errorMessage" 
+                      class="error-message"
+                      [title]="email.errorMessage">
+                  {{ email.errorMessage }}
+                </span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Remitente -->
+          <ng-container matColumnDef="senderName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Enviado por</th>
+            <td mat-cell *matCellDef="let email">{{ email.senderName }}</td>
+          </ng-container>
+
+          <!-- Acciones -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let email">
+              <div class="actions-cell">
+                <button mat-icon-button 
+                        color="primary"
+                        (click)="viewEmailDetails(email)"
+                        matTooltip="Ver detalles">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button 
+                        color="accent"
+                        (click)="resendEmail(email)"
+                        matTooltip="Reenviar email"
+                        [disabled]="!email.isSuccess">
+                  <mat-icon>forward_to_inbox</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- No data message -->
+        <div class="no-data" *ngIf="dataSource.data.length === 0">
+          <mat-icon>email_disabled</mat-icon>
+          <h3>No hay emails en el historial</h3>
+          <p>Aún no se han enviado emails desde el sistema</p>
+        </div>
+      </div>
+
+      <!-- Paginador -->
+      <mat-paginator 
+        [length]="totalEmails"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        (page)="onPageChange($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

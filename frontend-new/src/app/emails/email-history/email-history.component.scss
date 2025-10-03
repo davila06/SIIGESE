@@ -1,0 +1,225 @@
+.email-history-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #666;
+      margin: 0;
+    }
+  }
+
+  .history-card {
+    mat-card-header {
+      mat-icon {
+        color: #2196f3;
+        font-size: 1.5rem;
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-right: 15px;
+      }
+
+      mat-card-title {
+        font-size: 1.3rem;
+        margin: 0;
+      }
+
+      mat-card-subtitle {
+        margin: 5px 0 0 0;
+        color: #666;
+      }
+    }
+
+    mat-card-content {
+      padding: 20px;
+
+      .filters-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 20px;
+
+        .search-field {
+          flex: 1;
+          max-width: 400px;
+        }
+
+        .actions {
+          display: flex;
+          gap: 10px;
+
+          button mat-icon {
+            margin-right: 8px;
+          }
+        }
+      }
+
+      .loading-container {
+        text-align: center;
+        padding: 40px;
+
+        mat-spinner {
+          margin: 0 auto 20px;
+        }
+
+        p {
+          color: #666;
+          font-size: 1.1rem;
+        }
+      }
+
+      .table-container {
+        .mat-table {
+          width: 100%;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+          .date-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+
+            .date {
+              font-weight: 500;
+            }
+
+            .time {
+              font-size: 0.8rem;
+              color: #666;
+            }
+          }
+
+          .recipient-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+
+            .recipient-name {
+              font-size: 0.8rem;
+              color: #666;
+            }
+          }
+
+          .subject-cell {
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .status-cell {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            mat-icon {
+              font-size: 1.2rem;
+            }
+
+            .success-text {
+              color: #4caf50;
+              font-weight: 500;
+            }
+
+            .error-text {
+              color: #f44336;
+              font-weight: 500;
+            }
+
+            .error-message {
+              font-size: 0.7rem;
+              color: #f44336;
+              max-width: 100px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+
+          .actions-cell {
+            display: flex;
+            gap: 5px;
+          }
+        }
+
+        .no-data {
+          text-align: center;
+          padding: 60px 20px;
+          color: #666;
+
+          mat-icon {
+            font-size: 4rem;
+            width: 4rem;
+            height: 4rem;
+            margin-bottom: 20px;
+            color: #bbb;
+          }
+
+          h3 {
+            margin: 0 0 10px 0;
+            color: #777;
+          }
+
+          p {
+            margin: 0;
+            font-size: 0.9rem;
+          }
+        }
+      }
+
+      mat-paginator {
+        margin-top: 20px;
+        border-top: 1px solid #e0e0e0;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .email-history-container {
+    padding: 10px;
+
+    .header h1 {
+      font-size: 1.8rem;
+    }
+
+    .history-card {
+      mat-card-content {
+        padding: 15px;
+
+        .filters-actions {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 15px;
+
+          .search-field {
+            max-width: none;
+          }
+
+          .actions {
+            justify-content: center;
+          }
+        }
+
+        .table-container {
+          overflow-x: auto;
+
+          .mat-table {
+            min-width: 800px;
+          }
+        }
+      }
+    }
+  }
+}

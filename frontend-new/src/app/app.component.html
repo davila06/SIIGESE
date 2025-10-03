@@ -18,8 +18,8 @@
             <mat-icon>security</mat-icon>
           </div>
           <div class="brand-text" [class.collapsed]="isCollapsed && !isMobile">
-            <h3>SIINADSEG</h3>
-            <p>Sistema Integral de Administración de Seguros</p>
+            <h3>SIIGESE</h3>
+            <p>Sistema Integral de Gestión de Seguros</p>
           </div>
         </div>
         
@@ -68,6 +68,16 @@
         
         <a mat-button 
            class="nav-item" 
+           routerLink="/emails" 
+           routerLinkActive="active"
+           (click)="onNavItemClick()">
+          <mat-icon>email</mat-icon>
+          <span [class.collapsed]="isCollapsed && !isMobile">Notificaciones</span>
+          <div class="nav-indicator"></div>
+        </a>
+        
+        <a mat-button 
+           class="nav-item" 
            routerLink="/usuarios" 
            routerLinkActive="active"
            *ngIf="isAdmin()"
@@ -87,6 +97,7 @@
           <div class="user-details" [class.collapsed]="isCollapsed && !isMobile">
             <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
             <span class="user-role">{{ user.roles[0]?.name || 'Usuario' }}</span>
+            <span class="current-module">{{ getCurrentModule() }}</span>
           </div>
         </div>
         
@@ -107,7 +118,10 @@
         <button mat-icon-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <span>{{ title }}</span>
+        <div class="mobile-title">
+          <span class="app-name">SIIGESE</span>
+          <span class="module-name">{{ getCurrentModule() }}</span>
+        </div>
         <span class="toolbar-spacer"></span>
         <div class="mobile-user">
           <span>{{ user.firstName }}</span>

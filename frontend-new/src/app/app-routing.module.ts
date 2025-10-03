@@ -21,6 +21,11 @@ const routes: Routes = [
     loadChildren: () => import('./reclamos/reclamos.module').then(m => m.ReclamosModule),
     canActivate: [AuthGuard]
   },
+  { 
+    path: 'emails', 
+    loadChildren: () => import('./emails/emails.module').then(m => m.EmailsModule),
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: '/login' }
 ];
 

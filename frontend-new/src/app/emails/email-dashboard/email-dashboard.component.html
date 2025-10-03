@@ -1,0 +1,143 @@
+<div class="email-dashboard">
+  <div class="header">
+    <h1>📧 Sistema de Notificaciones</h1>
+    <p>Gestión y envío de notificaciones automáticas y manuales</p>
+  </div>
+
+  <div class="stats-cards" *ngIf="!loading">
+    <mat-card class="stat-card success">
+      <mat-card-header>
+        <mat-icon>mark_email_read</mat-icon>
+        <mat-card-title>Emails Enviados</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-number">{{ stats.totalSent || 0 }}</div>
+        <div class="stat-label">Total este mes</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card error">
+      <mat-card-header>
+        <mat-icon>error_outline</mat-icon>
+        <mat-card-title>Emails Fallidos</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-number">{{ stats.totalFailed || 0 }}</div>
+        <div class="stat-label">Total este mes</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card warning">
+      <mat-card-header>
+        <mat-icon>schedule</mat-icon>
+        <mat-card-title>Cobros Pendientes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-number">{{ stats.pendingCobros || 0 }}</div>
+        <div class="stat-label">Requieren notificación</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card info">
+      <mat-card-header>
+        <mat-icon>policy</mat-icon>
+        <mat-card-title>Pólizas por Vencer</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="stat-number">{{ stats.polizasPorVencer || 0 }}</div>
+        <div class="stat-label">Próximos 30 días</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <p>Cargando información...</p>
+  </div>
+
+  <div class="action-cards">
+    <mat-card class="action-card">
+      <mat-card-header>
+        <mat-icon>email</mat-icon>
+        <mat-card-title>Envío Manual</mat-card-title>
+        <mat-card-subtitle>Enviar emails personalizados</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Redactar y enviar emails manuales a clientes específicos con contenido personalizado.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="navigateToSendEmail()">
+          <mat-icon>edit</mat-icon>
+          Redactar Email
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="action-card">
+      <mat-card-header>
+        <mat-icon>auto_fix_high</mat-icon>
+        <mat-card-title>Notificaciones Automáticas</mat-card-title>
+        <mat-card-subtitle>Envío masivo programado</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Gestionar y enviar notificaciones automáticas de cobros vencidos y pólizas por vencer.</p>
+        <div class="automatic-actions">
+          <button mat-stroked-button 
+                  color="warn" 
+                  (click)="sendAutomaticCobroVencidoNotifications()"
+                  [disabled]="loading">
+            <mat-icon>payment</mat-icon>
+            Cobros Vencidos
+          </button>
+          <button mat-stroked-button 
+                  color="accent" 
+                  (click)="sendAutomaticPolizasPorVencerNotifications()"
+                  [disabled]="loading">
+            <mat-icon>schedule</mat-icon>
+            Pólizas por Vencer
+          </button>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="navigateToNotifications()">
+          <mat-icon>settings</mat-icon>
+          Gestionar Notificaciones
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="action-card">
+      <mat-card-header>
+        <mat-icon>history</mat-icon>
+        <mat-card-title>Historial de Emails</mat-card-title>
+        <mat-card-subtitle>Revisar envíos anteriores</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Consultar el historial completo de emails enviados, éxitos y errores.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent" (click)="navigateToEmailHistory()">
+          <mat-icon>visibility</mat-icon>
+          Ver Historial
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="action-card">
+      <mat-card-header>
+        <mat-icon>design_services</mat-icon>
+        <mat-card-title>Templates Personalizados</mat-card-title>
+        <mat-card-subtitle>Personalizar mensajes</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Crear y gestionar templates personalizados para los diferentes tipos de notificaciones.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="navigateToTemplates()">
+          <mat-icon>edit_note</mat-icon>
+          Gestionar Templates
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
