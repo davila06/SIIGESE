@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      email: ['admin@sinseg.com', [Validators.required, Validators.email]],
+      password: ['password123', [Validators.required, Validators.minLength(6)]]
     });
 
     this.resetPasswordForm = this.fb.group({
