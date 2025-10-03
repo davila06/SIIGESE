@@ -1,5 +1,14 @@
 <div class="login-container">
   <mat-card class="login-card">
+    <!-- Logo/Icono -->
+    <div class="login-logo">
+      <div class="logo-icon">
+        <mat-icon class="security-icon">security</mat-icon>
+      </div>
+      <h2 class="brand-name">SINSEG</h2>
+      <p class="brand-subtitle">Sistema Integral de Administración de Seguros</p>
+    </div>
+    
     <mat-card-header>
       <mat-card-title class="login-title">
         {{ showResetForm ? 'Resetear Contraseña' : 'Iniciar Sesión' }}
@@ -109,7 +118,7 @@
     <mat-card-actions class="login-actions" *ngIf="!showResetForm">
       <p class="demo-credentials">
         <strong>Credenciales de prueba:</strong><br>
-        Email: admin&#64;sinseg.com<br>
+        Email: admin@sinseg.com<br>
         Contraseña: password123
       </p>
     </mat-card-actions>
