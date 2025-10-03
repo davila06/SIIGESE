@@ -1,0 +1,313 @@
+<div class="reclamos-dashboard">
+  <!-- Header con título y acciones -->
+  <div class="dashboard-header">
+    <h1 class="page-title">
+      <mat-icon>assignment</mat-icon>
+      Gestión de Reclamos
+    </h1>
+    <div class="header-actions">
+      <button mat-raised-button color="accent" (click)="crearNuevoReclamo()">
+        <mat-icon>add</mat-icon>
+        Nuevo Reclamo
+      </button>
+      <button mat-raised-button color="primary" (click)="exportarReclamos()">
+        <mat-icon>download</mat-icon>
+        Exportar
+      </button>
+    </div>
+  </div>
+
+  <!-- Cards de estadísticas -->
+  <div class="stats-container" *ngIf="stats">
+    <mat-card class="stat-card pending">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>schedule</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.totalPendientes }}</h3>
+            <p>Pendientes</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card reviewing">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>rate_review</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.totalEnRevision }}</h3>
+            <p>En Revisión</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card approved">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.totalAprobados }}</h3>
+            <p>Aprobados</p>
+            <span class="stat-amount">${{ stats.montoTotalAprobado | number:'1.2-2' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card resolved">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon">
+            <mat-icon>task_alt</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3>{{ stats.totalResueltos }}</h3>
+            <p>Resueltos</p>
+            <span class="stat-time">{{ stats.tiempoPromedioResolucion }} días promedio</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Loading para estadísticas -->
+  <div class="stats-loading" *ngIf="!stats">
+    <mat-card class="stat-card" *ngFor="let i of [1,2,3,4]">
+      <mat-card-content>
+        <mat-spinner diameter="40"></mat-spinner>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Filtros y controles -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-container">
+        <mat-form-field class="search-field" appearance="outline">
+          <mat-label>Buscar reclamos</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Buscar por número, cliente o descripción...">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <div class="filter-groups">
+          <!-- Filtro por Estado -->
+          <div class="filter-group">
+            <span class="filter-label">Estado:</span>
+            <mat-chip-set>
+              <mat-chip 
+                [class.selected]="filtroEstado === ''"
+                (click)="filtrarPorEstado('')">
+                Todos
+              </mat-chip>
+              <mat-chip 
+                [class.selected]="filtroEstado === EstadoReclamo.PENDIENTE"
+                (click)="filtrarPorEstado(EstadoReclamo.PENDIENTE)">
+                Pendientes
+              </mat-chip>
+              <mat-chip 
+                [class.selected]="filtroEstado === EstadoReclamo.EN_REVISION"
+                (click)="filtrarPorEstado(EstadoReclamo.EN_REVISION)">
+                En Revisión
+              </mat-chip>
+              <mat-chip 
+                [class.selected]="filtroEstado === EstadoReclamo.APROBADO"
+                (click)="filtrarPorEstado(EstadoReclamo.APROBADO)">
+                Aprobados
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <!-- Filtro por Tipo -->
+          <div class="filter-group">
+            <span class="filter-label">Tipo:</span>
+            <mat-chip-set>
+              <mat-chip 
+                [class.selected]="filtroTipo === TipoReclamo.SINIESTRO"
+                (click)="filtrarPorTipo(TipoReclamo.SINIESTRO)">
+                Siniestros
+              </mat-chip>
+              <mat-chip 
+                [class.selected]="filtroTipo === TipoReclamo.REEMBOLSO"
+                (click)="filtrarPorTipo(TipoReclamo.REEMBOLSO)">
+                Reembolsos
+              </mat-chip>
+              <mat-chip 
+                [class.selected]="filtroTipo === TipoReclamo.QUEJA_SERVICIO"
+                (click)="filtrarPorTipo(TipoReclamo.QUEJA_SERVICIO)">
+                Quejas
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <!-- Botón limpiar filtros -->
+          <button mat-stroked-button (click)="limpiarFiltros()" *ngIf="filtroEstado || filtroTipo || filtroPrioridad">
+            <mat-icon>clear</mat-icon>
+            Limpiar Filtros
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tabla de reclamos -->
+  <mat-card class="table-card">
+    <mat-card-content>
+      <div class="table-container">
+        <!-- Loading spinner -->
+        <div class="loading-container" *ngIf="loading">
+          <mat-spinner></mat-spinner>
+          <p>Cargando reclamos...</p>
+        </div>
+
+        <!-- Tabla -->
+        <table mat-table [dataSource]="dataSource" matSort *ngIf="!loading" class="reclamos-table">
+          <!-- Columna Número de Reclamo -->
+          <ng-container matColumnDef="numeroReclamo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Reclamo</th>
+            <td mat-cell *matCellDef="let reclamo">
+              <strong>{{ reclamo.numeroReclamo }}</strong>
+            </td>
+          </ng-container>
+
+          <!-- Columna Número de Póliza -->
+          <ng-container matColumnDef="numeroPoliza">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Póliza</th>
+            <td mat-cell *matCellDef="let reclamo">{{ reclamo.numeroPoliza }}</td>
+          </ng-container>
+
+          <!-- Columna Cliente -->
+          <ng-container matColumnDef="cliente">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+            <td mat-cell *matCellDef="let reclamo">
+              {{ reclamo.clienteNombre }} {{ reclamo.clienteApellido }}
+            </td>
+          </ng-container>
+
+          <!-- Columna Tipo de Reclamo -->
+          <ng-container matColumnDef="tipoReclamo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+            <td mat-cell *matCellDef="let reclamo">
+              <div class="tipo-reclamo">
+                <mat-icon>{{ getTipoIcon(reclamo.tipoReclamo) }}</mat-icon>
+                <span>{{ reclamo.tipoReclamo }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Columna Fecha de Reclamo -->
+          <ng-container matColumnDef="fechaReclamo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+            <td mat-cell *matCellDef="let reclamo">
+              {{ reclamo.fechaReclamo | date:'dd/MM/yyyy' }}
+            </td>
+          </ng-container>
+
+          <!-- Columna Monto Reclamado -->
+          <ng-container matColumnDef="montoReclamado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
+            <td mat-cell *matCellDef="let reclamo">
+              <span *ngIf="reclamo.montoReclamado">${{ reclamo.montoReclamado | number:'1.2-2' }}</span>
+              <span *ngIf="!reclamo.montoReclamado">-</span>
+            </td>
+          </ng-container>
+
+          <!-- Columna Estado -->
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+            <td mat-cell *matCellDef="let reclamo">
+              <mat-chip [color]="getEstadoColor(reclamo.estado)" selected>
+                <mat-icon matChipAvatar>{{ getEstadoIcon(reclamo.estado) }}</mat-icon>
+                {{ reclamo.estado }}
+              </mat-chip>
+            </td>
+          </ng-container>
+
+          <!-- Columna Prioridad -->
+          <ng-container matColumnDef="prioridad">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Prioridad</th>
+            <td mat-cell *matCellDef="let reclamo">
+              <span class="prioridad-badge" [style.background-color]="getPrioridadColor(reclamo.prioridad)">
+                {{ reclamo.prioridad }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Columna Asignado A -->
+          <ng-container matColumnDef="asignadoA">
+            <th mat-header-cell *matHeaderCellDef>Asignado A</th>
+            <td mat-cell *matCellDef="let reclamo">
+              <span *ngIf="reclamo.asignadoA">{{ reclamo.asignadoA }}</span>
+              <span *ngIf="!reclamo.asignadoA" class="sin-asignar">Sin asignar</span>
+            </td>
+          </ng-container>
+
+          <!-- Columna Acciones -->
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let reclamo">
+              <div class="action-buttons">
+                <button 
+                  mat-icon-button 
+                  color="primary"
+                  (click)="verDetalle(reclamo)"
+                  matTooltip="Ver detalle">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                
+                <button 
+                  mat-icon-button 
+                  color="accent"
+                  *ngIf="reclamo.estado !== EstadoReclamo.CERRADO"
+                  (click)="cambiarEstado(reclamo)"
+                  matTooltip="Cambiar estado">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                
+                <button 
+                  mat-icon-button 
+                  color="warn"
+                  *ngIf="!reclamo.asignadoA"
+                  (click)="asignarReclamo(reclamo)"
+                  matTooltip="Asignar reclamo">
+                  <mat-icon>person_add</mat-icon>
+                </button>
+
+                <button 
+                  mat-icon-button 
+                  (click)="subirDocumento(reclamo)"
+                  matTooltip="Subir documento">
+                  <mat-icon>attach_file</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Mensaje cuando no hay datos -->
+        <div class="no-data" *ngIf="!loading && dataSource.data.length === 0">
+          <mat-icon>assignment_off</mat-icon>
+          <h3>No hay reclamos disponibles</h3>
+          <p>No se encontraron reclamos que coincidan con los filtros aplicados.</p>
+        </div>
+
+        <!-- Paginador -->
+        <mat-paginator 
+          *ngIf="!loading && dataSource.data.length > 0"
+          [pageSizeOptions]="[10, 25, 50, 100]"
+          showFirstLastButtons>
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

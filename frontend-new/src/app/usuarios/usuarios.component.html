@@ -1,0 +1,254 @@
+<div class="usuarios-container">
+  <div class="content-wrapper">
+    <h2 style="color: white; text-align: center; margin-bottom: 30px; font-size: 28px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Gestión de Usuarios</h2>
+
+    <!-- Mensaje informativo para no administradores -->
+    <mat-card *ngIf="!isAdmin()" class="info-card">
+      <mat-card-content>
+        <div class="access-denied-message">
+          <mat-icon color="warn">security</mat-icon>
+          <h3>Acceso Restringido</h3>
+          <p>Solo los administradores pueden crear y gestionar usuarios del sistema.</p>
+          <p>Si necesitas acceso administrativo, contacta con el administrador del sistema.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Formulario para crear/editar usuario - Solo visible para administradores -->
+    <mat-card class="form-section" #formSection *ngIf="isAdmin()">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>{{isEditMode ? 'edit' : 'person_add'}}</mat-icon>
+          {{formTitle}}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Nombre de Usuario</mat-label>
+              <input matInput formControlName="userName" required>
+              <mat-error *ngIf="userForm.get('userName')?.hasError('required')">
+                Nombre de usuario es requerido
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" required>
+              <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+                Email es requerido
+              </mat-error>
+              <mat-error *ngIf="userForm.get('email')?.hasError('email')">
+                Email debe ser válido
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="firstName" required>
+              <mat-error *ngIf="userForm.get('firstName')?.hasError('required')">
+                Nombre es requerido
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Apellido</mat-label>
+              <input matInput formControlName="lastName" required>
+              <mat-error *ngIf="userForm.get('lastName')?.hasError('required')">
+                Apellido es requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row" *ngIf="!isEditMode">
+            <mat-form-field>
+              <mat-label>Contraseña</mat-label>
+              <input matInput type="password" formControlName="password" required>
+              <mat-error *ngIf="userForm.get('password')?.hasError('required')">
+                Contraseña es requerida
+              </mat-error>
+              <mat-error *ngIf="userForm.get('password')?.hasError('minlength')">
+                Contraseña debe tener al menos 6 caracteres
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Confirmar Contraseña</mat-label>
+              <input matInput type="password" formControlName="confirmPassword" required>
+              <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('required')">
+                Confirmación de contraseña es requerida
+              </mat-error>
+              <mat-error *ngIf="userForm.hasError('passwordMismatch')">
+                Las contraseñas no coinciden
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field>
+              <mat-label>Roles</mat-label>
+              <mat-select formControlName="roleIds" multiple>
+                <mat-option *ngFor="let role of availableRoles" [value]="role.id">
+                  {{role.name}} - {{role.description}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="userForm.get('roleIds')?.hasError('required')">
+                Debe seleccionar al menos un rol
+              </mat-error>
+            </mat-form-field>
+
+            <mat-checkbox formControlName="isActive" class="active-checkbox">
+              Usuario Activo
+            </mat-checkbox>
+          </div>
+
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid || isLoading">
+              <mat-icon>{{isEditMode ? 'save' : 'person_add'}}</mat-icon>
+              {{submitButtonText}}
+            </button>
+            <button mat-button type="button" (click)="cancelEdit()" *ngIf="isEditMode">
+              <mat-icon>cancel</mat-icon>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+    <!-- Toolbar de búsqueda y filtros -->
+    <mat-card class="toolbar-section">
+      <mat-card-content>
+        <div class="toolbar">
+          <mat-form-field class="search-field">
+            <mat-label>Buscar usuarios...</mat-label>
+            <input matInput [(ngModel)]="searchTerm" (input)="applyFilter()" placeholder="Nombre, email o usuario">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+          
+          <div class="toolbar-actions">
+            <button mat-raised-button color="primary" (click)="scrollToForm()">
+              <mat-icon>person_add</mat-icon>
+              Nuevo Usuario
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Tabla de usuarios -->
+    <mat-card class="table-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>people</mat-icon>
+          Lista de Usuarios ({{filteredUsers.length}})
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-container">
+          <table mat-table [dataSource]="usersDataSource" class="users-table" matSort>
+            <!-- Columna Usuario -->
+            <ng-container matColumnDef="userName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuario</th>
+              <td mat-cell *matCellDef="let user">
+                <div class="user-info">
+                  <mat-icon class="user-avatar">account_circle</mat-icon>
+                  <div>
+                    <div class="user-name">{{user.userName}}</div>
+                    <div class="user-email">{{user.email}}</div>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Columna Nombre Completo -->
+            <ng-container matColumnDef="fullName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre Completo</th>
+              <td mat-cell *matCellDef="let user">{{user.firstName}} {{user.lastName}}</td>
+            </ng-container>
+
+            <!-- Columna Roles -->
+            <ng-container matColumnDef="roles">
+              <th mat-header-cell *matHeaderCellDef>Roles</th>
+              <td mat-cell *matCellDef="let user">
+                <div class="roles-container">
+                  <mat-chip-set>
+                    <mat-chip *ngFor="let role of user.roles" [color]="getRoleColor(role.name)">
+                      {{role.name}}
+                    </mat-chip>
+                  </mat-chip-set>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Columna Estado -->
+            <ng-container matColumnDef="isActive">
+              <th mat-header-cell *matHeaderCellDef>Estado</th>
+              <td mat-cell *matCellDef="let user">
+                <mat-chip [color]="user.isActive ? 'primary' : 'warn'">
+                  <mat-icon>{{user.isActive ? 'check_circle' : 'cancel'}}</mat-icon>
+                  {{user.isActive ? 'Activo' : 'Inactivo'}}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Columna Último Login -->
+            <ng-container matColumnDef="lastLoginAt">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Último Acceso</th>
+              <td mat-cell *matCellDef="let user">
+                {{user.lastLoginAt ? (user.lastLoginAt | date:'dd/MM/yyyy HH:mm') : 'Nunca'}}
+              </td>
+            </ng-container>
+
+            <!-- Columna Acciones -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let user">
+                <div class="action-buttons" *ngIf="isAdmin()">
+                  <button mat-icon-button color="primary" (click)="editUser(user)" [disabled]="isLoading">
+                    <mat-icon>edit_note</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="deleteUser(user)" [disabled]="isLoading || user.id === currentUserId">
+                    <mat-icon>delete_sweep</mat-icon>
+                  </button>
+                </div>
+                <div class="restricted-access" *ngIf="!isAdmin()">
+                  <mat-icon color="primary">visibility</mat-icon>
+                  <span>Solo lectura</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                [class.selected]="selectedUser?.id === row.id"
+                (click)="selectUser(row)"></tr>
+          </table>
+
+          <!-- Mensaje cuando no hay datos -->
+          <div *ngIf="filteredUsers.length === 0 && !isLoading" class="no-data">
+            <mat-icon>person_off</mat-icon>
+            <p>No se encontraron usuarios</p>
+          </div>
+
+          <!-- Loading spinner -->
+          <div *ngIf="isLoading" class="loading">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Cargando usuarios...</p>
+          </div>
+        </div>
+
+        <!-- Paginador -->
+        <mat-paginator [pageSizeOptions]="pageSizeOptions" 
+                       [pageSize]="pageSize" 
+                       showFirstLastButtons>
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+FORMATO EXCEL PARA CARGA DE PÓLIZAS
+=====================================
+
+El archivo Excel debe tener las siguientes columnas en el orden especificado:
+
+COLUMNAS REQUERIDAS (Posiciones 1-8):
+1. POLIZA - Número de póliza (texto único, no puede estar vacío)
+2. MOD - Modalidad (texto, no puede estar vacío)
+3. NOMBRE - Nombre del asegurado (texto, no puede estar vacío)
+4. PRIMA - Prima de la póliza (número decimal, ej: 1500.50)
+5. MONEDA - Moneda (COP, USD, EUR solamente)
+6. FECHA - Fecha de vigencia (formato: dd/MM/yyyy, dd-MM-yyyy, etc.)
+7. FRECUENCIA - Frecuencia de pago (texto, no puede estar vacío)
+8. ASEGURADORA - Nombre de la aseguradora (texto, no puede estar vacío)
+
+COLUMNAS OPCIONALES (Posiciones 9-11):
+9. PLACA - Placa del vehículo (opcional)
+10. MARCA - Marca del vehículo (opcional)
+11. MODELO - Modelo del vehículo (opcional)
+
+EJEMPLO DE DATOS:
+POLIZA     | MOD      | NOMBRE         | PRIMA   | MONEDA | FECHA      | FRECUENCIA | ASEGURADORA | PLACA   | MARCA | MODELO
+POL-001    | AUTO     | Juan Pérez     | 1500.50 | COP    | 01/12/2024 | MENSUAL    | Seguros XYZ | ABC123  | Toyota| Corolla
+POL-002    | VIDA     | María García   | 2000.00 | USD    | 15/01/2025 | ANUAL      | Seguros ABC |         |       |
+POL-003    | HOGAR    | Carlos López   | 800.75  | COP    | 20/02/2024 | TRIMESTRAL | Seguros DEF |         |       |
+
+NOTAS IMPORTANTES:
+- La primera fila debe contener los encabezados exactos
+- Las columnas POLIZA, MOD, NOMBRE, PRIMA, MONEDA, FECHA, FRECUENCIA y ASEGURADORA son obligatorias
+- El número de póliza debe ser único en el sistema
+- Las monedas válidas son: COP, USD, EUR
+- Las fechas pueden estar en varios formatos (dd/MM/yyyy, MM/dd/yyyy, yyyy-MM-dd, etc.)
+- Las columnas PLACA, MARCA y MODELO son opcionales y pueden estar vacías

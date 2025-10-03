@@ -1,0 +1,117 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title class="login-title">
+        {{ showResetForm ? 'Resetear Contraseña' : 'Iniciar Sesión' }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{ showResetForm ? 'Ingresa tu email para recibir instrucciones' : 'Accede a tu cuenta SINSEG' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Formulario de Login -->
+      <form *ngIf="!showResetForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput
+                 type="email"
+                 formControlName="email"
+                 placeholder="tu@email.com"
+                 autocomplete="email">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            {{ getErrorMessage('email') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput
+                 [type]="hidePassword ? 'password' : 'text'"
+                 formControlName="password"
+                 placeholder="Tu contraseña"
+                 autocomplete="current-password">
+          <button mat-icon-button
+                  matSuffix
+                  (click)="hidePassword = !hidePassword"
+                  [attr.aria-label]="'Hide password'"
+                  [attr.aria-pressed]="hidePassword"
+                  type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            {{ getErrorMessage('password') }}
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="loginForm.invalid || isLoading"
+                class="login-button full-width">
+          <mat-spinner *ngIf="isLoading" diameter="20" class="spinner"></mat-spinner>
+          <span *ngIf="!isLoading">Iniciar Sesión</span>
+          <span *ngIf="isLoading">Iniciando...</span>
+        </button>
+
+        <!-- Enlace para resetear contraseña -->
+        <div class="reset-link-container">
+          <button mat-button 
+                  type="button"
+                  color="primary"
+                  (click)="toggleResetForm()"
+                  class="reset-link">
+            ¿Olvidaste tu contraseña?
+          </button>
+        </div>
+      </form>
+
+      <!-- Formulario de Reset Password -->
+      <form *ngIf="showResetForm" [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="reset-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput
+                 type="email"
+                 formControlName="email"
+                 placeholder="tu@email.com"
+                 autocomplete="email">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
+            {{ getErrorMessage('email') }}
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="resetPasswordForm.invalid || isResettingPassword"
+                class="reset-button full-width">
+          <mat-spinner *ngIf="isResettingPassword" diameter="20" class="spinner"></mat-spinner>
+          <span *ngIf="!isResettingPassword">Enviar Enlace de Reseteo</span>
+          <span *ngIf="isResettingPassword">Enviando...</span>
+        </button>
+
+        <!-- Enlace para volver al login -->
+        <div class="back-link-container">
+          <button mat-button 
+                  type="button"
+                  color="primary"
+                  (click)="toggleResetForm()"
+                  class="back-link">
+            <mat-icon>arrow_back</mat-icon>
+            Volver al login
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions class="login-actions" *ngIf="!showResetForm">
+      <p class="demo-credentials">
+        <strong>Credenciales de prueba:</strong><br>
+        Email: admin@sinseg.com<br>
+        Contraseña: password123
+      </p>
+    </mat-card-actions>
+  </mat-card>
+</div>

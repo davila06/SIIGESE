@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Login</title>
+</head>
+<body>
+    <h1>Test de Login</h1>
+    <div>
+        <label>Email:</label>
+        <input type="email" id="email" value="admin@sinseg.com">
+    </div>
+    <div>
+        <label>Password:</label>
+        <input type="password" id="password" value="password123">
+    </div>
+    <button onclick="testLogin()">Test Login</button>
+    <div id="result"></div>
+
+    <script>
+        async function testLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+
+            console.log('Intentando login con:', { email, password });
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const contentType = response.headers.get('content-type');
+                let result;
+                
+                if (contentType && contentType.includes('application/json')) {
+                    result = await response.json();
+                } else {
+                    result = await response.text();
+                }
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                console.log('Response body:', result);
+
+                resultDiv.innerHTML = `
+                    <h3>Response Status: ${response.status} ${response.statusText}</h3>
+                    <h3>Content-Type: ${contentType || 'N/A'}</h3>
+                    <h3>Response:</h3>
+                    <pre>${JSON.stringify(result, null, 2)}</pre>
+                `;
+            } catch (error) {
+                console.error('Error completo:', error);
+                resultDiv.innerHTML = `
+                    <h3>Error:</h3>
+                    <pre>${error.message}</pre>
+                    <p>Revisa la consola del navegador para más detalles.</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

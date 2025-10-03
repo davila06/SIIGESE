@@ -1,0 +1,43 @@
+2025-10-02 17:55:30.965 -06:00 [INF] Executed DbCommand (32ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 17:55:31.066 -06:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 17:55:31.075 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 17:55:31.080 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 17:55:31.115 -06:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-02 17:55:31.150 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-02 17:55:31.153 -06:00 [INF] Database migration completed successfully
+2025-10-02 17:55:31.180 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-02 17:55:31.334 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-02 17:55:31.338 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-02 17:55:31.339 -06:00 [INF] Hosting environment: Production
+2025-10-02 17:55:31.342 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-02 18:08:32.967 -06:00 [INF] Application is shutting down...
+2025-10-02 18:11:51.111 -06:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 18:11:51.178 -06:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 18:11:51.185 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 18:11:51.187 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 18:11:51.210 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-02 18:11:51.233 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-02 18:11:51.236 -06:00 [INF] Database migration completed successfully
+2025-10-02 18:11:51.255 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-02 18:11:51.303 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-02 18:11:51.306 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-02 18:11:51.308 -06:00 [INF] Hosting environment: Production
+2025-10-02 18:11:51.310 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-02 18:17:13.556 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/ - null null
+2025-10-02 18:17:13.580 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-02 18:17:13.630 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/ - 404 0 null 75.3707ms
+2025-10-02 18:17:13.634 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5000/, Response status code: 404

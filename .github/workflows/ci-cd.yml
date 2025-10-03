@@ -1,0 +1,270 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  DOTNET_VERSION: '6.0.x'
+  NODE_VERSION: '16.x'
+  AZURE_WEBAPP_NAME: 'enterprise-web-app'
+  AZURE_WEBAPP_PACKAGE_PATH: './backend'
+
+jobs:
+  # Backend Build and Test
+  backend-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./backend
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      working-directory: ./backend
+    
+    - name: Run Unit Tests
+      run: dotnet test --no-build --verbosity normal --configuration Release --collect:"XPlat Code Coverage"
+      working-directory: ./backend
+    
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        directory: ./backend/tests/*/TestResults/*/coverage.cobertura.xml
+        fail_ci_if_error: false
+
+  # Frontend Build and Test
+  frontend-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: './frontend/package-lock.json'
+    
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./frontend
+    
+    - name: Lint
+      run: npm run lint
+      working-directory: ./frontend
+    
+    - name: Build
+      run: npm run build:prod
+      working-directory: ./frontend
+    
+    - name: Run Unit Tests
+      run: npm run test:ci
+      working-directory: ./frontend
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: frontend-test-results
+        path: ./frontend/coverage/
+
+  # Integration Tests
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: [backend-test, frontend-test]
+    
+    services:
+      sqlserver:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        env:
+          SA_PASSWORD: TestPassword123!
+          ACCEPT_EULA: Y
+        options: >-
+          --health-cmd "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P TestPassword123! -Q 'SELECT 1'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    
+    - name: Restore backend dependencies
+      run: dotnet restore
+      working-directory: ./backend
+    
+    - name: Build backend
+      run: dotnet build --no-restore --configuration Release
+      working-directory: ./backend
+    
+    - name: Install frontend dependencies
+      run: npm ci
+      working-directory: ./frontend
+    
+    - name: Build frontend
+      run: npm run build:prod
+      working-directory: ./frontend
+    
+    - name: Run Integration Tests
+      run: dotnet test ./tests/IntegrationTests --configuration Release --logger "console;verbosity=detailed"
+      working-directory: ./backend
+      env:
+        ConnectionStrings__DefaultConnection: "Server=localhost;Database=TestDb;User Id=sa;Password=TestPassword123!;TrustServerCertificate=true;"
+    
+    - name: Run E2E Tests with Cypress
+      run: |
+        npm install -g cypress
+        npx cypress run --config baseUrl=http://localhost:5000
+      working-directory: ./frontend
+
+  # Security Scan
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: [backend-test, frontend-test]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+    
+    - name: Upload Trivy scan results to GitHub Security tab
+      uses: github/codeql-action/upload-sarif@v2
+      if: always()
+      with:
+        sarif_file: 'trivy-results.sarif'
+
+  # Build and Push Docker Images
+  build-docker:
+    runs-on: ubuntu-latest
+    needs: [integration-tests]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    
+    - name: Login to Container Registry
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ secrets.CONTAINER_REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - name: Build and push backend image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./backend
+        push: true
+        tags: |
+          ${{ secrets.CONTAINER_REGISTRY }}/enterprise-app-backend:latest
+          ${{ secrets.CONTAINER_REGISTRY }}/enterprise-app-backend:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    
+    - name: Build and push frontend image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./frontend
+        push: true
+        tags: |
+          ${{ secrets.CONTAINER_REGISTRY }}/enterprise-app-frontend:latest
+          ${{ secrets.CONTAINER_REGISTRY }}/enterprise-app-frontend:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # Deploy to Development
+  deploy-dev:
+    runs-on: ubuntu-latest
+    needs: [build-docker]
+    if: github.ref == 'refs/heads/develop'
+    environment: development
+    
+    steps:
+    - name: Deploy to Azure Web App (Development)
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: '${{ env.AZURE_WEBAPP_NAME }}-dev'
+        slot-name: 'Production'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_DEV }}
+        images: '${{ secrets.CONTAINER_REGISTRY }}/enterprise-app-backend:${{ github.sha }}'
+
+  # Deploy to Production
+  deploy-prod:
+    runs-on: ubuntu-latest
+    needs: [build-docker]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    
+    steps:
+    - name: Deploy to Azure Web App (Production)
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: '${{ env.AZURE_WEBAPP_NAME }}'
+        slot-name: 'Production'
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: '${{ secrets.CONTAINER_REGISTRY }}/enterprise-app-backend:${{ github.sha }}'
+    
+    - name: Run Database Migrations
+      run: |
+        dotnet tool install --global dotnet-ef
+        dotnet ef database update --connection "${{ secrets.PROD_CONNECTION_STRING }}"
+      working-directory: ./backend/src/Infrastructure
+
+  # Performance Tests
+  performance-tests:
+    runs-on: ubuntu-latest
+    needs: [deploy-dev]
+    if: github.ref == 'refs/heads/develop'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run Artillery Load Tests
+      run: |
+        npm install -g artillery
+        artillery run tests/performance/load-test.yml
+      working-directory: ./backend
+
+  # Notification
+  notify:
+    runs-on: ubuntu-latest
+    needs: [deploy-prod, deploy-dev]
+    if: always()
+    
+    steps:
+    - name: Notify Slack
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+      if: always()

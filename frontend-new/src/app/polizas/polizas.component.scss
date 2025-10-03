@@ -1,0 +1,664 @@
+.polizas-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.upload-section, .form-section {
+  margin-bottom: 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+}
+
+.mat-card-header {
+  background: #667eea;
+  color: white;
+  padding: 16px;
+  border-radius: 8px 8px 0 0;
+}
+
+.polizas-grid {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.poliza-card {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid #e8e8e8;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.poliza-card:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.08);
+}
+
+.poliza-card.selected {
+  border-color: #667eea;
+  background: #fafbff;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.12);
+}
+
+.edit-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #667eea;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Estilos minimalistas para acciones de tarjetas */
+.poliza-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.poliza-card:hover .poliza-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 10;
+  background: transparent !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+.action-btn:hover {
+  border-color: currentColor !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+.edit-btn {
+  color: #2196F3 !important;
+}
+
+.edit-btn:hover {
+  background: rgba(33, 150, 243, 0.04) !important;
+}
+
+.delete-btn {
+  color: #f44336 !important;
+}
+
+.delete-btn:hover {
+  background: rgba(244, 67, 54, 0.04) !important;
+}
+
+.poliza-card {
+  position: relative;
+}
+
+.poliza-card.selected::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: #667eea;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* Estilos minimalistas para el contenido de las tarjetas */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.poliza-number {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.poliza-icon {
+  color: #667eea;
+  font-size: 18px;
+}
+
+.number {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.primary-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.asegurado-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  line-height: 1.3;
+}
+
+.prima-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.prima-amount {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.moneda-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.moneda-cop {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.moneda-usd {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.moneda-eur {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.secondary-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.info-icon {
+  color: #666;
+  font-size: 16px;
+}
+
+.info-label {
+  color: #666;
+  font-weight: 500;
+}
+
+.info-value {
+  color: #333;
+  font-weight: 400;
+}
+
+/* Estilos para footer de tarjetas */
+.card-footer {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.status-indicators {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.frecuencia-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #e8f4fd;
+  color: #1976d2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+/* Estilos para snackbar */
+::ng-deep .success-snackbar {
+  background: #4caf50 !important;
+  color: white !important;
+}
+
+::ng-deep .error-snackbar {
+  background: #f44336 !important;
+  color: white !important;
+}
+
+::ng-deep .warning-snackbar {
+  background: #ff9800 !important;
+  color: white !important;
+}
+
+.card-actions button {
+  margin-right: 8px;
+}
+
+/* Estilos minimalistas para paginación */
+.cards-paginator,
+.table-paginator {
+  background: white;
+  border-top: 1px solid #e8e8e8;
+  margin-top: 16px;
+}
+
+.cards-paginator {
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.table-paginator {
+  border-radius: 0 0 8px 8px;
+}
+
+.mat-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  padding: 0 16px;
+}
+
+.mat-paginator-range-label {
+  margin: 0 32px 0 24px;
+  color: #666;
+  font-size: 14px;
+}
+
+.polizas-cards {
+  margin-bottom: 0;
+}
+
+.table-container {
+  margin-bottom: 0;
+}
+
+/* Estilos para header con búsqueda */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+}
+
+.header-left {
+  flex: 0 0 auto;
+}
+
+.header-center {
+  flex: 1 1 auto;
+  max-width: 400px;
+  min-width: 250px;
+}
+
+.header-right {
+  flex: 0 0 auto;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.search-field .mat-form-field-wrapper {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+}
+
+.search-field .mat-form-field-outline {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.search-field .mat-form-field-outline-thick {
+  color: white;
+}
+
+.search-field .mat-form-field-label {
+  color: rgba(102, 126, 234, 0.8) !important;
+}
+
+.search-field .mat-input-element {
+  color: #333;
+}
+
+.search-field .mat-icon {
+  color: rgba(102, 126, 234, 0.7);
+}
+
+.search-field .mat-hint {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.title-icon {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.polizas-count {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* Responsive design para búsqueda */
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .header-center {
+    max-width: none;
+    min-width: auto;
+  }
+  
+  .header-right {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Estilos para sorting en tabla */
+.mat-sort-header-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.mat-sort-header-container:hover {
+  color: #667eea;
+}
+
+.mat-sort-header-arrow {
+  color: #667eea;
+  margin-left: 6px;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: #667eea;
+  font-weight: 600;
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.mat-sort-header-button {
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  outline: none;
+  width: 100%;
+  text-align: left;
+}
+
+.mat-sort-header-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Mejorar visibilidad de columnas ordenables */
+th.mat-header-cell.mat-sort-header {
+  position: relative;
+}
+
+th.mat-header-cell.mat-sort-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: #667eea;
+  transition: width 0.3s ease;
+}
+
+th.mat-header-cell.mat-sort-header:hover::after {
+  width: 80%;
+}
+
+th.mat-header-cell.mat-sort-header.mat-sort-header-sorted::after {
+  width: 100%;
+}
+
+/* Estilos minimalistas para botones de acción en tabla */
+.action-button {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  margin-right: 4px;
+  border-radius: 6px !important;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 10;
+  background: transparent !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+.action-button:hover {
+  border-color: currentColor !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+.edit-button {
+  color: #2196F3 !important;
+}
+
+.edit-button:hover {
+  background: rgba(33, 150, 243, 0.04) !important;
+}
+
+.delete-button {
+  color: #f44336 !important;
+}
+
+.delete-button:hover {
+  background: rgba(244, 67, 54, 0.04) !important;
+}
+
+.mat-cell.mat-column-actions {
+  padding-right: 16px;
+  white-space: nowrap;
+}
+
+/* Asegurar que las filas de tabla sean clickeables pero no interfieran con botones */
+.table-row {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+  
+  &.selected {
+    background: rgba(76, 175, 80, 0.1) !important;
+    border-left: 4px solid #4CAF50;
+  }
+}
+
+.table-row:hover {
+  background-color: #f8f9ff !important;
+}
+
+/* Estilos para controlar los estados de validación del formulario */
+.form-section {
+  transition: all 0.3s ease;
+  
+  &.editing-highlight {
+    border: 2px solid #4CAF50;
+    box-shadow: 0 4px 20px rgba(76, 175, 80, 0.3);
+  }
+  
+  .mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
+    
+    /* Prevenir que los campos se vean en rojo cuando no deberían */
+    &.ng-pristine.ng-untouched {
+      .mat-form-field-outline-thick {
+        color: rgba(0, 0, 0, 0.12) !important;
+      }
+      
+      .mat-form-field-label {
+        color: rgba(0, 0, 0, 0.6) !important;
+      }
+    }
+    
+    /* Solo mostrar error cuando el campo está touched y tiene errores */
+    &.ng-invalid.ng-touched {
+      .mat-form-field-outline-thick {
+        color: #f44336 !important;
+      }
+      
+      .mat-form-field-label {
+        color: #f44336 !important;
+      }
+    }
+    
+    /* Estado normal cuando el campo es válido */
+    &.ng-valid {
+      .mat-form-field-outline-thick {
+        color: #4CAF50 !important;
+      }
+    }
+  }
+  
+  /* Estilos específicos para el estado pristine */
+  .mat-form-field.ng-pristine .mat-form-field-outline-thick {
+    color: rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+/* Estilos para headers de sorting clickeables */
+.sortable-header {
+  cursor: pointer !important;
+  user-select: none;
+  position: relative;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+  }
+  
+  &.sort-active {
+    background-color: rgba(76, 175, 80, 0.1) !important;
+    color: #4CAF50 !important;
+    font-weight: 600;
+  }
+  
+  .sort-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    vertical-align: middle;
+    transition: transform 0.3s ease;
+  }
+}
+
+/* Estilos para la sección de upload */
+.upload-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+}
+
+.upload-controls button {
+  white-space: nowrap;
+}
+
+.file-name {
+  margin: 0 8px;
+  color: #666;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.upload-hint {
+  margin-top: 16px;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+  background-color: #f5f5f5;
+  padding: 12px;
+  border-radius: 4px;
+  border-left: 4px solid #2196F3;
+}

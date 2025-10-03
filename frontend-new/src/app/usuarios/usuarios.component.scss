@@ -1,0 +1,328 @@
+.usuarios-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.content-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+// Secciones principales
+.form-section, .toolbar-section, .table-section {
+  margin-bottom: 24px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e8e8e8;
+}
+
+.mat-card-header {
+  background: #667eea;
+  color: white;
+  padding: 16px;
+  border-radius: 8px 8px 0 0;
+  
+  .mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+// Formulario
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.active-checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// Toolbar
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.search-field {
+  flex: 1;
+  max-width: 400px;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 12px;
+  
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+// Tabla
+.table-container {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+.users-table {
+  width: 100%;
+  background: white;
+  
+  .mat-header-cell {
+    font-weight: 600;
+    color: #333;
+    background: #f8f9fa;
+  }
+  
+  .mat-row {
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    
+    &:hover {
+      background-color: #f5f7ff;
+    }
+    
+    &.selected {
+      background-color: #e3f2fd;
+    }
+  }
+}
+
+// Información de usuario
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  font-size: 32px;
+  color: #667eea;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #333;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #666;
+}
+
+// Roles
+.roles-container {
+  .mat-chip-set {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .mat-chip {
+    font-size: 11px;
+    min-height: 24px;
+    padding: 0 8px;
+  }
+}
+
+// Botones de acción
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  
+  .mat-icon-button {
+    width: 36px;
+    height: 36px;
+    
+    .mat-icon {
+      font-size: 18px;
+    }
+  }
+}
+
+// Estados vacíos y loading
+.no-data, .loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  color: #666;
+  
+  .mat-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    color: #ccc;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.loading {
+  .mat-spinner {
+    margin-bottom: 16px;
+  }
+}
+
+// Chips de estado
+.mat-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  
+  .mat-icon {
+    font-size: 16px;
+  }
+}
+
+// Estilos responsive
+@media (max-width: 1024px) {
+  .usuarios-container {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .usuarios-container {
+    padding: 12px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .toolbar {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .search-field {
+    max-width: none;
+  }
+}
+
+// Snackbar styles
+::ng-deep {
+  .snackbar-success {
+    background-color: #4caf50 !important;
+    color: white !important;
+  }
+  
+  .snackbar-error {
+    background-color: #f44336 !important;
+    color: white !important;
+  }
+  
+  .snackbar-info {
+    background-color: #2196f3 !important;
+    color: white !important;
+  }
+}
+
+// Ajustes específicos de Material Design
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-table {
+  box-shadow: none;
+}
+
+.mat-paginator {
+  background: transparent;
+  border-top: 1px solid #e0e0e0;
+}
+
+// Scroll suave
+html {
+  scroll-behavior: smooth;
+}
+
+// Mensaje de acceso denegado
+.info-card {
+  margin-bottom: 20px;
+  border-left: 4px solid #ff9800;
+  
+  .access-denied-message {
+    text-align: center;
+    padding: 20px;
+    
+    mat-icon {
+      font-size: 48px;
+      height: 48px;
+      width: 48px;
+      margin-bottom: 15px;
+    }
+    
+    h3 {
+      color: #ff9800;
+      margin: 15px 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    p {
+      margin: 10px 0;
+      color: #666;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+  }
+}
+
+// Acceso restringido en acciones
+.restricted-access {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-style: italic;
+  
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+  
+  span {
+    font-size: 12px;
+  }
+}

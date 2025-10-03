@@ -1,0 +1,1 @@
+export * from './cobros-dashboard/cobros-dashboard.component';

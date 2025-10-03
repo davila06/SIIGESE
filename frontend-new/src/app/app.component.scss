@@ -1,0 +1,411 @@
+// Colores del tema
+$primary-color: #2c3e50;
+$secondary-color: #3498db;
+$accent-color: #e74c3c;
+$success-color: #27ae60;
+$text-primary: #2c3e50;
+$text-secondary: #7f8c8d;
+$background-light: #f8f9fa;
+$border-color: #e9ecef;
+$white: #ffffff;
+
+// Variable CSS para el ancho del sidebar
+:root {
+  --sidebar-width: 280px;
+}
+
+.app-container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ====== SIDENAV CONTAINER ====== */
+.sidenav-container {
+  height: 100%;
+  background-color: $background-light;
+}
+
+/* Override Angular Material para controlar el layout manualmente */
+.sidenav-container {
+  &.sidebar-expanded {
+    .mat-drawer-content {
+      margin-left: 280px !important;
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+  }
+  
+  &.sidebar-collapsed {
+    .mat-drawer-content {
+      margin-left: 70px !important;
+      transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+  }
+  
+  &.mobile-mode {
+    .mat-drawer-content {
+      margin-left: 0 !important;
+    }
+  }
+}
+
+/* Asegurar que el drawer no interfiera con nuestro layout */
+.sidenav-container .mat-drawer {
+  position: fixed !important;
+  z-index: 100;
+}
+
+/* ====== SIDEBAR STYLES ====== */
+.modern-sidebar {
+  width: 280px;
+  background: linear-gradient(135deg, $primary-color 0%, #34495e 100%);
+  color: white;
+  border-right: none;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  &.collapsed {
+    width: 70px;
+  }
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 80px;
+  position: relative;
+}
+
+/* Cuando el sidebar está colapsado, ajustar el padding */
+.modern-sidebar.collapsed .sidebar-header {
+  padding: 15px;
+  justify-content: center;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Cuando está colapsado, mostrar solo el icono centrado */
+.modern-sidebar.collapsed .brand-container {
+  justify-content: center;
+  flex: none;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  mat-icon {
+    font-size: 24px;
+    color: white;
+  }
+}
+
+.brand-text {
+  transition: all 0.3s ease;
+  
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  &.collapsed {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+  }
+}
+
+.sidebar-toggle {
+  color: rgba(255, 255, 255, 0.8);
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+}
+
+/* Hacer el botón más visible y prominente cuando está colapsado */
+.modern-sidebar.collapsed .sidebar-toggle {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.35);
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  mat-icon {
+    font-size: 22px;
+    font-weight: bold;
+  }
+}
+
+/* Navigation */
+.sidebar-nav {
+  padding: 20px 0;
+  flex: 1;
+}
+
+.nav-item {
+  width: 100%;
+  height: 50px;
+  margin: 0 0 8px 0;
+  padding: 0 20px;
+  display: flex !important;
+  align-items: center;
+  gap: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  border-radius: 0;
+  position: relative;
+  transition: all 0.3s ease;
+  justify-content: flex-start;
+  
+  mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+  }
+  
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    &.collapsed {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+    }
+  }
+  
+  .nav-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: $secondary-color;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    
+    .nav-indicator {
+      transform: scaleY(0.6);
+    }
+  }
+  
+  &.active {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    
+    .nav-indicator {
+      transform: scaleY(1);
+    }
+  }
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  transition: all 0.3s ease;
+  
+  &.collapsed {
+    justify-content: center;
+  }
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $secondary-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  min-width: 40px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  
+  &.collapsed {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+  }
+  
+  .user-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    margin: 0;
+  }
+  
+  .user-role {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+  }
+}
+
+.logout-btn {
+  color: rgba(255, 255, 255, 0.8);
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+}
+
+/* ====== MAIN CONTENT ====== */
+.main-content {
+  background-color: $background-light;
+  min-height: 100vh;
+}
+
+.mobile-toolbar {
+  background-color: $primary-color;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.page-content {
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+  
+  @media (max-width: 768px) {
+    height: calc(100vh - 56px);
+  }
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.mobile-user {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ====== RESPONSIVE DESIGN ====== */
+@media (max-width: 768px) {
+  .modern-sidebar {
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .page-content {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-toolbar {
+    display: none;
+  }
+  
+  .page-content {
+    padding: 24px;
+  }
+}
+
+/* ====== ANIMATIONS ====== */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.nav-item {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ====== CUSTOM SCROLLBAR ====== */
+.page-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.page-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.page-content::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+}
+
+// Estilos globales para cuando no hay toolbar (página de login)
+:host {
+  .main-content {
+    height: 100vh;
+  }
+}

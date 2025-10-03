@@ -1,0 +1,945 @@
+2025-10-02 18:28:05.220 -06:00 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 18:28:05.298 -06:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 18:28:05.306 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 18:28:05.309 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 18:28:05.329 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-02 18:28:05.352 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-02 18:28:05.354 -06:00 [INF] Database migration completed successfully
+2025-10-02 18:28:05.375 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-02 18:28:05.453 -06:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5000: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Solo se permite un uso de cada dirección de socket (protocolo/dirección de red/puerto)
+ ---> System.Net.Sockets.SocketException (10048): Solo se permite un uso de cada dirección de socket (protocolo/dirección de red/puerto)
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.DefaultAddressStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindAsync(ListenOptions[] listenOptions, AddressBindContext context, Func`2 useHttps, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__15_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)
+2025-10-02 18:32:08.906 -06:00 [INF] Executed DbCommand (47ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 18:32:09.007 -06:00 [INF] Executed DbCommand (28ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 18:32:09.011 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-02 18:32:09.014 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-02 18:32:09.046 -06:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-02 18:32:09.068 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-02 18:32:09.070 -06:00 [INF] Database migration completed successfully
+2025-10-02 18:32:09.088 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-02 18:32:09.167 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-02 18:32:09.169 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-02 18:32:09.170 -06:00 [INF] Hosting environment: Production
+2025-10-02 18:32:09.171 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-02 18:32:57.704 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-02 18:32:57.726 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-02 18:32:57.732 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:32:57.739 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 37.0604ms
+2025-10-02 18:32:57.744 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login - application/json 53
+2025-10-02 18:32:57.752 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:32:57.813 -06:00 [INF] Executing endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-02 18:32:57.836 -06:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Application.DTOs.LoginRequestDto) on controller WebApi.Controllers.AuthController (WebApi).
+2025-10-02 18:32:58.215 -06:00 [INF] Executed DbCommand (55ms) [Parameters=[@__email_0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[PasswordHash], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+FROM [Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__email_0
+2025-10-02 18:32:58.503 -06:00 [INF] Executed DbCommand (26ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[CreatedBy], [t].[Email], [t].[FirstName], [t].[IsActive], [t].[IsDeleted], [t].[LastLoginAt], [t].[LastName], [t].[PasswordHash], [t].[UpdatedAt], [t].[UpdatedBy], [t].[UserName], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[IsDeleted], [t0].[RoleId], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserId], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[Description], [t0].[IsActive], [t0].[IsDeleted0], [t0].[Name], [t0].[UpdatedAt0], [t0].[UpdatedBy0]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[PasswordHash], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Id] = @__userId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[IsDeleted], [u0].[RoleId], [u0].[UpdatedAt], [u0].[UpdatedBy], [u0].[UserId], [t1].[Id] AS [Id0], [t1].[CreatedAt] AS [CreatedAt0], [t1].[CreatedBy] AS [CreatedBy0], [t1].[Description], [t1].[IsActive], [t1].[IsDeleted] AS [IsDeleted0], [t1].[Name], [t1].[UpdatedAt] AS [UpdatedAt0], [t1].[UpdatedBy] AS [UpdatedBy0]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN (
+        SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+        FROM [Roles] AS [r]
+        WHERE [r].[IsDeleted] = CAST(0 AS bit)
+    ) AS [t1] ON [u0].[RoleId] = [t1].[Id]
+    WHERE [u0].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [t].[Id] = [t0].[UserId]
+ORDER BY [t].[Id], [t0].[Id]
+2025-10-02 18:32:58.644 -06:00 [INF] Executed DbCommand (20ms) [Parameters=[@p12='?' (DbType = Int32), @p0='?' (DbType = DateTime2), @p1='?' (Size = 4000), @p2='?' (Size = 100), @p3='?' (Size = 50), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 4000), @p9='?' (DbType = DateTime2), @p10='?' (Size = 4000), @p11='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [CreatedAt] = @p0, [CreatedBy] = @p1, [Email] = @p2, [FirstName] = @p3, [IsActive] = @p4, [IsDeleted] = @p5, [LastLoginAt] = @p6, [LastName] = @p7, [PasswordHash] = @p8, [UpdatedAt] = @p9, [UpdatedBy] = @p10, [UserName] = @p11
+OUTPUT 1
+WHERE [Id] = @p12;
+2025-10-02 18:32:58.663 -06:00 [INF] Usuario admin@sinseg.com ha iniciado sesión exitosamente
+2025-10-02 18:32:58.669 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.LoginResponseDto'.
+2025-10-02 18:32:58.692 -06:00 [INF] Executed action WebApi.Controllers.AuthController.Login (WebApi) in 851.4944ms
+2025-10-02 18:32:58.696 -06:00 [INF] Executed endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-02 18:32:58.700 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/api/auth/login - 200 null application/json; charset=utf-8 955.7166ms
+2025-10-02 18:32:58.740 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:32:58.743 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:32:58.744 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.0431ms
+2025-10-02 18:32:58.751 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:32:58.754 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:32:58.799 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:32:58.804 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:32:58.874 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:32:58.920 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:32:58.929 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 121.5054ms
+2025-10-02 18:32:58.931 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:32:58.933 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 182.31ms
+2025-10-02 18:33:29.808 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-02 18:33:29.811 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:33:29.812 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 3.8289ms
+2025-10-02 18:33:29.819 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login - application/json 53
+2025-10-02 18:33:29.821 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:33:29.825 -06:00 [INF] Executing endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-02 18:33:29.826 -06:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Application.DTOs.LoginRequestDto) on controller WebApi.Controllers.AuthController (WebApi).
+2025-10-02 18:33:29.843 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[@__email_0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[PasswordHash], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+FROM [Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__email_0
+2025-10-02 18:33:30.002 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[CreatedBy], [t].[Email], [t].[FirstName], [t].[IsActive], [t].[IsDeleted], [t].[LastLoginAt], [t].[LastName], [t].[PasswordHash], [t].[UpdatedAt], [t].[UpdatedBy], [t].[UserName], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[IsDeleted], [t0].[RoleId], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserId], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[Description], [t0].[IsActive], [t0].[IsDeleted0], [t0].[Name], [t0].[UpdatedAt0], [t0].[UpdatedBy0]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[PasswordHash], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Id] = @__userId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[IsDeleted], [u0].[RoleId], [u0].[UpdatedAt], [u0].[UpdatedBy], [u0].[UserId], [t1].[Id] AS [Id0], [t1].[CreatedAt] AS [CreatedAt0], [t1].[CreatedBy] AS [CreatedBy0], [t1].[Description], [t1].[IsActive], [t1].[IsDeleted] AS [IsDeleted0], [t1].[Name], [t1].[UpdatedAt] AS [UpdatedAt0], [t1].[UpdatedBy] AS [UpdatedBy0]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN (
+        SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+        FROM [Roles] AS [r]
+        WHERE [r].[IsDeleted] = CAST(0 AS bit)
+    ) AS [t1] ON [u0].[RoleId] = [t1].[Id]
+    WHERE [u0].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [t].[Id] = [t0].[UserId]
+ORDER BY [t].[Id], [t0].[Id]
+2025-10-02 18:33:30.008 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[@p12='?' (DbType = Int32), @p0='?' (DbType = DateTime2), @p1='?' (Size = 4000), @p2='?' (Size = 100), @p3='?' (Size = 50), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 4000), @p9='?' (DbType = DateTime2), @p10='?' (Size = 4000), @p11='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [CreatedAt] = @p0, [CreatedBy] = @p1, [Email] = @p2, [FirstName] = @p3, [IsActive] = @p4, [IsDeleted] = @p5, [LastLoginAt] = @p6, [LastName] = @p7, [PasswordHash] = @p8, [UpdatedAt] = @p9, [UpdatedBy] = @p10, [UserName] = @p11
+OUTPUT 1
+WHERE [Id] = @p12;
+2025-10-02 18:33:30.012 -06:00 [INF] Usuario admin@sinseg.com ha iniciado sesión exitosamente
+2025-10-02 18:33:30.015 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.LoginResponseDto'.
+2025-10-02 18:33:30.017 -06:00 [INF] Executed action WebApi.Controllers.AuthController.Login (WebApi) in 189.0413ms
+2025-10-02 18:33:30.018 -06:00 [INF] Executed endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-02 18:33:30.019 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/api/auth/login - 200 null application/json; charset=utf-8 199.9158ms
+2025-10-02 18:33:30.050 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:33:30.053 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:33:30.054 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.4533ms
+2025-10-02 18:33:30.057 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:33:30.059 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:33:30.062 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:33:30.065 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:33:30.072 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:33:30.079 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:33:30.084 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 16.5052ms
+2025-10-02 18:33:30.086 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:33:30.087 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 30.0948ms
+2025-10-02 18:36:45.531 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:36:45.544 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:36:45.549 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 21.4124ms
+2025-10-02 18:36:45.554 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:36:45.556 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:36:45.583 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:36:45.590 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:36:45.665 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:36:45.668 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:36:45.669 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.9799ms
+2025-10-02 18:36:45.673 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:36:45.676 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:36:45.678 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:36:45.680 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:36:45.720 -06:00 [INF] Executed DbCommand (95ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:36:45.728 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:36:45.740 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:36:45.741 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:36:45.751 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 67.5886ms
+2025-10-02 18:36:45.751 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 159.3438ms
+2025-10-02 18:36:45.754 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:36:45.755 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:36:45.758 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 84.573ms
+2025-10-02 18:36:45.758 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 204.0699ms
+2025-10-02 18:37:07.560 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:37:07.565 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:07.566 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 5.6138ms
+2025-10-02 18:37:07.572 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:37:07.576 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:07.579 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:07.581 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:37:07.592 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:37:07.598 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:37:07.601 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 18.1587ms
+2025-10-02 18:37:07.603 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:07.604 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 32.4557ms
+2025-10-02 18:37:07.680 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:37:07.684 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:07.685 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 5.6041ms
+2025-10-02 18:37:07.690 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:37:07.693 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:07.695 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:07.696 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:37:07.700 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:37:07.705 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:37:07.707 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 8.6594ms
+2025-10-02 18:37:07.708 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:07.710 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 20.4694ms
+2025-10-02 18:37:26.647 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:37:26.649 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:26.650 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.3338ms
+2025-10-02 18:37:26.653 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:37:26.655 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:26.657 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:26.658 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:37:26.667 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:37:26.673 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:37:26.676 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 15.1999ms
+2025-10-02 18:37:26.679 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:26.680 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 26.906ms
+2025-10-02 18:37:26.684 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:37:26.687 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:26.688 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.6889ms
+2025-10-02 18:37:26.691 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:37:26.693 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:37:26.694 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:26.696 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:37:26.699 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:37:26.703 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:37:26.705 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 7.1664ms
+2025-10-02 18:37:26.706 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:37:26.707 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 16.3639ms
+2025-10-02 18:38:00.617 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:38:00.620 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:00.621 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.805ms
+2025-10-02 18:38:00.625 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:38:00.909 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:38:00.909 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:00.912 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:00.913 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:00.913 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.4763ms
+2025-10-02 18:38:00.914 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:38:00.917 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:38:00.920 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:00.921 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:00.922 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:38:00.923 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:38:00.925 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:38:00.928 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:38:00.930 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 11.7096ms
+2025-10-02 18:38:00.931 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:38:00.931 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:00.933 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 9.467ms
+2025-10-02 18:38:00.933 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 308.554ms
+2025-10-02 18:38:00.934 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:00.938 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 20.5779ms
+2025-10-02 18:38:13.305 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:38:13.307 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:13.308 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.9654ms
+2025-10-02 18:38:13.313 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:38:13.315 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:13.316 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:13.316 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:38:13.323 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:38:13.328 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:38:13.330 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 12.6834ms
+2025-10-02 18:38:13.331 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:38:13.332 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:13.333 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:13.334 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 21.5027ms
+2025-10-02 18:38:13.335 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.1814ms
+2025-10-02 18:38:13.339 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:38:13.341 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:13.342 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:13.343 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:38:13.348 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:38:13.352 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:38:13.353 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 8.404ms
+2025-10-02 18:38:13.355 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:13.356 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 16.5421ms
+2025-10-02 18:38:28.536 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:38:28.540 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:28.541 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.8761ms
+2025-10-02 18:38:28.547 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:38:28.550 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:28.552 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:28.553 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:38:28.561 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:38:28.580 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:38:28.586 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 31.3495ms
+2025-10-02 18:38:28.589 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:28.591 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 43.5349ms
+2025-10-02 18:38:39.530 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:38:39.533 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:39.534 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.7402ms
+2025-10-02 18:38:39.537 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:38:39.539 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:39.541 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:39.542 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:38:39.552 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:38:39.557 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:38:39.564 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 17.4668ms
+2025-10-02 18:38:39.567 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:39.568 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 31.0898ms
+2025-10-02 18:38:59.744 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:38:59.769 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:59.770 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 26.0403ms
+2025-10-02 18:38:59.775 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:38:59.777 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:38:59.780 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:59.781 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:38:59.802 -06:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:38:59.809 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:38:59.813 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 28.8325ms
+2025-10-02 18:38:59.814 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:38:59.815 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 40.4112ms
+2025-10-02 18:39:00.088 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:39:00.091 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:39:00.092 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.761ms
+2025-10-02 18:39:00.096 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:39:00.098 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:39:00.099 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:39:00.099 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:39:00.102 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:39:00.106 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:39:00.107 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 6.4193ms
+2025-10-02 18:39:00.108 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:39:00.108 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 12.5169ms
+2025-10-02 18:42:44.079 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:42:44.086 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:42:44.089 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 13.9656ms
+2025-10-02 18:42:44.093 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:42:44.096 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:42:44.106 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:42:44.113 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:42:44.163 -06:00 [INF] Executed DbCommand (26ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:42:44.173 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:42:44.181 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 67.3522ms
+2025-10-02 18:42:44.183 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:42:44.184 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 90.8344ms
+2025-10-02 18:43:21.232 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:43:21.234 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:43:21.234 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.4514ms
+2025-10-02 18:43:21.237 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:43:21.238 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:43:21.240 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:43:21.241 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:43:21.249 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:43:21.254 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:43:21.256 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 13.1388ms
+2025-10-02 18:43:21.258 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:43:21.259 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 22.782ms
+2025-10-02 18:43:38.666 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:43:38.669 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:43:38.671 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.1878ms
+2025-10-02 18:43:38.677 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:43:38.679 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:43:38.681 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:43:38.682 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:43:38.693 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:43:38.701 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:43:38.703 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 19.5985ms
+2025-10-02 18:43:38.705 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:43:38.706 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 29.5442ms
+2025-10-02 18:44:26.781 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:44:26.783 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:44:26.784 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.7282ms
+2025-10-02 18:44:26.786 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:44:26.788 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:44:26.789 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:44:26.791 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:44:26.797 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:44:26.802 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:44:26.805 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 11.687ms
+2025-10-02 18:44:26.807 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:44:26.808 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 21.9677ms
+2025-10-02 18:45:16.308 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:45:16.311 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:45:16.312 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.9114ms
+2025-10-02 18:45:16.315 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:45:16.317 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:45:16.318 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:45:16.320 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:45:16.327 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:45:16.332 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:45:16.334 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 12.9134ms
+2025-10-02 18:45:16.335 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:45:16.336 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 21.5804ms
+2025-10-02 18:45:32.487 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:45:32.489 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:45:32.491 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.0546ms
+2025-10-02 18:45:32.495 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:45:32.497 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:45:32.498 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:45:32.499 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:45:32.504 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:45:32.508 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:45:32.510 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 10.4025ms
+2025-10-02 18:45:32.511 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:45:32.513 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 17.7777ms
+2025-10-02 18:46:12.726 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:46:12.729 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:46:12.730 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.2501ms
+2025-10-02 18:46:12.733 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:46:12.737 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:46:12.739 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:46:12.740 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:46:12.747 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:46:12.751 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:46:12.753 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 10.9829ms
+2025-10-02 18:46:12.754 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:46:12.756 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 22.9853ms
+2025-10-02 18:46:27.016 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:46:27.019 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:46:27.020 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.5177ms
+2025-10-02 18:46:27.026 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:46:27.029 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:46:27.030 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:46:27.032 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:46:27.042 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:46:27.047 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:46:27.049 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 14.922ms
+2025-10-02 18:46:27.051 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:46:27.053 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 26.2358ms
+2025-10-02 18:46:55.889 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:46:55.899 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:46:55.901 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 11.1013ms
+2025-10-02 18:46:55.908 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:46:55.910 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:46:55.911 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:46:55.913 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:46:55.925 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:46:55.929 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:46:55.930 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 16.17ms
+2025-10-02 18:46:55.931 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:46:55.933 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 24.7715ms
+2025-10-02 18:48:45.197 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:48:45.201 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:48:45.202 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.6268ms
+2025-10-02 18:48:45.206 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:48:45.208 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:48:45.210 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:48:45.211 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:48:45.218 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:48:45.225 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:48:45.227 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 13.4724ms
+2025-10-02 18:48:45.228 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:48:45.230 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 23.7908ms
+2025-10-02 18:49:07.340 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:49:07.344 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:49:07.344 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.9028ms
+2025-10-02 18:49:07.346 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:49:07.348 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:49:07.349 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:49:07.350 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:49:07.358 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:49:07.362 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:49:07.364 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 12.3173ms
+2025-10-02 18:49:07.365 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:49:07.366 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 19.6239ms
+2025-10-02 18:49:28.875 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:49:28.879 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:49:28.880 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 5.1314ms
+2025-10-02 18:49:28.882 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:49:28.885 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:49:28.886 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:49:28.888 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:49:28.895 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:49:28.897 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:49:28.899 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 9.0182ms
+2025-10-02 18:49:28.903 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:49:28.904 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 21.9512ms
+2025-10-02 18:49:42.513 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:49:42.515 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:49:42.515 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.6683ms
+2025-10-02 18:49:42.518 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:49:42.520 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:49:42.531 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:49:42.532 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:49:42.540 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:49:42.544 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:49:42.546 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 12.4372ms
+2025-10-02 18:49:42.547 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:49:42.548 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 30.5901ms
+2025-10-02 18:50:08.418 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:50:08.420 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:50:08.422 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.0521ms
+2025-10-02 18:50:08.425 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:50:08.428 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:50:08.430 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:08.432 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:50:08.443 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:50:08.447 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:50:08.449 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 11.1008ms
+2025-10-02 18:50:08.450 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:08.451 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 25.9211ms
+2025-10-02 18:50:25.055 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:50:25.058 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:50:25.059 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.0035ms
+2025-10-02 18:50:25.061 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:50:25.064 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:50:25.066 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:25.069 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:50:25.076 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:50:25.083 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:50:25.085 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 13.9565ms
+2025-10-02 18:50:25.086 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:25.088 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 26.7321ms
+2025-10-02 18:50:29.980 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:50:29.982 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:50:29.983 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.5338ms
+2025-10-02 18:50:29.985 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:50:29.990 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:50:29.992 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:29.993 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:50:29.998 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:50:30.002 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:50:30.006 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 11.4818ms
+2025-10-02 18:50:30.008 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:30.009 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 23.7857ms
+2025-10-02 18:50:31.862 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:50:31.865 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:50:31.867 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:31.868 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:50:31.878 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:50:31.882 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:50:31.884 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 14.8912ms
+2025-10-02 18:50:31.885 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:50:31.889 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 27.6245ms
+2025-10-02 18:51:44.204 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:51:44.207 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:51:44.209 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.3501ms
+2025-10-02 18:51:44.212 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:51:44.215 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:51:44.216 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:51:44.218 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:51:44.228 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:51:44.231 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:51:44.233 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 10.3657ms
+2025-10-02 18:51:44.234 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:51:44.235 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 22.9989ms
+2025-10-02 18:51:44.422 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:51:44.423 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:51:44.424 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.6527ms
+2025-10-02 18:51:44.427 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:51:44.428 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:51:44.429 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:51:44.430 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:51:44.432 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:51:44.435 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:51:44.438 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 6.289ms
+2025-10-02 18:51:44.439 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:51:44.440 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 13.13ms
+2025-10-02 18:52:44.338 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:52:44.340 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:52:44.341 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.5431ms
+2025-10-02 18:52:44.343 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:52:44.345 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:52:44.347 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:52:44.348 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:52:44.362 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:52:44.362 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:52:44.366 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:52:44.367 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.3666ms
+2025-10-02 18:52:44.368 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:52:44.371 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:52:44.373 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 22.6139ms
+2025-10-02 18:52:44.374 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:52:44.375 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:52:44.376 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:52:44.377 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 33.2022ms
+2025-10-02 18:52:44.377 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:52:44.383 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:52:44.387 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:52:44.389 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 8.34ms
+2025-10-02 18:52:44.390 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:52:44.391 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 20.9186ms
+2025-10-02 18:53:00.309 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:53:00.311 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:00.312 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.0997ms
+2025-10-02 18:53:00.315 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:53:00.317 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:00.320 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:00.321 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:53:00.327 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:53:00.332 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:53:00.334 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 10.954ms
+2025-10-02 18:53:00.338 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:00.339 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 24.2507ms
+2025-10-02 18:53:00.397 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:53:00.400 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:00.400 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.926ms
+2025-10-02 18:53:00.404 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:53:00.406 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:00.407 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:00.408 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:53:00.413 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:53:00.417 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:53:00.419 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 10.0554ms
+2025-10-02 18:53:00.420 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:00.422 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 18.9518ms
+2025-10-02 18:53:10.095 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:53:10.097 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:10.098 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.3497ms
+2025-10-02 18:53:10.104 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:53:10.106 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:10.107 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:10.108 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:53:10.114 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:53:10.121 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:53:10.122 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 12.682ms
+2025-10-02 18:53:10.124 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:10.125 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 21.106ms
+2025-10-02 18:53:10.135 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:53:10.138 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:10.139 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.1681ms
+2025-10-02 18:53:10.142 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:53:10.144 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:53:10.145 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:10.146 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:53:10.149 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:53:10.155 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:53:10.157 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 8.846ms
+2025-10-02 18:53:10.158 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:53:10.159 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 16.774ms
+2025-10-02 18:54:33.336 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:54:33.339 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:54:33.340 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.6597ms
+2025-10-02 18:54:33.343 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:54:33.345 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:54:33.346 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:54:33.347 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:54:33.356 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:54:33.359 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:54:33.361 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 11.9602ms
+2025-10-02 18:54:33.362 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:54:33.364 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 21.172ms
+2025-10-02 18:54:33.364 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:54:33.369 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:54:33.370 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 6.1726ms
+2025-10-02 18:54:33.373 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:54:33.374 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:54:33.375 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:54:33.375 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:54:33.379 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:54:33.382 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:54:33.383 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 5.8704ms
+2025-10-02 18:54:33.384 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:54:33.386 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 13.8546ms
+2025-10-02 18:55:56.305 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:55:56.308 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:55:56.309 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.4607ms
+2025-10-02 18:55:56.310 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:55:56.313 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:55:56.314 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:55:56.315 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:55:56.322 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:55:56.326 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:55:56.327 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 11.4614ms
+2025-10-02 18:55:56.329 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:55:56.330 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 19.3526ms
+2025-10-02 18:55:56.387 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:55:56.389 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:55:56.390 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 2.6253ms
+2025-10-02 18:55:56.394 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:55:56.397 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:55:56.398 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:55:56.399 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:55:56.402 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:55:56.407 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:55:56.409 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 9.0621ms
+2025-10-02 18:55:56.410 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:55:56.411 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 17.5045ms
+2025-10-02 18:56:00.243 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:56:00.247 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:56:00.249 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:56:00.251 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:56:00.258 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:56:00.262 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:56:00.266 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 12.2034ms
+2025-10-02 18:56:00.268 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:56:00.269 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 26.0698ms
+2025-10-02 18:57:24.437 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:57:24.440 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:24.441 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.3369ms
+2025-10-02 18:57:24.444 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:57:24.446 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:24.447 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:24.448 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:57:24.459 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:57:24.462 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:57:24.464 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 11.0293ms
+2025-10-02 18:57:24.465 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:24.469 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 24.8578ms
+2025-10-02 18:57:24.632 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:57:24.635 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:24.636 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.4162ms
+2025-10-02 18:57:24.639 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:57:24.642 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:24.643 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:24.644 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:57:24.647 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:57:24.655 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:57:24.657 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 10.8742ms
+2025-10-02 18:57:24.658 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:24.659 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 19.6689ms
+2025-10-02 18:57:41.958 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:57:41.992 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:41.993 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 34.144ms
+2025-10-02 18:57:42.038 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:57:42.040 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:42.042 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:42.043 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:57:42.053 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:57:42.060 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:57:42.063 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 18.4076ms
+2025-10-02 18:57:42.064 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:42.070 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 31.4957ms
+2025-10-02 18:57:42.333 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:57:42.335 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:42.336 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.6218ms
+2025-10-02 18:57:42.339 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:57:42.341 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:57:42.342 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:42.343 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:57:42.348 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:57:42.352 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:57:42.354 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 8.0545ms
+2025-10-02 18:57:42.355 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:57:42.356 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 17.2272ms
+2025-10-02 18:58:09.302 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:58:09.304 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:58:09.305 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.2115ms
+2025-10-02 18:58:09.308 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:58:09.309 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:58:09.310 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:58:09.311 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:58:09.319 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:58:09.324 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:58:09.326 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 12.7693ms
+2025-10-02 18:58:09.327 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:58:09.328 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 20.252ms
+2025-10-02 18:58:09.425 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 18:58:09.427 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:58:09.428 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 3.0351ms
+2025-10-02 18:58:09.431 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 18:58:09.435 -06:00 [INF] CORS policy execution successful.
+2025-10-02 18:58:09.436 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:58:09.437 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 18:58:09.441 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 18:58:09.446 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 18:58:09.448 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 8.6292ms
+2025-10-02 18:58:09.451 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 18:58:09.452 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 21.1046ms
+2025-10-02 19:02:23.328 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 19:02:23.343 -06:00 [INF] CORS policy execution successful.
+2025-10-02 19:02:23.346 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 22.1625ms
+2025-10-02 19:02:23.352 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 19:02:23.354 -06:00 [INF] CORS policy execution successful.
+2025-10-02 19:02:23.375 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 19:02:23.380 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 19:02:23.517 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 19:02:23.539 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 19:02:23.539 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-02 19:02:23.543 -06:00 [INF] CORS policy execution successful.
+2025-10-02 19:02:23.544 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 156.9978ms
+2025-10-02 19:02:23.544 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.7971ms
+2025-10-02 19:02:23.545 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 19:02:23.548 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-02 19:02:23.549 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 197.7119ms
+2025-10-02 19:02:23.551 -06:00 [INF] CORS policy execution successful.
+2025-10-02 19:02:23.555 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 19:02:23.556 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-02 19:02:23.570 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-02 19:02:23.576 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-02 19:02:23.578 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 20.1554ms
+2025-10-02 19:02:23.579 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-02 19:02:23.580 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 31.429ms

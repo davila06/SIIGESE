@@ -1,0 +1,11 @@
+POLIZA,MOD,NOMBRE,PRIMA,MONEDA,FECHA,FRECUENCIA,ASEGURADORA,PLACA,MARCA,MODELO
+POL-2025-001,AUTO,Juan Carlos Pérez Martínez,1500000,COP,01/01/2025,MENSUAL,Seguros La Previsora,ABC123,Toyota,Corolla
+POL-2025-002,VIDA,María Elena García López,2000000,COP,15/01/2025,ANUAL,Seguros Bolívar,,
+POL-2025-003,HOGAR,Carlos Andrés López Torres,800000,COP,20/02/2025,TRIMESTRAL,Seguros del Estado,,
+POL-2025-004,AUTO,Ana María Rodríguez Silva,1200000,COP,10/03/2025,MENSUAL,Seguros La Previsora,DEF456,Chevrolet,Spark
+POL-2025-005,VIDA,Luis Fernando Martínez Cruz,3000000,USD,25/03/2025,ANUAL,Seguros Bolívar,,
+POL-2025-006,AUTO,Sandra Patricia Morales Ruiz,950000,COP,05/04/2025,MENSUAL,Seguros La Previsora,GHI789,Renault,Logan
+POL-2025-007,HOGAR,Roberto Carlos Vargas Mendez,1100000,COP,15/04/2025,SEMESTRAL,Seguros del Estado,,
+POL-2025-008,AUTO,Diana Paola Herrera Castro,1350000,COP,01/05/2025,MENSUAL,Seguros La Previsora,JKL012,Nissan,March
+POL-2025-009,VIDA,Jorge Enrique Salazar Peña,2500000,EUR,20/05/2025,ANUAL,Seguros Bolívar,,
+POL-2025-010,AUTO,Claudia Yaneth Rojas Vega,1450000,COP,10/06/2025,MENSUAL,Seguros La Previsora,MNO345,Hyundai,i10
