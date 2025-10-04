@@ -4,8 +4,8 @@
   align-items: center;
   min-height: 100vh;
   background: 
-    linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%),
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/><circle cx="150" cy="150" r="100" fill="rgba(255,255,255,0.05)"/><circle cx="850" cy="200" r="120" fill="rgba(255,255,255,0.03)"/><circle cx="300" cy="750" r="80" fill="rgba(255,255,255,0.04)"/><circle cx="750" cy="650" r="90" fill="rgba(255,255,255,0.06)"/><path d="M200,300 Q400,200 600,400 T800,500" stroke="rgba(255,255,255,0.08)" stroke-width="2" fill="none"/><path d="M100,600 Q300,500 500,700 T700,800" stroke="rgba(255,255,255,0.06)" stroke-width="2" fill="none"/></svg>');
+    linear-gradient(135deg, rgba(102, 126, 234, 0.85) 0%, rgba(118, 75, 162, 0.85) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="wallGrad" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:%23f5f5f5;stop-opacity:1"/><stop offset="100%" style="stop-color:%23e8e8e8;stop-opacity:1"/></linearGradient><linearGradient id="floorGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:%23d4d4d4;stop-opacity:1"/><stop offset="100%" style="stop-color:%23bdbdbd;stop-opacity:1"/></linearGradient></defs><rect width="100%" height="500" fill="url(%23wallGrad)"/><rect y="500" width="100%" height="300" fill="url(%23floorGrad)"/><g opacity="0.8"><rect x="100" y="300" width="200" height="120" fill="%23ffffff" stroke="%23cccccc" stroke-width="2"/><rect x="120" y="320" width="160" height="80" fill="%234285f4" opacity="0.3"/><rect x="350" y="280" width="180" height="140" fill="%23ffffff" stroke="%23cccccc" stroke-width="2"/><rect x="370" y="300" width="140" height="100" fill="%2334a853" opacity="0.3"/><rect x="580" y="320" width="160" height="100" fill="%23ffffff" stroke="%23cccccc" stroke-width="2"/><rect x="600" y="340" width="120" height="60" fill="%23ea4335" opacity="0.3"/><rect x="800" y="290" width="220" height="130" fill="%23ffffff" stroke="%23cccccc" stroke-width="2"/><rect x="820" y="310" width="180" height="90" fill="%23fbbc04" opacity="0.3"/></g><g opacity="0.6"><rect x="50" y="480" width="80" height="120" rx="5" fill="%23795548"/><rect x="60" y="490" width="60" height="90" fill="%236d4c41"/><rect x="200" y="470" width="90" height="130" rx="5" fill="%23795548"/><rect x="210" y="480" width="70" height="100" fill="%236d4c41"/><rect x="400" y="460" width="100" height="140" rx="5" fill="%23795548"/><rect x="410" y="470" width="80" height="110" fill="%236d4c41"/><rect x="600" y="475" width="85" height="125" rx="5" fill="%23795548"/><rect x="610" y="485" width="65" height="95" fill="%236d4c41"/><rect x="800" y="465" width="95" height="135" rx="5" fill="%23795548"/><rect x="810" y="475" width="75" height="105" fill="%236d4c41"/><rect x="950" y="480" width="75" height="120" rx="5" fill="%23795548"/><rect x="960" y="490" width="55" height="90" fill="%236d4c41"/></g><g opacity="0.7"><rect x="150" y="450" width="40" height="10" rx="20" fill="%23424242"/><rect x="300" y="440" width="45" height="10" rx="20" fill="%23424242"/><rect x="500" y="435" width="50" height="10" rx="20" fill="%23424242"/><rect x="700" y="445" width="42" height="10" rx="20" fill="%23424242"/><rect x="900" y="440" width="48" height="10" rx="20" fill="%23424242"/></g><g opacity="0.4"><rect x="0" y="200" width="1200" height="4" fill="%23e0e0e0"/><rect x="0" y="240" width="1200" height="4" fill="%23e0e0e0"/><rect x="0" y="280" width="1200" height="4" fill="%23e0e0e0"/></g><g opacity="0.3"><circle cx="150" cy="100" r="25" fill="%23ffffff"/><circle cx="400" cy="120" r="30" fill="%23ffffff"/><circle cx="700" cy="90" r="28" fill="%23ffffff"/><circle cx="1000" cy="110" r="32" fill="%23ffffff"/></g><g opacity="0.5"><rect x="80" y="550" width="15" height="30" fill="%23333333"/><circle cx="87" cy="540" r="8" fill="%23ffdbcb"/><rect x="250" y="545" width="12" height="35" fill="%23333333"/><circle cx="256" cy="535" r="7" fill="%23ffdbcb"/><rect x="450" y="555" width="14" height="25" fill="%23333333"/><circle cx="457" cy="545" r="8" fill="%23ffdbcb"/><rect x="650" y="550" width="13" height="30" fill="%23333333"/><circle cx="656" cy="540" r="7" fill="%23ffdbcb"/><rect x="850" y="548" width="15" height="32" fill="%23333333"/><circle cx="857" cy="538" r="8" fill="%23ffdbcb"/></g></svg>');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -20,8 +20,20 @@
     right: 0;
     bottom: 0;
     background: 
-      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%);
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200"><g opacity="0.2"><rect x="50" y="50" width="120" height="80" fill="%234285f4" rx="8"/><rect x="60" y="60" width="100" height="60" fill="%23ffffff" rx="4"/><rect x="200" y="40" width="100" height="90" fill="%2334a853" rx="8"/><rect x="210" y="50" width="80" height="70" fill="%23ffffff" rx="4"/><rect x="350" y="60" width="110" height="70" fill="%23ea4335" rx="8"/><rect x="360" y="70" width="90" height="50" fill="%23ffffff" rx="4"/><rect x="500" y="45" width="130" height="85" fill="%23fbbc04" rx="8"/><rect x="510" y="55" width="110" height="65" fill="%23ffffff" rx="4"/><rect x="680" y="55" width="90" height="75" fill="%239c27b0" rx="8"/><rect x="690" y="65" width="70" height="55" fill="%23ffffff" rx="4"/></g></svg>') no-repeat right bottom;
+    background-size: 400px 100px;
     pointer-events: none;
   }
 }
