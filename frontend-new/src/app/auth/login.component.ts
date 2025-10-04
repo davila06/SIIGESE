@@ -78,25 +78,26 @@ export class LoginComponent implements OnInit {
       this.isResettingPassword = true;
       const { email } = this.resetPasswordForm.value;
 
-      this.authService.resetPassword(email).subscribe({
-        next: (response: ResetPasswordResponse) => {
-          this.showMessage('Se ha enviado un enlace para resetear tu contraseña a tu email');
+      this.authService.forgotPassword(email).subscribe({
+        next: (response: any) => {
+          this.showMessage('Si el email existe, recibirás instrucciones para restablecer tu contraseña');
           this.showResetForm = false;
           this.resetPasswordForm.reset();
           this.isResettingPassword = false;
         },
         error: (error: any) => {
-          console.error('Error al resetear contraseña:', error);
-          let errorMessage = 'Error al enviar el email de reseteo';
+          console.error('Error al solicitar reset de contraseña:', error);
+          let errorMessage = 'Error al procesar la solicitud';
           
-          if (error.status === 404) {
-            errorMessage = 'No se encontró una cuenta con ese email';
-          } else if (error.status === 429) {
+          if (error.status === 429) {
             errorMessage = 'Demasiados intentos. Intenta nuevamente más tarde.';
           } else if (error.status === 500) {
             errorMessage = 'Error del servidor. Intente nuevamente más tarde.';
           } else if (!error.status) {
             errorMessage = 'Error de conexión. Verifique su conexión a internet.';
+          } else {
+            // Por seguridad, siempre mostramos el mismo mensaje
+            errorMessage = 'Si el email existe, recibirás instrucciones para restablecer tu contraseña';
           }
           
           this.showMessage(errorMessage);

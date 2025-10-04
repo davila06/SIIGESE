@@ -2,6 +2,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Linq;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
 using AutoMapper;
@@ -119,6 +120,111 @@ namespace Application.Services
         {
             // Implementar verificación de password con BCrypt
             return BCrypt.Net.BCrypt.Verify(password, hash);
+        }
+
+        public async Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)
+        {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("Usuario no encontrado");
+            }
+
+            // Verificar contraseña actual
+            if (!VerifyPassword(currentPassword, user.PasswordHash))
+            {
+                throw new UnauthorizedAccessException("Contraseña actual incorrecta");
+            }
+
+            // Validar nueva contraseña
+            ValidatePassword(newPassword);
+
+            // Encriptar nueva contraseña
+            user.PasswordHash = HashPassword(newPassword);
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _unitOfWork.Users.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task ForgotPasswordAsync(string email)
+        {
+            var user = await _unitOfWork.Users.GetByEmailAsync(email);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("Usuario no encontrado");
+            }
+
+            // Generar token de reset (válido por 1 hora)
+            var resetToken = Guid.NewGuid().ToString();
+            var expiresAt = DateTime.UtcNow.AddHours(1);
+
+            // Guardar token en la base de datos (necesitarás crear una tabla PasswordResetTokens)
+            // Por ahora, simplemente logueamos el token
+            // En producción, enviarías este token por email
+            
+            // TODO: Implementar envío de email con el token de reset
+            // TODO: Guardar token en base de datos con expiración
+            
+            await Task.CompletedTask;
+        }
+
+        public async Task ResetPasswordAsync(string token, string newPassword)
+        {
+            // TODO: Verificar token en base de datos y su expiración
+            // Por ahora, simulamos validación básica
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("Token inválido");
+            }
+
+            // Validar nueva contraseña
+            ValidatePassword(newPassword);
+
+            // TODO: Encontrar usuario por token y actualizar contraseña
+            // user.PasswordHash = HashPassword(newPassword);
+            // await _unitOfWork.Users.UpdateAsync(user);
+            // await _unitOfWork.SaveChangesAsync();
+
+            await Task.CompletedTask;
+        }
+
+        private void ValidatePassword(string password)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ArgumentException("La contraseña es requerida");
+            }
+
+            if (password.Length < 8)
+            {
+                throw new ArgumentException("La contraseña debe tener al menos 8 caracteres");
+            }
+
+            if (!password.Any(char.IsUpper))
+            {
+                throw new ArgumentException("La contraseña debe contener al menos una mayúscula");
+            }
+
+            if (!password.Any(char.IsLower))
+            {
+                throw new ArgumentException("La contraseña debe contener al menos una minúscula");
+            }
+
+            if (!password.Any(char.IsDigit))
+            {
+                throw new ArgumentException("La contraseña debe contener al menos un número");
+            }
+
+            if (!password.Any(c => !char.IsLetterOrDigit(c)))
+            {
+                throw new ArgumentException("La contraseña debe contener al menos un carácter especial");
+            }
+        }
+
+        private string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
     }
 

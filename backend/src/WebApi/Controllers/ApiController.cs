@@ -108,6 +108,105 @@ namespace WebApi.Controllers
                 return Unauthorized(new { valid = false });
             }
         }
+
+        /// <summary>
+        /// Cambiar contraseña del usuario actual
+        /// </summary>
+        [HttpPost("change-password")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto request)
+        {
+            try
+            {
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return Unauthorized(new { message = "Usuario no identificado" });
+
+                await _authService.ChangePasswordAsync(int.Parse(userId), request.CurrentPassword, request.NewPassword);
+                
+                _logger.LogInformation("Usuario {UserId} cambió su contraseña exitosamente", userId);
+                return Ok(new { message = "Contraseña cambiada exitosamente" });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning("Intento de cambio de contraseña fallido para usuario {UserId}: {Message}", 
+                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value, ex.Message);
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error cambiando contraseña para usuario {UserId}", 
+                    User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                return BadRequest(new { message = "Error interno del servidor" });
+            }
+        }
+
+        /// <summary>
+        /// Solicitar reset de contraseña
+        /// </summary>
+        [HttpPost("forgot-password")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto request)
+        {
+            try
+            {
+                await _authService.ForgotPasswordAsync(request.Email);
+                
+                _logger.LogInformation("Solicitud de reset de contraseña para {Email}", request.Email);
+                return Ok(new { message = "Si el email existe, recibirás instrucciones para restablecer tu contraseña" });
+            }
+            catch (KeyNotFoundException)
+            {
+                // Por seguridad, devolvemos el mismo mensaje aunque el usuario no exista
+                _logger.LogWarning("Solicitud de reset para email no existente: {Email}", request.Email);
+                return Ok(new { message = "Si el email existe, recibirás instrucciones para restablecer tu contraseña" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error procesando solicitud de reset para {Email}", request.Email);
+                return BadRequest(new { message = "Error procesando solicitud" });
+            }
+        }
+
+        /// <summary>
+        /// Restablecer contraseña usando token
+        /// </summary>
+        [HttpPost("reset-password")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto request)
+        {
+            try
+            {
+                await _authService.ResetPasswordAsync(request.Token, request.NewPassword);
+                
+                _logger.LogInformation("Contraseña restablecida exitosamente usando token");
+                return Ok(new { message = "Contraseña restablecida exitosamente" });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning("Token de reset inválido o expirado: {Message}", ex.Message);
+                return BadRequest(new { message = "Token inválido o expirado" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error restableciendo contraseña");
+                return BadRequest(new { message = "Error interno del servidor" });
+            }
+        }
     }
 
     [ApiController]

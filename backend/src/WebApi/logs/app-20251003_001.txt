@@ -1507,3 +1507,168 @@ WHERE [Id] = @p18;
 2025-10-03 17:38:49.382 -06:00 [INF] CORS policy execution successful.
 2025-10-03 17:38:49.384 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/api/api/email/send - 404 0 null 5.0778ms
 2025-10-03 17:38:49.387 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST http://localhost:5000/api/api/email/send, Response status code: 404
+2025-10-03 17:52:41.807 -06:00 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-03 17:52:41.929 -06:00 [INF] Executed DbCommand (40ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-03 17:52:41.946 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-03 17:52:41.977 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-03 17:52:42.026 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-03 17:52:42.076 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-03 17:52:42.084 -06:00 [INF] Database migration completed successfully
+2025-10-03 17:52:42.112 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-03 17:52:42.203 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-03 17:52:42.205 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-03 17:52:42.207 -06:00 [INF] Hosting environment: Production
+2025-10-03 17:52:42.208 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-03 17:53:09.435 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-03 17:53:09.472 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-03 17:53:09.479 -06:00 [INF] CORS policy execution successful.
+2025-10-03 17:53:09.489 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 56.3122ms
+2025-10-03 17:53:09.495 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-03 17:53:09.503 -06:00 [INF] CORS policy execution successful.
+2025-10-03 17:53:09.598 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 17:53:09.622 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-03 17:53:10.022 -06:00 [INF] Executed DbCommand (38ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-03 17:53:10.132 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-03 17:53:10.188 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 560.4925ms
+2025-10-03 17:53:10.191 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 17:53:10.194 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 698.9093ms
+2025-10-03 17:54:14.976 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-03 17:54:14.981 -06:00 [INF] CORS policy execution successful.
+2025-10-03 17:54:14.982 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 5.9889ms
+2025-10-03 17:54:14.985 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-03 17:54:14.986 -06:00 [INF] CORS policy execution successful.
+2025-10-03 17:54:14.990 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 17:54:14.991 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-03 17:54:15.055 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-03 17:54:15.062 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-03 17:54:15.066 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 73.3855ms
+2025-10-03 17:54:15.067 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 17:54:15.069 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 83.9607ms
+2025-10-03 17:54:15.972 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-03 17:54:15.977 -06:00 [INF] CORS policy execution successful.
+2025-10-03 17:54:15.983 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 17:54:15.986 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-03 17:54:15.993 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-03 17:54:16.001 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-03 17:54:16.003 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 14.5284ms
+2025-10-03 17:54:16.005 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 17:54:16.007 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 34.7873ms
+2025-10-03 18:01:25.139 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-03 18:01:25.168 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:25.172 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 39.2647ms
+2025-10-03 18:01:25.186 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login - application/json 53
+2025-10-03 18:01:25.194 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:25.215 -06:00 [INF] Executing endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-03 18:01:25.303 -06:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Application.DTOs.LoginRequestDto) on controller WebApi.Controllers.AuthController (WebApi).
+2025-10-03 18:01:25.909 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[@__email_0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[PasswordHash], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+FROM [Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__email_0
+2025-10-03 18:01:26.274 -06:00 [INF] Executed DbCommand (23ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[CreatedBy], [t].[Email], [t].[FirstName], [t].[IsActive], [t].[IsDeleted], [t].[LastLoginAt], [t].[LastName], [t].[PasswordHash], [t].[UpdatedAt], [t].[UpdatedBy], [t].[UserName], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[IsDeleted], [t0].[RoleId], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserId], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[Description], [t0].[IsActive], [t0].[IsDeleted0], [t0].[Name], [t0].[UpdatedAt0], [t0].[UpdatedBy0]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[PasswordHash], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Id] = @__userId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[IsDeleted], [u0].[RoleId], [u0].[UpdatedAt], [u0].[UpdatedBy], [u0].[UserId], [t1].[Id] AS [Id0], [t1].[CreatedAt] AS [CreatedAt0], [t1].[CreatedBy] AS [CreatedBy0], [t1].[Description], [t1].[IsActive], [t1].[IsDeleted] AS [IsDeleted0], [t1].[Name], [t1].[UpdatedAt] AS [UpdatedAt0], [t1].[UpdatedBy] AS [UpdatedBy0]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN (
+        SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+        FROM [Roles] AS [r]
+        WHERE [r].[IsDeleted] = CAST(0 AS bit)
+    ) AS [t1] ON [u0].[RoleId] = [t1].[Id]
+    WHERE [u0].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [t].[Id] = [t0].[UserId]
+ORDER BY [t].[Id], [t0].[Id]
+2025-10-03 18:01:26.463 -06:00 [INF] Executed DbCommand (22ms) [Parameters=[@p12='?' (DbType = Int32), @p0='?' (DbType = DateTime2), @p1='?' (Size = 4000), @p2='?' (Size = 100), @p3='?' (Size = 50), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (Size = 4000), @p9='?' (DbType = DateTime2), @p10='?' (Size = 4000), @p11='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [CreatedAt] = @p0, [CreatedBy] = @p1, [Email] = @p2, [FirstName] = @p3, [IsActive] = @p4, [IsDeleted] = @p5, [LastLoginAt] = @p6, [LastName] = @p7, [PasswordHash] = @p8, [UpdatedAt] = @p9, [UpdatedBy] = @p10, [UserName] = @p11
+OUTPUT 1
+WHERE [Id] = @p12;
+2025-10-03 18:01:26.484 -06:00 [INF] Usuario admin@sinseg.com ha iniciado sesión exitosamente
+2025-10-03 18:01:26.485 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.LoginResponseDto'.
+2025-10-03 18:01:26.490 -06:00 [INF] Executed action WebApi.Controllers.AuthController.Login (WebApi) in 1185.6202ms
+2025-10-03 18:01:26.491 -06:00 [INF] Executed endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-03 18:01:26.497 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/api/auth/login - 200 null application/json; charset=utf-8 1310.6387ms
+2025-10-03 18:01:26.556 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-03 18:01:26.560 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:26.563 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 7.0155ms
+2025-10-03 18:01:26.568 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-03 18:01:26.570 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:26.572 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 18:01:26.573 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-03 18:01:26.586 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-03 18:01:26.590 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-03 18:01:26.594 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 17.4733ms
+2025-10-03 18:01:26.597 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-03 18:01:26.599 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 30.771ms
+2025-10-03 18:01:34.923 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/api/email/stats - null null
+2025-10-03 18:01:34.938 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:34.939 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/api/email/stats - 204 null null 15.4361ms
+2025-10-03 18:01:34.945 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/api/email/stats - application/json null
+2025-10-03 18:01:34.947 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:34.951 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/api/email/stats - 404 0 null 6.0875ms
+2025-10-03 18:01:34.956 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5000/api/api/email/stats, Response status code: 404
+2025-10-03 18:01:36.346 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/users - null null
+2025-10-03 18:01:36.347 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/roles - null null
+2025-10-03 18:01:36.348 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:36.351 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:36.352 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/users - 204 null null 6.2073ms
+2025-10-03 18:01:36.353 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/roles - 204 null null 5.7256ms
+2025-10-03 18:01:36.355 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/roles - application/json null
+2025-10-03 18:01:36.363 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/users - application/json null
+2025-10-03 18:01:36.365 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:36.366 -06:00 [INF] CORS policy execution successful.
+2025-10-03 18:01:36.370 -06:00 [INF] Executing endpoint 'WebApi.Controllers.UsersController.GetRoles (WebApi)'
+2025-10-03 18:01:36.370 -06:00 [INF] Executing endpoint 'WebApi.Controllers.UsersController.GetUsers (WebApi)'
+2025-10-03 18:01:36.376 -06:00 [INF] Route matched with {action = "GetUsers", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetUsers() on controller WebApi.Controllers.UsersController (WebApi).
+2025-10-03 18:01:36.376 -06:00 [INF] Route matched with {action = "GetRoles", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetRoles() on controller WebApi.Controllers.UsersController (WebApi).
+2025-10-03 18:01:36.398 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+FROM [Roles] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit)
+2025-10-03 18:01:36.403 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Domain.Entities.Role, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Application.DTOs.RoleDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-03 18:01:36.407 -06:00 [INF] Executed action WebApi.Controllers.UsersController.GetRoles (WebApi) in 26.0112ms
+2025-10-03 18:01:36.412 -06:00 [INF] Executed endpoint 'WebApi.Controllers.UsersController.GetRoles (WebApi)'
+2025-10-03 18:01:36.417 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/roles - 200 null application/json; charset=utf-8 61.4423ms
+2025-10-03 18:01:36.419 -06:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[PasswordHash], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[IsDeleted], [t0].[RoleId], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserId], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[Description], [t0].[IsActive], [t0].[IsDeleted0], [t0].[Name], [t0].[UpdatedAt0], [t0].[UpdatedBy0]
+FROM [Users] AS [u]
+LEFT JOIN (
+    SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[IsDeleted], [u0].[RoleId], [u0].[UpdatedAt], [u0].[UpdatedBy], [u0].[UserId], [t].[Id] AS [Id0], [t].[CreatedAt] AS [CreatedAt0], [t].[CreatedBy] AS [CreatedBy0], [t].[Description], [t].[IsActive], [t].[IsDeleted] AS [IsDeleted0], [t].[Name], [t].[UpdatedAt] AS [UpdatedAt0], [t].[UpdatedBy] AS [UpdatedBy0]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN (
+        SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+        FROM [Roles] AS [r]
+        WHERE [r].[IsDeleted] = CAST(0 AS bit)
+    ) AS [t] ON [u0].[RoleId] = [t].[Id]
+    WHERE [u0].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [u].[Id] = [t0].[UserId]
+WHERE [u].[IsDeleted] = CAST(0 AS bit)
+ORDER BY [u].[Id], [t0].[Id]
+2025-10-03 18:01:36.424 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Domain.Entities.User, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Application.DTOs.UserDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-03 18:01:36.431 -06:00 [INF] Executed action WebApi.Controllers.UsersController.GetUsers (WebApi) in 51.5518ms
+2025-10-03 18:01:36.432 -06:00 [INF] Executed endpoint 'WebApi.Controllers.UsersController.GetUsers (WebApi)'
+2025-10-03 18:01:36.433 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/users - 200 null application/json; charset=utf-8 70.4048ms

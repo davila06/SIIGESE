@@ -11,6 +11,20 @@ export interface ResetPasswordRequest {
   email: string;
 }
 
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface PasswordResetRequest {
+  token: string;
+  newPassword: string;
+}
+
 export interface ResetPasswordResponse {
   message: string;
   success: boolean;
@@ -148,5 +162,26 @@ export class AuthService {
     const resetData: ResetPasswordRequest = { email };
     
     return this.http.post<ResetPasswordResponse>(`${this.API_URL}/auth/reset-password`, resetData);
+  }
+
+  // Método para cambiar contraseña del usuario actual
+  changePassword(currentPassword: string, newPassword: string): Observable<any> {
+    const changeData: ChangePasswordRequest = { currentPassword, newPassword };
+    
+    return this.http.post(`${this.API_URL}/auth/change-password`, changeData);
+  }
+
+  // Método para solicitar reset de contraseña (olvido)
+  forgotPassword(email: string): Observable<any> {
+    const forgotData: ForgotPasswordRequest = { email };
+    
+    return this.http.post(`${this.API_URL}/auth/forgot-password`, forgotData);
+  }
+
+  // Método para completar reset de contraseña con token
+  resetPasswordWithToken(token: string, newPassword: string): Observable<any> {
+    const resetData: PasswordResetRequest = { token, newPassword };
+    
+    return this.http.post(`${this.API_URL}/auth/reset-password`, resetData);
   }
 }
