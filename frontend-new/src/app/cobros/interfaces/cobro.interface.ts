@@ -20,18 +20,18 @@ export interface Cobro {
 }
 
 export enum EstadoCobro {
-  PENDIENTE = 'Pendiente',
-  COBRADO = 'Cobrado',
-  VENCIDO = 'Vencido',
-  CANCELADO = 'Cancelado'
+  Pendiente = 0,
+  Cobrado = 1,
+  Vencido = 2,
+  Cancelado = 3
 }
 
 export enum MetodoPago {
-  EFECTIVO = 'Efectivo',
-  TRANSFERENCIA = 'Transferencia',
-  CHEQUE = 'Cheque',
-  TARJETA_CREDITO = 'Tarjeta de Crédito',
-  TARJETA_DEBITO = 'Tarjeta de Débito'
+  Efectivo = 0,
+  Transferencia = 1,
+  Cheque = 2,
+  TarjetaCredito = 3,
+  TarjetaDebito = 4
 }
 
 export interface CobroRequest {
@@ -57,4 +57,26 @@ export interface CobroStats {
   montoTotalPendiente: number;
   montoTotalCobrado: number;
   montoPorVencer: number;
+}
+
+// Funciones helper para convertir enums a labels
+export function getEstadoCobroLabel(estado: EstadoCobro): string {
+  switch (estado) {
+    case EstadoCobro.Pendiente: return 'Pendiente';
+    case EstadoCobro.Cobrado: return 'Cobrado';
+    case EstadoCobro.Vencido: return 'Vencido';
+    case EstadoCobro.Cancelado: return 'Cancelado';
+    default: return 'Desconocido';
+  }
+}
+
+export function getMetodoPagoLabel(metodo: MetodoPago): string {
+  switch (metodo) {
+    case MetodoPago.Efectivo: return 'Efectivo';
+    case MetodoPago.Transferencia: return 'Transferencia';
+    case MetodoPago.Cheque: return 'Cheque';
+    case MetodoPago.TarjetaCredito: return 'Tarjeta de Crédito';
+    case MetodoPago.TarjetaDebito: return 'Tarjeta de Débito';
+    default: return 'Desconocido';
+  }
 }

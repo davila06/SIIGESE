@@ -16,7 +16,9 @@ import {
   Cobro, 
   CobroStats, 
   EstadoCobro, 
-  MetodoPago 
+  MetodoPago,
+  getEstadoCobroLabel,
+  getMetodoPagoLabel
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
@@ -62,7 +64,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   cobros: Cobro[] = [];
   stats: CobroStats | null = null;
   loading = true;
-  filtroEstado = '';
+  filtroEstado: number | null = null;
 
   // Enums para el template
   EstadoCobro = EstadoCobro;
@@ -124,8 +126,8 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  filtrarPorEstado(estado: string): void {
-    if (estado === '') {
+  filtrarPorEstado(estado: number | null): void {
+    if (estado === null) {
       this.dataSource.data = this.cobros;
     } else {
       this.dataSource.data = this.cobros.filter(cobro => cobro.estado === estado);
@@ -153,13 +155,13 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   getEstadoColor(estado: EstadoCobro): string {
     switch (estado) {
-      case EstadoCobro.PENDIENTE:
+      case EstadoCobro.Pendiente:
         return 'primary';
-      case EstadoCobro.COBRADO:
+      case EstadoCobro.Cobrado:
         return 'accent';
-      case EstadoCobro.VENCIDO:
+      case EstadoCobro.Vencido:
         return 'warn';
-      case EstadoCobro.CANCELADO:
+      case EstadoCobro.Cancelado:
         return '';
       default:
         return '';
@@ -168,13 +170,13 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   getEstadoIcon(estado: EstadoCobro): string {
     switch (estado) {
-      case EstadoCobro.PENDIENTE:
+      case EstadoCobro.Pendiente:
         return 'schedule';
-      case EstadoCobro.COBRADO:
+      case EstadoCobro.Cobrado:
         return 'check_circle';
-      case EstadoCobro.VENCIDO:
+      case EstadoCobro.Vencido:
         return 'warning';
-      case EstadoCobro.CANCELADO:
+      case EstadoCobro.Cancelado:
         return 'cancel';
       default:
         return 'help';
@@ -192,6 +194,15 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   getCurrencySymbol(currencyCode: string = CURRENCY_CONSTANTS.DEFAULT_CURRENCY): string {
     const currency = MONEDAS_SISTEMA.find(m => m.value === currencyCode);
     return currency?.symbol || '₡';
+  }
+
+  // Funciones helper para obtener labels de enums
+  getEstadoLabel(estado: EstadoCobro): string {
+    return getEstadoCobroLabel(estado);
+  }
+
+  getMetodoPagoLabel(metodo: MetodoPago): string {
+    return getMetodoPagoLabel(metodo);
   }
 
   private showMessage(message: string): void {
