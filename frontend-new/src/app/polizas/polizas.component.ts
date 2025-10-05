@@ -6,17 +6,16 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
-import { Poliza, CreatePoliza, DataUploadResult } from '../interfaces/user.interface';
-import * as XLSX from 'xlsx';
+import { Poliza, CreatePoliza } from '../interfaces/user.interface';
+import { formatCurrencyByCode, formatDateCR, MONEDAS_SISTEMA, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
 
 @Component({
-    selector: 'app-polizas',
-    templateUrl: './polizas.component.html',
-    styleUrls: ['./polizas.component.scss'],
-    standalone: false
+  selector: 'app-polizas',
+  templateUrl: './polizas.component.html',
+  styleUrls: ['./polizas.component.scss'],
+  standalone: false
 })
 export class PolizasComponent implements OnInit, AfterViewInit {
-  @ViewChild('fileInput') fileInput!: ElementRef;
   @ViewChild('formSection') formSection!: ElementRef;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -25,7 +24,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   polizasDataSource = new MatTableDataSource<Poliza>([]);
   polizaForm: FormGroup;
   isLoading = false;
-  selectedFile: File | null = null;
   selectedPoliza: Poliza | null = null;
   isEditMode = false;
   
@@ -43,10 +41,13 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   filteredPolizasCount = 0;
   displayedColumns: string[] = ['numeroPoliza', 'nombreAsegurado', 'prima', 'aseguradora', 'fechaVigencia', 'vehiculo', 'actions'];
 
+  // Datos para selectores
+  monedasSistema = MONEDAS_SISTEMA;
+
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private authService: AuthService,
+    public authService: AuthService,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef
   ) {
@@ -164,7 +165,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       modalidad: ['', [Validators.required, Validators.maxLength(100)]],
       nombreAsegurado: ['', [Validators.required, Validators.maxLength(200)]],
       prima: [0, [Validators.required, Validators.min(0)]],
-      moneda: ['', [Validators.required, Validators.maxLength(10)]],
+      moneda: [CURRENCY_CONSTANTS.DEFAULT_CURRENCY, [Validators.required, Validators.maxLength(10)]],
       fechaVigencia: ['', Validators.required],
       frecuencia: ['', [Validators.required, Validators.maxLength(50)]],
       aseguradora: ['', [Validators.required, Validators.maxLength(100)]],
@@ -223,6 +224,10 @@ export class PolizasComponent implements OnInit, AfterViewInit {
             if (index !== -1) {
               this.polizas[index] = updatedPoliza;
             }
+            
+            // Actualizar todas las listas filtradas y vistas
+            this.performSearch();
+            
             this.resetForm();
             this.showMessage('Póliza actualizada exitosamente');
             this.isLoading = false;
@@ -238,6 +243,10 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         this.apiService.createPoliza(polizaData).subscribe({
           next: (poliza: Poliza) => {
             this.polizas.push(poliza);
+            
+            // Actualizar todas las listas filtradas y vistas
+            this.performSearch();
+            
             this.resetForm();
             this.showMessage('Póliza creada exitosamente');
             this.isLoading = false;
@@ -250,60 +259,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         });
       }
     }
-  }
-
-  onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file && file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-      this.selectedFile = file;
-    } else {
-      this.showMessage('Por favor seleccione un archivo Excel válido (.xlsx)', 'error');
-    }
-  }
-
-  uploadExcel(): void {
-    if (!this.selectedFile) {
-      this.showMessage('Por favor seleccione un archivo Excel', 'error');
-      return;
-    }
-
-    this.isLoading = true;
-    const perfilId = this.polizaForm.get('perfilId')?.value || 1;
-
-    this.apiService.uploadExcelPolizas(perfilId, this.selectedFile).subscribe({
-      next: (result: DataUploadResult) => {
-        this.showMessage(result.message);
-        
-        // Generar Excel con registros fallidos si hay errores
-        if (result.errorRecords > 0 && result.failedRecords && result.failedRecords.length > 0) {
-          console.warn('Errores en el procesamiento:', result.errors);
-          this.generateFailedRecordsExcel(result.failedRecords, this.selectedFile!.name);
-          
-          this.showMessage(
-            `Se procesaron ${result.processedRecords} registros exitosos y ${result.errorRecords} con errores. ` +
-            `Se ha generado un archivo Excel con los registros fallidos.`,
-            'warning'
-          );
-        }
-        
-        if (result.success && result.processedRecords > 0) {
-          this.loadPolizas();
-        }
-        
-        // Limpiar selección de archivo
-        this.selectedFile = null;
-        if (this.fileInput) {
-          this.fileInput.nativeElement.value = '';
-        }
-        
-        this.isLoading = false;
-      },
-      error: (error: any) => {
-        console.error('Error uploading Excel:', error);
-        this.showMessage('Error al procesar el archivo Excel', 'error');
-        this.isLoading = false;
-      }
-    });
   }
 
   deletePoliza(poliza: Poliza): void {
@@ -344,114 +299,12 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private generateFailedRecordsExcel(failedRecords: any[], originalFileName: string): void {
-    try {
-      // Crear datos para el Excel
-      const excelData = failedRecords.map(record => {
-        const row: any = {
-          'Fila': record.rowNumber,
-          'Error': record.error
-        };
-        
-        // Agregar datos originales
-        if (record.originalData) {
-          Object.keys(record.originalData).forEach(key => {
-            row[key] = record.originalData[key];
-          });
-        }
-        
-        return row;
-      });
-
-      // Crear workbook
-      const worksheet = XLSX.utils.json_to_sheet(excelData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Registros Fallidos');
-
-      // Ajustar anchos de columnas
-      const columnWidths = Object.keys(excelData[0] || {}).map(key => {
-        const maxLength = Math.max(
-          key.length,
-          ...excelData.map(row => String(row[key] || '').length)
-        );
-        return { wch: Math.min(Math.max(maxLength + 2, 10), 50) };
-      });
-      worksheet['!cols'] = columnWidths;
-
-      // Generar archivo y descargar
-      const fileName = `Errores_${originalFileName.replace('.xlsx', '')}_${new Date().toISOString().split('T')[0]}.xlsx`;
-      XLSX.writeFile(workbook, fileName);
-      
-      console.log(`Excel de errores generado: ${fileName}`);
-    } catch (error) {
-      console.error('Error generando Excel de errores:', error);
-      this.showMessage('Error al generar el archivo Excel con los errores', 'error');
-    }
-  }
-
-  testFailedRecordsExcel(): void {
-    // Crear datos de prueba para simular registros fallidos
-    const mockFailedRecords = [
-      {
-        rowNumber: 2,
-        error: "Campos obligatorios vacíos (POLIZA, NOMBRE, ASEGURADORA)",
-        originalData: {
-          "POLIZA": "",
-          "MOD": "AUTO",
-          "NOMBRE": "Juan Pérez",
-          "PRIMA": "150000",
-          "MONEDA": "COP",
-          "FECHA": "2024-12-31",
-          "FRECUENCIA": "Mensual",
-          "ASEGURADORA": "",
-          "PLACA": "ABC123",
-          "MARCA": "Toyota",
-          "MODELO": "Corolla"
-        }
-      },
-      {
-        rowNumber: 5,
-        error: "Póliza ya existe (Número: POL001)",
-        originalData: {
-          "POLIZA": "POL001",
-          "MOD": "VIDA",
-          "NOMBRE": "María García",
-          "PRIMA": "200000",
-          "MONEDA": "USD",
-          "FECHA": "2024-11-30",
-          "FRECUENCIA": "Anual",
-          "ASEGURADORA": "Seguros XYZ",
-          "PLACA": "",
-          "MARCA": "",
-          "MODELO": ""
-        }
-      },
-      {
-        rowNumber: 8,
-        error: "Faltan columnas. Se requieren al menos 8 columnas",
-        originalData: {
-          "POLIZA": "POL123",
-          "MOD": "HOGAR",
-          "NOMBRE": "Carlos López",
-          "PRIMA": "75000",
-          "MONEDA": "COP"
-        }
-      }
-    ];
-
-    this.generateFailedRecordsExcel(mockFailedRecords, "archivo_prueba.xlsx");
-    this.showMessage("Excel de prueba con errores generado exitosamente", "success");
-  }
-
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP'
-    }).format(amount);
+  formatCurrency(amount: number, currency: string = CURRENCY_CONSTANTS.DEFAULT_CURRENCY): string {
+    return formatCurrencyByCode(amount, currency);
   }
 
   formatDate(date: Date): string {
-    return new Date(date).toLocaleDateString('es-CO');
+    return formatDateCR(date);
   }
 
   // Métodos para paginación de tarjetas
@@ -653,7 +506,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     
     // Restablecer valores por defecto
     this.polizaForm.patchValue({
-      perfilId: 1
+      perfilId: 1,
+      moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY
     });
     
     // Limpiar completamente los estados de validación
@@ -679,7 +533,4 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return this.isEditMode ? 'Actualizar Póliza' : 'Guardar Póliza';
   }
 
-  canUploadExcel(): boolean {
-    return this.authService.hasAnyRole(['Admin', 'DataLoader']);
-  }
 }

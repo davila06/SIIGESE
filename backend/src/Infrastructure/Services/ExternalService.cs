@@ -151,34 +151,5 @@ namespace Infrastructure.Services
         }
     }
 
-    public interface IEmailService
-    {
-        Task SendEmailAsync(string to, string subject, string body);
-        Task SendBulkEmailAsync(IEnumerable<string> recipients, string subject, string body);
-    }
 
-    public class EmailService : IEmailService
-    {
-        private readonly ILogger<EmailService> _logger;
-
-        public EmailService(ILogger<EmailService> logger)
-        {
-            _logger = logger;
-        }
-
-        public async Task SendEmailAsync(string to, string subject, string body)
-        {
-            // Implementar envío de email usando SendGrid, SMTP, etc.
-            _logger.LogInformation("Enviando email a {To} con asunto {Subject}", to, subject);
-            await Task.Delay(100); // Simular envío
-        }
-
-        public async Task SendBulkEmailAsync(IEnumerable<string> recipients, string subject, string body)
-        {
-            foreach (var recipient in recipients)
-            {
-                await SendEmailAsync(recipient, subject, body);
-            }
-        }
-    }
 }

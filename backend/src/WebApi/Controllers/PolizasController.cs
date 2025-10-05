@@ -155,7 +155,7 @@ namespace WebApi.Controllers
         /// Actualizar póliza existente
         /// </summary>
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,DataLoader")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PolizaDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(int id, [FromBody] CreatePolizaDto dto)
@@ -181,7 +181,7 @@ namespace WebApi.Controllers
         /// Eliminar póliza
         /// </summary>
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,DataLoader")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)

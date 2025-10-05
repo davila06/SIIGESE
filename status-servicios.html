@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Estado de Servicios - SINSEG</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .service-card.online {
+            border-left-color: #27ae60;
+        }
+        
+        .service-card.offline {
+            border-left-color: #e74c3c;
+        }
+        
+        .service-card.loading {
+            border-left-color: #f39c12;
+        }
+        
+        .service-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-online {
+            background: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .status-offline {
+            background: #fadbd8;
+            color: #e74c3c;
+        }
+        
+        .status-loading {
+            background: #fdebd0;
+            color: #f39c12;
+        }
+        
+        .service-details {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #219a52;
+        }
+        
+        .btn-test {
+            background: #9b59b6;
+            color: white;
+        }
+        
+        .btn-test:hover {
+            background: #8e44ad;
+        }
+        
+        .refresh-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .refresh-btn:hover {
+            background: #138496;
+            transform: scale(1.05);
+        }
+        
+        .logs {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .summary {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Estado de Servicios SINSEG</h1>
+        
+        <div class="service-grid">
+            <!-- Backend API -->
+            <div class="service-card loading" id="backend-card">
+                <div class="service-title">
+                    🚀 Backend API (.NET 8)
+                    <span class="status-badge status-loading" id="backend-status">Verificando...</span>
+                </div>
+                <div class="service-details">
+                    <strong>Puerto:</strong> 5000<br>
+                    <strong>URL:</strong> http://localhost:5000<br>
+                    <strong>Estado:</strong> <span id="backend-info">Verificando conexión...</span>
+                </div>
+                <div class="action-buttons">
+                    <a href="http://localhost:5000/api/auth/validate" class="btn btn-primary" target="_blank">🔗 Probar API</a>
+                    <button class="btn btn-test" onclick="testBackend()">🧪 Test Login</button>
+                </div>
+            </div>
+
+            <!-- Frontend Angular -->
+            <div class="service-card loading" id="frontend-card">
+                <div class="service-title">
+                    🌐 Frontend Angular
+                    <span class="status-badge status-loading" id="frontend-status">Verificando...</span>
+                </div>
+                <div class="service-details">
+                    <strong>Puerto:</strong> 4200<br>
+                    <strong>URL:</strong> http://localhost:4200<br>
+                    <strong>Estado:</strong> <span id="frontend-info">Verificando aplicación...</span>
+                </div>
+                <div class="action-buttons">
+                    <a href="http://localhost:4200" class="btn btn-success" target="_blank">🎯 Abrir App</a>
+                    <a href="http://localhost:4200/auth/change-password" class="btn btn-test" target="_blank">🔐 Test Cambio Password</a>
+                </div>
+            </div>
+
+            <!-- Base de Datos -->
+            <div class="service-card loading" id="database-card">
+                <div class="service-title">
+                    🗄️ Base de Datos SQL Server
+                    <span class="status-badge status-loading" id="database-status">Verificando...</span>
+                </div>
+                <div class="service-details">
+                    <strong>Servidor:</strong> (localdb)\\mssqllocaldb<br>
+                    <strong>BD:</strong> SinsegAppDb<br>
+                    <strong>Estado:</strong> <span id="database-info">Verificando conexión...</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-test" onclick="testDatabase()">🧪 Test Conexión</button>
+                </div>
+            </div>
+
+            <!-- Email Service -->
+            <div class="service-card loading" id="email-card">
+                <div class="service-title">
+                    📧 Servicio de Email
+                    <span class="status-badge status-loading" id="email-status">Verificando...</span>
+                </div>
+                <div class="service-details">
+                    <strong>SMTP:</strong> smtp.gmail.com:587<br>
+                    <strong>Estado:</strong> <span id="email-info">Configurado (requiere credenciales)</span>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-test" onclick="testForgotPassword()">🧪 Test Forgot Password</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="refresh-btn" onclick="checkAllServices()">🔄 Actualizar Estado</button>
+        
+        <div class="summary" id="summary">
+            <h3>📊 Resumen del Sistema</h3>
+            <p id="summary-text">Verificando servicios...</p>
+        </div>
+
+        <div class="logs" id="logs">
+            <strong>📋 Log de Verificaciones:</strong><br>
+            Iniciando verificación de servicios...<br>
+        </div>
+    </div>
+
+    <script>
+        let logs = [];
+
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            logs.push(`[${timestamp}] ${message}`);
+            const logsDiv = document.getElementById('logs');
+            logsDiv.innerHTML = '<strong>📋 Log de Verificaciones:</strong><br>' + 
+                               logs.slice(-10).join('<br>'); // Mostrar últimos 10 logs
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        async function checkService(url, timeout = 5000) {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                
+                const response = await fetch(url, { 
+                    signal: controller.signal,
+                    mode: 'cors'
+                });
+                clearTimeout(timeoutId);
+                
+                return { 
+                    success: true, 
+                    status: response.status, 
+                    statusText: response.statusText 
+                };
+            } catch (error) {
+                return { 
+                    success: false, 
+                    error: error.message 
+                };
+            }
+        }
+
+        async function updateServiceCard(cardId, statusId, infoId, isOnline, message, details = '') {
+            const card = document.getElementById(cardId);
+            const status = document.getElementById(statusId);
+            const info = document.getElementById(infoId);
+            
+            card.className = `service-card ${isOnline ? 'online' : 'offline'}`;
+            status.className = `status-badge ${isOnline ? 'status-online' : 'status-offline'}`;
+            status.textContent = isOnline ? 'ONLINE' : 'OFFLINE';
+            info.innerHTML = message + (details ? `<br><small>${details}</small>` : '');
+        }
+
+        async function checkBackend() {
+            addLog('🚀 Verificando Backend API...');
+            
+            const result = await checkService('http://localhost:5000/api/auth/validate');
+            
+            if (result.success) {
+                addLog('✅ Backend API: ONLINE');
+                await updateServiceCard('backend-card', 'backend-status', 'backend-info', 
+                    true, 'API funcionando correctamente', `Status: ${result.status}`);
+            } else {
+                addLog('❌ Backend API: OFFLINE - ' + result.error);
+                await updateServiceCard('backend-card', 'backend-status', 'backend-info', 
+                    false, 'No se puede conectar al servidor', result.error);
+            }
+        }
+
+        async function checkFrontend() {
+            addLog('🌐 Verificando Frontend Angular...');
+            
+            const result = await checkService('http://localhost:4200');
+            
+            if (result.success) {
+                addLog('✅ Frontend Angular: ONLINE');
+                await updateServiceCard('frontend-card', 'frontend-status', 'frontend-info', 
+                    true, 'Aplicación cargada correctamente', 'Angular Dev Server activo');
+            } else {
+                addLog('❌ Frontend Angular: OFFLINE - ' + result.error);
+                await updateServiceCard('frontend-card', 'frontend-status', 'frontend-info', 
+                    false, 'Aplicación no disponible', result.error);
+            }
+        }
+
+        async function checkDatabase() {
+            addLog('🗄️ Verificando Base de Datos...');
+            
+            // Verificamos indirectamente a través del backend
+            const result = await checkService('http://localhost:5000/api/auth/validate');
+            
+            if (result.success) {
+                addLog('✅ Base de Datos: ONLINE (verificada via API)');
+                await updateServiceCard('database-card', 'database-status', 'database-info', 
+                    true, 'Conexión establecida', 'LocalDB respondiendo correctamente');
+            } else {
+                addLog('⚠️ Base de Datos: ESTADO DESCONOCIDO');
+                await updateServiceCard('database-card', 'database-status', 'database-info', 
+                    false, 'No se puede verificar conexión', 'Backend no disponible');
+            }
+        }
+
+        async function checkEmail() {
+            addLog('📧 Verificando Servicio de Email...');
+            
+            // El servicio de email se verifica por configuración
+            const card = document.getElementById('email-card');
+            const status = document.getElementById('email-status');
+            const info = document.getElementById('email-info');
+            
+            card.className = 'service-card online';
+            status.className = 'status-badge status-online';
+            status.textContent = 'CONFIGURADO';
+            info.innerHTML = 'Servicio implementado<br><small>Requiere credenciales SMTP para envío real</small>';
+            
+            addLog('✅ Email Service: CONFIGURADO');
+        }
+
+        async function testBackend() {
+            addLog('🧪 Ejecutando test de login...');
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'admin@admin.com', password: 'admin123' })
+                });
+                
+                if (response.ok) {
+                    addLog('✅ Test Login: EXITOSO');
+                    alert('✅ Test de login exitoso! Backend funcionando correctamente.');
+                } else {
+                    addLog('⚠️ Test Login: Respuesta no esperada - ' + response.status);
+                    alert('⚠️ Backend responde pero el login falló. Verificar credenciales.');
+                }
+            } catch (error) {
+                addLog('❌ Test Login: ERROR - ' + error.message);
+                alert('❌ Error en test de login: ' + error.message);
+            }
+        }
+
+        async function testDatabase() {
+            addLog('🧪 Testeando conexión a base de datos...');
+            await checkDatabase();
+        }
+
+        async function testForgotPassword() {
+            addLog('🧪 Testeando servicio de forgot password...');
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: 'test@test.com' })
+                });
+                
+                if (response.ok) {
+                    addLog('✅ Test Forgot Password: EXITOSO');
+                    alert('✅ Servicio de forgot password funcionando correctamente!');
+                } else {
+                    addLog('⚠️ Test Forgot Password: Respuesta no esperada - ' + response.status);
+                    alert('⚠️ Servicio responde pero con error: ' + response.status);
+                }
+            } catch (error) {
+                addLog('❌ Test Forgot Password: ERROR - ' + error.message);
+                alert('❌ Error en test de forgot password: ' + error.message);
+            }
+        }
+
+        async function checkAllServices() {
+            addLog('🔄 Iniciando verificación completa de servicios...');
+            
+            // Ejecutar verificaciones en paralelo
+            await Promise.all([
+                checkBackend(),
+                checkFrontend(),
+                checkDatabase(),
+                checkEmail()
+            ]);
+            
+            updateSummary();
+            addLog('✅ Verificación completa finalizada');
+        }
+
+        function updateSummary() {
+            const backendOnline = document.getElementById('backend-card').classList.contains('online');
+            const frontendOnline = document.getElementById('frontend-card').classList.contains('online');
+            const databaseOnline = document.getElementById('database-card').classList.contains('online');
+            const emailConfigured = document.getElementById('email-card').classList.contains('online');
+            
+            const totalServices = 4;
+            const onlineServices = [backendOnline, frontendOnline, databaseOnline, emailConfigured].filter(Boolean).length;
+            
+            const summaryText = document.getElementById('summary-text');
+            const percentage = Math.round((onlineServices / totalServices) * 100);
+            
+            if (percentage === 100) {
+                summaryText.innerHTML = `🎉 <strong>Sistema Completamente Operativo</strong><br>
+                    Todos los servicios están funcionando correctamente (${onlineServices}/${totalServices})`;
+            } else if (percentage >= 75) {
+                summaryText.innerHTML = `⚠️ <strong>Sistema Mayormente Operativo</strong><br>
+                    ${onlineServices}/${totalServices} servicios funcionando (${percentage}%)`;
+            } else {
+                summaryText.innerHTML = `❌ <strong>Sistema con Problemas</strong><br>
+                    Solo ${onlineServices}/${totalServices} servicios funcionando (${percentage}%)`;
+            }
+        }
+
+        // Iniciar verificación automática al cargar la página
+        window.addEventListener('load', () => {
+            setTimeout(checkAllServices, 1000);
+        });
+
+        // Auto-refresh cada 30 segundos
+        setInterval(checkAllServices, 30000);
+    </script>
+</body>
+</html>

@@ -43,6 +43,14 @@ namespace Application.Mappings
                 .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
                 .ForMember(dest => dest.EsActivo, opt => opt.MapFrom(src => true));
+
+            // Cobro mappings
+            CreateMap<Cobro, CobroDto>()
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado.ToString()))
+                .ForMember(dest => dest.MetodoPago, opt => opt.MapFrom(src => 
+                    src.MetodoPago.HasValue ? src.MetodoPago.Value.ToString() : null))
+                .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom(src => src.CreatedAt))
+                .ForMember(dest => dest.FechaActualizacion, opt => opt.MapFrom(src => src.UpdatedAt));
         }
     }
 }

@@ -8,7 +8,7 @@ COLUMNAS REQUERIDAS (Posiciones 1-8):
 2. MOD - Modalidad (texto, no puede estar vacío)
 3. NOMBRE - Nombre del asegurado (texto, no puede estar vacío)
 4. PRIMA - Prima de la póliza (número decimal, ej: 1500.50)
-5. MONEDA - Moneda (COP, USD, EUR solamente)
+5. MONEDA - Moneda (CRC, USD, EUR solamente)
 6. FECHA - Fecha de vigencia (formato: dd/MM/yyyy, dd-MM-yyyy, etc.)
 7. FRECUENCIA - Frecuencia de pago (texto, no puede estar vacío)
 8. ASEGURADORA - Nombre de la aseguradora (texto, no puede estar vacío)
@@ -20,14 +20,14 @@ COLUMNAS OPCIONALES (Posiciones 9-11):
 
 EJEMPLO DE DATOS:
 POLIZA     | MOD      | NOMBRE         | PRIMA   | MONEDA | FECHA      | FRECUENCIA | ASEGURADORA | PLACA   | MARCA | MODELO
-POL-001    | AUTO     | Juan Pérez     | 1500.50 | COP    | 01/12/2024 | MENSUAL    | Seguros XYZ | ABC123  | Toyota| Corolla
+POL-001    | AUTO     | Juan Pérez     | 1500.50 | CRC    | 01/12/2024 | MENSUAL    | Seguros XYZ | ABC123  | Toyota| Corolla
 POL-002    | VIDA     | María García   | 2000.00 | USD    | 15/01/2025 | ANUAL      | Seguros ABC |         |       |
-POL-003    | HOGAR    | Carlos López   | 800.75  | COP    | 20/02/2024 | TRIMESTRAL | Seguros DEF |         |       |
+POL-003    | HOGAR    | Carlos López   | 800.75  | CRC    | 20/02/2024 | TRIMESTRAL | Seguros DEF |         |       |
 
 NOTAS IMPORTANTES:
 - La primera fila debe contener los encabezados exactos
 - Las columnas POLIZA, MOD, NOMBRE, PRIMA, MONEDA, FECHA, FRECUENCIA y ASEGURADORA son obligatorias
 - El número de póliza debe ser único en el sistema
-- Las monedas válidas son: COP, USD, EUR
+- Las monedas válidas son: CRC, USD, EUR
 - Las fechas pueden estar en varios formatos (dd/MM/yyyy, MM/dd/yyyy, yyyy-MM-dd, etc.)
 - Las columnas PLACA, MARCA y MODELO son opcionales y pueden estar vacías

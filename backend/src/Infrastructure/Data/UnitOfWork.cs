@@ -20,6 +20,8 @@ namespace Infrastructure.Data
             Clientes = new ClienteRepository(_context);
             DataRecords = new DataRecordRepository(_context);
             Polizas = new PolizaRepository(_context);
+            PasswordResetTokens = new PasswordResetTokenRepository(_context);
+            Cobros = new CobroRepository(_context);
         }
 
         public IUserRepository Users { get; }
@@ -27,6 +29,8 @@ namespace Infrastructure.Data
         public IClienteRepository Clientes { get; }
         public IDataRecordRepository DataRecords { get; }
         public IPolizaRepository Polizas { get; }
+        public IPasswordResetTokenRepository PasswordResetTokens { get; }
+        public ICobroRepository Cobros { get; }
 
         public async Task<int> SaveChangesAsync()
         {

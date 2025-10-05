@@ -21,12 +21,14 @@ namespace Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
+        private readonly IEmailService _emailService;
 
-        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        public AuthService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IEmailService emailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
@@ -54,7 +56,8 @@ namespace Application.Services
             {
                 Token = token,
                 ExpiresAt = DateTime.UtcNow.AddHours(8),
-                User = _mapper.Map<UserDto>(userWithRoles)
+                User = _mapper.Map<UserDto>(userWithRoles),
+                RequiresPasswordChange = user.RequiresPasswordChange
             };
         }
 
@@ -141,6 +144,8 @@ namespace Application.Services
 
             // Encriptar nueva contraseña
             user.PasswordHash = HashPassword(newPassword);
+            user.RequiresPasswordChange = false; // Ya no requiere cambio
+            user.LastPasswordChangeAt = DateTime.UtcNow;
             user.UpdatedAt = DateTime.UtcNow;
 
             await _unitOfWork.Users.UpdateAsync(user);
@@ -155,38 +160,73 @@ namespace Application.Services
                 throw new KeyNotFoundException("Usuario no encontrado");
             }
 
-            // Generar token de reset (válido por 1 hora)
-            var resetToken = Guid.NewGuid().ToString();
+            // Invalidar tokens existentes del usuario
+            await _unitOfWork.PasswordResetTokens.InvalidateUserTokensAsync(user.Id);
+
+            // Generar nuevo token de reset (válido por 1 hora)
+            var resetToken = Guid.NewGuid().ToString().Replace("-", "");
             var expiresAt = DateTime.UtcNow.AddHours(1);
 
-            // Guardar token en la base de datos (necesitarás crear una tabla PasswordResetTokens)
-            // Por ahora, simplemente logueamos el token
-            // En producción, enviarías este token por email
+            var passwordResetToken = new PasswordResetToken
+            {
+                Token = resetToken,
+                UserId = user.Id,
+                ExpiresAt = expiresAt,
+                CreatedBy = "System",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _unitOfWork.PasswordResetTokens.AddAsync(passwordResetToken);
+            await _unitOfWork.SaveChangesAsync();
+
+            // Enviar email con token de reset
+            var resetUrl = _configuration["App:FrontendUrl"] ?? "http://localhost:4200";
+            resetUrl += "/change-password";
             
-            // TODO: Implementar envío de email con el token de reset
-            // TODO: Guardar token en base de datos con expiración
-            
-            await Task.CompletedTask;
+            try
+            {
+                await _emailService.SendPasswordResetEmailAsync(email, resetToken, resetUrl);
+            }
+            catch (Exception ex)
+            {
+                // Log el error pero no fallar el proceso
+                // En un entorno de producción, podrías querer fallar si el email no se puede enviar
+                Console.WriteLine($"Error enviando email: {ex.Message}");
+            }
         }
 
         public async Task ResetPasswordAsync(string token, string newPassword)
         {
-            // TODO: Verificar token en base de datos y su expiración
-            // Por ahora, simulamos validación básica
             if (string.IsNullOrEmpty(token))
             {
                 throw new UnauthorizedAccessException("Token inválido");
             }
 
+            // Buscar token válido en base de datos
+            var resetToken = await _unitOfWork.PasswordResetTokens.GetByTokenAsync(token);
+            if (resetToken == null)
+            {
+                throw new UnauthorizedAccessException("Token inválido o expirado");
+            }
+
             // Validar nueva contraseña
             ValidatePassword(newPassword);
 
-            // TODO: Encontrar usuario por token y actualizar contraseña
-            // user.PasswordHash = HashPassword(newPassword);
-            // await _unitOfWork.Users.UpdateAsync(user);
-            // await _unitOfWork.SaveChangesAsync();
+            // Actualizar contraseña del usuario
+            var user = resetToken.User;
+            user.PasswordHash = HashPassword(newPassword);
+            user.RequiresPasswordChange = false; // Ya no requiere cambio
+            user.LastPasswordChangeAt = DateTime.UtcNow;
+            user.UpdatedAt = DateTime.UtcNow;
 
-            await Task.CompletedTask;
+            await _unitOfWork.Users.UpdateAsync(user);
+
+            // Marcar token como usado
+            resetToken.IsUsed = true;
+            resetToken.UsedAt = DateTime.UtcNow;
+            await _unitOfWork.PasswordResetTokens.UpdateAsync(resetToken);
+
+            await _unitOfWork.SaveChangesAsync();
         }
 
         private void ValidatePassword(string password)

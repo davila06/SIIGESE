@@ -65,6 +65,16 @@
           <span [class.collapsed]="isCollapsed && !isMobile">Reclamos</span>
           <div class="nav-indicator"></div>
         </a>
+                
+        <a mat-button 
+           class="nav-item" 
+           routerLink="/cotizaciones" 
+           routerLinkActive="active"
+           (click)="onNavItemClick()">
+          <mat-icon>request_quote</mat-icon>
+          <span [class.collapsed]="isCollapsed && !isMobile">Cotizaciones</span>
+          <div class="nav-indicator"></div>
+        </a>
         
         <a mat-button 
            class="nav-item" 
@@ -84,6 +94,17 @@
            (click)="onNavItemClick()">
           <mat-icon>people</mat-icon>
           <span [class.collapsed]="isCollapsed && !isMobile">Usuarios</span>
+          <div class="nav-indicator"></div>
+        </a>
+     
+      <a mat-button 
+           class="nav-item" 
+           routerLink="/polizas/upload" 
+           routerLinkActive="active"
+           *ngIf="canUploadExcel()"
+           (click)="onNavItemClick()">
+          <mat-icon>cloud_upload</mat-icon>
+          <span [class.collapsed]="isCollapsed && !isMobile">Subir Pólizas Excel</span>
           <div class="nav-indicator"></div>
         </a>
       </nav>

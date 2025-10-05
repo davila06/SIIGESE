@@ -7,10 +7,10 @@ import { AuthService, User } from './services/auth.service';
 import { TitleService } from './services/title.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  standalone: false
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sidenav', { static: false }) sidenav!: MatSidenav;
@@ -107,6 +107,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isAdmin(): boolean {
     return this.authService.hasAnyRole(['Admin']);
+  }
+
+  canUploadExcel(): boolean {
+    return this.authService.hasAnyRole(['Admin', 'DataLoader']);
   }
 
   getCurrentModule(): string {

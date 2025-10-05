@@ -1,0 +1,426 @@
+<div class="cotizaciones-container">
+  <div class="header-section">
+    <h1 class="page-title">
+      <mat-icon>request_quote</mat-icon>
+      Gestión de Cotizaciones
+    </h1>
+    <p class="page-subtitle">Administra cotizaciones de seguros</p>
+  </div>
+
+  <mat-tab-group class="main-tabs" animationDuration="300ms">
+    <!-- Tab: Lista de Cotizaciones -->
+    <mat-tab label="Lista de Cotizaciones">
+      <div class="tab-content">
+        <!-- Filtros de búsqueda -->
+        <mat-card class="filters-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>filter_list</mat-icon>
+              Filtros de Búsqueda
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="filters-row">
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Buscar</mat-label>
+                <input matInput
+                       [(ngModel)]="searchTerm"
+                       (input)="applyFilter()"
+                       placeholder="Número, nombre o email...">
+                <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Tipo de Seguro</mat-label>
+                <mat-select [(ngModel)]="selectedTipoSeguro" (selectionChange)="applyFilter()">
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option *ngFor="let tipo of tiposSeguro" [value]="tipo.value">
+                    {{tipo.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Estado</mat-label>
+                <mat-select [(ngModel)]="selectedEstado" (selectionChange)="applyFilter()">
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option *ngFor="let estado of estadosCotizacion" [value]="estado.value">
+                    {{estado.label}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <button mat-raised-button 
+                      color="accent" 
+                      (click)="clearFilters()"
+                      class="clear-filters-btn">
+                <mat-icon>clear</mat-icon>
+                Limpiar
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Tabla de cotizaciones -->
+        <mat-card class="table-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>list</mat-icon>
+              Cotizaciones Registradas
+            </mat-card-title>
+            <div class="header-actions">
+              <button mat-raised-button 
+                      color="primary" 
+                      (click)="loadCotizaciones()"
+                      [disabled]="isLoading">
+                <mat-icon>refresh</mat-icon>
+                Actualizar
+              </button>
+            </div>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="table-container">
+              <table mat-table 
+                     [dataSource]="cotizacionesDataSource" 
+                     matSort 
+                     class="cotizaciones-table">
+                
+                <!-- Número de cotización -->
+                <ng-container matColumnDef="numeroCotizacion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Número</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    <span class="numero-cotizacion">{{cotizacion.numeroCotizacion}}</span>
+                  </td>
+                </ng-container>
+
+                <!-- Solicitante -->
+                <ng-container matColumnDef="nombreSolicitante">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Solicitante</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    <div class="solicitante-info">
+                      <span class="nombre">{{cotizacion.nombreSolicitante}}</span>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <!-- Email -->
+                <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    <span class="email">{{cotizacion.email}}</span>
+                  </td>
+                </ng-container>
+
+                <!-- Tipo de Seguro -->
+                <ng-container matColumnDef="tipoSeguro">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    <mat-chip-set>
+                      <mat-chip [color]="'primary'" selected>
+                        {{getTipoSeguroLabel(cotizacion.tipoSeguro)}}
+                      </mat-chip>
+                    </mat-chip-set>
+                  </td>
+                </ng-container>
+
+                <!-- Aseguradora -->
+                <ng-container matColumnDef="aseguradora">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Aseguradora</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    {{cotizacion.aseguradora}}
+                  </td>
+                </ng-container>
+
+                <!-- Monto Asegurado -->
+                <ng-container matColumnDef="montoAsegurado">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    <span class="monto">{{formatCurrency(cotizacion.montoAsegurado)}}</span>
+                  </td>
+                </ng-container>
+
+                <!-- Estado -->
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    <mat-chip-set>
+                      <mat-chip [color]="getEstadoColor(cotizacion.estado)" selected>
+                        {{cotizacion.estado}}
+                      </mat-chip>
+                    </mat-chip-set>
+                  </td>
+                </ng-container>
+
+                <!-- Fecha -->
+                <ng-container matColumnDef="fechaCotizacion">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    {{formatDate(cotizacion.fechaCotizacion)}}
+                  </td>
+                </ng-container>
+
+                <!-- Acciones -->
+                <ng-container matColumnDef="acciones">
+                  <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                  <td mat-cell *matCellDef="let cotizacion">
+                    <div class="actions-container">
+                      <button mat-icon-button 
+                              color="primary"
+                              (click)="editCotizacion(cotizacion)"
+                              matTooltip="Editar cotización">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+
+                      <button mat-icon-button 
+                              [matMenuTriggerFor]="estadoMenu"
+                              color="accent"
+                              matTooltip="Cambiar estado">
+                        <mat-icon>more_vert</mat-icon>
+                      </button>
+                      <mat-menu #estadoMenu="matMenu">
+                        <button mat-menu-item 
+                                *ngFor="let estado of estadosCotizacion"
+                                (click)="updateEstado(cotizacion, estado.value)"
+                                [disabled]="cotizacion.estado === estado.value">
+                          <mat-icon>{{estado.value === 'APROBADA' ? 'check_circle' : 
+                                      estado.value === 'RECHAZADA' ? 'cancel' :
+                                      estado.value === 'CONVERTIDA' ? 'assignment_turned_in' : 
+                                      'schedule'}}</mat-icon>
+                          <span>{{estado.label}}</span>
+                        </button>
+                      </mat-menu>
+
+                      <button mat-icon-button 
+                              color="warn"
+                              (click)="deleteCotizacion(cotizacion)"
+                              matTooltip="Eliminar cotización">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+
+              <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" 
+                             showFirstLastButtons>
+              </mat-paginator>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Tab: Nueva/Editar Cotización -->
+    <mat-tab [label]="formTitle">
+      <div class="tab-content">
+        <mat-card class="form-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>{{isEditMode ? 'edit' : 'add'}}</mat-icon>
+              {{formTitle}}
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="cotizacionForm" (ngSubmit)="onSubmit()">
+              <!-- Información básica -->
+              <div class="form-section">
+                <h3 class="section-title">Información del Solicitante</h3>
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Nombre Completo *</mat-label>
+                    <input matInput formControlName="nombreSolicitante" required>
+                    <mat-error *ngIf="cotizacionForm.get('nombreSolicitante')?.hasError('required')">
+                      El nombre es obligatorio
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Email *</mat-label>
+                    <input matInput type="email" formControlName="email" required>
+                    <mat-error *ngIf="cotizacionForm.get('email')?.hasError('required')">
+                      El email es obligatorio
+                    </mat-error>
+                    <mat-error *ngIf="cotizacionForm.get('email')?.hasError('email')">
+                      Formato de email inválido
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput formControlName="telefono">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Información del seguro -->
+              <div class="form-section">
+                <h3 class="section-title">Información del Seguro</h3>
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Tipo de Seguro *</mat-label>
+                    <mat-select formControlName="tipoSeguro" required>
+                      <mat-option *ngFor="let tipo of tiposSeguro" [value]="tipo.value">
+                        {{tipo.label}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Aseguradora *</mat-label>
+                    <input matInput formControlName="aseguradora" required>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Moneda</mat-label>
+                    <mat-select formControlName="moneda">
+                      <mat-option *ngFor="let moneda of monedas" [value]="moneda.value">
+                        {{moneda.label}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Monto Asegurado *</mat-label>
+                    <input matInput type="number" formControlName="montoAsegurado" required>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Prima Cotizada</mat-label>
+                    <input matInput type="number" formControlName="primaCotizada">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Fecha de Vencimiento</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="fechaVencimiento">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Campos específicos para seguro de auto -->
+              <div class="form-section" *ngIf="isAutoSeguro">
+                <h3 class="section-title">Información del Vehículo</h3>
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Placa</mat-label>
+                    <input matInput formControlName="placa">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Marca</mat-label>
+                    <input matInput formControlName="marca">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Modelo</mat-label>
+                    <input matInput formControlName="modelo">
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Año</mat-label>
+                    <input matInput type="number" formControlName="año">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Cilindraje</mat-label>
+                    <input matInput formControlName="cilindraje">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Campos específicos para seguro de vida -->
+              <div class="form-section" *ngIf="isVidaSeguro">
+                <h3 class="section-title">Información Personal</h3>
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Fecha de Nacimiento</mat-label>
+                    <input matInput [matDatepicker]="pickerNacimiento" formControlName="fechaNacimiento">
+                    <mat-datepicker-toggle matSuffix [for]="pickerNacimiento"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerNacimiento></mat-datepicker>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Género</mat-label>
+                    <mat-select formControlName="genero">
+                      <mat-option *ngFor="let genero of generos" [value]="genero.value">
+                        {{genero.label}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Ocupación</mat-label>
+                    <input matInput formControlName="ocupacion">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Campos específicos para seguro de hogar -->
+              <div class="form-section" *ngIf="isHogarSeguro">
+                <h3 class="section-title">Información del Inmueble</h3>
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Dirección del Inmueble</mat-label>
+                    <input matInput formControlName="direccionInmueble">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Tipo de Inmueble</mat-label>
+                    <mat-select formControlName="tipoInmueble">
+                      <mat-option *ngFor="let tipo of tiposInmueble" [value]="tipo.value">
+                        {{tipo.label}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Valor del Inmueble</mat-label>
+                    <input matInput type="number" formControlName="valorInmueble">
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- Observaciones -->
+              <div class="form-section">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Observaciones</mat-label>
+                  <textarea matInput 
+                            formControlName="observaciones" 
+                            rows="3"
+                            placeholder="Información adicional sobre la cotización..."></textarea>
+                </mat-form-field>
+              </div>
+
+              <!-- Botones -->
+              <div class="form-actions">
+                <button mat-raised-button 
+                        type="button" 
+                        (click)="resetForm()"
+                        [disabled]="isLoading">
+                  <mat-icon>clear</mat-icon>
+                  Cancelar
+                </button>
+
+                <button mat-raised-button 
+                        color="primary" 
+                        type="submit"
+                        [disabled]="!cotizacionForm.valid || isLoading">
+                  <mat-icon>{{isEditMode ? 'save' : 'add'}}</mat-icon>
+                  {{submitButtonText}}
+                </button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

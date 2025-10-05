@@ -59,8 +59,8 @@ namespace Application.Validators
 
             RuleFor(x => x.Moneda)
                 .NotEmpty().WithMessage("La moneda es requerida")
-                .Must(x => x == "COP" || x == "USD" || x == "EUR")
-                .WithMessage("La moneda debe ser COP, USD o EUR");
+                .Must(x => x == "CRC" || x == "USD" || x == "EUR")
+                .WithMessage("La moneda debe ser CRC, USD o EUR");
 
             RuleFor(x => x.FechaVigencia)
                 .GreaterThan(DateTime.Today.AddDays(-30))

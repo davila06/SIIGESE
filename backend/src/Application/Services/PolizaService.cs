@@ -474,7 +474,7 @@ namespace Application.Services
 
         private bool IsValidCurrency(string currency)
         {
-            var validCurrencies = new[] { "COP", "USD", "EUR" };
+            var validCurrencies = new[] { "CRC", "USD", "EUR" };
             return validCurrencies.Contains(currency?.ToUpperInvariant());
         }
 
@@ -488,8 +488,8 @@ namespace Application.Services
             // Convertir formatos largos a códigos ISO
             if (upperCurrency.Contains("COLON") || upperCurrency == "COL")
             {
-                Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' convertida automáticamente a 'COP'");
-                return "COP";
+                Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' convertida automáticamente a 'CRC'");
+                return "CRC";
             }
             
             if (upperCurrency.Contains("DOLAR") || upperCurrency.Contains("DOLLAR") || upperCurrency == "DOL")
@@ -508,9 +508,9 @@ namespace Application.Services
             if (IsValidCurrency(currency))
                 return currency.ToUpperInvariant();
 
-            // Si no se puede convertir, devolver COP por defecto
-            Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' no reconocida, asignando 'COP' por defecto");
-            return "COP";
+            // Si no se puede convertir, devolver CRC por defecto
+            Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' no reconocida, asignando 'CRC' por defecto");
+            return "CRC";
         }
 
         private string GenerateErrorSummary(List<string> errors)
@@ -530,7 +530,7 @@ namespace Application.Services
                 }
                 else if (error.Contains("Moneda inválida"))
                 {
-                    var key = "Moneda inválida (use: COP, USD, EUR)";
+                    var key = "Moneda inválida (use: CRC, USD, EUR)";
                     errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
                 }
                 else if (error.Contains("Faltan columnas"))

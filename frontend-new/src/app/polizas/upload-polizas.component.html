@@ -1,0 +1,223 @@
+<div class="upload-container">
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-content">
+      <button mat-icon-button (click)="navigateToPolizas()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="header-text">
+        <h1>📊 Subir Pólizas Excel</h1>
+        <p>Carga masiva de pólizas desde archivo Excel</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-section">
+    
+    <!-- Upload Area -->
+    <mat-card class="upload-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>cloud_upload</mat-icon>
+          Seleccionar Archivo
+        </mat-card-title>
+        <mat-card-subtitle>
+          Arrastra tu archivo Excel aquí o haz clic para seleccionar
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Drag & Drop Area -->
+        <div class="drop-zone"
+             [class.drag-over]="isDragOver"
+             [class.has-file]="selectedFile"
+             (dragover)="onDragOver($event)"
+             (dragleave)="onDragLeave($event)"
+             (drop)="onDrop($event)"
+             (click)="fileInput.click()">
+          
+          <!-- No file selected state -->
+          <div *ngIf="!selectedFile" class="drop-zone-content">
+            <mat-icon class="upload-icon">cloud_upload</mat-icon>
+            <h3>Arrastra tu archivo Excel aquí</h3>
+            <p>o haz clic para seleccionar</p>
+            <small>Formatos soportados: .xlsx, .xls (máximo 10MB)</small>
+          </div>
+
+          <!-- File selected state -->
+          <div *ngIf="selectedFile" class="file-selected">
+            <mat-icon class="file-icon">{{ getFileIcon() }}</mat-icon>
+            <div class="file-info">
+              <h4>{{ selectedFile.name }}</h4>
+              <p>{{ getFileSizeFormatted() }}</p>
+            </div>
+            <button mat-icon-button 
+                    (click)="clearFile(); $event.stopPropagation()" 
+                    class="remove-file">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Hidden file input -->
+        <input #fileInput
+               type="file"
+               accept=".xlsx,.xls"
+               (change)="onFileSelected($event)"
+               style="display: none;">
+      </mat-card-content>
+
+      <mat-card-actions class="upload-actions">
+        <button mat-raised-button 
+                color="primary"
+                [disabled]="!selectedFile || isLoading"
+                (click)="uploadExcel()"
+                class="upload-button">
+          <mat-icon *ngIf="!isLoading">upload</mat-icon>
+          <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+          {{ isLoading ? 'Subiendo...' : 'Subir Archivo' }}
+        </button>
+
+        <button mat-stroked-button
+                (click)="downloadTemplate()"
+                class="template-button">
+          <mat-icon>download</mat-icon>
+          Descargar Template
+        </button>
+
+        <button mat-button
+                (click)="clearFile()"
+                [disabled]="!selectedFile"
+                class="clear-button">
+          <mat-icon>clear</mat-icon>
+          Limpiar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Upload Progress -->
+    <mat-card *ngIf="isLoading" class="progress-card">
+      <mat-card-content>
+        <div class="progress-content">
+          <mat-icon class="progress-icon">sync</mat-icon>
+          <div class="progress-text">
+            <h3>Procesando archivo...</h3>
+            <p>Por favor espera mientras procesamos tu archivo Excel</p>
+          </div>
+        </div>
+        <mat-progress-bar mode="indeterminate" class="progress-bar"></mat-progress-bar>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Upload Results -->
+    <mat-card *ngIf="uploadResult && !isLoading" class="results-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon [color]="uploadResult.success ? 'primary' : 'warn'">
+            {{ uploadResult.success ? 'check_circle' : 'error' }}
+          </mat-icon>
+          Resultado del Procesamiento
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Success Stats -->
+        <div class="stats-grid" *ngIf="uploadResult.success">
+          <div class="stat-card success">
+            <mat-icon>description</mat-icon>
+            <div class="stat-info">
+              <span class="stat-number">{{ uploadStats.totalRecords }}</span>
+              <span class="stat-label">Total Registros</span>
+            </div>
+          </div>
+
+          <div class="stat-card processed">
+            <mat-icon>check_circle</mat-icon>
+            <div class="stat-info">
+              <span class="stat-number">{{ uploadStats.processedRecords }}</span>
+              <span class="stat-label">Procesados</span>
+            </div>
+          </div>
+
+          <div class="stat-card errors" *ngIf="uploadStats.errorRecords > 0">
+            <mat-icon>error</mat-icon>
+            <div class="stat-info">
+              <span class="stat-number">{{ uploadStats.errorRecords }}</span>
+              <span class="stat-label">Con Errores</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Error Details -->
+        <div *ngIf="uploadStats.errors.length > 0" class="error-section">
+          <h4>
+            <mat-icon>warning</mat-icon>
+            Errores Encontrados
+          </h4>
+          <mat-expansion-panel class="error-panel">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Ver detalles de errores ({{ uploadStats.errors.length }})
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="error-list">
+              <div *ngFor="let error of uploadStats.errors; let i = index" class="error-item">
+                <span class="error-number">{{ i + 1 }}.</span>
+                <span class="error-message">{{ error }}</span>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </div>
+
+        <!-- Success Actions -->
+        <div *ngIf="uploadResult.success" class="success-actions">
+          <button mat-raised-button 
+                  color="primary"
+                  (click)="navigateToPolizas()">
+            <mat-icon>list</mat-icon>
+            Ver Pólizas Cargadas
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Instructions Card -->
+    <mat-card class="instructions-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>info</mat-icon>
+          Instrucciones
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="instructions-content">
+          <h4>📋 Formato requerido del archivo Excel:</h4>
+          <ul class="instructions-list">
+            <li><strong>Número Póliza:</strong> Identificador único de la póliza</li>
+            <li><strong>Nombre Asegurado:</strong> Nombre completo del asegurado</li>
+            <li><strong>Prima:</strong> Valor numérico de la prima</li>
+            <li><strong>Aseguradora:</strong> Nombre de la aseguradora</li>
+            <li><strong>Fecha Vigencia:</strong> Fecha en formato YYYY-MM-DD</li>
+            <li><strong>Marca, Modelo, Placa:</strong> Información del vehículo</li>
+            <li><strong>Modalidad:</strong> Anual, Semestral, etc.</li>
+            <li><strong>Frecuencia:</strong> Mensual, Trimestral, etc.</li>
+            <li><strong>Moneda:</strong> CRC, USD, EUR</li>
+          </ul>
+
+          <div class="tips-section">
+            <h4>💡 Consejos:</h4>
+            <ul class="tips-list">
+              <li>Asegúrate de que la primera fila contenga los encabezados</li>
+              <li>Verifica que no haya celdas vacías en campos obligatorios</li>
+              <li>Los números deben estar en formato numérico (sin comas o puntos como separadores de miles)</li>
+              <li>Las fechas deben estar en formato YYYY-MM-DD</li>
+              <li>Descarga el template de ejemplo para mayor precisión</li>
+            </ul>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -4,7 +4,57 @@
   padding: 20px;
 }
 
-.upload-section, .form-section {
+/* Header Section */
+.header-section {
+  margin-bottom: 30px;
+  
+  .navigation-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    
+    .template-nav-button {
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      }
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+    
+    .template-nav-button {
+      background: linear-gradient(45deg, #4ecdc4, #6bb6ff);
+      
+      &:hover {
+        background: linear-gradient(45deg, #26d0ce, #4dabf7);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header-section {
+    .navigation-buttons {
+      flex-direction: column;
+      align-items: center;
+      
+      .template-nav-button {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+  }
+}
+
+.form-section {
   margin-bottom: 24px;
   background: white;
   border-radius: 8px;
@@ -186,7 +236,7 @@
   text-transform: uppercase;
 }
 
-.moneda-cop {
+.moneda-crc {
   background: #e8f5e8;
   color: #2e7d32;
 }
@@ -632,33 +682,3 @@ th.mat-header-cell.mat-sort-header.mat-sort-header-sorted::after {
   }
 }
 
-/* Estilos para la sección de upload */
-.upload-controls {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: 16px 0;
-}
-
-.upload-controls button {
-  white-space: nowrap;
-}
-
-.file-name {
-  margin: 0 8px;
-  color: #666;
-  font-style: italic;
-  font-size: 14px;
-}
-
-.upload-hint {
-  margin-top: 16px;
-  color: #666;
-  font-size: 14px;
-  line-height: 1.4;
-  background-color: #f5f5f5;
-  padding: 12px;
-  border-radius: 4px;
-  border-left: 4px solid #2196F3;
-}

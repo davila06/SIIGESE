@@ -118,6 +118,98 @@ namespace Infrastructure.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Cobro", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClienteApellido")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ClienteNombre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("FechaCobro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaVencimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MetodoPago")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("MontoCobrado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("MontoTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NumeroPoliza")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("NumeroRecibo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("PolizaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UsuarioCobroId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioCobroNombre")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Estado");
+
+                    b.HasIndex("FechaVencimiento");
+
+                    b.HasIndex("NumeroRecibo")
+                        .IsUnique();
+
+                    b.HasIndex("PolizaId");
+
+                    b.HasIndex("UsuarioCobroId");
+
+                    b.ToTable("Cobros");
+                });
+
             modelBuilder.Entity("Domain.Entities.DataRecord", b =>
                 {
                     b.Property<int>("Id")
@@ -149,8 +241,8 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("FileType")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -186,6 +278,67 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UploadedByUserId");
 
                     b.ToTable("DataRecords");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PasswordResetToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(45)
+                        .HasColumnType("nvarchar(45)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UsedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("Token")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetTokens");
                 });
 
             modelBuilder.Entity("Domain.Entities.Poliza", b =>
@@ -331,7 +484,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 10, 1, 22, 47, 0, 603, DateTimeKind.Utc).AddTicks(4206),
+                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2707),
                             CreatedBy = "System",
                             Description = "Administrador del sistema",
                             IsActive = true,
@@ -341,7 +494,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 10, 1, 22, 47, 0, 603, DateTimeKind.Utc).AddTicks(4217),
+                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2714),
                             CreatedBy = "System",
                             Description = "Cargador de datos",
                             IsActive = true,
@@ -351,7 +504,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 10, 1, 22, 47, 0, 603, DateTimeKind.Utc).AddTicks(4218),
+                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2716),
                             CreatedBy = "System",
                             Description = "Usuario estándar",
                             IsActive = true,
@@ -399,9 +552,15 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime?>("LastPasswordChangeAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RequiresPasswordChange")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -428,14 +587,16 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 10, 1, 22, 47, 0, 603, DateTimeKind.Utc).AddTicks(4435),
+                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2981),
                             CreatedBy = "System",
                             Email = "admin@sinseg.com",
                             FirstName = "Administrador",
                             IsActive = true,
                             IsDeleted = false,
                             LastName = "Sistema",
-                            PasswordHash = "$2a$11$8nhPSmjjsP15ANy.C5nkUua8yAmLgmkY.Xpq/NYxkJ2PpSnJ0Gcju",
+                            LastPasswordChangeAt = new DateTime(2025, 10, 5, 1, 19, 5, 293, DateTimeKind.Utc).AddTicks(2067),
+                            PasswordHash = "$2a$11$oOFuS5G5NQwxjfQXMRfTd.N5oRI7cpiTiq9HfWBfrqT.LbRplzve2",
+                            RequiresPasswordChange = false,
                             UserName = "admin"
                         });
                 });
@@ -483,12 +644,30 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 10, 1, 22, 47, 0, 822, DateTimeKind.Utc).AddTicks(427),
+                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 293, DateTimeKind.Utc).AddTicks(2823),
                             CreatedBy = "System",
                             IsDeleted = false,
                             RoleId = 1,
                             UserId = 1
                         });
+                });
+
+            modelBuilder.Entity("Domain.Entities.Cobro", b =>
+                {
+                    b.HasOne("Domain.Entities.Poliza", "Poliza")
+                        .WithMany()
+                        .HasForeignKey("PolizaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "UsuarioCobro")
+                        .WithMany()
+                        .HasForeignKey("UsuarioCobroId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Poliza");
+
+                    b.Navigation("UsuarioCobro");
                 });
 
             modelBuilder.Entity("Domain.Entities.DataRecord", b =>
@@ -500,6 +679,17 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("UploadedBy");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PasswordResetToken", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>

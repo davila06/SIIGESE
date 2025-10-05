@@ -161,14 +161,14 @@ El archivo Excel debe contener las siguientes columnas en este orden:
 
 | POLIZA | MOD | NOMBRE | PRIMA | MONEDA | FECHA | FRECUENCIA | ASEGURADORA | PLACA | MARCA | MODELO |
 |--------|-----|--------|-------|--------|-------|------------|-------------|-------|-------|---------|
-| POL001 | AUTO | Juan Pérez | 500000 | COP | 01/01/2024 | Anual | Seguros ABC | ABC123 | Toyota | Corolla |
+| POL001 | AUTO | Juan Pérez | 500000 | CRC | 01/01/2024 | Anual | Seguros ABC | ABC123 | Toyota | Corolla |
 
 ### Validaciones Aplicadas
 - **POLIZA**: Requerido, único, máximo 50 caracteres
 - **MOD**: Requerido, máximo 100 caracteres
 - **NOMBRE**: Requerido, máximo 200 caracteres
 - **PRIMA**: Requerido, numérico, mayor a 0
-- **MONEDA**: Requerido, código de 3 letras (COP, USD, EUR)
+- **MONEDA**: Requerido, código de 3 letras (CRC, USD, EUR)
 - **FECHA**: Requerido, formato fecha válido
 - **FRECUENCIA**: Requerido, valores: Mensual, Trimestral, Semestral, Anual
 - **ASEGURADORA**: Requerido, máximo 100 caracteres

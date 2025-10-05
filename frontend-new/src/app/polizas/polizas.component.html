@@ -1,53 +1,8 @@
 <div class="polizas-container">
   <div class="content-wrapper">
-    <h2 style="color: white; text-align: center; margin-bottom: 30px; font-size: 28px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Gestión de Pólizas de Seguros</h2>
-
-    <!-- Sección de carga de Excel - Solo para Admin y DataLoader -->
-    <div *ngIf="canUploadExcel()">
-      <mat-card class="upload-section">
-        <mat-card-header>
-          <mat-card-title>
-            <mat-icon>cloud_upload</mat-icon>
-            Importar desde Excel
-          </mat-card-title>
-        </mat-card-header>
-      <mat-card-content>
-        <div class="upload-controls">
-          <input type="file" 
-                 #fileInput
-                 id="fileInput" 
-                 accept=".xlsx,.xls" 
-                 (change)="onFileSelected($event)" 
-                 style="display: none;">
-          <button mat-raised-button 
-                  color="primary" 
-                  (click)="fileInput.click()">
-            <mat-icon>cloud_upload</mat-icon>
-            Seleccionar Archivo Excel
-          </button>
-          <span class="file-name" *ngIf="selectedFile">{{selectedFile.name}}</span>
-          <button mat-raised-button 
-                  color="accent" 
-                  [disabled]="!selectedFile || isLoading"
-                  (click)="uploadExcel()">
-            <mat-icon>upload</mat-icon>
-            Procesar Excel
-          </button>
-          <button mat-raised-button 
-                  color="warn" 
-                  (click)="testFailedRecordsExcel()"
-                  style="margin-left: 10px;">
-            <mat-icon>bug_report</mat-icon>
-            Probar Excel Errores
-          </button>
-        </div>
-        <p class="upload-hint">
-          El archivo Excel debe contener las columnas: POLIZA, MOD, NOMBRE, PRIMA, MONEDA, FECHA, FRECUENCIA, ASEGURADORA, PLACA, MARCA, MODELO
-        </p>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-divider></mat-divider>
+    <!-- Header con navegación -->
+    <div class="header-section">
+      <h2 style="color: white; text-align: center; margin-bottom: 30px; font-size: 28px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Gestión de Pólizas de Seguros</h2>
     </div>
 
     <!-- Formulario para nueva póliza -->
@@ -89,7 +44,7 @@
           <mat-form-field>
             <mat-label>Moneda</mat-label>
             <mat-select formControlName="moneda" required>
-              <mat-option value="COP">COP</mat-option>
+              <mat-option value="CRC">CRC</mat-option>
               <mat-option value="USD">USD</mat-option>
               <mat-option value="EUR">EUR</mat-option>
             </mat-select>
@@ -464,7 +419,7 @@
     <div class="no-data" *ngIf="!isLoading && polizas.length === 0">
       <mat-icon>description</mat-icon>
       <p>No hay pólizas registradas</p>
-      <p>Agregue una nueva póliza o importe desde Excel</p>
+      <p>Agregue una nueva póliza para comenzar</p>
     </div>
     </div>
   </div>

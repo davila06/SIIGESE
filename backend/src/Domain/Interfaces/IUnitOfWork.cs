@@ -9,6 +9,8 @@ namespace Domain.Interfaces
         IClienteRepository Clientes { get; }
         IDataRecordRepository DataRecords { get; }
         IPolizaRepository Polizas { get; }
+        IPasswordResetTokenRepository PasswordResetTokens { get; }
+        ICobroRepository Cobros { get; }
         
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
