@@ -26,13 +26,16 @@ import { EmailTemplateManagerComponent } from './components/email-template-manag
 
 @NgModule({
   declarations: [
+  ],
+  imports: [
+    // Standalone Components
     EmailDashboardComponent,
     SendEmailComponent,
     EmailHistoryComponent,
     AutomaticNotificationsComponent,
-    EmailTemplateManagerComponent
-  ],
-  imports: [
+    EmailTemplateManagerComponent,
+    
+    // Modules
     CommonModule,
     EmailsRoutingModule,
     ReactiveFormsModule,

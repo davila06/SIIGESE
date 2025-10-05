@@ -56,12 +56,12 @@ export class CobrosService {
 
   // Obtener cobros pendientes
   getCobrosPendientes(): Observable<Cobro[]> {
-    return this.getCobrosByEstado(EstadoCobro.PENDIENTE);
+    return this.getCobrosByEstado(EstadoCobro.Pendiente);
   }
 
   // Obtener cobros vencidos
   getCobrosVencidos(): Observable<Cobro[]> {
-    return this.getCobrosByEstado(EstadoCobro.VENCIDO);
+    return this.getCobrosByEstado(EstadoCobro.Vencido);
   }
 
   // Obtener cobros por rango de fechas
@@ -86,7 +86,7 @@ export class CobrosService {
         clienteApellido: 'Pérez',
         fechaVencimiento: new Date('2025-10-15'),
         montoTotal: 2500.00,
-        estado: EstadoCobro.PENDIENTE,
+        estado: EstadoCobro.Pendiente,
         fechaCreacion: new Date('2025-10-01')
       },
       {
@@ -100,8 +100,8 @@ export class CobrosService {
         fechaCobro: new Date('2025-09-28'),
         montoTotal: 1800.00,
         montoCobrado: 1800.00,
-        estado: EstadoCobro.COBRADO,
-        metodoPago: MetodoPago.TRANSFERENCIA,
+        estado: EstadoCobro.Cobrado,
+        metodoPago: MetodoPago.Transferencia,
         usuarioCobroNombre: 'Admin',
         fechaCreacion: new Date('2025-09-15')
       },
@@ -114,7 +114,7 @@ export class CobrosService {
         clienteApellido: 'Rodríguez',
         fechaVencimiento: new Date('2025-09-20'),
         montoTotal: 3200.00,
-        estado: EstadoCobro.VENCIDO,
+        estado: EstadoCobro.Vencido,
         fechaCreacion: new Date('2025-09-01')
       }
     ];

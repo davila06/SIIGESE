@@ -43,8 +43,7 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
     AppComponent,
     PolizasComponent,
     UploadPolizasComponent,
-    LoginComponent,
-    UsuariosComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +76,10 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
     MatSidenavModule,
     MatListModule,
     MatProgressBarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    
+    // Standalone Components
+    UsuariosComponent
   ],
   providers: [
     {

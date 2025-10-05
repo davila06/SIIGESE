@@ -209,7 +209,7 @@
                 <button 
                   mat-icon-button 
                   color="accent"
-                  *ngIf="cobro.estado === EstadoCobro.PENDIENTE"
+                  *ngIf="cobro.estado === EstadoCobro.Pendiente"
                   (click)="registrarCobro(cobro)"
                   matTooltip="Registrar cobro">
                   <mat-icon>payment</mat-icon>
@@ -218,7 +218,7 @@
                 <button 
                   mat-icon-button 
                   color="warn"
-                  *ngIf="cobro.estado === EstadoCobro.PENDIENTE"
+                  *ngIf="cobro.estado === EstadoCobro.Pendiente"
                   (click)="cancelarCobro(cobro)"
                   matTooltip="Cancelar cobro">
                   <mat-icon>cancel</mat-icon>
