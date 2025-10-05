@@ -158,6 +158,10 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("MetodoPago")
                         .HasColumnType("int");
 
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("MontoCobrado")
                         .HasColumnType("decimal(18,2)");
 
@@ -208,6 +212,153 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UsuarioCobroId");
 
                     b.ToTable("Cobros");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Cotizacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Aseguradora")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("Año")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Cilindraje")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DireccionInmueble")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("FechaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCotizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaNacimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaVencimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Genero")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Marca")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Modelo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<decimal>("MontoAsegurado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NombreSolicitante")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NumeroCotizacion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Observaciones")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Ocupacion")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Placa")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal?>("PrimaCotizada")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Telefono")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TipoInmueble")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TipoSeguro")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("ValorInmueble")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("Estado");
+
+                    b.HasIndex("FechaCotizacion");
+
+                    b.HasIndex("NumeroCotizacion")
+                        .IsUnique();
+
+                    b.HasIndex("TipoSeguro");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Cotizaciones");
                 });
 
             modelBuilder.Entity("Domain.Entities.DataRecord", b =>
@@ -436,6 +587,102 @@ namespace Infrastructure.Migrations
                     b.ToTable("Polizas");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Reclamo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClienteApellido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClienteNombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DocumentosAdjuntos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("FechaLimiteRespuesta")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaReclamo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaResolucion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Moneda")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("MontoAprobado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("MontoReclamado")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("NumeroPoliza")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroReclamo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Observaciones")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PolizaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Prioridad")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TipoReclamo")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UsuarioAsignadoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioAsignadoNombre")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PolizaId");
+
+                    b.HasIndex("UsuarioAsignadoId");
+
+                    b.ToTable("Reclamos");
+                });
+
             modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -484,7 +731,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2707),
+                            CreatedAt = new DateTime(2025, 10, 5, 4, 6, 43, 432, DateTimeKind.Utc).AddTicks(2376),
                             CreatedBy = "System",
                             Description = "Administrador del sistema",
                             IsActive = true,
@@ -494,7 +741,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2714),
+                            CreatedAt = new DateTime(2025, 10, 5, 4, 6, 43, 432, DateTimeKind.Utc).AddTicks(2384),
                             CreatedBy = "System",
                             Description = "Cargador de datos",
                             IsActive = true,
@@ -504,7 +751,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2716),
+                            CreatedAt = new DateTime(2025, 10, 5, 4, 6, 43, 432, DateTimeKind.Utc).AddTicks(2385),
                             CreatedBy = "System",
                             Description = "Usuario estándar",
                             IsActive = true,
@@ -587,15 +834,15 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 80, DateTimeKind.Utc).AddTicks(2981),
+                            CreatedAt = new DateTime(2025, 10, 5, 4, 6, 43, 432, DateTimeKind.Utc).AddTicks(2543),
                             CreatedBy = "System",
                             Email = "admin@sinseg.com",
                             FirstName = "Administrador",
                             IsActive = true,
                             IsDeleted = false,
                             LastName = "Sistema",
-                            LastPasswordChangeAt = new DateTime(2025, 10, 5, 1, 19, 5, 293, DateTimeKind.Utc).AddTicks(2067),
-                            PasswordHash = "$2a$11$oOFuS5G5NQwxjfQXMRfTd.N5oRI7cpiTiq9HfWBfrqT.LbRplzve2",
+                            LastPasswordChangeAt = new DateTime(2025, 10, 5, 4, 6, 43, 607, DateTimeKind.Utc).AddTicks(6266),
+                            PasswordHash = "$2a$11$gTPJsyPi3DZ6F.bHZ62Qv.VTvNEiOiOy25IHXu1eITRS44x9s/mxm",
                             RequiresPasswordChange = false,
                             UserName = "admin"
                         });
@@ -644,7 +891,7 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 10, 5, 1, 19, 5, 293, DateTimeKind.Utc).AddTicks(2823),
+                            CreatedAt = new DateTime(2025, 10, 5, 4, 6, 43, 607, DateTimeKind.Utc).AddTicks(6992),
                             CreatedBy = "System",
                             IsDeleted = false,
                             RoleId = 1,
@@ -670,6 +917,17 @@ namespace Infrastructure.Migrations
                     b.Navigation("UsuarioCobro");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Cotizacion", b =>
+                {
+                    b.HasOne("Domain.Entities.User", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Domain.Entities.DataRecord", b =>
                 {
                     b.HasOne("Domain.Entities.User", "UploadedBy")
@@ -690,6 +948,23 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Reclamo", b =>
+                {
+                    b.HasOne("Domain.Entities.Poliza", "Poliza")
+                        .WithMany()
+                        .HasForeignKey("PolizaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "UsuarioAsignado")
+                        .WithMany()
+                        .HasForeignKey("UsuarioAsignadoId");
+
+                    b.Navigation("Poliza");
+
+                    b.Navigation("UsuarioAsignado");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>

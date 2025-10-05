@@ -26,7 +26,7 @@
             <mat-icon>schedule</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.totalPendientes }}</h3>
+            <h3>{{ stats.reclamosAbiertos }}</h3>
             <p>Pendientes</p>
           </div>
         </div>
@@ -40,7 +40,7 @@
             <mat-icon>rate_review</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.totalEnRevision }}</h3>
+            <h3>{{ stats.reclamosEnProceso }}</h3>
             <p>En Revisión</p>
           </div>
         </div>
@@ -54,9 +54,9 @@
             <mat-icon>check_circle</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.totalAprobados }}</h3>
+            <h3>{{ stats.reclamosResueltos }}</h3>
             <p>Aprobados</p>
-            <span class="stat-amount">${{ stats.montoTotalAprobado | number:'1.2-2' }}</span>
+            <span class="stat-amount">${{ stats.totalMontoAprobado | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -69,9 +69,9 @@
             <mat-icon>task_alt</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.totalResueltos }}</h3>
+            <h3>{{ stats.reclamosCerrados }}</h3>
             <p>Resueltos</p>
-            <span class="stat-time">{{ stats.tiempoPromedioResolucion }} días promedio</span>
+            <span class="stat-time">Cerrados</span>
           </div>
         </div>
       </mat-card-content>
@@ -103,23 +103,23 @@
             <span class="filter-label">Estado:</span>
             <mat-chip-set>
               <mat-chip 
-                [class.selected]="filtroEstado === ''"
-                (click)="filtrarPorEstado('')">
+                [class.selected]="filtroEstado === null"
+                (click)="filtrarPorEstado(null)">
                 Todos
               </mat-chip>
               <mat-chip 
-                [class.selected]="filtroEstado === EstadoReclamo.PENDIENTE"
-                (click)="filtrarPorEstado(EstadoReclamo.PENDIENTE)">
+                [class.selected]="filtroEstado === EstadoReclamo.Abierto"
+                (click)="filtrarPorEstado(EstadoReclamo.Abierto)">
                 Pendientes
               </mat-chip>
               <mat-chip 
-                [class.selected]="filtroEstado === EstadoReclamo.EN_REVISION"
-                (click)="filtrarPorEstado(EstadoReclamo.EN_REVISION)">
+                [class.selected]="filtroEstado === EstadoReclamo.EnProceso"
+                (click)="filtrarPorEstado(EstadoReclamo.EnProceso)">
                 En Revisión
               </mat-chip>
               <mat-chip 
-                [class.selected]="filtroEstado === EstadoReclamo.APROBADO"
-                (click)="filtrarPorEstado(EstadoReclamo.APROBADO)">
+                [class.selected]="filtroEstado === EstadoReclamo.Resuelto"
+                (click)="filtrarPorEstado(EstadoReclamo.Resuelto)">
                 Aprobados
               </mat-chip>
             </mat-chip-set>
@@ -130,18 +130,18 @@
             <span class="filter-label">Tipo:</span>
             <mat-chip-set>
               <mat-chip 
-                [class.selected]="filtroTipo === TipoReclamo.SINIESTRO"
-                (click)="filtrarPorTipo(TipoReclamo.SINIESTRO)">
+                [class.selected]="filtroTipo === TipoReclamo.Siniestro"
+                (click)="filtrarPorTipo(TipoReclamo.Siniestro)">
                 Siniestros
               </mat-chip>
               <mat-chip 
-                [class.selected]="filtroTipo === TipoReclamo.REEMBOLSO"
-                (click)="filtrarPorTipo(TipoReclamo.REEMBOLSO)">
-                Reembolsos
+                [class.selected]="filtroTipo === TipoReclamo.Facturacion"
+                (click)="filtrarPorTipo(TipoReclamo.Facturacion)">
+                Facturación
               </mat-chip>
               <mat-chip 
-                [class.selected]="filtroTipo === TipoReclamo.QUEJA_SERVICIO"
-                (click)="filtrarPorTipo(TipoReclamo.QUEJA_SERVICIO)">
+                [class.selected]="filtroTipo === TipoReclamo.Servicio"
+                (click)="filtrarPorTipo(TipoReclamo.Servicio)">
                 Quejas
               </mat-chip>
             </mat-chip-set>
@@ -265,7 +265,7 @@
                 <button 
                   mat-icon-button 
                   color="accent"
-                  *ngIf="reclamo.estado !== EstadoReclamo.CERRADO"
+                  *ngIf="reclamo.estado !== EstadoReclamo.Cerrado"
                   (click)="cambiarEstado(reclamo)"
                   matTooltip="Cambiar estado">
                   <mat-icon>edit</mat-icon>

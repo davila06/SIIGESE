@@ -51,6 +51,29 @@ namespace Application.Mappings
                     src.MetodoPago.HasValue ? src.MetodoPago.Value.ToString() : null))
                 .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom(src => src.CreatedAt))
                 .ForMember(dest => dest.FechaActualizacion, opt => opt.MapFrom(src => src.UpdatedAt));
+
+            // Reclamo mappings
+            CreateMap<Reclamo, ReclamoDto>()
+                .ForMember(dest => dest.TipoReclamo, opt => opt.MapFrom(src => src.TipoReclamo.ToString()))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado.ToString()))
+                .ForMember(dest => dest.Prioridad, opt => opt.MapFrom(src => src.Prioridad.ToString()));
+
+            CreateMap<CreateReclamoDto, Reclamo>()
+                .ForMember(dest => dest.TipoReclamo, opt => opt.MapFrom(src => (TipoReclamo)src.TipoReclamo))
+                .ForMember(dest => dest.Prioridad, opt => opt.MapFrom(src => (PrioridadReclamo)src.Prioridad))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => EstadoReclamo.Abierto))
+                .ForMember(dest => dest.FechaReclamo, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.NumeroReclamo, opt => opt.Ignore())
+                .ForMember(dest => dest.FechaResolucion, opt => opt.Ignore())
+                .ForMember(dest => dest.MontoAprobado, opt => opt.Ignore())
+                .ForMember(dest => dest.Poliza, opt => opt.Ignore())
+                .ForMember(dest => dest.UsuarioAsignado, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
         }
     }
 }

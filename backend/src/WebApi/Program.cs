@@ -97,12 +97,14 @@ builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IDataRecordRepository, DataRecordRepository>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 builder.Services.AddScoped<ICobroRepository, CobroRepository>();
+builder.Services.AddScoped<IReclamoRepository, ReclamoRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPolizaService, PolizaService>();
 builder.Services.AddScoped<ICobrosService, CobrosService>();
+builder.Services.AddScoped<IReclamoService, ReclamoService>();
 builder.Services.AddScoped<ICotizacionService, Infrastructure.Services.CotizacionService>();
 builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddScoped<IEmailService, EmailService>();

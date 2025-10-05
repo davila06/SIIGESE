@@ -21,19 +21,16 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-// Components
-import { CobrosDashboardComponent } from './components';
-
 const routes = [
   {
     path: '',
-    component: CobrosDashboardComponent
+    loadComponent: () => import('./components').then(m => m.CobrosDashboardComponent)
   }
 ];
 
 @NgModule({
   declarations: [
-    CobrosDashboardComponent
+    // Componentes standalone se importan, no se declaran
   ],
   imports: [
     CommonModule,

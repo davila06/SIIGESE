@@ -1,0 +1,6 @@
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\SeedData.csproj.AssemblyReference.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\SeedData.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\SeedData.AssemblyInfoInputs.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\SeedData.AssemblyInfo.cs
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\SeedData.csproj.CoreCompileInputs.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\SeedData.sourcelink.json

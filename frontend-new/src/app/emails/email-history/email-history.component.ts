@@ -6,10 +6,9 @@ import { EmailService, EmailHistoryResponse } from '../../services/email.service
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-email-history',
-    templateUrl: './email-history.component.html',
-    styleUrls: ['./email-history.component.scss'],
-    standalone: false
+  selector: 'app-email-history',
+  templateUrl: './email-history.component.html',
+  styleUrls: ['./email-history.component.scss']
 })
 export class EmailHistoryComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -11,6 +11,7 @@ namespace Domain.Interfaces
         IPolizaRepository Polizas { get; }
         IPasswordResetTokenRepository PasswordResetTokens { get; }
         ICobroRepository Cobros { get; }
+        ICotizacionRepository Cotizaciones { get; }
         
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();

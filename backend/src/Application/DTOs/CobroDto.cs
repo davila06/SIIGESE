@@ -14,6 +14,7 @@ namespace Application.DTOs
         public DateTime? FechaCobro { get; set; }
         public decimal MontoTotal { get; set; }
         public decimal? MontoCobrado { get; set; }
+        public string Moneda { get; set; } = "CRC"; // Código de moneda
         public string Estado { get; set; } = string.Empty;
         public string? MetodoPago { get; set; }
         public string? Observaciones { get; set; }
@@ -28,6 +29,7 @@ namespace Application.DTOs
         public int PolizaId { get; set; }
         public DateTime FechaVencimiento { get; set; }
         public decimal MontoTotal { get; set; }
+        public string Moneda { get; set; } = "CRC"; // Código de moneda por defecto
         public string? Observaciones { get; set; }
     }
 

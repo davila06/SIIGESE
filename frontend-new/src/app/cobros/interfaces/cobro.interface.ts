@@ -9,6 +9,7 @@ export interface Cobro {
   fechaCobro?: Date;
   montoTotal: number;
   montoCobrado?: number;
+  moneda?: string; // Código de moneda (CRC, USD, EUR)
   estado: EstadoCobro;
   metodoPago?: MetodoPago;
   observaciones?: string;
@@ -37,6 +38,7 @@ export interface CobroRequest {
   polizaId: number;
   fechaVencimiento: Date;
   montoTotal: number;
+  moneda?: string; // Código de moneda (CRC por defecto)
   observaciones?: string;
 }
 

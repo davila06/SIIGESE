@@ -73,6 +73,7 @@ export class CobrosService {
     return this.http.get<Cobro[]>(`${this.apiUrl}/rango-fechas`, { params });
   }
 
+  /*
   // Métodos helper para datos mock (mientras no haya backend)
   getMockCobros(): Cobro[] {
     return [
@@ -129,4 +130,5 @@ export class CobrosService {
       montoPorVencer: 22000.00
     };
   }
+  */
 }

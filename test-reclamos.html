@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba Módulo Reclamos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .endpoint {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            color: white;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background-color: #61affe; }
+        .post { background-color: #49cc90; }
+        .put { background-color: #fca130; }
+        .delete { background-color: #f93e3e; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Módulo Reclamos - Pruebas API</h1>
+        <p>Prueba los endpoints del módulo de reclamos desarrollado</p>
+    </div>
+
+    <!-- Obtener todas las estadísticas -->
+    <div class="container">
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <strong>/api/reclamos/stats</strong>
+            <p>Obtiene estadísticas generales de reclamos</p>
+            <button onclick="getStats()">Probar</button>
+            <div id="stats-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Obtener todos los reclamos -->
+    <div class="container">
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <strong>/api/reclamos</strong>
+            <p>Obtiene todos los reclamos</p>
+            <button onclick="getAllReclamos()">Probar</button>
+            <div id="all-reclamos-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Filtrar reclamos -->
+    <div class="container">
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <strong>/api/reclamos/filtrar</strong>
+            <p>Filtra reclamos según criterios</p>
+            
+            <div class="form-group">
+                <label>Estado:</label>
+                <select id="filtro-estado">
+                    <option value="">Todos</option>
+                    <option value="0">Abierto</option>
+                    <option value="1">En Proceso</option>
+                    <option value="2">Resuelto</option>
+                    <option value="3">Cerrado</option>
+                    <option value="4">Rechazado</option>
+                    <option value="5">Escalado</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Tipo de Reclamo:</label>
+                <select id="filtro-tipo">
+                    <option value="">Todos</option>
+                    <option value="0">Siniestro</option>
+                    <option value="1">Servicio</option>
+                    <option value="2">Facturación</option>
+                    <option value="3">Cobertura</option>
+                    <option value="4">Proceso</option>
+                    <option value="5">Otro</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Prioridad:</label>
+                <select id="filtro-prioridad">
+                    <option value="">Todas</option>
+                    <option value="0">Baja</option>
+                    <option value="1">Media</option>
+                    <option value="2">Alta</option>
+                    <option value="3">Crítica</option>
+                </select>
+            </div>
+            
+            <button onclick="filtrarReclamos()">Filtrar</button>
+            <div id="filtrar-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Crear reclamo -->
+    <div class="container">
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <strong>/api/reclamos</strong>
+            <p>Crea un nuevo reclamo</p>
+            
+            <div class="form-group">
+                <label>Número de Póliza:</label>
+                <input type="text" id="crear-poliza" value="POL-2024-001-0001" placeholder="Ej: POL-2024-001-0001">
+            </div>
+            
+            <div class="form-group">
+                <label>Nombre del Cliente:</label>
+                <input type="text" id="crear-nombre" value="Juan" placeholder="Nombre">
+            </div>
+            
+            <div class="form-group">
+                <label>Apellido del Cliente:</label>
+                <input type="text" id="crear-apellido" value="Pérez" placeholder="Apellido">
+            </div>
+            
+            <div class="form-group">
+                <label>Tipo de Reclamo:</label>
+                <select id="crear-tipo">
+                    <option value="0">Siniestro</option>
+                    <option value="1">Servicio</option>
+                    <option value="2">Facturación</option>
+                    <option value="3">Cobertura</option>
+                    <option value="4">Proceso</option>
+                    <option value="5">Otro</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Descripción:</label>
+                <textarea id="crear-descripcion" placeholder="Describe el motivo del reclamo...">Reclamo por demora en el procesamiento de siniestro vehicular. Se requiere agilizar el proceso de evaluación y liquidación.</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Monto Reclamado:</label>
+                <input type="number" id="crear-monto" value="50000" placeholder="0.00" step="0.01">
+            </div>
+            
+            <div class="form-group">
+                <label>Prioridad:</label>
+                <select id="crear-prioridad">
+                    <option value="0">Baja</option>
+                    <option value="1">Media</option>
+                    <option value="2">Alta</option>
+                    <option value="3">Crítica</option>
+                </select>
+            </div>
+            
+            <button onclick="crearReclamo()">Crear Reclamo</button>
+            <div id="crear-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const baseUrl = 'http://localhost:5000/api';
+        
+        // Función para mostrar resultados
+        function showResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${isError ? 'error' : 'success'}`;
+            element.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+        }
+
+        // Obtener estadísticas
+        async function getStats() {
+            try {
+                const response = await fetch(`${baseUrl}/reclamos/stats`);
+                const data = await response.json();
+                showResult('stats-result', data);
+            } catch (error) {
+                showResult('stats-result', `Error: ${error.message}`, true);
+            }
+        }
+
+        // Obtener todos los reclamos
+        async function getAllReclamos() {
+            try {
+                const response = await fetch(`${baseUrl}/reclamos`);
+                const data = await response.json();
+                showResult('all-reclamos-result', data);
+            } catch (error) {
+                showResult('all-reclamos-result', `Error: ${error.message}`, true);
+            }
+        }
+
+        // Filtrar reclamos
+        async function filtrarReclamos() {
+            try {
+                const filtro = {
+                    estado: document.getElementById('filtro-estado').value || null,
+                    tipoReclamo: document.getElementById('filtro-tipo').value || null,
+                    prioridad: document.getElementById('filtro-prioridad').value || null
+                };
+
+                // Remover propiedades null/undefined
+                Object.keys(filtro).forEach(key => {
+                    if (filtro[key] === null || filtro[key] === '') {
+                        delete filtro[key];
+                    } else {
+                        filtro[key] = parseInt(filtro[key]);
+                    }
+                });
+
+                const response = await fetch(`${baseUrl}/reclamos/filtrar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(filtro)
+                });
+                
+                const data = await response.json();
+                showResult('filtrar-result', data);
+            } catch (error) {
+                showResult('filtrar-result', `Error: ${error.message}`, true);
+            }
+        }
+
+        // Crear reclamo
+        async function crearReclamo() {
+            try {
+                // Primero obtenemos una póliza válida
+                const polizasResponse = await fetch(`${baseUrl}/polizas`);
+                const polizas = await polizasResponse.json();
+                
+                if (!polizas.data || polizas.data.length === 0) {
+                    showResult('crear-result', 'Error: No hay pólizas disponibles en el sistema', true);
+                    return;
+                }
+
+                const polizaId = polizas.data[0].id;
+
+                const reclamo = {
+                    polizaId: polizaId,
+                    numeroPoliza: document.getElementById('crear-poliza').value,
+                    clienteNombre: document.getElementById('crear-nombre').value,
+                    clienteApellido: document.getElementById('crear-apellido').value,
+                    tipoReclamo: parseInt(document.getElementById('crear-tipo').value),
+                    descripcion: document.getElementById('crear-descripcion').value,
+                    montoReclamado: parseFloat(document.getElementById('crear-monto').value) || null,
+                    moneda: 'CRC',
+                    prioridad: parseInt(document.getElementById('crear-prioridad').value)
+                };
+
+                const response = await fetch(`${baseUrl}/reclamos`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(reclamo)
+                });
+                
+                const data = await response.json();
+                showResult('crear-result', data, !response.ok);
+            } catch (error) {
+                showResult('crear-result', `Error: ${error.message}`, true);
+            }
+        }
+
+        // Función para probar autenticación básica
+        async function testAuth() {
+            try {
+                const response = await fetch(`${baseUrl}/auth/test`);
+                const data = await response.json();
+                console.log('Auth test:', data);
+            } catch (error) {
+                console.log('Auth test error:', error);
+            }
+        }
+
+        // Probar autenticación al cargar la página
+        testAuth();
+    </script>
+</body>
+</html>

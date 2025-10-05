@@ -13,6 +13,7 @@ namespace Domain.Entities
         public DateTime? FechaCobro { get; set; }
         public decimal MontoTotal { get; set; }
         public decimal? MontoCobrado { get; set; }
+        public string Moneda { get; set; } = "CRC"; // Código de moneda por defecto CRC (Colón Costarricense)
         public EstadoCobro Estado { get; set; } = EstadoCobro.Pendiente;
         public MetodoPago? MetodoPago { get; set; }
         public string? Observaciones { get; set; }

@@ -22,21 +22,24 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatStepperModule } from '@angular/material/stepper';
 
 // Components
 import { ReclamosDashboardComponent } from './components/reclamos-dashboard/reclamos-dashboard.component';
+import { CrearReclamoComponent } from './components/crear-reclamo/crear-reclamo.component';
 
 const routes = [
   {
     path: '',
     component: ReclamosDashboardComponent
+  },
+  {
+    path: 'crear',
+    component: CrearReclamoComponent
   }
 ];
 
 @NgModule({
-  declarations: [
-    ReclamosDashboardComponent
-  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
@@ -61,7 +64,12 @@ const routes = [
     MatDialogModule,
     MatTooltipModule,
     MatMenuModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatStepperModule,
+    
+    // Components as imports for standalone
+    ReclamosDashboardComponent,
+    CrearReclamoComponent
   ]
 })
 export class ReclamosModule { }

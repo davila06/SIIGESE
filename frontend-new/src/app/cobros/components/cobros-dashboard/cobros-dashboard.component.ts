@@ -1,8 +1,17 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { 
   Cobro, 
   CobroStats, 
@@ -10,12 +19,28 @@ import {
   MetodoPago 
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
+import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
 
 @Component({
-    selector: 'app-cobros-dashboard',
-    templateUrl: './cobros-dashboard.component.html',
-    styleUrls: ['./cobros-dashboard.component.scss'],
-    standalone: false
+  selector: 'app-cobros-dashboard',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule
+  ],
+  templateUrl: './cobros-dashboard.component.html',
+  styleUrls: ['./cobros-dashboard.component.scss']
 })
 export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -43,6 +68,10 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   EstadoCobro = EstadoCobro;
   MetodoPago = MetodoPago;
 
+  // Constantes de moneda para el template
+  CURRENCY_CONSTANTS = CURRENCY_CONSTANTS;
+  MONEDAS_SISTEMA = MONEDAS_SISTEMA;
+
   constructor(
     private cobrosService: CobrosService,
     private snackBar: MatSnackBar
@@ -61,14 +90,6 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   loadCobros(): void {
     this.loading = true;
     
-    // Por ahora usar datos mock hasta tener el backend
-    setTimeout(() => {
-      this.cobros = this.cobrosService.getMockCobros();
-      this.dataSource.data = this.cobros;
-      this.loading = false;
-    }, 1000);
-
-    /* Una vez que esté el backend:
     this.cobrosService.getCobros().subscribe({
       next: (cobros) => {
         this.cobros = cobros;
@@ -81,16 +102,9 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
         this.loading = false;
       }
     });
-    */
   }
 
   loadStats(): void {
-    // Por ahora usar datos mock
-    setTimeout(() => {
-      this.stats = this.cobrosService.getMockStats();
-    }, 800);
-
-    /* Una vez que esté el backend:
     this.cobrosService.getCobroStats().subscribe({
       next: (stats) => {
         this.stats = stats;
@@ -99,7 +113,6 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
         console.error('Error al cargar estadísticas:', error);
       }
     });
-    */
   }
 
   applyFilter(event: Event): void {
@@ -170,6 +183,15 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   exportarCobros(): void {
     this.showMessage('Funcionalidad de exportación en desarrollo');
+  }
+
+  formatCurrency(amount: number, currencyCode: string = CURRENCY_CONSTANTS.DEFAULT_CURRENCY): string {
+    return formatCurrencyByCode(amount, currencyCode);
+  }
+
+  getCurrencySymbol(currencyCode: string = CURRENCY_CONSTANTS.DEFAULT_CURRENCY): string {
+    const currency = MONEDAS_SISTEMA.find(m => m.value === currencyCode);
+    return currency?.symbol || '₡';
   }
 
   private showMessage(message: string): void {

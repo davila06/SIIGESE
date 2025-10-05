@@ -2,44 +2,36 @@ using Application.DTOs;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Entities;
-using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+using Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Services
 {
     public class CotizacionService : ICotizacionService
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<CotizacionService> _logger;
 
         public CotizacionService(
-            ApplicationDbContext context,
+            IUnitOfWork unitOfWork,
             IMapper mapper,
             ILogger<CotizacionService> logger)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<IEnumerable<CotizacionDto>> GetAllAsync()
         {
-            var cotizaciones = await _context.Cotizaciones
-                .Include(c => c.Usuario)
-                .OrderByDescending(c => c.FechaCreacion)
-                .ToListAsync();
-
+            var cotizaciones = await _unitOfWork.Cotizaciones.GetAllAsync();
             return _mapper.Map<IEnumerable<CotizacionDto>>(cotizaciones);
         }
 
         public async Task<CotizacionDto?> GetByIdAsync(int id)
         {
-            var cotizacion = await _context.Cotizaciones
-                .Include(c => c.Usuario)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
+            var cotizacion = await _unitOfWork.Cotizaciones.GetByIdAsync(id);
             return cotizacion == null ? null : _mapper.Map<CotizacionDto>(cotizacion);
         }
 
@@ -48,27 +40,19 @@ namespace Infrastructure.Services
             var cotizacion = _mapper.Map<Cotizacion>(createDto);
             cotizacion.UsuarioId = usuarioId;
             cotizacion.NumeroCotizacion = await GenerateNumeroCotizacionAsync();
+            cotizacion.FechaCotizacion = DateTime.UtcNow;
+            cotizacion.FechaCreacion = DateTime.UtcNow;
+            cotizacion.FechaActualizacion = DateTime.UtcNow;
 
-            _context.Cotizaciones.Add(cotizacion);
-            await _context.SaveChangesAsync();
-
-            _logger.LogInformation("Cotización {NumeroCotizacion} creada por usuario {UsuarioId}", 
-                cotizacion.NumeroCotizacion, usuarioId);
-
-            // Cargar la entidad completa con el usuario
-            await _context.Entry(cotizacion)
-                .Reference(c => c.Usuario)
-                .LoadAsync();
+            await _unitOfWork.Cotizaciones.AddAsync(cotizacion);
+            await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<CotizacionDto>(cotizacion);
         }
 
         public async Task<CotizacionDto> UpdateAsync(int id, UpdateCotizacionDto updateDto)
         {
-            var cotizacion = await _context.Cotizaciones
-                .Include(c => c.Usuario)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
+            var cotizacion = await _unitOfWork.Cotizaciones.GetByIdAsync(id);
             if (cotizacion == null)
             {
                 throw new KeyNotFoundException($"Cotización con ID {id} no encontrada");
@@ -77,83 +61,70 @@ namespace Infrastructure.Services
             _mapper.Map(updateDto, cotizacion);
             cotizacion.FechaActualizacion = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
-
-            _logger.LogInformation("Cotización {Id} actualizada", id);
+            await _unitOfWork.Cotizaciones.UpdateAsync(cotizacion);
+            await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<CotizacionDto>(cotizacion);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            var cotizacion = await _context.Cotizaciones.FindAsync(id);
+            var cotizacion = await _unitOfWork.Cotizaciones.GetByIdAsync(id);
             if (cotizacion == null)
             {
-                throw new KeyNotFoundException($"Cotización con ID {id} no encontrada");
+                return false;
             }
 
-            _context.Cotizaciones.Remove(cotizacion);
-            await _context.SaveChangesAsync();
+            await _unitOfWork.Cotizaciones.DeleteAsync(cotizacion);
+            await _unitOfWork.SaveChangesAsync();
 
-            _logger.LogInformation("Cotización {Id} eliminada", id);
+            return true;
         }
 
         public async Task<IEnumerable<CotizacionDto>> SearchAsync(CotizacionSearchDto searchDto)
         {
-            var query = _context.Cotizaciones
-                .Include(c => c.Usuario)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchDto.NumeroCotizacion))
-            {
-                query = query.Where(c => c.NumeroCotizacion.Contains(searchDto.NumeroCotizacion));
-            }
+            IEnumerable<Cotizacion> cotizaciones;
 
             if (!string.IsNullOrEmpty(searchDto.NombreSolicitante))
             {
-                query = query.Where(c => c.NombreSolicitante.Contains(searchDto.NombreSolicitante));
+                cotizaciones = await _unitOfWork.Cotizaciones.GetByClienteAsync(searchDto.NombreSolicitante);
+            }
+            else if (searchDto.FechaDesde.HasValue && searchDto.FechaHasta.HasValue)
+            {
+                cotizaciones = await _unitOfWork.Cotizaciones.GetByFechaRangeAsync(searchDto.FechaDesde.Value, searchDto.FechaHasta.Value);
+            }
+            else
+            {
+                cotizaciones = await _unitOfWork.Cotizaciones.GetAllAsync();
+            }
+
+            // Aplicar filtros adicionales
+            if (!string.IsNullOrEmpty(searchDto.Estado))
+            {
+                cotizaciones = cotizaciones.Where(c => c.Estado == searchDto.Estado);
+            }
+
+            if (!string.IsNullOrEmpty(searchDto.NumeroCotizacion))
+            {
+                cotizaciones = cotizaciones.Where(c => c.NumeroCotizacion.Contains(searchDto.NumeroCotizacion));
             }
 
             if (!string.IsNullOrEmpty(searchDto.Email))
             {
-                query = query.Where(c => c.Email.Contains(searchDto.Email));
+                cotizaciones = cotizaciones.Where(c => c.Email.Contains(searchDto.Email));
             }
 
             if (!string.IsNullOrEmpty(searchDto.TipoSeguro))
             {
-                query = query.Where(c => c.TipoSeguro == searchDto.TipoSeguro);
+                cotizaciones = cotizaciones.Where(c => c.TipoSeguro == searchDto.TipoSeguro);
             }
 
-            if (!string.IsNullOrEmpty(searchDto.Estado))
-            {
-                query = query.Where(c => c.Estado == searchDto.Estado);
-            }
-
-            if (searchDto.FechaDesde.HasValue)
-            {
-                query = query.Where(c => c.FechaCotizacion >= searchDto.FechaDesde.Value);
-            }
-
-            if (searchDto.FechaHasta.HasValue)
-            {
-                query = query.Where(c => c.FechaCotizacion <= searchDto.FechaHasta.Value);
-            }
-
-            // Paginación
-            query = query.OrderByDescending(c => c.FechaCreacion)
-                .Skip((searchDto.PageNumber - 1) * searchDto.PageSize)
-                .Take(searchDto.PageSize);
-
-            var cotizaciones = await query.ToListAsync();
             return _mapper.Map<IEnumerable<CotizacionDto>>(cotizaciones);
         }
 
         public async Task<CotizacionDto> UpdateEstadoAsync(int id, string estado)
         {
-            var cotizacion = await _context.Cotizaciones
-                .Include(c => c.Usuario)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
+            var cotizacion = await _unitOfWork.Cotizaciones.GetByIdAsync(id);
             if (cotizacion == null)
             {
                 throw new KeyNotFoundException($"Cotización con ID {id} no encontrada");
@@ -162,51 +133,45 @@ namespace Infrastructure.Services
             cotizacion.Estado = estado;
             cotizacion.FechaActualizacion = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
-
-            _logger.LogInformation("Estado de cotización {Id} actualizado a {Estado}", id, estado);
+            await _unitOfWork.Cotizaciones.UpdateAsync(cotizacion);
+            await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<CotizacionDto>(cotizacion);
         }
 
         public async Task<IEnumerable<CotizacionDto>> GetByUsuarioIdAsync(int usuarioId)
         {
-            var cotizaciones = await _context.Cotizaciones
-                .Include(c => c.Usuario)
-                .Where(c => c.UsuarioId == usuarioId)
-                .OrderByDescending(c => c.FechaCreacion)
-                .ToListAsync();
-
-            return _mapper.Map<IEnumerable<CotizacionDto>>(cotizaciones);
+            var cotizaciones = await _unitOfWork.Cotizaciones.GetAllAsync();
+            var cotizacionesUsuario = cotizaciones.Where(c => c.UsuarioId == usuarioId);
+            return _mapper.Map<IEnumerable<CotizacionDto>>(cotizacionesUsuario);
         }
 
         public async Task<bool> ExistsAsync(int id)
         {
-            return await _context.Cotizaciones.AnyAsync(c => c.Id == id);
+            var cotizacion = await _unitOfWork.Cotizaciones.GetByIdAsync(id);
+            return cotizacion != null;
         }
 
         public async Task<string> GenerateNumeroCotizacionAsync()
         {
             var year = DateTime.Now.Year;
-            var prefix = $"COT{year}";
+            var prefix = $"COT-{year}-";
             
-            var lastCotizacion = await _context.Cotizaciones
+            var cotizaciones = await _unitOfWork.Cotizaciones.GetAllAsync();
+            var cotizacionesActuales = cotizaciones
                 .Where(c => c.NumeroCotizacion.StartsWith(prefix))
-                .OrderByDescending(c => c.NumeroCotizacion)
-                .FirstOrDefaultAsync();
+                .ToList();
 
-            if (lastCotizacion == null)
+            if (!cotizacionesActuales.Any())
             {
-                return $"{prefix}0001";
+                return $"{prefix}001";
             }
 
-            var lastNumber = lastCotizacion.NumeroCotizacion.Substring(prefix.Length);
-            if (int.TryParse(lastNumber, out int number))
-            {
-                return $"{prefix}{(number + 1):D4}";
-            }
+            var ultimoNumero = cotizacionesActuales
+                .Select(c => int.Parse(c.NumeroCotizacion.Substring(prefix.Length)))
+                .Max();
 
-            return $"{prefix}0001";
+            return $"{prefix}{(ultimoNumero + 1):D3}";
         }
     }
 }

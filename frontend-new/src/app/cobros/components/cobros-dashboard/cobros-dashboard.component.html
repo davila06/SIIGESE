@@ -24,7 +24,7 @@
           <div class="stat-info">
             <h3>{{ stats.totalPendientes }}</h3>
             <p>Cobros Pendientes</p>
-            <span class="stat-amount">${{ stats.montoTotalPendiente | number:'1.2-2' }}</span>
+            <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoTotalPendiente | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -39,7 +39,7 @@
           <div class="stat-info">
             <h3>{{ stats.totalCobrados }}</h3>
             <p>Cobros Realizados</p>
-            <span class="stat-amount">${{ stats.montoTotalCobrado | number:'1.2-2' }}</span>
+            <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoTotalCobrado | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -54,7 +54,7 @@
           <div class="stat-info">
             <h3>{{ stats.totalVencidos }}</h3>
             <p>Cobros Vencidos</p>
-            <span class="stat-amount">${{ stats.montoPorVencer | number:'1.2-2' }}</span>
+            <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoPorVencer | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -162,7 +162,7 @@
           <ng-container matColumnDef="montoTotal">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
             <td mat-cell *matCellDef="let cobro">
-              ${{ cobro.montoTotal | number:'1.2-2' }}
+              {{ getCurrencySymbol(cobro.moneda) }}{{ cobro.montoTotal | number:'1.2-2' }}
             </td>
           </ng-container>
 

@@ -4,10 +4,9 @@ import { EmailService, EmailResponse } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-email-dashboard',
-    templateUrl: './email-dashboard.component.html',
-    styleUrls: ['./email-dashboard.component.scss'],
-    standalone: false
+  selector: 'app-email-dashboard',
+  templateUrl: './email-dashboard.component.html',
+  styleUrls: ['./email-dashboard.component.scss']
 })
 export class EmailDashboardComponent implements OnInit {
   stats: any = {};

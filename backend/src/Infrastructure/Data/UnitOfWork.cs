@@ -22,6 +22,7 @@ namespace Infrastructure.Data
             Polizas = new PolizaRepository(_context);
             PasswordResetTokens = new PasswordResetTokenRepository(_context);
             Cobros = new CobroRepository(_context);
+            Cotizaciones = new CotizacionRepository(_context);
         }
 
         public IUserRepository Users { get; }
@@ -31,6 +32,7 @@ namespace Infrastructure.Data
         public IPolizaRepository Polizas { get; }
         public IPasswordResetTokenRepository PasswordResetTokens { get; }
         public ICobroRepository Cobros { get; }
+        public ICotizacionRepository Cotizaciones { get; }
 
         public async Task<int> SaveChangesAsync()
         {

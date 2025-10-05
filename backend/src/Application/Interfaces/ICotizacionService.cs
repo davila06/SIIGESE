@@ -8,7 +8,7 @@ namespace Application.Interfaces
         Task<CotizacionDto?> GetByIdAsync(int id);
         Task<CotizacionDto> CreateAsync(CreateCotizacionDto createDto, int usuarioId);
         Task<CotizacionDto> UpdateAsync(int id, UpdateCotizacionDto updateDto);
-        Task DeleteAsync(int id);
+        Task<bool> DeleteAsync(int id);
         Task<IEnumerable<CotizacionDto>> SearchAsync(CotizacionSearchDto searchDto);
         Task<CotizacionDto> UpdateEstadoAsync(int id, string estado);
         Task<IEnumerable<CotizacionDto>> GetByUsuarioIdAsync(int usuarioId);

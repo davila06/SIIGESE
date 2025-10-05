@@ -1,0 +1,554 @@
+2025-10-04 21:45:40.234 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:45:40.710 -06:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:45:40.743 -06:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:45:40.747 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:45:40.751 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:45:40.770 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:45:40.782 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:48:44.922 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:48:46.045 -06:00 [INF] Executed DbCommand (33ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:48:46.098 -06:00 [INF] Executed DbCommand (34ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:48:46.106 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:48:46.109 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:48:46.142 -06:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:48:46.162 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:48:46.164 -06:00 [INF] Database migration completed successfully
+2025-10-04 21:48:46.188 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-04 21:48:46.282 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-04 21:48:46.287 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-04 21:48:46.288 -06:00 [INF] Hosting environment: Production
+2025-10-04 21:48:46.289 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-04 21:48:46.890 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:48:46.890 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:48:46.912 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-04 21:48:46.921 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:46.921 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:46.929 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 39.6151ms
+2025-10-04 21:48:46.929 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 39.6148ms
+2025-10-04 21:48:46.940 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:48:46.942 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:48:46.950 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:46.955 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:47.125 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:48:47.125 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:48:47.144 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:48:47.144 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:48:47.506 -06:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:48:47.506 -06:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:48:47.529 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CobroDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:48:47.595 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 447.3857ms
+2025-10-04 21:48:47.598 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:48:47.605 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 200 null application/json; charset=utf-8 662.679ms
+2025-10-04 21:48:47.606 -06:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:48:47.739 -06:00 [INF] Executed DbCommand (48ms) [Parameters=[@__estado_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = @__estado_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:47.776 -06:00 [INF] Executed DbCommand (14ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:47.809 -06:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:48:47.834 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoCobrado]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 1 AND [c].[MontoCobrado] IS NOT NULL
+2025-10-04 21:48:47.859 -06:00 [INF] Executed DbCommand (17ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:47.895 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[@__fechaLimite_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) <= @__fechaLimite_0 AND CONVERT(date, [c].[FechaVencimiento]) >= CONVERT(date, GETUTCDATE())
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:47.905 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.CobroStatsDto'.
+2025-10-04 21:48:47.919 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 771.096ms
+2025-10-04 21:48:47.922 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:48:47.925 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 200 null application/json; charset=utf-8 985.0555ms
+2025-10-04 21:48:54.543 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:48:54.546 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:48:54.549 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:48:54.551 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 8.1858ms
+2025-10-04 21:49:15.734 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:49:15.740 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:49:15.741 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:49:15.742 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 7.6641ms
+2025-10-04 21:50:46.248 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:50:46.254 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:50:46.255 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:50:46.256 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 7.7481ms
+2025-10-04 21:50:52.949 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/users - null null
+2025-10-04 21:50:52.949 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/roles - null null
+2025-10-04 21:50:52.953 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:50:52.968 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:50:52.972 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/roles - 204 null null 22.8995ms
+2025-10-04 21:50:52.972 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/users - 204 null null 22.9126ms
+2025-10-04 21:50:52.978 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/roles - application/json null
+2025-10-04 21:50:52.981 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/users - application/json null
+2025-10-04 21:50:52.986 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:50:52.987 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:50:53.030 -06:00 [INF] Executing endpoint 'WebApi.Controllers.UsersController.GetRoles (WebApi)'
+2025-10-04 21:50:53.030 -06:00 [INF] Executing endpoint 'WebApi.Controllers.UsersController.GetUsers (WebApi)'
+2025-10-04 21:50:53.083 -06:00 [INF] Route matched with {action = "GetUsers", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetUsers() on controller WebApi.Controllers.UsersController (WebApi).
+2025-10-04 21:50:53.083 -06:00 [INF] Route matched with {action = "GetRoles", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetRoles() on controller WebApi.Controllers.UsersController (WebApi).
+2025-10-04 21:50:53.450 -06:00 [INF] Executed DbCommand (122ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+FROM [Roles] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:50:53.451 -06:00 [INF] Executed DbCommand (58ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[IsDeleted], [t0].[RoleId], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserId], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[Description], [t0].[IsActive], [t0].[IsDeleted0], [t0].[Name], [t0].[UpdatedAt0], [t0].[UpdatedBy0]
+FROM [Users] AS [u]
+LEFT JOIN (
+    SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[IsDeleted], [u0].[RoleId], [u0].[UpdatedAt], [u0].[UpdatedBy], [u0].[UserId], [t].[Id] AS [Id0], [t].[CreatedAt] AS [CreatedAt0], [t].[CreatedBy] AS [CreatedBy0], [t].[Description], [t].[IsActive], [t].[IsDeleted] AS [IsDeleted0], [t].[Name], [t].[UpdatedAt] AS [UpdatedAt0], [t].[UpdatedBy] AS [UpdatedBy0]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN (
+        SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+        FROM [Roles] AS [r]
+        WHERE [r].[IsDeleted] = CAST(0 AS bit)
+    ) AS [t] ON [u0].[RoleId] = [t].[Id]
+    WHERE [u0].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [u].[Id] = [t0].[UserId]
+WHERE [u].[IsDeleted] = CAST(0 AS bit)
+ORDER BY [u].[Id], [t0].[Id]
+2025-10-04 21:50:53.532 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Domain.Entities.Role, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Application.DTOs.RoleDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:50:53.540 -06:00 [INF] Executed action WebApi.Controllers.UsersController.GetRoles (WebApi) in 453.3453ms
+2025-10-04 21:50:53.541 -06:00 [INF] Executed endpoint 'WebApi.Controllers.UsersController.GetRoles (WebApi)'
+2025-10-04 21:50:53.548 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/roles - 200 null application/json; charset=utf-8 570.0203ms
+2025-10-04 21:50:53.569 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Domain.Entities.User, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Application.DTOs.UserDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:50:53.577 -06:00 [INF] Executed action WebApi.Controllers.UsersController.GetUsers (WebApi) in 491.6642ms
+2025-10-04 21:50:53.578 -06:00 [INF] Executed endpoint 'WebApi.Controllers.UsersController.GetUsers (WebApi)'
+2025-10-04 21:50:53.580 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/users - 200 null application/json; charset=utf-8 598.9005ms
+2025-10-04 21:50:59.402 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - null null
+2025-10-04 21:50:59.586 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:50:59.588 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - 204 null null 185.988ms
+2025-10-04 21:50:59.591 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cotizaciones - application/json null
+2025-10-04 21:50:59.601 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:50:59.607 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:50:59.616 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cotizaciones"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.CotizacionesController (WebApi).
+2025-10-04 21:50:59.680 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Aseguradora], [c].[Año], [c].[Cilindraje], [c].[CreatedAt], [c].[CreatedBy], [c].[DireccionInmueble], [c].[Email], [c].[Estado], [c].[FechaActualizacion], [c].[FechaCotizacion], [c].[FechaCreacion], [c].[FechaNacimiento], [c].[FechaVencimiento], [c].[Genero], [c].[IsDeleted], [c].[Marca], [c].[Modelo], [c].[Moneda], [c].[MontoAsegurado], [c].[NombreSolicitante], [c].[NumeroCotizacion], [c].[Observaciones], [c].[Ocupacion], [c].[Placa], [c].[PrimaCotizada], [c].[Telefono], [c].[TipoInmueble], [c].[TipoSeguro], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioId], [c].[ValorInmueble]
+FROM [Cotizaciones] AS [c]
+2025-10-04 21:50:59.694 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CotizacionDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:50:59.709 -06:00 [INF] Executed action WebApi.Controllers.CotizacionesController.GetAll (WebApi) in 54.6133ms
+2025-10-04 21:50:59.711 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:50:59.714 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cotizaciones - 200 null application/json; charset=utf-8 122.5432ms
+2025-10-04 21:52:01.367 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - null null
+2025-10-04 21:52:01.370 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:52:01.371 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - 204 null null 3.9634ms
+2025-10-04 21:52:01.376 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/cotizaciones - application/json 457
+2025-10-04 21:52:01.380 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:52:01.383 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CotizacionesController.Create (WebApi)'
+2025-10-04 21:52:01.405 -06:00 [INF] Route matched with {action = "Create", controller = "Cotizaciones"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Create(Application.DTOs.CreateCotizacionDto) on controller WebApi.Controllers.CotizacionesController (WebApi).
+2025-10-04 21:52:01.511 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Aseguradora], [c].[Año], [c].[Cilindraje], [c].[CreatedAt], [c].[CreatedBy], [c].[DireccionInmueble], [c].[Email], [c].[Estado], [c].[FechaActualizacion], [c].[FechaCotizacion], [c].[FechaCreacion], [c].[FechaNacimiento], [c].[FechaVencimiento], [c].[Genero], [c].[IsDeleted], [c].[Marca], [c].[Modelo], [c].[Moneda], [c].[MontoAsegurado], [c].[NombreSolicitante], [c].[NumeroCotizacion], [c].[Observaciones], [c].[Ocupacion], [c].[Placa], [c].[PrimaCotizada], [c].[Telefono], [c].[TipoInmueble], [c].[TipoSeguro], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioId], [c].[ValorInmueble]
+FROM [Cotizaciones] AS [c]
+2025-10-04 21:52:01.755 -06:00 [INF] Executed DbCommand (44ms) [Parameters=[@p0='?' (Size = 100), @p1='?' (DbType = Int32), @p2='?' (Size = 50), @p3='?' (DbType = DateTime2), @p4='?' (Size = 4000), @p5='?' (Size = 200), @p6='?' (Size = 100), @p7='?' (Size = 20), @p8='?' (DbType = DateTime2), @p9='?' (DbType = DateTime2), @p10='?' (DbType = DateTime2), @p11='?' (DbType = DateTime2), @p12='?' (DbType = DateTime2), @p13='?' (Size = 20), @p14='?' (DbType = Boolean), @p15='?' (Size = 50), @p16='?' (Size = 50), @p17='?' (Size = 10), @p18='?' (Precision = 18) (Scale = 2) (DbType = Decimal), @p19='?' (Size = 200), @p20='?' (Size = 50), @p21='?' (Size = 500), @p22='?' (Size = 100), @p23='?' (Size = 20), @p24='?' (Precision = 18) (Scale = 2) (DbType = Decimal), @p25='?' (Size = 20), @p26='?' (Size = 50), @p27='?' (Size = 50), @p28='?' (DbType = DateTime2), @p29='?' (Size = 4000), @p30='?' (DbType = Int32), @p31='?' (Precision = 18) (Scale = 2) (DbType = Decimal)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Cotizaciones] ([Aseguradora], [Año], [Cilindraje], [CreatedAt], [CreatedBy], [DireccionInmueble], [Email], [Estado], [FechaActualizacion], [FechaCotizacion], [FechaCreacion], [FechaNacimiento], [FechaVencimiento], [Genero], [IsDeleted], [Marca], [Modelo], [Moneda], [MontoAsegurado], [NombreSolicitante], [NumeroCotizacion], [Observaciones], [Ocupacion], [Placa], [PrimaCotizada], [Telefono], [TipoInmueble], [TipoSeguro], [UpdatedAt], [UpdatedBy], [UsuarioId], [ValorInmueble])
+OUTPUT INSERTED.[Id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29, @p30, @p31);
+2025-10-04 21:52:01.784 -06:00 [INF] Cotización COT-2025-001 creada por usuario 1
+2025-10-04 21:52:01.786 -06:00 [INF] Executing CreatedAtActionResult, writing value of type 'Application.DTOs.CotizacionDto'.
+2025-10-04 21:52:01.814 -06:00 [INF] Executed action WebApi.Controllers.CotizacionesController.Create (WebApi) in 407.8662ms
+2025-10-04 21:52:01.816 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CotizacionesController.Create (WebApi)'
+2025-10-04 21:52:01.818 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/api/cotizaciones - 201 null application/json; charset=utf-8 441.8802ms
+2025-10-04 21:54:04.556 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:54:04.562 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:54:04.563 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:54:04.564 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 7.9818ms
+2025-10-04 21:54:06.747 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:54:06.751 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:54:06.751 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:54:06.752 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 5.4721ms
+2025-10-04 21:55:15.951 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:55:15.955 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:15.957 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 6.1118ms
+2025-10-04 21:55:15.963 -06:00 [INF] Request starting HTTP/1.1 POST http://localhost:5000/api/auth/login - application/json 53
+2025-10-04 21:55:15.965 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:15.969 -06:00 [INF] Executing endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-04 21:55:16.001 -06:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(Application.DTOs.LoginRequestDto) on controller WebApi.Controllers.AuthController (WebApi).
+2025-10-04 21:55:16.184 -06:00 [INF] Executed DbCommand (42ms) [Parameters=[@__email_0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+FROM [Users] AS [u]
+WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Email] = @__email_0
+2025-10-04 21:55:16.388 -06:00 [INF] Executed DbCommand (33ms) [Parameters=[@__userId_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [t].[Id], [t].[CreatedAt], [t].[CreatedBy], [t].[Email], [t].[FirstName], [t].[IsActive], [t].[IsDeleted], [t].[LastLoginAt], [t].[LastName], [t].[LastPasswordChangeAt], [t].[PasswordHash], [t].[RequiresPasswordChange], [t].[UpdatedAt], [t].[UpdatedBy], [t].[UserName], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[IsDeleted], [t0].[RoleId], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserId], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[Description], [t0].[IsActive], [t0].[IsDeleted0], [t0].[Name], [t0].[UpdatedAt0], [t0].[UpdatedBy0]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit) AND [u].[Id] = @__userId_0
+) AS [t]
+LEFT JOIN (
+    SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[IsDeleted], [u0].[RoleId], [u0].[UpdatedAt], [u0].[UpdatedBy], [u0].[UserId], [t1].[Id] AS [Id0], [t1].[CreatedAt] AS [CreatedAt0], [t1].[CreatedBy] AS [CreatedBy0], [t1].[Description], [t1].[IsActive], [t1].[IsDeleted] AS [IsDeleted0], [t1].[Name], [t1].[UpdatedAt] AS [UpdatedAt0], [t1].[UpdatedBy] AS [UpdatedBy0]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN (
+        SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+        FROM [Roles] AS [r]
+        WHERE [r].[IsDeleted] = CAST(0 AS bit)
+    ) AS [t1] ON [u0].[RoleId] = [t1].[Id]
+    WHERE [u0].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [t].[Id] = [t0].[UserId]
+ORDER BY [t].[Id], [t0].[Id]
+2025-10-04 21:55:16.497 -06:00 [INF] Executed DbCommand (13ms) [Parameters=[@p14='?' (DbType = Int32), @p0='?' (DbType = DateTime2), @p1='?' (Size = 4000), @p2='?' (Size = 100), @p3='?' (Size = 50), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTime2), @p7='?' (Size = 50), @p8='?' (DbType = DateTime2), @p9='?' (Size = 4000), @p10='?' (DbType = Boolean), @p11='?' (DbType = DateTime2), @p12='?' (Size = 4000), @p13='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+UPDATE [Users] SET [CreatedAt] = @p0, [CreatedBy] = @p1, [Email] = @p2, [FirstName] = @p3, [IsActive] = @p4, [IsDeleted] = @p5, [LastLoginAt] = @p6, [LastName] = @p7, [LastPasswordChangeAt] = @p8, [PasswordHash] = @p9, [RequiresPasswordChange] = @p10, [UpdatedAt] = @p11, [UpdatedBy] = @p12, [UserName] = @p13
+OUTPUT 1
+WHERE [Id] = @p14;
+2025-10-04 21:55:16.508 -06:00 [INF] Usuario admin@sinseg.com ha iniciado sesión exitosamente
+2025-10-04 21:55:16.510 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.LoginResponseDto'.
+2025-10-04 21:55:16.517 -06:00 [INF] Executed action WebApi.Controllers.AuthController.Login (WebApi) in 512.5624ms
+2025-10-04 21:55:16.518 -06:00 [INF] Executed endpoint 'WebApi.Controllers.AuthController.Login (WebApi)'
+2025-10-04 21:55:16.519 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/api/auth/login - 200 null application/json; charset=utf-8 556.7959ms
+2025-10-04 21:55:16.596 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-04 21:55:16.600 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:16.601 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 4.5615ms
+2025-10-04 21:55:16.603 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-04 21:55:16.605 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:16.608 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-04 21:55:16.615 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-04 21:55:16.638 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-04 21:55:16.689 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:55:16.701 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 85.0388ms
+2025-10-04 21:55:16.703 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-04 21:55:16.706 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 102.6856ms
+2025-10-04 21:55:22.005 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:55:22.008 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:22.012 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 6.6399ms
+2025-10-04 21:55:22.006 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:55:22.018 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:55:22.020 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:22.022 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:22.022 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 16.7168ms
+2025-10-04 21:55:22.024 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:55:22.032 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:55:22.033 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:55:22.035 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:22.037 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:55:22.039 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:55:22.058 -06:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:55:22.062 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CobroDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:55:22.063 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 30.3409ms
+2025-10-04 21:55:22.065 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:55:22.066 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 200 null application/json; charset=utf-8 47.7967ms
+2025-10-04 21:55:22.089 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:55:22.099 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:55:22.119 -06:00 [INF] Executed DbCommand (17ms) [Parameters=[@__estado_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = @__estado_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:22.133 -06:00 [INF] Executed DbCommand (12ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:22.142 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:55:22.150 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoCobrado]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 1 AND [c].[MontoCobrado] IS NOT NULL
+2025-10-04 21:55:22.159 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:22.181 -06:00 [INF] Executed DbCommand (18ms) [Parameters=[@__fechaLimite_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) <= @__fechaLimite_0 AND CONVERT(date, [c].[FechaVencimiento]) >= CONVERT(date, GETUTCDATE())
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:22.183 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.CobroStatsDto'.
+2025-10-04 21:55:22.184 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 143.856ms
+2025-10-04 21:55:22.185 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:55:22.186 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 200 null application/json; charset=utf-8 153.1325ms
+2025-10-04 21:55:35.986 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - null null
+2025-10-04 21:55:35.988 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:35.989 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - 204 null null 3.0605ms
+2025-10-04 21:55:35.993 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cotizaciones - application/json null
+2025-10-04 21:55:35.996 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:35.998 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:55:36.000 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cotizaciones"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.CotizacionesController (WebApi).
+2025-10-04 21:55:36.008 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Aseguradora], [c].[Año], [c].[Cilindraje], [c].[CreatedAt], [c].[CreatedBy], [c].[DireccionInmueble], [c].[Email], [c].[Estado], [c].[FechaActualizacion], [c].[FechaCotizacion], [c].[FechaCreacion], [c].[FechaNacimiento], [c].[FechaVencimiento], [c].[Genero], [c].[IsDeleted], [c].[Marca], [c].[Modelo], [c].[Moneda], [c].[MontoAsegurado], [c].[NombreSolicitante], [c].[NumeroCotizacion], [c].[Observaciones], [c].[Ocupacion], [c].[Placa], [c].[PrimaCotizada], [c].[Telefono], [c].[TipoInmueble], [c].[TipoSeguro], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioId], [c].[ValorInmueble]
+FROM [Cotizaciones] AS [c]
+2025-10-04 21:55:36.011 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CotizacionDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:55:36.014 -06:00 [INF] Executed action WebApi.Controllers.CotizacionesController.GetAll (WebApi) in 12.4511ms
+2025-10-04 21:55:36.015 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:55:36.017 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cotizaciones - 200 null application/json; charset=utf-8 23.3856ms
+2025-10-04 21:55:39.616 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/api/email/stats - null null
+2025-10-04 21:55:39.622 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:39.627 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/api/email/stats - 204 null null 11.462ms
+2025-10-04 21:55:39.631 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/api/email/stats - application/json null
+2025-10-04 21:55:39.634 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:39.637 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/api/email/stats - 404 0 null 6.1457ms
+2025-10-04 21:55:39.644 -06:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5000/api/api/email/stats, Response status code: 404
+2025-10-04 21:55:41.951 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/users - null null
+2025-10-04 21:55:41.953 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/roles - null null
+2025-10-04 21:55:41.955 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:41.957 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:41.958 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/roles - 204 null null 5.3051ms
+2025-10-04 21:55:41.958 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/users - 204 null null 7.0302ms
+2025-10-04 21:55:41.963 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/users - application/json null
+2025-10-04 21:55:41.965 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/roles - application/json null
+2025-10-04 21:55:41.967 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:41.968 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:41.969 -06:00 [INF] Executing endpoint 'WebApi.Controllers.UsersController.GetUsers (WebApi)'
+2025-10-04 21:55:41.970 -06:00 [INF] Executing endpoint 'WebApi.Controllers.UsersController.GetRoles (WebApi)'
+2025-10-04 21:55:41.970 -06:00 [INF] Route matched with {action = "GetUsers", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetUsers() on controller WebApi.Controllers.UsersController (WebApi).
+2025-10-04 21:55:41.971 -06:00 [INF] Route matched with {action = "GetRoles", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetRoles() on controller WebApi.Controllers.UsersController (WebApi).
+2025-10-04 21:55:41.994 -06:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+FROM [Roles] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:55:41.997 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Domain.Entities.Role, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Application.DTOs.RoleDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:55:42.000 -06:00 [INF] Executed action WebApi.Controllers.UsersController.GetRoles (WebApi) in 25.8924ms
+2025-10-04 21:55:42.000 -06:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[IsDeleted], [t0].[RoleId], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserId], [t0].[Id0], [t0].[CreatedAt0], [t0].[CreatedBy0], [t0].[Description], [t0].[IsActive], [t0].[IsDeleted0], [t0].[Name], [t0].[UpdatedAt0], [t0].[UpdatedBy0]
+FROM [Users] AS [u]
+LEFT JOIN (
+    SELECT [u0].[Id], [u0].[CreatedAt], [u0].[CreatedBy], [u0].[IsDeleted], [u0].[RoleId], [u0].[UpdatedAt], [u0].[UpdatedBy], [u0].[UserId], [t].[Id] AS [Id0], [t].[CreatedAt] AS [CreatedAt0], [t].[CreatedBy] AS [CreatedBy0], [t].[Description], [t].[IsActive], [t].[IsDeleted] AS [IsDeleted0], [t].[Name], [t].[UpdatedAt] AS [UpdatedAt0], [t].[UpdatedBy] AS [UpdatedBy0]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN (
+        SELECT [r].[Id], [r].[CreatedAt], [r].[CreatedBy], [r].[Description], [r].[IsActive], [r].[IsDeleted], [r].[Name], [r].[UpdatedAt], [r].[UpdatedBy]
+        FROM [Roles] AS [r]
+        WHERE [r].[IsDeleted] = CAST(0 AS bit)
+    ) AS [t] ON [u0].[RoleId] = [t].[Id]
+    WHERE [u0].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [u].[Id] = [t0].[UserId]
+WHERE [u].[IsDeleted] = CAST(0 AS bit)
+ORDER BY [u].[Id], [t0].[Id]
+2025-10-04 21:55:42.002 -06:00 [INF] Executed endpoint 'WebApi.Controllers.UsersController.GetRoles (WebApi)'
+2025-10-04 21:55:42.006 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Linq.Enumerable+SelectListIterator`2[[Domain.Entities.User, Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null],[Application.DTOs.UserDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:55:42.007 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/roles - 200 null application/json; charset=utf-8 41.9276ms
+2025-10-04 21:55:42.008 -06:00 [INF] Executed action WebApi.Controllers.UsersController.GetUsers (WebApi) in 35.3613ms
+2025-10-04 21:55:42.014 -06:00 [INF] Executed endpoint 'WebApi.Controllers.UsersController.GetUsers (WebApi)'
+2025-10-04 21:55:42.015 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/users - 200 null application/json; charset=utf-8 52.4511ms
+2025-10-04 21:55:43.440 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:55:43.440 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:55:43.443 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:43.446 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:43.447 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 7.5689ms
+2025-10-04 21:55:43.447 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 7.8197ms
+2025-10-04 21:55:43.450 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:55:43.452 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:55:43.454 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:43.455 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:55:43.467 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:55:43.467 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:55:43.468 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:55:43.469 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:55:43.479 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:55:43.480 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:55:43.482 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CobroDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:55:43.485 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 13.8815ms
+2025-10-04 21:55:43.486 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:55:43.486 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:55:43.489 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 200 null application/json; charset=utf-8 36.3965ms
+2025-10-04 21:55:43.498 -06:00 [INF] Executed DbCommand (10ms) [Parameters=[@__estado_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = @__estado_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:43.507 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:43.514 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:55:43.520 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoCobrado]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 1 AND [c].[MontoCobrado] IS NOT NULL
+2025-10-04 21:55:43.523 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:43.535 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[@__fechaLimite_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) <= @__fechaLimite_0 AND CONVERT(date, [c].[FechaVencimiento]) >= CONVERT(date, GETUTCDATE())
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:55:43.537 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.CobroStatsDto'.
+2025-10-04 21:55:43.538 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 65.1505ms
+2025-10-04 21:55:43.539 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:55:43.541 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 200 null application/json; charset=utf-8 90.3068ms

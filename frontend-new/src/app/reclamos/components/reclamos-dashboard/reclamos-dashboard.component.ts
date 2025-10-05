@@ -1,8 +1,22 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
 import { 
   Reclamo,
   ReclamosStats,
@@ -14,10 +28,32 @@ import {
 import { ReclamosService } from '../../services/reclamos.service';
 
 @Component({
-    selector: 'app-reclamos-dashboard',
-    templateUrl: './reclamos-dashboard.component.html',
-    styleUrls: ['./reclamos-dashboard.component.scss'],
-    standalone: false
+  selector: 'app-reclamos-dashboard',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatSnackBarModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatChipsModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
+    MatMenuModule,
+    MatBadgeModule,
+    DatePipe,
+    DecimalPipe
+  ],
+  templateUrl: './reclamos-dashboard.component.html',
+  styleUrls: ['./reclamos-dashboard.component.scss']
 })
 export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -40,9 +76,10 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   reclamos: Reclamo[] = [];
   stats: ReclamosStats | null = null;
   loading = true;
-  filtroEstado = '';
-  filtroTipo = '';
-  filtroPrioridad = '';
+  // Cambiar tipo de filtros para usar números en lugar de strings
+  filtroEstado: number | null = null;
+  filtroTipo: number | null = null;
+  filtroPrioridad: number | null = null;
 
   // Enums para el template
   TipoReclamo = TipoReclamo;
@@ -51,7 +88,8 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private reclamosService: ReclamosService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -67,18 +105,10 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   loadReclamos(): void {
     this.loading = true;
     
-    // Por ahora usar datos mock hasta tener el backend
-    setTimeout(() => {
-      this.reclamos = this.reclamosService.getMockReclamos();
-      this.dataSource.data = this.reclamos;
-      this.loading = false;
-    }, 1000);
-
-    /* Una vez que esté el backend:
     this.reclamosService.getReclamos().subscribe({
-      next: (reclamos) => {
-        this.reclamos = reclamos;
-        this.dataSource.data = reclamos;
+      next: (response) => {
+        this.reclamos = response.data || response;
+        this.dataSource.data = this.reclamos;
         this.loading = false;
       },
       error: (error) => {
@@ -87,25 +117,18 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
         this.loading = false;
       }
     });
-    */
   }
 
   loadStats(): void {
-    // Por ahora usar datos mock
-    setTimeout(() => {
-      this.stats = this.reclamosService.getMockStats();
-    }, 800);
-
-    /* Una vez que esté el backend:
     this.reclamosService.getReclamosStats().subscribe({
       next: (stats) => {
         this.stats = stats;
       },
       error: (error) => {
         console.error('Error al cargar estadísticas:', error);
+        this.showMessage('Error al cargar las estadísticas');
       }
     });
-    */
   }
 
   applyFilter(event: Event): void {
@@ -117,17 +140,17 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
-  filtrarPorEstado(estado: string): void {
+  filtrarPorEstado(estado: number | null): void {
     this.filtroEstado = estado;
     this.aplicarFiltros();
   }
 
-  filtrarPorTipo(tipo: string): void {
+  filtrarPorTipo(tipo: number | null): void {
     this.filtroTipo = tipo;
     this.aplicarFiltros();
   }
 
-  filtrarPorPrioridad(prioridad: string): void {
+  filtrarPorPrioridad(prioridad: number | null): void {
     this.filtroPrioridad = prioridad;
     this.aplicarFiltros();
   }
@@ -135,15 +158,15 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   private aplicarFiltros(): void {
     let reclamosFiltrados = [...this.reclamos];
 
-    if (this.filtroEstado) {
+    if (this.filtroEstado !== null) {
       reclamosFiltrados = reclamosFiltrados.filter(r => r.estado === this.filtroEstado);
     }
 
-    if (this.filtroTipo) {
+    if (this.filtroTipo !== null) {
       reclamosFiltrados = reclamosFiltrados.filter(r => r.tipoReclamo === this.filtroTipo);
     }
 
-    if (this.filtroPrioridad) {
+    if (this.filtroPrioridad !== null) {
       reclamosFiltrados = reclamosFiltrados.filter(r => r.prioridad === this.filtroPrioridad);
     }
 
@@ -151,9 +174,9 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   limpiarFiltros(): void {
-    this.filtroEstado = '';
-    this.filtroTipo = '';
-    this.filtroPrioridad = '';
+    this.filtroEstado = null;
+    this.filtroTipo = null;
+    this.filtroPrioridad = null;
     this.dataSource.data = this.reclamos;
   }
 
@@ -179,20 +202,18 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
   getEstadoColor(estado: EstadoReclamo): string {
     switch (estado) {
-      case EstadoReclamo.PENDIENTE:
+      case EstadoReclamo.Abierto:
         return 'primary';
-      case EstadoReclamo.EN_REVISION:
+      case EstadoReclamo.EnProceso:
         return 'accent';
-      case EstadoReclamo.REQUIERE_DOCUMENTOS:
-        return 'warn';
-      case EstadoReclamo.APROBADO:
-        return 'primary';
-      case EstadoReclamo.RECHAZADO:
-        return 'warn';
-      case EstadoReclamo.RESUELTO:
+      case EstadoReclamo.Resuelto:
         return 'accent';
-      case EstadoReclamo.CERRADO:
+      case EstadoReclamo.Cerrado:
         return '';
+      case EstadoReclamo.Rechazado:
+        return 'warn';
+      case EstadoReclamo.Escalado:
+        return 'warn';
       default:
         return '';
     }
@@ -200,20 +221,18 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
   getEstadoIcon(estado: EstadoReclamo): string {
     switch (estado) {
-      case EstadoReclamo.PENDIENTE:
+      case EstadoReclamo.Abierto:
         return 'schedule';
-      case EstadoReclamo.EN_REVISION:
+      case EstadoReclamo.EnProceso:
         return 'rate_review';
-      case EstadoReclamo.REQUIERE_DOCUMENTOS:
-        return 'description';
-      case EstadoReclamo.APROBADO:
-        return 'check_circle';
-      case EstadoReclamo.RECHAZADO:
-        return 'cancel';
-      case EstadoReclamo.RESUELTO:
+      case EstadoReclamo.Resuelto:
         return 'task_alt';
-      case EstadoReclamo.CERRADO:
+      case EstadoReclamo.Cerrado:
         return 'lock';
+      case EstadoReclamo.Rechazado:
+        return 'cancel';
+      case EstadoReclamo.Escalado:
+        return 'priority_high';
       default:
         return 'help';
     }
@@ -221,13 +240,13 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
   getPrioridadColor(prioridad: PrioridadReclamo): string {
     switch (prioridad) {
-      case PrioridadReclamo.BAJA:
+      case PrioridadReclamo.Baja:
         return '#4CAF50';
-      case PrioridadReclamo.MEDIA:
+      case PrioridadReclamo.Media:
         return '#FF9800';
-      case PrioridadReclamo.ALTA:
+      case PrioridadReclamo.Alta:
         return '#F44336';
-      case PrioridadReclamo.URGENTE:
+      case PrioridadReclamo.Critica:
         return '#9C27B0';
       default:
         return '#757575';
@@ -236,17 +255,17 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
   getTipoIcon(tipo: TipoReclamo): string {
     switch (tipo) {
-      case TipoReclamo.SINIESTRO:
+      case TipoReclamo.Siniestro:
         return 'car_crash';
-      case TipoReclamo.REEMBOLSO:
-        return 'money';
-      case TipoReclamo.QUEJA_SERVICIO:
+      case TipoReclamo.Servicio:
         return 'feedback';
-      case TipoReclamo.CANCELACION:
-        return 'cancel_presentation';
-      case TipoReclamo.CAMBIO_POLIZA:
+      case TipoReclamo.Facturacion:
+        return 'money';
+      case TipoReclamo.Cobertura:
+        return 'security';
+      case TipoReclamo.Proceso:
         return 'edit';
-      case TipoReclamo.OTRO:
+      case TipoReclamo.Otro:
         return 'help_outline';
       default:
         return 'assignment';
@@ -258,7 +277,7 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   crearNuevoReclamo(): void {
-    this.showMessage('Funcionalidad de creación de reclamo en desarrollo');
+    this.router.navigate(['/reclamos/crear']);
   }
 
   private showMessage(message: string): void {

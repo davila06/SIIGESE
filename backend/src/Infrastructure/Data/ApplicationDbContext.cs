@@ -18,6 +18,7 @@ namespace Infrastructure.Data
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<Cobro> Cobros { get; set; }
         public DbSet<Cotizacion> Cotizaciones { get; set; }
+        public DbSet<Reclamo> Reclamos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

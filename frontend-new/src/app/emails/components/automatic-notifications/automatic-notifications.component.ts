@@ -10,10 +10,9 @@ import {
 } from '../../services/notification.service';
 
 @Component({
-    selector: 'app-automatic-notifications',
-    templateUrl: './automatic-notifications.component.html',
-    styleUrls: ['./automatic-notifications.component.scss'],
-    standalone: false
+  selector: 'app-automatic-notifications',
+  templateUrl: './automatic-notifications.component.html',
+  styleUrls: ['./automatic-notifications.component.scss']
 })
 export class AutomaticNotificationsComponent implements OnInit {
   statistics: NotificationStatistics | null = null;

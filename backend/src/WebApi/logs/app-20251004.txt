@@ -2330,3 +2330,1388 @@ WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
 2025-10-04 20:45:33.990 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 15.7501ms
 2025-10-04 20:45:33.991 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
 2025-10-04 20:45:33.994 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 30.6378ms
+2025-10-04 20:53:14.395 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-04 20:53:14.415 -06:00 [INF] CORS policy execution successful.
+2025-10-04 20:53:14.433 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 42.5205ms
+2025-10-04 20:53:14.459 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-04 20:53:14.462 -06:00 [INF] CORS policy execution successful.
+2025-10-04 20:53:14.510 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-04 20:53:14.517 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-04 20:53:15.026 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-04 20:53:15.045 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 20:53:15.054 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 535.4052ms
+2025-10-04 20:53:15.056 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-04 20:53:15.057 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 597.5951ms
+2025-10-04 20:59:16.481 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - null null
+2025-10-04 20:59:16.504 -06:00 [INF] CORS policy execution successful.
+2025-10-04 20:59:16.512 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/polizas - 204 null null 38.1906ms
+2025-10-04 20:59:16.521 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/polizas - application/json null
+2025-10-04 20:59:16.523 -06:00 [INF] CORS policy execution successful.
+2025-10-04 20:59:16.549 -06:00 [INF] Executing endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-04 20:59:16.561 -06:00 [INF] Route matched with {action = "GetAll", controller = "Polizas"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.PolizasController (WebApi).
+2025-10-04 20:59:17.203 -06:00 [INF] Executed DbCommand (92ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit)
+2025-10-04 20:59:17.249 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.PolizaDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 20:59:17.275 -06:00 [INF] Executed action WebApi.Controllers.PolizasController.GetAll (WebApi) in 709.0201ms
+2025-10-04 20:59:17.281 -06:00 [INF] Executed endpoint 'WebApi.Controllers.PolizasController.GetAll (WebApi)'
+2025-10-04 20:59:17.283 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/polizas - 200 null application/json; charset=utf-8 764.0546ms
+2025-10-04 21:26:45.649 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:26:47.471 -06:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:26:47.514 -06:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:26:47.519 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:26:47.523 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:26:47.547 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:26:47.571 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:26:47.573 -06:00 [INF] Database migration completed successfully
+2025-10-04 21:26:47.600 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-04 21:26:47.692 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-04 21:26:47.696 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-04 21:26:47.698 -06:00 [INF] Hosting environment: Production
+2025-10-04 21:26:47.699 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-04 21:27:19.016 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:27:19.051 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-04 21:27:19.197 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:27:19.198 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:27:19.239 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 225.3697ms
+2025-10-04 21:27:38.908 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:27:38.908 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:27:38.920 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:27:38.920 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:27:38.927 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 18.4359ms
+2025-10-04 21:27:38.927 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 18.5229ms
+2025-10-04 21:27:38.931 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:27:38.933 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:27:38.940 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:27:38.940 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:27:39.172 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:27:39.172 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:27:39.226 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:27:39.226 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:27:39.698 -06:00 [ERR] Failed executing DbCommand (53ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:27:39.698 -06:00 [ERR] Failed executing DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:27:39.734 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:27:39.734 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:27:39.741 -06:00 [ERR] Error obteniendo todos los cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetAllCobrosAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 22
+   at WebApi.Controllers.CobrosController.GetAll() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 30
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:27:39.747 -06:00 [ERR] Error obteniendo estadísticas de cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetCobrosStatsAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 69
+   at WebApi.Controllers.CobrosController.GetStats() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 168
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:27:39.812 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:27:39.813 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:27:39.820 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 587.45ms
+2025-10-04 21:27:39.820 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 586.0147ms
+2025-10-04 21:27:39.821 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:27:39.822 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:27:39.824 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 500 null text/plain; charset=utf-8 891.4387ms
+2025-10-04 21:27:39.824 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 500 null text/plain; charset=utf-8 893.3387ms
+2025-10-04 21:28:01.205 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - null null
+2025-10-04 21:28:01.209 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:01.210 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - 204 null null 5.3982ms
+2025-10-04 21:28:01.214 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cotizaciones - application/json null
+2025-10-04 21:28:01.217 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:01.227 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:28:01.231 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cotizaciones"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.CotizacionesController (WebApi).
+2025-10-04 21:28:01.303 -06:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Aseguradora], [c].[Año], [c].[Cilindraje], [c].[CreatedAt], [c].[CreatedBy], [c].[DireccionInmueble], [c].[Email], [c].[Estado], [c].[FechaActualizacion], [c].[FechaCotizacion], [c].[FechaCreacion], [c].[FechaNacimiento], [c].[FechaVencimiento], [c].[Genero], [c].[IsDeleted], [c].[Marca], [c].[Modelo], [c].[Moneda], [c].[MontoAsegurado], [c].[NombreSolicitante], [c].[NumeroCotizacion], [c].[Observaciones], [c].[Ocupacion], [c].[Placa], [c].[PrimaCotizada], [c].[Telefono], [c].[TipoInmueble], [c].[TipoSeguro], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioId], [c].[ValorInmueble]
+FROM [Cotizaciones] AS [c]
+2025-10-04 21:28:01.305 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Cotizaciones'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Cotizaciones'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:208,State:1,Class:16
+2025-10-04 21:28:01.313 -06:00 [ERR] Error obteniendo cotizaciones
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Cotizaciones'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Infrastructure.Services.CotizacionService.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Services\CotizacionService.cs:line 28
+   at WebApi.Controllers.CotizacionesController.GetAll() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CotizacionesController.cs:line 41
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:208,State:1,Class:16
+2025-10-04 21:28:01.323 -06:00 [INF] Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-10-04 21:28:01.343 -06:00 [INF] Executed action WebApi.Controllers.CotizacionesController.GetAll (WebApi) in 108.8911ms
+2025-10-04 21:28:01.345 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:28:01.347 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cotizaciones - 400 null application/json; charset=utf-8 133.3871ms
+2025-10-04 21:28:05.788 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cotizaciones - application/json null
+2025-10-04 21:28:05.793 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:05.795 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:28:05.796 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cotizaciones"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.CotizacionesController (WebApi).
+2025-10-04 21:28:05.814 -06:00 [ERR] Failed executing DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Aseguradora], [c].[Año], [c].[Cilindraje], [c].[CreatedAt], [c].[CreatedBy], [c].[DireccionInmueble], [c].[Email], [c].[Estado], [c].[FechaActualizacion], [c].[FechaCotizacion], [c].[FechaCreacion], [c].[FechaNacimiento], [c].[FechaVencimiento], [c].[Genero], [c].[IsDeleted], [c].[Marca], [c].[Modelo], [c].[Moneda], [c].[MontoAsegurado], [c].[NombreSolicitante], [c].[NumeroCotizacion], [c].[Observaciones], [c].[Ocupacion], [c].[Placa], [c].[PrimaCotizada], [c].[Telefono], [c].[TipoInmueble], [c].[TipoSeguro], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioId], [c].[ValorInmueble]
+FROM [Cotizaciones] AS [c]
+2025-10-04 21:28:05.818 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Cotizaciones'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:208,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Cotizaciones'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:208,State:1,Class:16
+2025-10-04 21:28:05.825 -06:00 [ERR] Error obteniendo cotizaciones
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'Cotizaciones'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Infrastructure.Services.CotizacionService.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Services\CotizacionService.cs:line 28
+   at WebApi.Controllers.CotizacionesController.GetAll() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CotizacionesController.cs:line 41
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:208,State:1,Class:16
+2025-10-04 21:28:05.834 -06:00 [INF] Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-10-04 21:28:05.836 -06:00 [INF] Executed action WebApi.Controllers.CotizacionesController.GetAll (WebApi) in 29.4984ms
+2025-10-04 21:28:05.837 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:28:05.839 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cotizaciones - 400 null application/json; charset=utf-8 50.8891ms
+2025-10-04 21:28:08.587 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:28:08.588 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:28:08.591 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:08.594 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:08.595 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 7.3287ms
+2025-10-04 21:28:08.596 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 7.3101ms
+2025-10-04 21:28:08.600 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:28:08.602 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:28:08.604 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:08.606 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:08.608 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:28:08.609 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:28:08.610 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:28:08.611 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:28:08.619 -06:00 [ERR] Failed executing DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:28:08.619 -06:00 [ERR] Failed executing DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:28:08.622 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:08.625 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:08.631 -06:00 [ERR] Error obteniendo todos los cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetAllCobrosAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 22
+   at WebApi.Controllers.CobrosController.GetAll() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 30
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:08.636 -06:00 [ERR] Error obteniendo estadísticas de cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetCobrosStatsAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 69
+   at WebApi.Controllers.CobrosController.GetStats() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 168
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:08.641 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:28:08.646 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:28:08.647 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 31.6801ms
+2025-10-04 21:28:08.648 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 34.3175ms
+2025-10-04 21:28:08.649 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:28:08.650 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:28:08.650 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 500 null text/plain; charset=utf-8 48.0818ms
+2025-10-04 21:28:08.651 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 500 null text/plain; charset=utf-8 51.0282ms
+2025-10-04 21:28:29.508 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:28:29.520 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:28:29.551 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:30.070 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:30.075 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 567.1949ms
+2025-10-04 21:28:30.083 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 563.093ms
+2025-10-04 21:28:30.101 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:28:30.103 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:28:30.105 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:30.116 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:30.119 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:28:30.119 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:28:30.121 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:28:30.123 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:28:30.146 -06:00 [ERR] Failed executing DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:28:30.146 -06:00 [ERR] Failed executing DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:28:30.164 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:30.167 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:30.182 -06:00 [ERR] Error obteniendo todos los cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetAllCobrosAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 22
+   at WebApi.Controllers.CobrosController.GetAll() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 30
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:30.191 -06:00 [ERR] Error obteniendo estadísticas de cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetCobrosStatsAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 69
+   at WebApi.Controllers.CobrosController.GetStats() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 168
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:30.201 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:28:30.267 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:28:30.453 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 317.1502ms
+2025-10-04 21:28:30.456 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 321.9433ms
+2025-10-04 21:28:30.463 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:28:30.467 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 500 null text/plain; charset=utf-8 364.0259ms
+2025-10-04 21:28:30.466 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:28:30.470 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 500 null text/plain; charset=utf-8 369.2047ms
+2025-10-04 21:28:43.096 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:28:43.096 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:28:43.105 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:43.105 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:43.112 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 21.7092ms
+2025-10-04 21:28:43.113 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 21.8166ms
+2025-10-04 21:28:43.119 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:28:43.120 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:28:43.123 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:43.129 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:28:43.171 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:28:43.171 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:28:43.183 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:28:43.183 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:28:43.335 -06:00 [ERR] Failed executing DbCommand (116ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:28:43.335 -06:00 [ERR] Failed executing DbCommand (115ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:28:43.368 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:43.368 -06:00 [ERR] An exception occurred while iterating over the results of a query for context type 'Infrastructure.Data.ApplicationDbContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:43.387 -06:00 [ERR] Error obteniendo estadísticas de cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetCobrosStatsAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 69
+   at WebApi.Controllers.CobrosController.GetStats() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 168
+ClientConnectionId:6f2ab69e-0358-4d78-bd00-b5348661edfd
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:43.399 -06:00 [ERR] Error obteniendo todos los cobros
+Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid column name 'Moneda'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__209_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ToListAsync[TSource](IQueryable`1 source, CancellationToken cancellationToken)
+   at Infrastructure.Data.Repositories.Repository`1.GetAllAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Infrastructure\Data\Repositories\Repository.cs:line 30
+   at Application.Services.CobrosService.GetAllCobrosAsync() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\Application\Services\CobrosService.cs:line 22
+   at WebApi.Controllers.CobrosController.GetAll() in C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi\Controllers\CobrosController.cs:line 30
+ClientConnectionId:9f36eb79-54cf-46e5-b701-0efa1c66840f
+Error Number:207,State:1,Class:16
+2025-10-04 21:28:43.451 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:28:43.487 -06:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-10-04 21:28:43.487 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 299.8562ms
+2025-10-04 21:28:43.491 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 306.3281ms
+2025-10-04 21:28:43.507 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:28:43.514 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:28:43.516 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 500 null text/plain; charset=utf-8 395.5672ms
+2025-10-04 21:28:43.516 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 500 null text/plain; charset=utf-8 397.0304ms
+2025-10-04 21:29:09.934 -06:00 [INF] Application is shutting down...
+2025-10-04 21:29:29.919 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:29:32.002 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:29:51.481 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:29:52.240 -06:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:29:52.272 -06:00 [INF] Executed DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:29:52.278 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:29:52.280 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:29:52.307 -06:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:29:52.324 -06:00 [INF] Applying migration '20251005032933_AddMonedaAndCotizaciones'.
+2025-10-04 21:29:52.455 -06:00 [INF] Executed DbCommand (32ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cobros] ADD [Moneda] nvarchar(max) NOT NULL DEFAULT N'';
+2025-10-04 21:29:52.471 -06:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Cotizaciones] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroCotizacion] nvarchar(50) NOT NULL,
+    [NombreSolicitante] nvarchar(200) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [Telefono] nvarchar(20) NULL,
+    [TipoSeguro] nvarchar(50) NOT NULL,
+    [Aseguradora] nvarchar(100) NOT NULL,
+    [MontoAsegurado] decimal(18,2) NOT NULL,
+    [PrimaCotizada] decimal(18,2) NULL,
+    [Moneda] nvarchar(10) NOT NULL,
+    [FechaCotizacion] datetime2 NOT NULL,
+    [FechaVencimiento] datetime2 NULL,
+    [Estado] nvarchar(20) NOT NULL,
+    [Observaciones] nvarchar(500) NULL,
+    [Placa] nvarchar(20) NULL,
+    [Marca] nvarchar(50) NULL,
+    [Modelo] nvarchar(50) NULL,
+    [Año] int NULL,
+    [Cilindraje] nvarchar(50) NULL,
+    [FechaNacimiento] datetime2 NULL,
+    [Genero] nvarchar(20) NULL,
+    [Ocupacion] nvarchar(100) NULL,
+    [DireccionInmueble] nvarchar(200) NULL,
+    [TipoInmueble] nvarchar(50) NULL,
+    [ValorInmueble] decimal(18,2) NULL,
+    [UsuarioId] int NOT NULL,
+    [FechaCreacion] datetime2 NOT NULL,
+    [FechaActualizacion] datetime2 NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Cotizaciones] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Cotizaciones_Users_UsuarioId] FOREIGN KEY ([UsuarioId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION
+);
+2025-10-04 21:29:52.495 -06:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536921Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-04 21:29:52.498 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536930Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-04 21:29:52.500 -06:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536932Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-04 21:29:52.506 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-05T03:29:31.9571018Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-04 21:29:52.519 -06:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-05T03:29:31.6537296Z', [LastPasswordChangeAt] = '2025-10-05T03:29:31.9569868Z', [PasswordHash] = N'$2a$11$CmLRP9Jl1Vwz6hJmE2lYLejDJmrzwtD.fSv4TWOt16Vyl.ci9GBGS'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-04 21:29:52.523 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_Email] ON [Cotizaciones] ([Email]);
+2025-10-04 21:29:52.529 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_Estado] ON [Cotizaciones] ([Estado]);
+2025-10-04 21:29:52.532 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_FechaCotizacion] ON [Cotizaciones] ([FechaCotizacion]);
+2025-10-04 21:29:52.534 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Cotizaciones_NumeroCotizacion] ON [Cotizaciones] ([NumeroCotizacion]);
+2025-10-04 21:29:52.537 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_TipoSeguro] ON [Cotizaciones] ([TipoSeguro]);
+2025-10-04 21:29:52.540 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_UsuarioId] ON [Cotizaciones] ([UsuarioId]);
+2025-10-04 21:29:52.547 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251005032933_AddMonedaAndCotizaciones', N'8.0.0');
+2025-10-04 21:30:07.104 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:30:07.717 -06:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:30:07.757 -06:00 [INF] Executed DbCommand (22ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:30:07.764 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:30:07.768 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:30:07.798 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:30:07.821 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:30:07.823 -06:00 [INF] Database migration completed successfully
+2025-10-04 21:30:07.853 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-04 21:30:07.937 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-04 21:30:07.939 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-04 21:30:07.940 -06:00 [INF] Hosting environment: Production
+2025-10-04 21:30:07.943 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-04 21:30:32.145 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:30:32.181 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-04 21:30:32.187 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:30:32.189 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:30:32.199 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 56.5496ms
+2025-10-04 21:30:33.684 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:30:33.848 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:30:33.849 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:30:33.853 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 168.5874ms
+2025-10-04 21:30:57.378 -06:00 [INF] Application is shutting down...
+2025-10-04 21:36:19.195 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:36:20.910 -06:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:36:20.944 -06:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:36:20.951 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:36:20.955 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:36:20.987 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:36:21.014 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:36:21.017 -06:00 [INF] Database migration completed successfully
+2025-10-04 21:36:21.043 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-04 21:36:21.122 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-04 21:36:21.124 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-04 21:36:21.125 -06:00 [INF] Hosting environment: Production
+2025-10-04 21:36:21.126 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-04 21:37:12.463 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:37:12.463 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:37:12.579 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-04 21:37:12.611 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:37:12.612 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:37:12.631 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 174.7423ms
+2025-10-04 21:37:12.631 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 174.7292ms
+2025-10-04 21:37:12.646 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:37:12.652 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:37:12.666 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:37:12.667 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:37:12.979 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:37:12.979 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:37:13.031 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:37:13.032 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:37:14.036 -06:00 [INF] Executed DbCommand (62ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:37:14.038 -06:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:37:14.099 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CobroDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:37:14.184 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 1129.0458ms
+2025-10-04 21:37:14.192 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:37:14.197 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 200 null application/json; charset=utf-8 1551.2629ms
+2025-10-04 21:37:14.232 -06:00 [INF] Executed DbCommand (32ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:37:14.482 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[@__estado_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = @__estado_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:37:14.531 -06:00 [INF] Executed DbCommand (20ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:37:14.568 -06:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:37:14.599 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoCobrado]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 1 AND [c].[MontoCobrado] IS NOT NULL
+2025-10-04 21:37:14.637 -06:00 [INF] Executed DbCommand (24ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:37:14.760 -06:00 [INF] Executed DbCommand (31ms) [Parameters=[@__fechaLimite_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) <= @__fechaLimite_0 AND CONVERT(date, [c].[FechaVencimiento]) >= CONVERT(date, GETUTCDATE())
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:37:14.795 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.CobroStatsDto'.
+2025-10-04 21:37:14.832 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 1783.0593ms
+2025-10-04 21:37:14.848 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:37:14.851 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 200 null application/json; charset=utf-8 2198.4574ms
+2025-10-04 21:37:18.694 -06:00 [INF] Application is shutting down...
+2025-10-04 21:41:32.930 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:41:33.633 -06:00 [INF] Executed DbCommand (41ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:41:33.683 -06:00 [INF] Executed DbCommand (33ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:41:33.691 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:41:33.694 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:41:33.728 -06:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:41:33.755 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:41:33.757 -06:00 [INF] Database migration completed successfully
+2025-10-04 21:41:33.781 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-04 21:41:33.866 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-04 21:41:33.870 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-04 21:41:33.872 -06:00 [INF] Hosting environment: Production
+2025-10-04 21:41:33.873 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-04 21:41:53.081 -06:00 [INF] Application is shutting down...
+2025-10-04 21:42:23.864 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:42:25.089 -06:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:42:25.142 -06:00 [INF] Executed DbCommand (31ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:42:25.148 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:42:25.345 -06:00 [INF] Executed DbCommand (191ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:42:25.414 -06:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:42:25.444 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:42:25.446 -06:00 [INF] Database migration completed successfully
+2025-10-04 21:42:25.466 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-04 21:42:25.538 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-04 21:42:25.541 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-04 21:42:25.542 -06:00 [INF] Hosting environment: Production
+2025-10-04 21:42:25.543 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-04 21:43:13.172 -06:00 [INF] Application is shutting down...
+2025-10-04 21:43:53.987 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-04 21:43:55.031 -06:00 [INF] Executed DbCommand (24ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:43:55.072 -06:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:43:55.077 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-04 21:43:55.080 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-04 21:43:55.102 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-04 21:43:55.124 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-04 21:43:55.127 -06:00 [INF] Database migration completed successfully
+2025-10-04 21:43:55.144 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-04 21:43:55.194 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-04 21:43:55.198 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-04 21:43:55.201 -06:00 [INF] Hosting environment: Production
+2025-10-04 21:43:55.203 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-04 21:44:15.929 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - null null
+2025-10-04 21:44:15.982 -06:00 [WRN] Failed to determine the https port for redirect.
+2025-10-04 21:44:15.995 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:44:16.008 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cotizaciones - 204 null null 84.3796ms
+2025-10-04 21:44:16.024 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cotizaciones - application/json null
+2025-10-04 21:44:16.029 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:44:16.141 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:44:16.165 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cotizaciones"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.CotizacionesController (WebApi).
+2025-10-04 21:44:16.551 -06:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Aseguradora], [c].[Año], [c].[Cilindraje], [c].[CreatedAt], [c].[CreatedBy], [c].[DireccionInmueble], [c].[Email], [c].[Estado], [c].[FechaActualizacion], [c].[FechaCotizacion], [c].[FechaCreacion], [c].[FechaNacimiento], [c].[FechaVencimiento], [c].[Genero], [c].[IsDeleted], [c].[Marca], [c].[Modelo], [c].[Moneda], [c].[MontoAsegurado], [c].[NombreSolicitante], [c].[NumeroCotizacion], [c].[Observaciones], [c].[Ocupacion], [c].[Placa], [c].[PrimaCotizada], [c].[Telefono], [c].[TipoInmueble], [c].[TipoSeguro], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioId], [c].[ValorInmueble]
+FROM [Cotizaciones] AS [c]
+2025-10-04 21:44:16.590 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CotizacionDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:44:16.645 -06:00 [INF] Executed action WebApi.Controllers.CotizacionesController.GetAll (WebApi) in 469.5484ms
+2025-10-04 21:44:16.647 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:44:16.650 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cotizaciones - 200 null application/json; charset=utf-8 626.4939ms
+2025-10-04 21:44:20.825 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cotizaciones - application/json null
+2025-10-04 21:44:20.829 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:44:20.832 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:44:20.835 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cotizaciones"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll() on controller WebApi.Controllers.CotizacionesController (WebApi).
+2025-10-04 21:44:20.898 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[Aseguradora], [c].[Año], [c].[Cilindraje], [c].[CreatedAt], [c].[CreatedBy], [c].[DireccionInmueble], [c].[Email], [c].[Estado], [c].[FechaActualizacion], [c].[FechaCotizacion], [c].[FechaCreacion], [c].[FechaNacimiento], [c].[FechaVencimiento], [c].[Genero], [c].[IsDeleted], [c].[Marca], [c].[Modelo], [c].[Moneda], [c].[MontoAsegurado], [c].[NombreSolicitante], [c].[NumeroCotizacion], [c].[Observaciones], [c].[Ocupacion], [c].[Placa], [c].[PrimaCotizada], [c].[Telefono], [c].[TipoInmueble], [c].[TipoSeguro], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioId], [c].[ValorInmueble]
+FROM [Cotizaciones] AS [c]
+2025-10-04 21:44:20.904 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CotizacionDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:44:20.907 -06:00 [INF] Executed action WebApi.Controllers.CotizacionesController.GetAll (WebApi) in 68.7317ms
+2025-10-04 21:44:20.908 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CotizacionesController.GetAll (WebApi)'
+2025-10-04 21:44:20.910 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cotizaciones - 200 null application/json; charset=utf-8 84.1553ms
+2025-10-04 21:44:40.007 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:44:40.010 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:44:40.010 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:44:40.012 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:44:40.012 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 5.5895ms
+2025-10-04 21:44:40.014 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 4.8117ms
+2025-10-04 21:44:40.020 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:44:40.023 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:44:40.027 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:44:40.027 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:44:40.037 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:44:40.037 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:44:40.045 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:44:40.045 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:44:40.160 -06:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:44:40.160 -06:00 [INF] Executed DbCommand (46ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:44:40.169 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CobroDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:44:40.175 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 120.5855ms
+2025-10-04 21:44:40.176 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:44:40.177 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 200 null application/json; charset=utf-8 154.5175ms
+2025-10-04 21:44:40.244 -06:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:44:40.373 -06:00 [INF] Executed DbCommand (45ms) [Parameters=[@__estado_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = @__estado_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:44:40.411 -06:00 [INF] Executed DbCommand (16ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:44:40.440 -06:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:44:40.457 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoCobrado]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 1 AND [c].[MontoCobrado] IS NOT NULL
+2025-10-04 21:44:40.473 -06:00 [INF] Executed DbCommand (12ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:44:40.497 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[@__fechaLimite_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) <= @__fechaLimite_0 AND CONVERT(date, [c].[FechaVencimiento]) >= CONVERT(date, GETUTCDATE())
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:44:40.505 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.CobroStatsDto'.
+2025-10-04 21:44:40.511 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 463.8634ms
+2025-10-04 21:44:40.512 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:44:40.513 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 200 null application/json; charset=utf-8 493.4331ms
+2025-10-04 21:44:52.730 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:44:52.738 -06:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-10-04 21:44:52.741 -06:00 [INF] AuthenticationScheme: Bearer was challenged.
+2025-10-04 21:44:52.742 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 401 0 null 11.4029ms
+2025-10-04 21:45:06.445 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:45:06.450 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:45:06.452 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:45:06.454 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 9.1605ms
+2025-10-04 21:45:16.641 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:45:16.644 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:45:16.645 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:45:16.646 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 5.0741ms
+2025-10-04 21:45:55.863 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:45:55.896 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:45:55.896 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:45:55.898 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 34.1981ms
+2025-10-04 21:46:56.254 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:46:56.261 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:46:56.262 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:46:56.263 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 8.5866ms
+2025-10-04 21:47:02.074 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - null null
+2025-10-04 21:47:02.079 -06:00 [INF] CORS policy execution failed.
+2025-10-04 21:47:02.080 -06:00 [INF] Request origin http://localhost:4201 does not have permission to access the resource.
+2025-10-04 21:47:02.082 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/auth/login - 204 null null 8.3175ms
+2025-10-04 21:47:16.456 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:47:16.456 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:47:16.458 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:47:16.461 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:47:16.463 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 7.4678ms
+2025-10-04 21:47:16.463 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 7.4672ms
+2025-10-04 21:47:16.480 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:47:16.480 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:47:16.494 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:47:16.494 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:47:16.558 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:47:16.558 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:47:16.574 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:47:16.574 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:47:17.046 -06:00 [INF] Executed DbCommand (347ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:47:17.047 -06:00 [INF] Executed DbCommand (347ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:47:17.068 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CobroDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:47:17.077 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 500.6758ms
+2025-10-04 21:47:17.078 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:47:17.082 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 200 null application/json; charset=utf-8 600.0923ms
+2025-10-04 21:47:17.094 -06:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:47:17.152 -06:00 [INF] Executed DbCommand (39ms) [Parameters=[@__estado_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = @__estado_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:47:17.175 -06:00 [INF] Executed DbCommand (17ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:47:17.198 -06:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:47:17.211 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoCobrado]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 1 AND [c].[MontoCobrado] IS NOT NULL
+2025-10-04 21:47:17.239 -06:00 [INF] Executed DbCommand (24ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:47:17.260 -06:00 [INF] Executed DbCommand (16ms) [Parameters=[@__fechaLimite_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) <= @__fechaLimite_0 AND CONVERT(date, [c].[FechaVencimiento]) >= CONVERT(date, GETUTCDATE())
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:47:17.263 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.CobroStatsDto'.
+2025-10-04 21:47:17.269 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 691.7373ms
+2025-10-04 21:47:17.271 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:47:17.272 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 200 null application/json; charset=utf-8 792.4929ms
+2025-10-04 21:48:08.466 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - null null
+2025-10-04 21:48:08.466 -06:00 [INF] Request starting HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:48:08.470 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:08.471 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:08.472 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros - 204 null null 6.392ms
+2025-10-04 21:48:08.473 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/cobros/stats - 204 null null 7.263ms
+2025-10-04 21:48:08.479 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros/stats - null null
+2025-10-04 21:48:08.483 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/cobros - null null
+2025-10-04 21:48:08.485 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:08.487 -06:00 [INF] CORS policy execution successful.
+2025-10-04 21:48:08.488 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:48:08.489 -06:00 [INF] Executing endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:48:08.489 -06:00 [INF] Route matched with {action = "GetStats", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.CobroStatsDto]] GetStats() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:48:08.490 -06:00 [INF] Route matched with {action = "GetAll", controller = "Cobros"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Application.DTOs.CobroDto]]] GetAll() on controller WebApi.Controllers.CobrosController (WebApi).
+2025-10-04 21:48:08.507 -06:00 [INF] Executed DbCommand (12ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:48:08.507 -06:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit)
+2025-10-04 21:48:08.511 -06:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Application.DTOs.CobroDto, Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-10-04 21:48:08.512 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetAll (WebApi) in 18.6165ms
+2025-10-04 21:48:08.512 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:48:08.513 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetAll (WebApi)'
+2025-10-04 21:48:08.519 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros - 200 null application/json; charset=utf-8 36.4807ms
+2025-10-04 21:48:08.534 -06:00 [INF] Executed DbCommand (14ms) [Parameters=[@__estado_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = @__estado_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:08.545 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:08.555 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0
+2025-10-04 21:48:08.559 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoCobrado]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 1 AND [c].[MontoCobrado] IS NOT NULL
+2025-10-04 21:48:08.562 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[@__fechaActual_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) < @__fechaActual_0
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:08.577 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__fechaLimite_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Id], [c].[ClienteApellido], [c].[ClienteNombre], [c].[CreatedAt], [c].[CreatedBy], [c].[Estado], [c].[FechaCobro], [c].[FechaVencimiento], [c].[IsDeleted], [c].[MetodoPago], [c].[Moneda], [c].[MontoCobrado], [c].[MontoTotal], [c].[NumeroPoliza], [c].[NumeroRecibo], [c].[Observaciones], [c].[PolizaId], [c].[UpdatedAt], [c].[UpdatedBy], [c].[UsuarioCobroId], [c].[UsuarioCobroNombre], [t].[Id], [t].[Aseguradora], [t].[CreatedAt], [t].[CreatedBy], [t].[EsActivo], [t].[FechaVigencia], [t].[Frecuencia], [t].[IsDeleted], [t].[Marca], [t].[Modalidad], [t].[Modelo], [t].[Moneda], [t].[NombreAsegurado], [t].[NumeroPoliza], [t].[PerfilId], [t].[Placa], [t].[Prima], [t].[UpdatedAt], [t].[UpdatedBy], [t0].[Id], [t0].[CreatedAt], [t0].[CreatedBy], [t0].[Email], [t0].[FirstName], [t0].[IsActive], [t0].[IsDeleted], [t0].[LastLoginAt], [t0].[LastName], [t0].[LastPasswordChangeAt], [t0].[PasswordHash], [t0].[RequiresPasswordChange], [t0].[UpdatedAt], [t0].[UpdatedBy], [t0].[UserName]
+FROM [Cobros] AS [c]
+INNER JOIN (
+    SELECT [p].[Id], [p].[Aseguradora], [p].[CreatedAt], [p].[CreatedBy], [p].[EsActivo], [p].[FechaVigencia], [p].[Frecuencia], [p].[IsDeleted], [p].[Marca], [p].[Modalidad], [p].[Modelo], [p].[Moneda], [p].[NombreAsegurado], [p].[NumeroPoliza], [p].[PerfilId], [p].[Placa], [p].[Prima], [p].[UpdatedAt], [p].[UpdatedBy]
+    FROM [Polizas] AS [p]
+    WHERE [p].[IsDeleted] = CAST(0 AS bit)
+) AS [t] ON [c].[PolizaId] = [t].[Id]
+LEFT JOIN (
+    SELECT [u].[Id], [u].[CreatedAt], [u].[CreatedBy], [u].[Email], [u].[FirstName], [u].[IsActive], [u].[IsDeleted], [u].[LastLoginAt], [u].[LastName], [u].[LastPasswordChangeAt], [u].[PasswordHash], [u].[RequiresPasswordChange], [u].[UpdatedAt], [u].[UpdatedBy], [u].[UserName]
+    FROM [Users] AS [u]
+    WHERE [u].[IsDeleted] = CAST(0 AS bit)
+) AS [t0] ON [c].[UsuarioCobroId] = [t0].[Id]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 0 AND CONVERT(date, [c].[FechaVencimiento]) <= @__fechaLimite_0 AND CONVERT(date, [c].[FechaVencimiento]) >= CONVERT(date, GETUTCDATE())
+ORDER BY [c].[FechaVencimiento]
+2025-10-04 21:48:08.579 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.CobroStatsDto'.
+2025-10-04 21:48:08.581 -06:00 [INF] Executed action WebApi.Controllers.CobrosController.GetStats (WebApi) in 88.8449ms
+2025-10-04 21:48:08.586 -06:00 [INF] Executed endpoint 'WebApi.Controllers.CobrosController.GetStats (WebApi)'
+2025-10-04 21:48:08.588 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/cobros/stats - 200 null application/json; charset=utf-8 108.4944ms

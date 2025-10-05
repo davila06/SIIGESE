@@ -5,92 +5,146 @@ export interface Reclamo {
   numeroPoliza: string;
   clienteNombre: string;
   clienteApellido: string;
+  fechaReclamo: string;
+  fechaResolucion?: string;
   tipoReclamo: TipoReclamo;
-  descripcion: string;
-  fechaReclamo: Date;
-  fechaOcurrencia?: Date;
-  montoReclamado?: number;
-  montoAprobado?: number;
   estado: EstadoReclamo;
-  prioridad: PrioridadReclamo;
-  asignadoA?: string;
-  observaciones?: string;
-  documentosAdjuntos?: DocumentoAdjunto[];
-  fechaResolucion?: Date;
-  motivoRechazo?: string;
-  usuarioCreacion: string;
-  fechaCreacion: Date;
-  fechaActualizacion?: Date;
-}
-
-export enum TipoReclamo {
-  SINIESTRO = 'Siniestro',
-  REEMBOLSO = 'Reembolso',
-  QUEJA_SERVICIO = 'Queja de Servicio',
-  CANCELACION = 'Cancelación',
-  CAMBIO_POLIZA = 'Cambio de Póliza',
-  OTRO = 'Otro'
-}
-
-export enum EstadoReclamo {
-  PENDIENTE = 'Pendiente',
-  EN_REVISION = 'En Revisión',
-  REQUIERE_DOCUMENTOS = 'Requiere Documentos',
-  APROBADO = 'Aprobado',
-  RECHAZADO = 'Rechazado',
-  RESUELTO = 'Resuelto',
-  CERRADO = 'Cerrado'
-}
-
-export enum PrioridadReclamo {
-  BAJA = 'Baja',
-  MEDIA = 'Media',
-  ALTA = 'Alta',
-  URGENTE = 'Urgente'
-}
-
-export interface DocumentoAdjunto {
-  id: number;
-  nombre: string;
-  tipo: string;
-  tamaño: number;
-  url: string;
-  fechaSubida: Date;
-}
-
-export interface ReclamoRequest {
-  polizaId: number;
-  tipoReclamo: TipoReclamo;
   descripcion: string;
-  fechaOcurrencia?: Date;
   montoReclamado?: number;
-  prioridad?: PrioridadReclamo;
+  montoAprobado?: number;
+  moneda: string;
+  prioridad: PrioridadReclamo;
+  observaciones?: string;
+  documentosAdjuntos?: string;
+  usuarioAsignadoId?: number;
+  usuarioAsignadoNombre?: string;
+  fechaLimiteRespuesta?: string;
+  createdAt: string;
+  updatedAt?: string;
+  createdBy: string;
+  updatedBy?: string;
+  isDeleted: boolean;
+  poliza?: any;
+  usuarioAsignado?: any;
 }
 
-export interface ActualizarEstadoRequest {
-  reclamoId: number;
-  nuevoEstado: EstadoReclamo;
+export interface CreateReclamoDto {
+  polizaId: number;
+  numeroPoliza: string;
+  clienteNombre: string;
+  clienteApellido: string;
+  tipoReclamo: number;
+  descripcion: string;
+  montoReclamado?: number;
+  moneda: string;
+  prioridad: number;
   observaciones?: string;
+  documentosAdjuntos?: string;
+  usuarioAsignadoId?: number;
+  fechaLimiteRespuesta?: string;
+}
+
+export interface UpdateReclamoDto {
+  numeroPoliza?: string;
+  clienteNombre?: string;
+  clienteApellido?: string;
+  tipoReclamo?: number;
+  estado?: number;
+  descripcion?: string;
+  montoReclamado?: number;
   montoAprobado?: number;
-  motivoRechazo?: string;
+  moneda?: string;
+  prioridad?: number;
+  observaciones?: string;
+  documentosAdjuntos?: string;
+  usuarioAsignadoId?: number;
+  fechaLimiteRespuesta?: string;
 }
 
 export interface ReclamosStats {
-  totalPendientes: number;
-  totalEnRevision: number;
-  totalAprobados: number;
-  totalRechazados: number;
-  totalResueltos: number;
-  montoTotalReclamado: number;
-  montoTotalAprobado: number;
-  tiempoPromedioResolucion: number; // en días
+  totalReclamos: number;
+  reclamosAbiertos: number;
+  reclamosEnProceso: number;
+  reclamosResueltos: number;
+  reclamosCerrados: number;
+  reclamosRechazados: number;
+  totalMontoReclamado: number;
+  totalMontoAprobado: number;
+  monedaPrincipal: string;
+  reclamosPrioridadAlta: number;
+  reclamosPrioridadCritica: number;
+  reclamosVencidos: number;
 }
 
 export interface FiltroReclamos {
-  estado?: EstadoReclamo;
-  tipoReclamo?: TipoReclamo;
-  prioridad?: PrioridadReclamo;
-  fechaDesde?: Date;
-  fechaHasta?: Date;
-  asignadoA?: string;
+  estado?: number;
+  tipoReclamo?: number;
+  prioridad?: number;
+  clienteNombre?: string;
+  numeroPoliza?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
+  usuarioAsignadoId?: number;
+  soloVencidos?: boolean;
+  moneda?: string;
+}
+
+export enum TipoReclamo {
+  Siniestro = 0,
+  Servicio = 1,
+  Facturacion = 2,
+  Cobertura = 3,
+  Proceso = 4,
+  Otro = 5
+}
+
+export enum EstadoReclamo {
+  Abierto = 0,
+  EnProceso = 1,
+  Resuelto = 2,
+  Cerrado = 3,
+  Rechazado = 4,
+  Escalado = 5
+}
+
+export enum PrioridadReclamo {
+  Baja = 0,
+  Media = 1,
+  Alta = 2,
+  Critica = 3
+}
+
+// Helper functions para mostrar labels
+export function getTipoReclamoLabel(tipo: TipoReclamo): string {
+  switch (tipo) {
+    case TipoReclamo.Siniestro: return 'Siniestro';
+    case TipoReclamo.Servicio: return 'Servicio';
+    case TipoReclamo.Facturacion: return 'Facturación';
+    case TipoReclamo.Cobertura: return 'Cobertura';
+    case TipoReclamo.Proceso: return 'Proceso';
+    case TipoReclamo.Otro: return 'Otro';
+    default: return 'Desconocido';
+  }
+}
+
+export function getEstadoReclamoLabel(estado: EstadoReclamo): string {
+  switch (estado) {
+    case EstadoReclamo.Abierto: return 'Abierto';
+    case EstadoReclamo.EnProceso: return 'En Proceso';
+    case EstadoReclamo.Resuelto: return 'Resuelto';
+    case EstadoReclamo.Cerrado: return 'Cerrado';
+    case EstadoReclamo.Rechazado: return 'Rechazado';
+    case EstadoReclamo.Escalado: return 'Escalado';
+    default: return 'Desconocido';
+  }
+}
+
+export function getPrioridadReclamoLabel(prioridad: PrioridadReclamo): string {
+  switch (prioridad) {
+    case PrioridadReclamo.Baja: return 'Baja';
+    case PrioridadReclamo.Media: return 'Media';
+    case PrioridadReclamo.Alta: return 'Alta';
+    case PrioridadReclamo.Critica: return 'Crítica';
+    default: return 'Desconocido';
+  }
 }

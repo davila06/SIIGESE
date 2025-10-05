@@ -7,10 +7,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { EmailTemplateService, EmailTemplate, EmailTemplateRequest } from '../../services/email-template.service';
 
 @Component({
-    selector: 'app-email-template-manager',
-    templateUrl: './email-template-manager.component.html',
-    styleUrls: ['./email-template-manager.component.scss'],
-    standalone: false
+  selector: 'app-email-template-manager',
+  templateUrl: './email-template-manager.component.html',
+  styleUrls: ['./email-template-manager.component.scss']
 })
 export class EmailTemplateManagerComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;

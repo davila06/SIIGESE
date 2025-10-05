@@ -5,10 +5,9 @@ import { EmailService, EmailRequest } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-    selector: 'app-send-email',
-    templateUrl: './send-email.component.html',
-    styleUrls: ['./send-email.component.scss'],
-    standalone: false
+  selector: 'app-send-email',
+  templateUrl: './send-email.component.html',
+  styleUrls: ['./send-email.component.scss']
 })
 export class SendEmailComponent implements OnInit {
   emailForm: FormGroup;

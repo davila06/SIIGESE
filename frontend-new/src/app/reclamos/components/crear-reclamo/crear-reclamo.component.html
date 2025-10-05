@@ -1,0 +1,154 @@
+<div class="crear-reclamo-container">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <div mat-card-avatar class="header-icon">
+        <mat-icon>add_circle</mat-icon>
+      </div>
+      <mat-card-title>Crear Nuevo Reclamo</mat-card-title>
+      <mat-card-subtitle>Complete la información del reclamo</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="reclamoForm" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h3>Información de la Póliza</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>ID de Póliza</mat-label>
+              <input matInput 
+                     type="number"
+                     formControlName="polizaId"
+                     placeholder="Ingrese el ID de la póliza">
+              <mat-error *ngIf="reclamoForm.get('polizaId')?.hasError('required')">
+                ID de Póliza es requerido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Número de Póliza</mat-label>
+              <input matInput 
+                     formControlName="numeroPoliza"
+                     placeholder="Ingrese el número de póliza">
+              <mat-error *ngIf="reclamoForm.get('numeroPoliza')?.hasError('required')">
+                Número de Póliza es requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Información del Cliente</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Nombre del Cliente</mat-label>
+              <input matInput 
+                     formControlName="clienteNombre"
+                     placeholder="Ingrese el nombre">
+              <mat-error *ngIf="reclamoForm.get('clienteNombre')?.hasError('required')">
+                Nombre es requerido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Apellido del Cliente</mat-label>
+              <input matInput 
+                     formControlName="clienteApellido"
+                     placeholder="Ingrese el apellido">
+              <mat-error *ngIf="reclamoForm.get('clienteApellido')?.hasError('required')">
+                Apellido es requerido
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3>Detalles del Reclamo</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Tipo de Reclamo</mat-label>
+              <mat-select formControlName="tipoReclamo">
+                <mat-option *ngFor="let tipo of tiposReclamo" [value]="tipo.value">
+                  {{ tipo.label }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="reclamoForm.get('tipoReclamo')?.hasError('required')">
+                Tipo de Reclamo es requerido
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Prioridad</mat-label>
+              <mat-select formControlName="prioridad">
+                <mat-option *ngFor="let prioridad of prioridades" [value]="prioridad.value">
+                  {{ prioridad.label }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="reclamoForm.get('prioridad')?.hasError('required')">
+                Prioridad es requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Monto Reclamado</mat-label>
+              <input matInput 
+                     type="number"
+                     step="0.01"
+                     formControlName="montoReclamado"
+                     placeholder="0.00">
+              <span matPrefix>$ </span>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Moneda</mat-label>
+              <mat-select formControlName="moneda">
+                <mat-option value="USD">USD - Dólar Americano</mat-option>
+                <mat-option value="EUR">EUR - Euro</mat-option>
+                <mat-option value="GTQ">GTQ - Quetzal</mat-option>
+              </mat-select>
+              <mat-error *ngIf="reclamoForm.get('moneda')?.hasError('required')">
+                Moneda es requerida
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción del Reclamo</mat-label>
+            <textarea matInput 
+                      rows="4"
+                      formControlName="descripcion"
+                      placeholder="Describa detalladamente el motivo del reclamo...">
+            </textarea>
+            <mat-error *ngIf="reclamoForm.get('descripcion')?.hasError('required')">
+              Descripción es requerida
+            </mat-error>
+            <mat-error *ngIf="reclamoForm.get('descripcion')?.hasError('minlength')">
+              La descripción debe tener al menos 10 caracteres
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button 
+              type="button"
+              (click)="onCancel()"
+              [disabled]="loading">
+        <mat-icon>cancel</mat-icon>
+        Cancelar
+      </button>
+      
+      <button mat-raised-button 
+              color="primary"
+              type="button"
+              (click)="onSubmit()"
+              [disabled]="loading || reclamoForm.invalid">
+        <mat-icon *ngIf="!loading">save</mat-icon>
+        <mat-icon *ngIf="loading" class="spinning">refresh</mat-icon>
+        {{ loading ? 'Guardando...' : 'Crear Reclamo' }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
