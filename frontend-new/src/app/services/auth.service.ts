@@ -65,10 +65,18 @@ export class AuthService {
   private readonly REFRESH_TOKEN_KEY = 'sinseg_refresh_token';
   private readonly USER_KEY = 'sinseg_user';
 
-  private currentUserSubject = new BehaviorSubject<User | null>(this.getCurrentUser());
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    // Inicializar correctamente verificando autenticación
+    this.initializeAuth();
+  }
+
+  private initializeAuth(): void {
+    const user = this.getCurrentUser();
+    this.currentUserSubject.next(user);
+  }
 
   login(email: string, password: string): Observable<LoginResponse> {
     const loginData: LoginRequest = { email, password };
@@ -83,10 +91,14 @@ export class AuthService {
   }
 
   logout(): void {
+    this.clearAuthData();
+    this.currentUserSubject.next(null);
+  }
+
+  private clearAuthData(): void {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.REFRESH_TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
-    this.currentUserSubject.next(null);
   }
 
   isAuthenticated(): boolean {
@@ -112,6 +124,13 @@ export class AuthService {
   }
 
   getCurrentUser(): User | null {
+    // Primero verificar si está autenticado
+    if (!this.isAuthenticated()) {
+      // Si no está autenticado, limpiar localStorage y retornar null
+      this.clearAuthData();
+      return null;
+    }
+    
     const userStr = localStorage.getItem(this.USER_KEY);
     if (userStr) {
       try {

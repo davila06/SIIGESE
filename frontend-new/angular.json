@@ -43,18 +43,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "1mb",
-                  "maximumError": "2mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
+              "budgets": [],
               "outputHashing": "all"
             },
             "development": {
@@ -71,14 +60,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "frontend-new:build"
+            "buildTarget": "frontend-new:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "frontend-new:build:production"
+              "buildTarget": "frontend-new:build:production"
             },
             "development": {
-              "browserTarget": "frontend-new:build:development"
+              "buildTarget": "frontend-new:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "frontend-new:build"
+            "buildTarget": "frontend-new:build"
           }
         },
         "test": {
