@@ -17,7 +17,7 @@ import {
   providedIn: 'root'
 })
 export class ReclamosService {
-  private readonly apiUrl = `${environment.apiUrl}/reclamos`;
+  private readonly apiUrl = `${environment.apiUrl}/api/reclamos`;
 
   constructor(private http: HttpClient) { }
 

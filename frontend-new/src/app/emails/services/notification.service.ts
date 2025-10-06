@@ -48,7 +48,7 @@ export interface NotificationStatistics {
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = `${environment.apiUrl}/notifications`;
+  private apiUrl = `${environment.apiUrl}/api/notifications`;
 
   constructor(private http: HttpClient) { }
 

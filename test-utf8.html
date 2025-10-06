@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test UTF-8 - Cobros</title>
+</head>
+<body>
+    <h1>Test de Codificación UTF-8 - Nombres de Clientes</h1>
+    <div id="resultados"></div>
+
+    <script>
+        fetch('http://localhost:5000/api/cobros')
+            .then(response => response.json())
+            .then(data => {
+                const div = document.getElementById('resultados');
+                div.innerHTML = '<h2>Primeros 5 cobros:</h2>';
+                
+                data.slice(0, 5).forEach(cobro => {
+                    div.innerHTML += `
+                        <p><strong>Cliente:</strong> ${cobro.clienteNombre} ${cobro.clienteApellido}</p>
+                        <p><strong>Recibo:</strong> ${cobro.numeroRecibo}</p>
+                        <hr>
+                    `;
+                });
+            })
+            .catch(error => {
+                document.getElementById('resultados').innerHTML = `<p>Error: ${error}</p>`;
+            });
+    </script>
+</body>
+</html>

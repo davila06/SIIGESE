@@ -15,8 +15,8 @@ namespace Application.DTOs
         public decimal MontoTotal { get; set; }
         public decimal? MontoCobrado { get; set; }
         public string Moneda { get; set; } = "CRC"; // Código de moneda
-        public string Estado { get; set; } = string.Empty;
-        public string? MetodoPago { get; set; }
+        public int Estado { get; set; } = 0; // EstadoCobro como número
+        public int? MetodoPago { get; set; } // MetodoPago como número nullable
         public string? Observaciones { get; set; }
         public int? UsuarioCobroId { get; set; }
         public string? UsuarioCobroNombre { get; set; }
@@ -38,7 +38,7 @@ namespace Application.DTOs
         public int CobroId { get; set; }
         public DateTime FechaCobro { get; set; }
         public decimal MontoCobrado { get; set; }
-        public string MetodoPago { get; set; } = string.Empty;
+        public int MetodoPago { get; set; } // MetodoPago como número
         public string? Observaciones { get; set; }
     }
 

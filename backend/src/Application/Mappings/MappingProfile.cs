@@ -46,11 +46,13 @@ namespace Application.Mappings
 
             // Cobro mappings
             CreateMap<Cobro, CobroDto>()
-                .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => src.Estado.ToString()))
+                .ForMember(dest => dest.Estado, opt => opt.MapFrom(src => (int)src.Estado))
                 .ForMember(dest => dest.MetodoPago, opt => opt.MapFrom(src => 
-                    src.MetodoPago.HasValue ? src.MetodoPago.Value.ToString() : null))
+                    src.MetodoPago.HasValue ? (int)src.MetodoPago.Value : (int?)null))
                 .ForMember(dest => dest.FechaCreacion, opt => opt.MapFrom(src => src.CreatedAt))
-                .ForMember(dest => dest.FechaActualizacion, opt => opt.MapFrom(src => src.UpdatedAt));
+                .ForMember(dest => dest.FechaActualizacion, opt => opt.MapFrom(src => src.UpdatedAt))
+                .ForMember(dest => dest.ClienteNombre, opt => opt.MapFrom(src => FixEncoding(src.ClienteNombre)))
+                .ForMember(dest => dest.ClienteApellido, opt => opt.MapFrom(src => FixEncoding(src.ClienteApellido)));
 
             // Reclamo mappings
             CreateMap<Reclamo, ReclamoDto>()
@@ -74,6 +76,22 @@ namespace Application.Mappings
                 .ForMember(dest => dest.CreatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedBy, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore());
+        }
+
+        private static string FixEncoding(string? input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return input ?? string.Empty;
+
+            return input
+                .Replace("Ã¡", "á")
+                .Replace("Ã©", "é")
+                .Replace("Ã­", "í")
+                .Replace("Ã³", "ó")
+                .Replace("Ãº", "ú")
+                .Replace("Ã±", "ñ")
+                .Replace("Ã", "Á")
+                .Replace("Ã‰", "É");
         }
     }
 }

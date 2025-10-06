@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { 
   Cobro, 
   CobroStats, 
@@ -22,6 +23,7 @@ import {
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
+import { CobroDetalleDialogComponent } from '../cobro-detalle-dialog/cobro-detalle-dialog.component';
 
 @Component({
   selector: 'app-cobros-dashboard',
@@ -39,7 +41,8 @@ import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../..
     MatFormFieldModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   templateUrl: './cobros-dashboard.component.html',
   styleUrls: ['./cobros-dashboard.component.scss']
@@ -76,7 +79,8 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private cobrosService: CobrosService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -94,6 +98,18 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     
     this.cobrosService.getCobros().subscribe({
       next: (cobros) => {
+        console.log('=== DEBUG COBROS ===');
+        console.log('Total cobros recibidos:', cobros.length);
+        cobros.forEach((cobro, index) => {
+          console.log(`Cobro ${index + 1}:`, {
+            numeroRecibo: cobro.numeroRecibo,
+            estado: cobro.estado,
+            tipoEstado: typeof cobro.estado,
+            clienteNombre: cobro.clienteNombre
+          });
+        });
+        console.log('=== FIN DEBUG ===');
+        
         this.cobros = cobros;
         this.dataSource.data = cobros;
         this.loading = false;
@@ -142,9 +158,18 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   verDetalle(cobro: Cobro): void {
-    // Aquí se abriría un diálogo con los detalles del cobro
-    console.log('Ver detalle:', cobro);
-    this.showMessage('Funcionalidad de detalles en desarrollo');
+    const dialogRef = this.dialog.open(CobroDetalleDialogComponent, {
+      width: '800px',
+      maxWidth: '90vw',
+      data: cobro
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Si se realizó alguna acción, recargar los datos
+        this.loadCobros();
+      }
+    });
   }
 
   cancelarCobro(cobro: Cobro): void {
@@ -198,6 +223,10 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   // Funciones helper para obtener labels de enums
   getEstadoLabel(estado: EstadoCobro): string {
+    return getEstadoCobroLabel(estado);
+  }
+
+  getEstadoCobroLabel(estado: any): string {
     return getEstadoCobroLabel(estado);
   }
 

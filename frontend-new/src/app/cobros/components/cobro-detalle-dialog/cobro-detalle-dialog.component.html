@@ -1,0 +1,110 @@
+<div class="cobro-detalle-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>receipt</mat-icon>
+    Detalles del Cobro
+  </h2>
+
+  <mat-dialog-content class="dialog-content">
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>Información del Recibo</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Número de Recibo:</label>
+            <span class="value">{{ cobro.numeroRecibo }}</span>
+          </div>
+          <div class="info-item">
+            <label>Estado:</label>
+            <mat-chip-set>
+              <mat-chip [color]="getEstadoColor(cobro.estado)" selected>
+                {{ getEstadoCobroLabel(cobro.estado) }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+          <div class="info-item">
+            <label>Fecha de Creación:</label>
+            <span class="value">{{ cobro.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item" *ngIf="cobro.fechaActualizacion">
+            <label>Última Actualización:</label>
+            <span class="value">{{ cobro.fechaActualizacion | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>Información de la Póliza</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Número de Póliza:</label>
+            <span class="value">{{ cobro.numeroPoliza }}</span>
+          </div>
+          <div class="info-item">
+            <label>Cliente:</label>
+            <span class="value">{{ cobro.clienteNombre }} {{ cobro.clienteApellido }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>Información de Pago</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Monto Total:</label>
+            <span class="value amount">{{ formatCurrency(cobro.montoTotal, cobro.moneda || 'CRC') }}</span>
+          </div>
+          <div class="info-item" *ngIf="cobro.montoCobrado">
+            <label>Monto Cobrado:</label>
+            <span class="value amount">{{ formatCurrency(cobro.montoCobrado, cobro.moneda || 'CRC') }}</span>
+          </div>
+          <div class="info-item">
+            <label>Fecha de Vencimiento:</label>
+            <span class="value">{{ cobro.fechaVencimiento | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="info-item" *ngIf="cobro.fechaCobro">
+            <label>Fecha de Cobro:</label>
+            <span class="value">{{ cobro.fechaCobro | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <div class="info-item" *ngIf="cobro.metodoPago !== null && cobro.metodoPago !== undefined">
+            <label>Método de Pago:</label>
+            <span class="value">{{ getMetodoPagoLabel(cobro.metodoPago) }}</span>
+          </div>
+          <div class="info-item" *ngIf="cobro.usuarioCobroNombre">
+            <label>Cobrado por:</label>
+            <span class="value">{{ cobro.usuarioCobroNombre }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="info-card" *ngIf="cobro.observaciones">
+      <mat-card-header>
+        <mat-card-title>Observaciones</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="observaciones">{{ cobro.observaciones }}</p>
+      </mat-card-content>
+    </mat-card>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCerrar()">
+      <mat-icon>close</mat-icon>
+      Cerrar
+    </button>
+  </mat-dialog-actions>
+</div>

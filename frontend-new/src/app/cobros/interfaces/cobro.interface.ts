@@ -10,8 +10,8 @@ export interface Cobro {
   montoTotal: number;
   montoCobrado?: number;
   moneda?: string; // Código de moneda (CRC, USD, EUR)
-  estado: EstadoCobro;
-  metodoPago?: MetodoPago;
+  estado: number; // EstadoCobro como número
+  metodoPago?: number; // MetodoPago como número nullable
   observaciones?: string;
   usuarioCobroId?: number;
   usuarioCobroNombre?: string;
@@ -60,23 +60,70 @@ export interface CobroStats {
 }
 
 // Funciones helper para convertir enums a labels
-export function getEstadoCobroLabel(estado: EstadoCobro): string {
-  switch (estado) {
-    case EstadoCobro.Pendiente: return 'Pendiente';
-    case EstadoCobro.Cobrado: return 'Cobrado';
-    case EstadoCobro.Vencido: return 'Vencido';
-    case EstadoCobro.Cancelado: return 'Cancelado';
-    default: return 'Desconocido';
+export function getEstadoCobroLabel(estado: any): string {
+  // Verificar tipos y valores
+  if (estado === null || estado === undefined) {
+    return 'NULL/UNDEFINED';
+  }
+  
+  const tipo = typeof estado;
+  
+  if (tipo === 'string') {
+    if (estado === '') {
+      return 'STRING_VACIO';
+    }
+    const num = parseInt(estado, 10);
+    if (isNaN(num)) {
+      return `STR:"${estado}"`;
+    }
+    return getEstadoFromNumber(num);
+  } else if (tipo === 'number') {
+    return getEstadoFromNumber(estado);
+  } else {
+    return `TIPO:${tipo}`;
   }
 }
 
-export function getMetodoPagoLabel(metodo: MetodoPago): string {
-  switch (metodo) {
-    case MetodoPago.Efectivo: return 'Efectivo';
-    case MetodoPago.Transferencia: return 'Transferencia';
-    case MetodoPago.Cheque: return 'Cheque';
-    case MetodoPago.TarjetaCredito: return 'Tarjeta de Crédito';
-    case MetodoPago.TarjetaDebito: return 'Tarjeta de Débito';
-    default: return 'Desconocido';
+function getEstadoFromNumber(num: number): string {
+  switch (num) {
+    case 0: return 'Pendiente';
+    case 1: return 'Cobrado';
+    case 2: return 'Vencido';
+    case 3: return 'Cancelado';
+    default: return `NUM:${num}`;
+  }
+}
+
+export function getMetodoPagoLabel(metodo: MetodoPago | number | string | null | undefined): string {
+  if (metodo === null || metodo === undefined) {
+    return 'NULL/UNDEFINED';
+  }
+  
+  const tipo = typeof metodo;
+  
+  if (tipo === 'string') {
+    if (metodo === '') {
+      return 'STRING_VACIO';
+    }
+    const num = parseInt(metodo as string, 10);
+    if (isNaN(num)) {
+      return `STR:"${metodo}"`;
+    }
+    return getMetodoFromNumber(num);
+  } else if (tipo === 'number') {
+    return getMetodoFromNumber(metodo as number);
+  } else {
+    return `TIPO:${tipo}`;
+  }
+}
+
+function getMetodoFromNumber(num: number): string {
+  switch (num) {
+    case 0: return 'Efectivo';
+    case 1: return 'Transferencia';
+    case 2: return 'Cheque';
+    case 3: return 'Tarjeta Crédito';
+    case 4: return 'Tarjeta Débito';
+    default: return `NUM:${num}`;
   }
 }

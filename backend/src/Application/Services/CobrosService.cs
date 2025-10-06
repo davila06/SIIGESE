@@ -176,10 +176,12 @@ namespace Application.Services
                 throw new InvalidOperationException("Solo se pueden registrar cobros en estado pendiente");
             }
 
-            if (!Enum.TryParse<MetodoPago>(request.MetodoPago, true, out var metodoPago))
+            if (!Enum.IsDefined(typeof(MetodoPago), request.MetodoPago))
             {
                 throw new ArgumentException($"Método de pago inválido: {request.MetodoPago}");
             }
+
+            var metodoPago = (MetodoPago)request.MetodoPago;
 
             cobro.FechaCobro = request.FechaCobro;
             cobro.MontoCobrado = request.MontoCobrado;

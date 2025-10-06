@@ -172,7 +172,7 @@
             <td mat-cell *matCellDef="let cobro">
               <mat-chip [color]="getEstadoColor(cobro.estado)" selected>
                 <mat-icon matChipAvatar>{{ getEstadoIcon(cobro.estado) }}</mat-icon>
-                {{ getEstadoLabel(cobro.estado) }}
+                {{ getEstadoCobroLabel(cobro.estado) }}
               </mat-chip>
             </td>
           </ng-container>

@@ -24,6 +24,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 const routes = [
   {
     path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full' as const
+  },
+  {
+    path: 'dashboard',
     loadComponent: () => import('./components').then(m => m.CobrosDashboardComponent)
   }
 ];

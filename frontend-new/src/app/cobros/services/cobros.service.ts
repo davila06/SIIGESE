@@ -15,7 +15,7 @@ import {
   providedIn: 'root'
 })
 export class CobrosService {
-  private readonly apiUrl = `${environment.apiUrl}/cobros`;
+  private readonly apiUrl = `${environment.apiUrl}/api/cobros`;
 
   constructor(private http: HttpClient) { }
 
