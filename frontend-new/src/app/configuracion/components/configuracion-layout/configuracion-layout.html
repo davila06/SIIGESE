@@ -1,0 +1,32 @@
+<div class="configuracion-layout">
+  <div class="layout-header">
+    <h1>
+      <mat-icon>settings</mat-icon>
+      Configuración del Sistema
+    </h1>
+    <p>Administra las configuraciones generales del sistema</p>
+  </div>
+
+  <div class="layout-content">
+    <div class="sidebar">
+      <mat-card class="menu-card">
+        <mat-card-header>
+          <mat-card-title>Configuraciones</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-nav-list>
+            <mat-list-item *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active">
+              <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
+              <div matListItemTitle>{{item.label}}</div>
+              <div matListItemLine>{{item.description}}</div>
+            </mat-list-item>
+          </mat-nav-list>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

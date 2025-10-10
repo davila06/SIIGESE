@@ -33,6 +33,11 @@ const routes: Routes = [
     loadChildren: () => import('./emails/emails.module').then(m => m.EmailsModule),
     canActivate: [AuthGuard]
   },
+  { 
+    path: 'configuracion', 
+    loadChildren: () => import('./configuracion/configuracion.module').then(m => m.ConfiguracionModule),
+    canActivate: [AuthGuard, AdminGuard]
+  },
   { path: '**', redirectTo: '/login' }
 ];
 

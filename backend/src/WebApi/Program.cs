@@ -98,6 +98,7 @@ builder.Services.AddScoped<IDataRecordRepository, DataRecordRepository>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 builder.Services.AddScoped<ICobroRepository, CobroRepository>();
 builder.Services.AddScoped<IReclamoRepository, ReclamoRepository>();
+builder.Services.AddScoped<IEmailConfigRepository, EmailConfigRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -108,6 +109,7 @@ builder.Services.AddScoped<IReclamoService, ReclamoService>();
 builder.Services.AddScoped<ICotizacionService, Infrastructure.Services.CotizacionService>();
 builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailConfigService, EmailConfigService>();
 
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

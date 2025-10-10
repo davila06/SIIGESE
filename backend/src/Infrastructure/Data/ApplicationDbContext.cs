@@ -19,6 +19,7 @@ namespace Infrastructure.Data
         public DbSet<Cobro> Cobros { get; set; }
         public DbSet<Cotizacion> Cotizaciones { get; set; }
         public DbSet<Reclamo> Reclamos { get; set; }
+        public DbSet<EmailConfig> EmailConfigs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -224,6 +225,40 @@ namespace Infrastructure.Data
                       .WithMany()
                       .HasForeignKey(e => e.UsuarioId)
                       .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // EmailConfig configuration
+            modelBuilder.Entity<EmailConfig>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ConfigName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.SmtpServer).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.SmtpPort).IsRequired();
+                entity.Property(e => e.FromEmail).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.FromName).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Username).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Password).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.UseSSL).IsRequired();
+                entity.Property(e => e.UseTLS).IsRequired();
+                entity.Property(e => e.IsDefault).IsRequired();
+                entity.Property(e => e.IsActive).IsRequired();
+                entity.Property(e => e.Description).HasMaxLength(500);
+                entity.Property(e => e.CompanyName).HasMaxLength(200);
+                entity.Property(e => e.CompanyAddress).HasMaxLength(500);
+                entity.Property(e => e.CompanyPhone).HasMaxLength(20);
+                entity.Property(e => e.CompanyWebsite).HasMaxLength(100);
+                entity.Property(e => e.CompanyLogo).HasMaxLength(500);
+                entity.Property(e => e.TimeoutSeconds).IsRequired();
+                entity.Property(e => e.MaxRetries).IsRequired();
+                entity.Property(e => e.LastTested).IsRequired();
+                entity.Property(e => e.LastTestSuccessful).IsRequired();
+                entity.Property(e => e.LastTestError).HasMaxLength(500);
+
+                entity.HasIndex(e => e.ConfigName).IsUnique();
+                entity.HasIndex(e => e.IsDefault);
+                entity.HasIndex(e => e.IsActive);
+
+                entity.HasQueryFilter(e => !e.IsDeleted);
             });
 
             // Seed data
