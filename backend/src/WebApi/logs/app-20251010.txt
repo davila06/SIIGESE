@@ -955,3 +955,89 @@ SELECT [MigrationId], [ProductVersion]
 FROM [__EFMigrationsHistory]
 ORDER BY [MigrationId];
 2025-10-10 09:50:29.439 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-10 11:49:07.895 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-10 11:49:07.933 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-10 11:49:08.027 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-10 11:49:08.028 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-10 11:49:08.411 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-10 11:49:08.413 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-10 11:49:08.437 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-10 11:49:08.440 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-10 12:02:14.552 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-10 12:02:14.591 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-10 12:02:14.676 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-10 12:02:14.677 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-10 12:02:16.151 -06:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-10 12:02:16.177 -06:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-10 12:02:16.183 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-10 12:02:16.187 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-10 12:02:16.210 -06:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-10 12:02:16.226 -06:00 [INF] Applying migration '20251010174908_AddEmailConfigTable'.
+2025-10-10 12:02:16.326 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [EmailConfigs] (
+    [Id] int NOT NULL IDENTITY,
+    [ConfigName] nvarchar(100) NOT NULL,
+    [SmtpServer] nvarchar(100) NOT NULL,
+    [SmtpPort] int NOT NULL,
+    [FromEmail] nvarchar(100) NOT NULL,
+    [FromName] nvarchar(100) NOT NULL,
+    [Username] nvarchar(100) NOT NULL,
+    [Password] nvarchar(200) NOT NULL,
+    [UseSSL] bit NOT NULL,
+    [UseTLS] bit NOT NULL,
+    [IsDefault] bit NOT NULL,
+    [IsActive] bit NOT NULL,
+    [Description] nvarchar(500) NULL,
+    [CompanyName] nvarchar(200) NULL,
+    [CompanyAddress] nvarchar(500) NULL,
+    [CompanyPhone] nvarchar(20) NULL,
+    [CompanyWebsite] nvarchar(100) NULL,
+    [CompanyLogo] nvarchar(500) NULL,
+    [TimeoutSeconds] int NOT NULL,
+    [MaxRetries] int NOT NULL,
+    [LastTested] datetime2 NOT NULL,
+    [LastTestSuccessful] bit NOT NULL,
+    [LastTestError] nvarchar(500) NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_EmailConfigs] PRIMARY KEY ([Id])
+);
+2025-10-10 12:02:16.334 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888264Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-10 12:02:16.338 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888272Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-10 12:02:16.342 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888273Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-10 12:02:16.345 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-10T17:49:08.3909329Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-10 12:02:16.353 -06:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-10T17:49:08.1888456Z', [LastPasswordChangeAt] = '2025-10-10T17:49:08.3903333Z', [PasswordHash] = N'$2a$11$S3xQGzPo8/4EN8B/gY.AUOiKbE.b79bDyHPZrYibXp3yRTffQ1fLi'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-10 12:02:16.356 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_EmailConfigs_ConfigName] ON [EmailConfigs] ([ConfigName]);
+2025-10-10 12:02:16.358 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailConfigs_IsActive] ON [EmailConfigs] ([IsActive]);
+2025-10-10 12:02:16.361 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailConfigs_IsDefault] ON [EmailConfigs] ([IsDefault]);
+2025-10-10 12:02:16.365 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251010174908_AddEmailConfigTable', N'8.0.0');
