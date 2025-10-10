@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5000/api'
+  apiUrl: 'https://siinadseg-api-9543.azurewebsites.net/api',
+  version: '20251010-165500',
+  enableLogging: true
 };
