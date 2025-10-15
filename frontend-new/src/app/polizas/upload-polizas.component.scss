@@ -374,6 +374,25 @@
       }
     }
   }
+  
+  .error-actions {
+    margin-top: 16px;
+    text-align: center;
+    
+    .download-errors-btn {
+      background-color: #f44336;
+      color: white;
+      font-weight: 600;
+      
+      &:hover {
+        background-color: #d32f2f;
+      }
+      
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
 }
 
 /* Success Actions */

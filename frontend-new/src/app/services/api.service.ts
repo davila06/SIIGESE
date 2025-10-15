@@ -161,6 +161,22 @@ export class ApiService {
     ).pipe(catchError(this.handleError));
   }
 
+  downloadPolizasTemplate(): Observable<Blob> {
+    const token = localStorage.getItem('sinseg_token');
+    let headers = new HttpHeaders();
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    return this.http.get(
+      `${this.apiUrl}/polizas/template`,
+      { 
+        headers,
+        responseType: 'blob'
+      }
+    ).pipe(catchError(this.handleError));
+  }
+
   private getHttpOptions() {
     const token = localStorage.getItem('sinseg_token');
     return {

@@ -168,6 +168,17 @@
               </div>
             </div>
           </mat-expansion-panel>
+          
+          <!-- Botón para descargar archivo de errores -->
+          <div class="error-actions" *ngIf="uploadStats.failedRecords.length > 0">
+            <button mat-raised-button 
+                    color="warn"
+                    (click)="downloadErrorsFile()"
+                    class="download-errors-btn">
+              <mat-icon>download</mat-icon>
+              Descargar Archivo de Errores
+            </button>
+          </div>
         </div>
 
         <!-- Success Actions -->

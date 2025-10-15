@@ -59,12 +59,17 @@ namespace Application.Validators
 
             RuleFor(x => x.Moneda)
                 .NotEmpty().WithMessage("La moneda es requerida")
-                .Must(x => x == "CRC" || x == "USD" || x == "EUR")
-                .WithMessage("La moneda debe ser CRC, USD o EUR");
+                .Must(x => x == "CRC" || x == "USD" || x == "EUR" || x == "GTQ")
+                .WithMessage("La moneda debe ser CRC, USD, EUR o GTQ");
 
             RuleFor(x => x.FechaVigencia)
                 .GreaterThan(DateTime.Today.AddDays(-30))
                 .WithMessage("La fecha de vigencia no puede ser muy antigua");
+
+            RuleFor(x => x.Frecuencia)
+                .NotEmpty().WithMessage("La frecuencia es requerida")
+                .Must(x => x == "Mensual" || x == "Trimestral" || x == "Semestral" || x == "Anual")
+                .WithMessage("La frecuencia debe ser Mensual, Trimestral, Semestral o Anual");
 
             RuleFor(x => x.Aseguradora)
                 .NotEmpty().WithMessage("La aseguradora es requerida")

@@ -1,11 +1,12 @@
 // Constantes de monedas para todo el sistema
 export const CURRENCY_CONSTANTS = {
-  DEFAULT_CURRENCY: 'CRC',
-  SUPPORTED_CURRENCIES: ['CRC', 'USD', 'EUR'],
-  DEFAULT_LOCALE: 'es-CR'
+  DEFAULT_CURRENCY: 'GTQ',
+  SUPPORTED_CURRENCIES: ['CRC', 'USD', 'EUR', 'GTQ'],
+  DEFAULT_LOCALE: 'es-GT'
 };
 
 export const MONEDAS_SISTEMA = [
+  { value: 'GTQ', label: 'Quetzales Guatemaltecos (GTQ)', symbol: 'Q', locale: 'es-GT' },
   { value: 'CRC', label: 'Colones Costarricenses (CRC)', symbol: '₡', locale: 'es-CR' },
   { value: 'USD', label: 'Dólares Americanos (USD)', symbol: '$', locale: 'en-US' },
   { value: 'EUR', label: 'Euros (EUR)', symbol: '€', locale: 'es-ES' }

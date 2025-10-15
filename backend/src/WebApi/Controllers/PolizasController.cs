@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Application.DTOs;
 using Application.Interfaces;
+using Infrastructure.Services;
 using System.Security.Claims;
 
 namespace WebApi.Controllers
@@ -14,11 +15,13 @@ namespace WebApi.Controllers
     public class PolizasController : ControllerBase
     {
         private readonly IPolizaService _polizaService;
+        private readonly IExcelService _excelService;
         private readonly ILogger<PolizasController> _logger;
 
-        public PolizasController(IPolizaService polizaService, ILogger<PolizasController> logger)
+        public PolizasController(IPolizaService polizaService, IExcelService excelService, ILogger<PolizasController> logger)
         {
             _polizaService = polizaService;
+            _excelService = excelService;
             _logger = logger;
         }
 
@@ -243,6 +246,83 @@ namespace WebApi.Controllers
             {
                 _logger.LogError(ex, "Error procesando archivo Excel de pólizas");
                 return BadRequest(new { message = "Error procesando archivo Excel" });
+            }
+        }
+
+        /// <summary>
+        /// Descargar template Excel para cargar pólizas
+        /// </summary>
+        [HttpGet("template")]
+        [Authorize(Roles = "Admin,DataLoader")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DownloadTemplate()
+        {
+            try
+            {
+                // Datos de ejemplo para el template
+                var templateData = new[]
+                {
+                    new
+                    {
+                        NumeroPoliza = "POL-2024-001",
+                        NombreAsegurado = "Juan Pérez García",
+                        Prima = "150000",
+                        Aseguradora = "Seguros ABC",
+                        FechaVigencia = "2024-12-31",
+                        Marca = "Toyota",
+                        Modelo = "Corolla",
+                        Placa = "ABC123",
+                        Modalidad = "Anual",
+                        Frecuencia = "Mensual",
+                        Moneda = "GTQ"
+                    }
+                };
+
+                var headers = new[]
+                {
+                    "Número Póliza",
+                    "Nombre Asegurado", 
+                    "Prima",
+                    "Aseguradora",
+                    "Fecha Vigencia",
+                    "Marca",
+                    "Modelo",
+                    "Placa",
+                    "Modalidad",
+                    "Frecuencia",
+                    "Moneda"
+                };
+
+                var excelBytes = await _excelService.GenerateExcelAsync(
+                    templateData,
+                    headers,
+                    item => new object[]
+                    {
+                        item.NumeroPoliza,
+                        item.NombreAsegurado,
+                        item.Prima,
+                        item.Aseguradora,
+                        item.FechaVigencia,
+                        item.Marca,
+                        item.Modelo,
+                        item.Placa,
+                        item.Modalidad,
+                        item.Frecuencia,
+                        item.Moneda
+                    }
+                );
+
+                var fileName = $"template_polizas_{DateTime.Now:yyyyMMdd}.xlsx";
+                
+                _logger.LogInformation("Template de pólizas descargado por usuario {UserId}", GetCurrentUserId());
+
+                return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generando template de pólizas");
+                return StatusCode(500, new { message = "Error generando template" });
             }
         }
 

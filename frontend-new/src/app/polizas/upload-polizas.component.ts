@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
-import { DataUploadResult } from '../interfaces/user.interface';
+import { DataUploadResult, FailedRecord } from '../interfaces/user.interface';
 import { Router } from '@angular/router';
 import { CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
 
@@ -25,7 +25,8 @@ export class UploadPolizasComponent implements OnInit {
     totalRecords: 0,
     processedRecords: 0,
     errorRecords: 0,
-    errors: [] as string[]
+    errors: [] as string[],
+    failedRecords: [] as FailedRecord[]
   };
 
   constructor(
@@ -202,7 +203,8 @@ export class UploadPolizasComponent implements OnInit {
       totalRecords: result.totalRecords,
       processedRecords: result.processedRecords,
       errorRecords: result.errorRecords,
-      errors: result.errors || []
+      errors: result.errors || [],
+      failedRecords: result.failedRecords || []
     };
   }
 
@@ -215,27 +217,102 @@ export class UploadPolizasComponent implements OnInit {
   }
 
   downloadTemplate(): void {
-    // Crear un template Excel de ejemplo
-    const templateData = [
-      {
-        'Número Póliza': 'POL-2024-001',
-        'Nombre Asegurado': 'Juan Pérez García',
-        'Prima': '150000',
-        'Aseguradora': 'Seguros ABC',
-        'Fecha Vigencia': '2024-12-31',
-        'Marca': 'Toyota',
-        'Modelo': 'Corolla',
-        'Placa': 'ABC123',
-        'Modalidad': 'Anual',
-        'Frecuencia': 'Mensual',
-        'Moneda': CURRENCY_CONSTANTS.DEFAULT_CURRENCY
+    this.isLoading = true;
+    
+    this.apiService.downloadPolizasTemplate().subscribe({
+      next: (blob: Blob) => {
+        // Crear un link para descargar el archivo
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `template_polizas_${new Date().toISOString().split('T')[0]}.xlsx`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        
+        this.snackBar.open('Template descargado exitosamente', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      },
+      error: (error) => {
+        console.error('Error descargando template:', error);
+        this.snackBar.open('Error descargando template. Intente nuevamente.', 'Cerrar', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      },
+      complete: () => {
+        this.isLoading = false;
       }
+    });
+  }
+
+  downloadErrorsFile(): void {
+    if (this.uploadStats.failedRecords.length === 0) {
+      this.snackBar.open('No hay errores para descargar', 'Cerrar', {
+        duration: 3000
+      });
+      return;
+    }
+
+    // Crear datos para el CSV de errores
+    const headers = [
+      'Fila',
+      'Error',
+      'Número Póliza',
+      'Nombre Asegurado',
+      'Prima',
+      'Aseguradora',
+      'Fecha Vigencia',
+      'Marca',
+      'Modelo',
+      'Placa',
+      'Modalidad',
+      'Frecuencia',
+      'Moneda'
     ];
 
-    // Aquí podrías implementar la descarga del template
-    // Por ahora solo mostramos un mensaje
-    this.snackBar.open('Función de descarga de template próximamente', 'Cerrar', {
-      duration: 3000
+    const errorData = this.uploadStats.failedRecords.map(record => [
+      record.rowNumber.toString(),
+      record.error,
+      record.originalData['Número Póliza'] || '',
+      record.originalData['Nombre Asegurado'] || '',
+      record.originalData['Prima'] || '',
+      record.originalData['Aseguradora'] || '',
+      record.originalData['Fecha Vigencia'] || '',
+      record.originalData['Marca'] || '',
+      record.originalData['Modelo'] || '',
+      record.originalData['Placa'] || '',
+      record.originalData['Modalidad'] || '',
+      record.originalData['Frecuencia'] || '',
+      record.originalData['Moneda'] || ''
+    ]);
+
+    // Crear contenido CSV
+    let csvContent = headers.map(header => `"${header}"`).join(',') + '\n';
+    errorData.forEach(row => {
+      csvContent += row.map(value => `"${value}"`).join(',') + '\n';
+    });
+
+    // Crear y descargar archivo
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    
+    const fileName = `Errores_archivo_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
+    link.setAttribute('download', fileName);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    this.snackBar.open('Archivo de errores descargado exitosamente', 'Cerrar', {
+      duration: 3000,
+      panelClass: ['success-snackbar']
     });
   }
 
