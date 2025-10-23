@@ -112,15 +112,15 @@
               <mat-card-content>
                 <div class="info-item">
                   <label>Fecha de Reclamo:</label>
-                  <span class="value">{{ reclamo.fechaReclamo | date:'dd/MM/yyyy HH:mm' }}</span>
+                  <span class="value">{{ reclamo.fechaReclamo | date:'dd-MM-yyyy HH:mm' }}</span>
                 </div>
                 <div class="info-item" *ngIf="reclamo.fechaLimiteRespuesta">
                   <label>Fecha Límite:</label>
-                  <span class="value">{{ reclamo.fechaLimiteRespuesta | date:'dd/MM/yyyy' }}</span>
+                  <span class="value">{{ reclamo.fechaLimiteRespuesta | date:'dd-MM-yyyy' }}</span>
                 </div>
                 <div class="info-item" *ngIf="reclamo.updatedAt">
                   <label>Última Actualización:</label>
-                  <span class="value">{{ reclamo.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                  <span class="value">{{ reclamo.updatedAt | date:'dd-MM-yyyy HH:mm' }}</span>
                 </div>
               </mat-card-content>
             </mat-card>

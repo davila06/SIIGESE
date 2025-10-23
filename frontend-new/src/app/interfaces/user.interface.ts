@@ -101,6 +101,7 @@ export interface Poliza {
   numeroPoliza: string;
   modalidad: string;
   nombreAsegurado: string;
+  numeroCedula: string;
   prima: number;
   moneda: string;
   fechaVigencia: Date;
@@ -109,6 +110,9 @@ export interface Poliza {
   placa?: string;
   marca?: string;
   modelo?: string;
+  año?: string;
+  correo?: string;
+  numeroTelefono?: string;
   fechaCreacion: Date;
   fechaModificacion?: Date;
   usuarioCreacion: string;
@@ -121,6 +125,7 @@ export interface CreatePoliza {
   numeroPoliza: string;
   modalidad: string;
   nombreAsegurado: string;
+  numeroCedula: string;
   prima: number;
   moneda: string;
   fechaVigencia: Date;
@@ -129,6 +134,9 @@ export interface CreatePoliza {
   placa?: string;
   marca?: string;
   modelo?: string;
+  año?: string;
+  correo?: string;
+  numeroTelefono?: string;
 }
 
 export interface DataUploadResult {

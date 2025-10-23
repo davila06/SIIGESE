@@ -84,7 +84,29 @@ export class CrearReclamoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Inicialización del componente
+    // Asegurar que el formulario esté siempre limpio al iniciar
+    this.resetForm();
+  }
+  
+  resetForm(): void {
+    this.reclamoForm.reset();
+    
+    // Restablecer valores por defecto
+    this.reclamoForm.patchValue({
+      moneda: 'USD',
+      prioridad: PrioridadReclamo.Media
+    });
+    
+    // Limpiar completamente los estados de validación
+    Object.keys(this.reclamoForm.controls).forEach(key => {
+      const control = this.reclamoForm.get(key);
+      if (control) {
+        control.markAsUntouched();
+        control.markAsPristine();
+        control.setErrors(null);
+        control.updateValueAndValidity();
+      }
+    });
   }
 
   onSubmit(): void {

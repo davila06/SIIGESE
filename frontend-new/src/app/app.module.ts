@@ -1,8 +1,14 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { registerLocaleData } from '@angular/common';
+import localeEsCR from '@angular/common/locales/es-CR';
+
+// Angular Material Date
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 
 // Angular Material Modules
 import { MatButtonModule } from '@angular/material/button';
@@ -38,6 +44,22 @@ import { LoginComponent } from './auth/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { MockApiInterceptor } from './interceptors/mock-api.interceptor';
 import { UsuariosComponent } from './usuarios/usuarios.component';
+
+// Configurar locale español Costa Rica
+registerLocaleData(localeEsCR);
+
+// Configurar formatos de fecha personalizados DD-MM-YYYY
+export const CUSTOM_DATE_FORMATS = {
+  parse: {
+    dateInput: ['DD-MM-YYYY', 'DD/MM/YYYY'],
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD-MM-YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @NgModule({
   declarations: [
@@ -78,6 +100,8 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
     MatListModule,
     MatProgressBarModule,
     MatExpansionModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     
     // Standalone Components
     UsuariosComponent
@@ -92,6 +116,18 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
+    },
+    {
+      provide: LOCALE_ID,
+      useValue: 'es-CR'
+    },
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: CUSTOM_DATE_FORMATS
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'es-CR'
     }
   ],
   bootstrap: [AppComponent]

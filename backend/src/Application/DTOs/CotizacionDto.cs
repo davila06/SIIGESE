@@ -21,7 +21,7 @@ namespace Application.DTOs
         public string TipoSeguro { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "La aseguradora es obligatoria")]
-        [MaxLength(100, ErrorMessage = "La aseguradora no puede exceder 100 caracteres")]
+        [MaxLength(200, ErrorMessage = "La aseguradora no puede exceder 200 caracteres")]
         public string Aseguradora { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "El monto asegurado es obligatorio")]

@@ -205,26 +205,34 @@
       <mat-card-content>
         <div class="instructions-content">
           <h4>📋 Formato requerido del archivo Excel:</h4>
-          <ul class="instructions-list">
-            <li><strong>Número Póliza:</strong> Identificador único de la póliza</li>
-            <li><strong>Nombre Asegurado:</strong> Nombre completo del asegurado</li>
-            <li><strong>Prima:</strong> Valor numérico de la prima</li>
-            <li><strong>Aseguradora:</strong> Nombre de la aseguradora</li>
-            <li><strong>Fecha Vigencia:</strong> Fecha en formato YYYY-MM-DD</li>
-            <li><strong>Marca, Modelo, Placa:</strong> Información del vehículo</li>
-            <li><strong>Modalidad:</strong> Anual, Semestral, etc.</li>
-            <li><strong>Frecuencia:</strong> Mensual, Trimestral, etc.</li>
-            <li><strong>Moneda:</strong> CRC, USD, EUR</li>
-          </ul>
+          <p><strong>El archivo debe contener las siguientes 14 columnas en este orden exacto:</strong></p>
+          <ol class="instructions-list">
+            <li><strong>POLIZA:</strong> Identificador único de la póliza</li>
+            <li><strong>NOMBRE:</strong> Nombre completo del asegurado</li>
+            <li><strong>NUMEROCEDULA:</strong> Número de cédula del asegurado</li>
+            <li><strong>PRIMA:</strong> Valor numérico de la prima</li>
+            <li><strong>MONEDA:</strong> CRC, USD, EUR</li>
+            <li><strong>FECHA:</strong> Fecha de vigencia en formato YYYY-MM-DD</li>
+            <li><strong>FRECUENCIA:</strong> Mensual, Trimestral, Semestral, Anual</li>
+            <li><strong>ASEGURADORA:</strong> Nombre de la aseguradora</li>
+            <li><strong>PLACA:</strong> Placa del vehículo (opcional)</li>
+            <li><strong>MARCA:</strong> Marca del vehículo (opcional)</li>
+            <li><strong>MODELO:</strong> Modelo del vehículo (opcional)</li>
+            <li><strong>AÑO:</strong> Año del vehículo (opcional)</li>
+            <li><strong>CORREO:</strong> Email del asegurado (opcional)</li>
+            <li><strong>NUMEROTELEFONO:</strong> Teléfono del asegurado (opcional)</li>
+          </ol>
 
           <div class="tips-section">
-            <h4>💡 Consejos:</h4>
+            <h4>💡 Consejos importantes:</h4>
             <ul class="tips-list">
-              <li>Asegúrate de que la primera fila contenga los encabezados</li>
-              <li>Verifica que no haya celdas vacías en campos obligatorios</li>
-              <li>Los números deben estar en formato numérico (sin comas o puntos como separadores de miles)</li>
-              <li>Las fechas deben estar en formato YYYY-MM-DD</li>
-              <li>Descarga el template de ejemplo para mayor precisión</li>
+              <li><strong>Orden crítico:</strong> Las columnas deben estar en el orden exacto mostrado arriba</li>
+              <li><strong>Encabezados:</strong> La primera fila debe contener exactamente estos nombres de columnas</li>
+              <li><strong>Campos obligatorios:</strong> POLIZA, NOMBRE, NUMEROCEDULA, PRIMA, MONEDA, FECHA, FRECUENCIA, ASEGURADORA</li>
+              <li><strong>Campos opcionales:</strong> PLACA, MARCA, MODELO, AÑO, CORREO, NUMEROTELEFONO</li>
+              <li><strong>Números:</strong> Sin comas o puntos como separadores de miles</li>
+              <li><strong>Fechas:</strong> Formato DD-MM-YYYY (ej: 23-10-2025)</li>
+              <li><strong>Template:</strong> Descarga el template para mayor precisión</li>
             </ul>
           </div>
         </div>

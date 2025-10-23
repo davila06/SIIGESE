@@ -15,6 +15,7 @@ using Domain.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using Infrastructure.Services;
+using WebApi.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,13 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Add services to the container
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Configurar formato de fecha DD-MM-YYYY
+        options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new JsonDateTimeNullableConverter());
+    });
 
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation()
@@ -170,10 +177,10 @@ app.UseHttpsRedirection();
 // Security Headers
 app.Use(async (context, next) =>
 {
-    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Add("X-Frame-Options", "DENY");
-    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
-    context.Response.Headers.Add("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["X-XSS-Protection"] = "1; mode=block";
+    context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
     await next();
 });
 

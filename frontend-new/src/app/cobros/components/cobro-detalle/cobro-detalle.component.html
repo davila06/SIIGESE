@@ -41,13 +41,13 @@
           <div class="info-item">
             <span class="label">Fecha de Vencimiento:</span>
             <span [class.vencido]="cobro.estado === EstadoCobro.Vencido">
-              {{ cobro.fechaVencimiento | date:'dd/MM/yyyy' }}
+              {{ cobro.fechaVencimiento | date:'dd-MM-yyyy' }}
             </span>
           </div>
 
           <div class="info-item" *ngIf="cobro.fechaCobro">
             <span class="label">Fecha de Cobro:</span>
-            <span>{{ cobro.fechaCobro | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span>{{ cobro.fechaCobro | date:'dd-MM-yyyy HH:mm' }}</span>
           </div>
 
           <div class="info-item" *ngIf="cobro.metodoPago">
@@ -123,7 +123,7 @@
                 </div>
                 <div class="info-item">
                   <span class="label">Fecha de Creación:</span>
-                  <span>{{ cobro.fechaCreacion | date:'dd/MM/yyyy' }}</span>
+                  <span>{{ cobro.fechaCreacion | date:'dd-MM-yyyy' }}</span>
                 </div>
               </div>
             </div>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="info-item">
                   <span class="label">Fecha de Vencimiento:</span>
-                  <span>{{ cobro.fechaVencimiento | date:'dd/MM/yyyy' }}</span>
+                  <span>{{ cobro.fechaVencimiento | date:'dd-MM-yyyy' }}</span>
                 </div>
                 <div class="info-item total">
                   <span class="label">Total a Pagar:</span>
@@ -180,7 +180,7 @@
                   <ng-container matColumnDef="fecha">
                     <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
                     <mat-cell *matCellDef="let movimiento">
-                      {{ movimiento.fecha | date:'dd/MM/yyyy HH:mm' }}
+                      {{ movimiento.fecha | date:'dd-MM-yyyy HH:mm' }}
                     </mat-cell>
                   </ng-container>
 
@@ -275,7 +275,7 @@
                   <ng-container matColumnDef="fechaSubida">
                     <mat-header-cell *matHeaderCellDef>Fecha de Subida</mat-header-cell>
                     <mat-cell *matCellDef="let documento">
-                      {{ documento.fechaSubida | date:'dd/MM/yyyy HH:mm' }}
+                      {{ documento.fechaSubida | date:'dd-MM-yyyy HH:mm' }}
                     </mat-cell>
                   </ng-container>
 

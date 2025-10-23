@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -71,7 +71,8 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
     private apiService: ApiService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) {
     this.userForm = this.createForm();
     this.currentUserId = this.authService.getCurrentUser()?.id || 0;
@@ -80,6 +81,8 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loadUsers();
     this.loadRoles();
+    // Asegurar que el formulario esté siempre limpio al iniciar
+    this.resetForm();
   }
 
   ngAfterViewInit(): void {
@@ -110,7 +113,26 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
     
-    if (password && confirmPassword && password.value !== confirmPassword.value) {
+    // No validar si alguno de los controles no existe o no está inicializado
+    if (!password || !confirmPassword) {
+      return null;
+    }
+    
+    // No validar si ambos campos están vacíos (modo edición o formulario resetedo)
+    if ((!password?.value || password.value === '') && 
+        (!confirmPassword?.value || confirmPassword.value === '')) {
+      return null;
+    }
+    
+    // No validar si los campos están en estado pristine (no tocados)
+    if (password.pristine && confirmPassword.pristine) {
+      return null;
+    }
+    
+    // Solo validar coincidencia si ambos campos tienen valores
+    if (password && confirmPassword && 
+        password.value && confirmPassword.value &&
+        password.value !== confirmPassword.value) {
       return { 'passwordMismatch': true };
     }
     return null;
@@ -153,7 +175,8 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.userForm.invalid) {
+    // Usar la validación apropiada según el modo
+    if (!this.isFormValidForMode()) {
       this.markFormGroupTouched();
       return;
     }
@@ -176,7 +199,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
         next: (updatedUser) => {
           this.showSnackBar('Usuario actualizado exitosamente', 'success');
           this.loadUsers();
-          this.resetForm();
+          this.resetFormAfterUpdate();
           this.isLoading = false;
         },
         error: (error) => {
@@ -226,16 +249,22 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
     // Remover validadores de contraseña para edición
     this.userForm.get('password')?.clearValidators();
     this.userForm.get('confirmPassword')?.clearValidators();
-    this.userForm.updateValueAndValidity();
     
+    // Limpiar los valores de contraseña para evitar conflictos con el validador
     this.userForm.patchValue({
       userName: user.userName,
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
       isActive: user.isActive,
-      roleIds: user.roles.map(r => r.id)
+      roleIds: user.roles.map(r => r.id),
+      password: '', // Limpiar campo contraseña
+      confirmPassword: '' // Limpiar campo confirmar contraseña
     });
+    
+    // Actualizar validez después de los cambios
+    this.userForm.updateValueAndValidity();
+    
     this.scrollToForm();
   }
 
@@ -275,14 +304,111 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
     this.resetForm();
   }
 
+  resetFormAfterUpdate(): void {
+    // Dar tiempo para que la actualización se complete
+    setTimeout(() => {
+      this.isEditMode = false;
+      this.selectedUser = null;
+      
+      // Limpiar el formulario completamente
+      this.userForm.reset();
+      
+      // Crear un nuevo formulario limpio
+      this.userForm = this.createForm();
+      
+      // Asegurar que los campos estén completamente vacíos
+      this.userForm.patchValue({
+        userName: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        password: '',
+        confirmPassword: '',
+        roleIds: [],
+        isActive: true
+      });
+      
+      // Limpiar todos los estados de validación
+      Object.keys(this.userForm.controls).forEach(key => {
+        const control = this.userForm.get(key);
+        if (control) {
+          control.markAsUntouched();
+          control.markAsPristine();
+          control.setErrors(null);
+          control.updateValueAndValidity();
+        }
+      });
+      
+      // Forzar detección de cambios
+      this.cdr.detectChanges();
+    }, 200); // Aumentamos a 200ms para mayor seguridad
+  }
+
   resetForm(): void {
     this.isEditMode = false;
     this.selectedUser = null;
+    
+    // Limpiar el formulario actual completamente
     this.userForm.reset();
+    
+    // Crear un nuevo formulario para asegurar estado limpio
     this.userForm = this.createForm();
+    
+    // Forzar actualización de valores específicos para prevenir autocompletado
+    setTimeout(() => {
+      this.userForm.patchValue({
+        userName: '',
+        email: '',
+        firstName: '',
+        lastName: '',
+        password: '',
+        confirmPassword: '',
+        roleIds: [],
+        isActive: true
+      });
+      
+      // Limpiar completamente los estados de validación
+      Object.keys(this.userForm.controls).forEach(key => {
+        const control = this.userForm.get(key);
+        if (control) {
+          control.markAsUntouched();
+          control.markAsPristine();
+          control.setErrors(null);
+          control.updateValueAndValidity();
+        }
+      });
+      
+      // Forzar detección de cambios
+      this.cdr.detectChanges();
+    }, 0);
+  }
+
+  isFormValidForMode(): boolean {
+    if (this.isEditMode) {
+      // En modo edición, verificar campos requeridos excepto contraseñas
+      const requiredFields = ['userName', 'email', 'firstName', 'lastName', 'roleIds'];
+      return requiredFields.every(field => {
+        const control = this.userForm.get(field);
+        return control && control.valid && control.value && 
+               (field === 'roleIds' ? control.value.length > 0 : true);
+      });
+    } else {
+      // En modo creación, usar validación normal
+      return this.userForm.valid;
+    }
+  }
+
+  newUser(): void {
+    this.resetForm();
+    this.scrollToForm();
   }
 
   scrollToForm(): void {
+    // Si no está en modo edición, resetear el formulario para asegurar que esté limpio
+    if (!this.isEditMode) {
+      this.resetForm();
+    }
+    
     if (this.formSection) {
       this.formSection.nativeElement.scrollIntoView({ 
         behavior: 'smooth', 

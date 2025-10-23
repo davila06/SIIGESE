@@ -23,11 +23,15 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()" autocomplete="off">
           <div class="form-row">
             <mat-form-field>
               <mat-label>Nombre de Usuario</mat-label>
-              <input matInput formControlName="userName" required>
+              <input matInput 
+                     formControlName="userName" 
+                     required
+                     autocomplete="new-password"
+                     spellcheck="false">
               <mat-error *ngIf="userForm.get('userName')?.hasError('required')">
                 Nombre de usuario es requerido
               </mat-error>
@@ -35,7 +39,12 @@
             
             <mat-form-field>
               <mat-label>Email</mat-label>
-              <input matInput type="email" formControlName="email" required>
+              <input matInput 
+                     type="email" 
+                     formControlName="email" 
+                     required
+                     autocomplete="new-password"
+                     spellcheck="false">
               <mat-error *ngIf="userForm.get('email')?.hasError('required')">
                 Email es requerido
               </mat-error>
@@ -48,7 +57,11 @@
           <div class="form-row">
             <mat-form-field>
               <mat-label>Nombre</mat-label>
-              <input matInput formControlName="firstName" required>
+              <input matInput 
+                     formControlName="firstName" 
+                     required
+                     autocomplete="off"
+                     spellcheck="false">
               <mat-error *ngIf="userForm.get('firstName')?.hasError('required')">
                 Nombre es requerido
               </mat-error>
@@ -56,7 +69,11 @@
             
             <mat-form-field>
               <mat-label>Apellido</mat-label>
-              <input matInput formControlName="lastName" required>
+              <input matInput 
+                     formControlName="lastName" 
+                     required
+                     autocomplete="off"
+                     spellcheck="false">
               <mat-error *ngIf="userForm.get('lastName')?.hasError('required')">
                 Apellido es requerido
               </mat-error>
@@ -66,7 +83,12 @@
           <div class="form-row" *ngIf="!isEditMode">
             <mat-form-field>
               <mat-label>Contraseña</mat-label>
-              <input matInput type="password" formControlName="password" required>
+              <input matInput 
+                     type="password" 
+                     formControlName="password" 
+                     required
+                     autocomplete="new-password"
+                     spellcheck="false">
               <mat-error *ngIf="userForm.get('password')?.hasError('required')">
                 Contraseña es requerida
               </mat-error>
@@ -77,7 +99,12 @@
             
             <mat-form-field>
               <mat-label>Confirmar Contraseña</mat-label>
-              <input matInput type="password" formControlName="confirmPassword" required>
+              <input matInput 
+                     type="password" 
+                     formControlName="confirmPassword" 
+                     required
+                     autocomplete="new-password"
+                     spellcheck="false">
               <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('required')">
                 Confirmación de contraseña es requerida
               </mat-error>
@@ -106,13 +133,17 @@
           </div>
 
           <div class="form-actions">
-            <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid || isLoading">
+            <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValidForMode() || isLoading">
               <mat-icon>{{isEditMode ? 'save' : 'person_add'}}</mat-icon>
               {{submitButtonText}}
             </button>
             <button mat-button type="button" (click)="cancelEdit()" *ngIf="isEditMode">
               <mat-icon>cancel</mat-icon>
-              Cancelar
+              Cancelar Edición
+            </button>
+            <button mat-button type="button" (click)="resetForm()" *ngIf="!isEditMode">
+              <mat-icon>clear</mat-icon>
+              Limpiar Formulario
             </button>
           </div>
         </form>
@@ -132,7 +163,7 @@
           </mat-form-field>
           
           <div class="toolbar-actions">
-            <button mat-raised-button color="primary" (click)="scrollToForm()">
+            <button mat-raised-button color="primary" (click)="newUser()">
               <mat-icon>person_add</mat-icon>
               Nuevo Usuario
             </button>
@@ -201,7 +232,7 @@
             <ng-container matColumnDef="lastLoginAt">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Último Acceso</th>
               <td mat-cell *matCellDef="let user">
-                {{user.lastLoginAt ? (user.lastLoginAt | date:'dd/MM/yyyy HH:mm') : 'Nunca'}}
+                {{user.lastLoginAt ? (user.lastLoginAt | date:'dd-MM-yyyy HH:mm') : 'Nunca'}}
               </td>
             </ng-container>
 

@@ -174,7 +174,7 @@
           <ng-container matColumnDef="createdDate">
             <th mat-header-cell *matHeaderCellDef>Creado</th>
             <td mat-cell *matCellDef="let template">
-              {{template.createdDate | date:'short'}}
+              {{template.createdDate | date:'dd-MM-yyyy HH:mm'}}
             </td>
           </ng-container>
 

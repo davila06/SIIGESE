@@ -25,8 +25,8 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
-      email: ['admin@sinseg.com', [Validators.required, Validators.email]],
-      password: ['password123', [Validators.required, Validators.minLength(6)]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
 
     this.resetPasswordForm = this.fb.group({
@@ -39,6 +39,28 @@ export class LoginComponent implements OnInit {
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/polizas']);
     }
+    
+    // Asegurar que los formularios estén limpios al cargar
+    this.resetForms();
+  }
+  
+  resetForms(): void {
+    this.loginForm.reset();
+    this.resetPasswordForm.reset();
+    this.showResetForm = false;
+    
+    // Limpiar estados de validación
+    [this.loginForm, this.resetPasswordForm].forEach(form => {
+      Object.keys(form.controls).forEach(key => {
+        const control = form.get(key);
+        if (control) {
+          control.markAsUntouched();
+          control.markAsPristine();
+          control.setErrors(null);
+          control.updateValueAndValidity();
+        }
+      });
+    });
   }
 
   onSubmit(): void {

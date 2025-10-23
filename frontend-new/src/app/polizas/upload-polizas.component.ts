@@ -351,37 +351,43 @@ export class UploadPolizasComponent implements OnInit {
       return;
     }
 
-    // Crear datos para el CSV de errores
+    // Crear datos para el CSV de errores con las nuevas 14 columnas
     const headers = [
       'Fila',
       'Error',
-      'Número Póliza',
-      'Nombre Asegurado',
-      'Prima',
-      'Aseguradora',
-      'Fecha Vigencia',
-      'Marca',
-      'Modelo',
-      'Placa',
-      'Modalidad',
-      'Frecuencia',
-      'Moneda'
+      'POLIZA',
+      'NOMBRE',
+      'NUMEROCEDULA',
+      'PRIMA',
+      'MONEDA',
+      'FECHA',
+      'FRECUENCIA',
+      'ASEGURADORA',
+      'PLACA',
+      'MARCA',
+      'MODELO',
+      'AÑO',
+      'CORREO',
+      'NUMEROTELEFONO'
     ];
 
     const errorData = this.uploadStats.failedRecords.map(record => [
       record.rowNumber.toString(),
       record.error,
-      record.originalData['Número Póliza'] || '',
-      record.originalData['Nombre Asegurado'] || '',
-      record.originalData['Prima'] || '',
-      record.originalData['Aseguradora'] || '',
-      record.originalData['Fecha Vigencia'] || '',
-      record.originalData['Marca'] || '',
-      record.originalData['Modelo'] || '',
-      record.originalData['Placa'] || '',
-      record.originalData['Modalidad'] || '',
-      record.originalData['Frecuencia'] || '',
-      record.originalData['Moneda'] || ''
+      record.originalData['POLIZA'] || '',
+      record.originalData['NOMBRE'] || '',
+      record.originalData['NUMEROCEDULA'] || '',
+      record.originalData['PRIMA'] || '',
+      record.originalData['MONEDA'] || '',
+      record.originalData['FECHA'] || '',
+      record.originalData['FRECUENCIA'] || '',
+      record.originalData['ASEGURADORA'] || '',
+      record.originalData['PLACA'] || '',
+      record.originalData['MARCA'] || '',
+      record.originalData['MODELO'] || '',
+      record.originalData['AÑO'] || '',
+      record.originalData['CORREO'] || '',
+      record.originalData['NUMEROTELEFONO'] || ''
     ]);
 
     // Crear contenido CSV
@@ -390,13 +396,13 @@ export class UploadPolizasComponent implements OnInit {
       csvContent += row.map(value => `"${value}"`).join(',') + '\n';
     });
 
-    // Crear y descargar archivo
+    // Crear y descargar archivo Excel
     const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
     
-    const fileName = `Errores_archivo_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
+    const fileName = `Errores_Polizas_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
     link.setAttribute('download', fileName);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);

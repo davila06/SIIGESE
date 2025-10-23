@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { Poliza, CreatePoliza } from '../interfaces/user.interface';
-import { formatCurrencyByCode, formatDateCR, MONEDAS_SISTEMA, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
+import { formatCurrencyByCode, formatDateCR, MONEDAS_SISTEMA, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-polizas',
@@ -43,6 +43,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
 
   // Datos para selectores
   monedasSistema = MONEDAS_SISTEMA;
+  aseguradorasSistema = ASEGURADORAS_SISTEMA;
 
   constructor(
     private fb: FormBuilder,
@@ -56,6 +57,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.loadPolizas();
+    // Asegurar que el formulario esté siempre limpio al iniciar
+    this.resetForm();
   }
 
   // Variables para sorting manual
@@ -533,6 +536,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   resetForm(): void {
+    // Resetear completamente el formulario
     this.polizaForm.reset();
     this.selectedPoliza = null;
     this.isEditMode = false;
@@ -540,7 +544,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     // Restablecer valores por defecto
     this.polizaForm.patchValue({
       perfilId: 1,
-      moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY
+      moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY,
+      prima: 0
     });
     
     // Limpiar completamente los estados de validación
@@ -550,8 +555,12 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         control.markAsUntouched();
         control.markAsPristine();
         control.setErrors(null);
+        control.updateValueAndValidity();
       }
     });
+    
+    // Forzar actualización de la vista
+    this.cdr.detectChanges();
   }
 
   cancelEdit(): void {

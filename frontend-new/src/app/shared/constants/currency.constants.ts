@@ -1,15 +1,24 @@
 // Constantes de monedas para todo el sistema
 export const CURRENCY_CONSTANTS = {
-  DEFAULT_CURRENCY: 'GTQ',
-  SUPPORTED_CURRENCIES: ['CRC', 'USD', 'EUR', 'GTQ'],
-  DEFAULT_LOCALE: 'es-GT'
+  DEFAULT_CURRENCY: 'CRC',
+  SUPPORTED_CURRENCIES: ['CRC', 'USD', 'EUR'],
+  DEFAULT_LOCALE: 'es-CR'
 };
 
 export const MONEDAS_SISTEMA = [
-  { value: 'GTQ', label: 'Quetzales Guatemaltecos (GTQ)', symbol: 'Q', locale: 'es-GT' },
   { value: 'CRC', label: 'Colones Costarricenses (CRC)', symbol: '₡', locale: 'es-CR' },
   { value: 'USD', label: 'Dólares Americanos (USD)', symbol: '$', locale: 'en-US' },
   { value: 'EUR', label: 'Euros (EUR)', symbol: '€', locale: 'es-ES' }
+];
+
+// Constantes de aseguradoras para todo el sistema
+export const ASEGURADORAS_SISTEMA = [
+  { value: 'Instituto Nacional de Seguros (INS)', label: 'Instituto Nacional de Seguros (INS)' },
+  { value: 'ASSA Compañía de Seguros S.A.', label: 'ASSA Compañía de Seguros S.A.' },
+  { value: 'Pan-American Life Insurance de Costa Rica, S.A. (PALIG)', label: 'Pan-American Life Insurance de Costa Rica, S.A. (PALIG)' },
+  { value: 'Davivienda Seguros (Costa Rica)', label: 'Davivienda Seguros (Costa Rica)' },
+  { value: 'MNK Seguros Compañía Aseguradora', label: 'MNK Seguros Compañía Aseguradora' },
+  { value: 'Aseguradora del Istmo (ADISA)', label: 'Aseguradora del Istmo (ADISA)' }
 ];
 
 export function formatCurrencyByCode(amount: number, currencyCode: string = 'CRC'): string {
@@ -25,5 +34,9 @@ export function formatCurrencyByCode(amount: number, currencyCode: string = 'CRC
 }
 
 export function formatDateCR(date: Date | string): string {
-  return new Date(date).toLocaleDateString('es-CR');
+  const d = new Date(date);
+  const day = d.getDate().toString().padStart(2, '0');
+  const month = (d.getMonth() + 1).toString().padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
 }

@@ -260,38 +260,44 @@ namespace WebApi.Controllers
         {
             try
             {
-                // Datos de ejemplo para el template
+                // Datos de ejemplo para el template con el nuevo formato
                 var templateData = new[]
                 {
                     new
                     {
-                        NumeroPoliza = "POL-2024-001",
-                        NombreAsegurado = "Juan Pérez García",
+                        Poliza = "POL-2024-001",
+                        Nombre = "Juan Pérez García",
+                        NumeroCedula = "1-2345-6789",
                         Prima = "150000",
-                        Aseguradora = "Seguros ABC",
-                        FechaVigencia = "2024-12-31",
+                        Moneda = "CRC",
+                        Fecha = "2024-12-31",
+                        Frecuencia = "Mensual",
+                        Aseguradora = "Instituto Nacional de Seguros (INS)",
+                        Placa = "ABC123",
                         Marca = "Toyota",
                         Modelo = "Corolla",
-                        Placa = "ABC123",
-                        Modalidad = "Anual",
-                        Frecuencia = "Mensual",
-                        Moneda = "GTQ"
+                        Año = "2023",
+                        Correo = "juan.perez@email.com",
+                        NumeroTelefono = "+506 8888-9999"
                     }
                 };
 
                 var headers = new[]
                 {
-                    "Número Póliza",
-                    "Nombre Asegurado", 
-                    "Prima",
-                    "Aseguradora",
-                    "Fecha Vigencia",
-                    "Marca",
-                    "Modelo",
-                    "Placa",
-                    "Modalidad",
-                    "Frecuencia",
-                    "Moneda"
+                    "POLIZA",
+                    "NOMBRE",
+                    "NUMEROCEDULA",
+                    "PRIMA",
+                    "MONEDA",
+                    "FECHA",
+                    "FRECUENCIA",
+                    "ASEGURADORA",
+                    "PLACA",
+                    "MARCA",
+                    "MODELO",
+                    "AÑO",
+                    "CORREO",
+                    "NUMEROTELEFONO"
                 };
 
                 var excelBytes = await _excelService.GenerateExcelAsync(
@@ -299,17 +305,20 @@ namespace WebApi.Controllers
                     headers,
                     item => new object[]
                     {
-                        item.NumeroPoliza,
-                        item.NombreAsegurado,
+                        item.Poliza,
+                        item.Nombre,
+                        item.NumeroCedula,
                         item.Prima,
+                        item.Moneda,
+                        item.Fecha,
+                        item.Frecuencia,
                         item.Aseguradora,
-                        item.FechaVigencia,
+                        item.Placa,
                         item.Marca,
                         item.Modelo,
-                        item.Placa,
-                        item.Modalidad,
-                        item.Frecuencia,
-                        item.Moneda
+                        item.Año,
+                        item.Correo,
+                        item.NumeroTelefono
                     }
                 );
 

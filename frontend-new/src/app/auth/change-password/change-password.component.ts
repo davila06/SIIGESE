@@ -52,6 +52,25 @@ export class ChangePasswordComponent implements OnInit {
     });
 
     this.initializeForm();
+    // Asegurar que el formulario esté limpio al inicializar
+    this.resetForm();
+  }
+  
+  resetForm(): void {
+    if (this.changePasswordForm) {
+      this.changePasswordForm.reset();
+      
+      // Limpiar estados de validación
+      Object.keys(this.changePasswordForm.controls).forEach(key => {
+        const control = this.changePasswordForm.get(key);
+        if (control) {
+          control.markAsUntouched();
+          control.markAsPristine();
+          control.setErrors(null);
+          control.updateValueAndValidity();
+        }
+      });
+    }
   }
 
   private initializeForm() {

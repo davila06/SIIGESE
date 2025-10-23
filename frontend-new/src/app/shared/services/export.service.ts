@@ -156,7 +156,7 @@ export class ExportService {
       
       case 'date':
         if (value instanceof Date) {
-          const format = column.dateFormat || 'dd/MM/yyyy';
+          const format = column.dateFormat || 'dd-MM-yyyy';
           return this.formatDate(value, format);
         }
         return value.toString();

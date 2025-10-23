@@ -75,10 +75,11 @@ export class ExportDialogComponent {
   ];
 
   dateFormats = [
+    { value: 'dd-MM-yyyy', label: 'DD-MM-AAAA' },
     { value: 'dd/MM/yyyy', label: 'DD/MM/AAAA' },
     { value: 'MM/dd/yyyy', label: 'MM/DD/AAAA' },
     { value: 'yyyy-MM-dd', label: 'AAAA-MM-DD' },
-    { value: 'dd/MM/yyyy HH:mm', label: 'DD/MM/AAAA HH:MM' }
+    { value: 'dd-MM-yyyy HH:mm', label: 'DD-MM-AAAA HH:MM' }
   ];
 
   constructor(
@@ -90,7 +91,7 @@ export class ExportDialogComponent {
       format: [data.defaultFormat || 'csv', [Validators.required]],
       filename: [data.defaultFilename || this.generateDefaultFilename(), [Validators.required]],
       includeHeaders: [true],
-      dateFormat: ['dd/MM/yyyy', [Validators.required]]
+      dateFormat: ['dd-MM-yyyy', [Validators.required]]
     });
 
     // Update filename when format changes

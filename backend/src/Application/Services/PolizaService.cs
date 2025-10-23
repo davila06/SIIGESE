@@ -146,14 +146,14 @@ namespace Application.Services
                         try
                         {
                             // Verificar que la fila tenga al menos las columnas mínimas requeridas
-                            if (row.CellsUsed().Count() < 8) // Al menos 8 columnas: POLIZA hasta ASEGURADORA
+                            if (row.CellsUsed().Count() < 14) // Al menos 14 columnas según el nuevo formato
                             {
-                                var error = $"Faltan columnas. Se requieren al menos 8 columnas (POLIZA, MOD, NOMBRE, PRIMA, MONEDA, FECHA, FRECUENCIA, ASEGURADORA)";
+                                var error = $"Faltan columnas. Se requieren al menos 14 columnas (POLIZA, NOMBRE, NUMEROCEDULA, PRIMA, MONEDA, FECHA, FRECUENCIA, ASEGURADORA, PLACA, MARCA, MODELO, AÑO, CORREO, NUMEROTELEFONO)";
                                 errors.Add($"Fila {row.RowNumber()}: {error}");
                                 
                                 // Capturar datos originales para el registro fallido
                                 var originalData = new Dictionary<string, string>();
-                                for (int i = 1; i <= Math.Max(8, row.CellsUsed().Count()); i++)
+                                for (int i = 1; i <= Math.Max(14, row.CellsUsed().Count()); i++)
                                 {
                                     originalData[$"Columna{i}"] = GetCellValueSafe(row, i, $"Col{i}", true);
                                 }
@@ -173,8 +173,8 @@ namespace Application.Services
                             var rowData = new Dictionary<string, string>
                             {
                                 ["POLIZA"] = GetCellValueSafe(row, 1, "POLIZA", true),
-                                ["MOD"] = GetCellValueSafe(row, 2, "MOD", true),
-                                ["NOMBRE"] = GetCellValueSafe(row, 3, "NOMBRE", true),
+                                ["NOMBRE"] = GetCellValueSafe(row, 2, "NOMBRE", true),
+                                ["NUMEROCEDULA"] = GetCellValueSafe(row, 3, "NUMEROCEDULA", true),
                                 ["PRIMA"] = GetCellValueSafe(row, 4, "PRIMA", true),
                                 ["MONEDA"] = GetCellValueSafe(row, 5, "MONEDA", true),
                                 ["FECHA"] = GetCellValueSafe(row, 6, "FECHA", true),
@@ -182,16 +182,19 @@ namespace Application.Services
                                 ["ASEGURADORA"] = GetCellValueSafe(row, 8, "ASEGURADORA", true),
                                 ["PLACA"] = GetCellValueSafe(row, 9, "PLACA", true),
                                 ["MARCA"] = GetCellValueSafe(row, 10, "MARCA", true),
-                                ["MODELO"] = GetCellValueSafe(row, 11, "MODELO", true)
+                                ["MODELO"] = GetCellValueSafe(row, 11, "MODELO", true),
+                                ["AÑO"] = GetCellValueSafe(row, 12, "AÑO", true),
+                                ["CORREO"] = GetCellValueSafe(row, 13, "CORREO", true),
+                                ["NUMEROTELEFONO"] = GetCellValueSafe(row, 14, "NUMEROTELEFONO", true)
                             };
 
-                            // Mapear columnas específicas del Excel
-                            // POLIZA	MOD	NOMBRE	PRIMA	MONEDA	FECHA	FRECUENCIA	ASEGURADORA	PLACA	MARCA	MODELO
+                            // Mapear columnas específicas del Excel según el nuevo formato
+                            // POLIZA	NOMBRE	NUMEROCEDULA	PRIMA	MONEDA	FECHA	FRECUENCIA	ASEGURADORA	PLACA	MARCA	MODELO	AÑO	CORREO	NUMEROTELEFONO
                             var poliza = new Poliza
                             {
                                 NumeroPoliza = TruncateString(GetCellValueSafe(row, 1, "POLIZA"), 50, row.RowNumber(), "POLIZA"),
-                                Modalidad = TruncateString(GetCellValueSafe(row, 2, "MOD", true), 50, row.RowNumber(), "MOD"), // Hacer MOD opcional temporalmente
-                                NombreAsegurado = TruncateString(GetCellValueSafe(row, 3, "NOMBRE"), 200, row.RowNumber(), "NOMBRE"),
+                                NombreAsegurado = TruncateString(GetCellValueSafe(row, 2, "NOMBRE"), 200, row.RowNumber(), "NOMBRE"),
+                                NumeroCedula = TruncateString(GetCellValueSafe(row, 3, "NUMEROCEDULA"), 50, row.RowNumber(), "NUMEROCEDULA"),
                                 Prima = ParseDecimal(GetCellValueSafe(row, 4, "PRIMA")),
                                 Moneda = GetCellValueSafe(row, 5, "MONEDA").ToUpperInvariant(), // No truncar moneda, será normalizada después
                                 FechaVigencia = ParseDate(GetCellValueSafe(row, 6, "FECHA")),
@@ -200,6 +203,10 @@ namespace Application.Services
                                 Placa = TruncateString(GetCellValueSafe(row, 9, "PLACA", true), 8, row.RowNumber(), "PLACA"), // Máximo 8 caracteres para placa
                                 Marca = TruncateString(GetCellValueSafe(row, 10, "MARCA", true), 50, row.RowNumber(), "MARCA"),
                                 Modelo = TruncateString(GetCellValueSafe(row, 11, "MODELO", true), 50, row.RowNumber(), "MODELO"),
+                                Año = TruncateString(GetCellValueSafe(row, 12, "AÑO", true), 4, row.RowNumber(), "AÑO"),
+                                Correo = TruncateString(GetCellValueSafe(row, 13, "CORREO", true), 100, row.RowNumber(), "CORREO"),
+                                NumeroTelefono = TruncateString(GetCellValueSafe(row, 14, "NUMEROTELEFONO", true), 20, row.RowNumber(), "NUMEROTELEFONO"),
+                                Modalidad = "GENERAL", // Valor por defecto
                                 PerfilId = perfilId,
                                 CreatedBy = userId.ToString()
                             };
@@ -285,9 +292,9 @@ namespace Application.Services
                         var originalData = new Dictionary<string, string>();
                         try
                         {
-                            for (int i = 1; i <= 11; i++)
+                            for (int i = 1; i <= 14; i++)
                             {
-                                var columnNames = new[] { "", "POLIZA", "MOD", "NOMBRE", "PRIMA", "MONEDA", "FECHA", "FRECUENCIA", "ASEGURADORA", "PLACA", "MARCA", "MODELO" };
+                                var columnNames = new[] { "", "POLIZA", "NOMBRE", "NUMEROCEDULA", "PRIMA", "MONEDA", "FECHA", "FRECUENCIA", "ASEGURADORA", "PLACA", "MARCA", "MODELO", "AÑO", "CORREO", "NUMEROTELEFONO" };
                                 var columnName = i < columnNames.Length ? columnNames[i] : $"Col{i}";
                                 originalData[columnName] = GetCellValueSafe(row, i, columnName, true);
                             }

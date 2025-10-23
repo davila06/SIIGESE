@@ -21,7 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { CotizacionService } from '../services/cotizacion.service';
 import { Cotizacion, CreateCotizacion, UpdateCotizacion, TIPOS_SEGURO, ESTADOS_COTIZACION, MONEDAS, GENEROS, TIPOS_INMUEBLE } from '../models/cotizacion.model';
-import { formatCurrencyByCode, formatDateCR, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
+import { formatCurrencyByCode, formatDateCR, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-cotizaciones',
@@ -86,6 +86,7 @@ export class CotizacionesComponent implements OnInit {
   monedas = MONEDAS;
   generos = GENEROS;
   tiposInmueble = TIPOS_INMUEBLE;
+  aseguradorasSistema = ASEGURADORAS_SISTEMA;
 
   // Filtros de búsqueda
   searchTerm = '';
@@ -103,6 +104,8 @@ export class CotizacionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCotizaciones();
+    // Asegurar que el formulario esté siempre limpio al iniciar
+    this.resetForm();
   }
 
   ngAfterViewInit(): void {
@@ -284,6 +287,7 @@ export class CotizacionesComponent implements OnInit {
   }
 
   resetForm(): void {
+    // Resetear completamente el formulario
     this.cotizacionForm.reset();
     this.selectedCotizacion = null;
     this.isEditMode = false;
@@ -295,6 +299,29 @@ export class CotizacionesComponent implements OnInit {
       primaCotizada: 0,
       valorInmueble: 0
     });
+    
+    // Limpiar completamente los estados de validación
+    Object.keys(this.cotizacionForm.controls).forEach(key => {
+      const control = this.cotizacionForm.get(key);
+      if (control) {
+        control.markAsUntouched();
+        control.markAsPristine();
+        control.setErrors(null);
+        control.updateValueAndValidity();
+      }
+    });
+  }
+
+  // Método para manejar cambio de tabs
+  onTabChange(event: any): void {
+    if (event.index === 1) { // Tab de formulario (Nueva/Editar Cotización)
+      if (!this.isEditMode) {
+        // Solo resetear si no estamos editando
+        setTimeout(() => {
+          this.resetForm();
+        }, 100);
+      }
+    }
   }
 
   // Filtros y búsqueda

@@ -67,7 +67,38 @@ export class EmailConfigForm implements OnInit {
 
     if (this.isEditMode) {
       this.loadEmailConfig();
+    } else {
+      // Asegurar que el formulario esté limpio para nuevas configuraciones
+      this.resetForm();
     }
+  }
+  
+  resetForm(): void {
+    this.emailConfigForm.reset();
+    
+    // Restablecer valores por defecto
+    this.emailConfigForm.patchValue({
+      smtpPort: 587,
+      useSSL: false,
+      useTLS: true,
+      fromName: 'SIIGESE Sistema',
+      companyName: 'SIIGESE',
+      timeoutSeconds: 30,
+      maxRetries: 3,
+      isActive: true,
+      isDefault: false
+    });
+    
+    // Limpiar completamente los estados de validación
+    Object.keys(this.emailConfigForm.controls).forEach(key => {
+      const control = this.emailConfigForm.get(key);
+      if (control) {
+        control.markAsUntouched();
+        control.markAsPristine();
+        control.setErrors(null);
+        control.updateValueAndValidity();
+      }
+    });
   }
 
   private createForm(): FormGroup {

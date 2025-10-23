@@ -59,8 +59,8 @@ namespace Application.Validators
 
             RuleFor(x => x.Moneda)
                 .NotEmpty().WithMessage("La moneda es requerida")
-                .Must(x => x == "CRC" || x == "USD" || x == "EUR" || x == "GTQ")
-                .WithMessage("La moneda debe ser CRC, USD, EUR o GTQ");
+                .Must(x => x == "CRC" || x == "USD" || x == "EUR")
+                .WithMessage("La moneda debe ser CRC, USD o EUR");
 
             RuleFor(x => x.FechaVigencia)
                 .GreaterThan(DateTime.Today.AddDays(-30))
@@ -73,7 +73,13 @@ namespace Application.Validators
 
             RuleFor(x => x.Aseguradora)
                 .NotEmpty().WithMessage("La aseguradora es requerida")
-                .MaximumLength(100).WithMessage("La aseguradora no puede exceder 100 caracteres");
+                .Must(x => x == "Instituto Nacional de Seguros (INS)" || 
+                          x == "ASSA Compañía de Seguros S.A." || 
+                          x == "Pan-American Life Insurance de Costa Rica, S.A. (PALIG)" || 
+                          x == "Davivienda Seguros (Costa Rica)" || 
+                          x == "MNK Seguros Compañía Aseguradora" || 
+                          x == "Aseguradora del Istmo (ADISA)")
+                .WithMessage("La aseguradora debe ser una de las opciones válidas del sistema");
 
             RuleFor(x => x.Placa)
                 .MaximumLength(10).WithMessage("La placa no puede exceder 10 caracteres")
@@ -81,6 +87,43 @@ namespace Application.Validators
 
             RuleFor(x => x.PerfilId)
                 .GreaterThan(0).WithMessage("Debe seleccionar un perfil válido");
+        }
+    }
+
+    public class CreateCotizacionValidator : AbstractValidator<CreateCotizacionDto>
+    {
+        public CreateCotizacionValidator()
+        {
+            RuleFor(x => x.NombreSolicitante)
+                .NotEmpty().WithMessage("El nombre del solicitante es requerido")
+                .MaximumLength(200).WithMessage("El nombre del solicitante no puede exceder 200 caracteres");
+
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("El email es requerido")
+                .EmailAddress().WithMessage("El formato del email no es válido");
+
+            RuleFor(x => x.TipoSeguro)
+                .NotEmpty().WithMessage("El tipo de seguro es requerido")
+                .Must(x => x == "AUTO" || x == "VIDA" || x == "HOGAR" || x == "EMPRESARIAL")
+                .WithMessage("El tipo de seguro debe ser AUTO, VIDA, HOGAR o EMPRESARIAL");
+
+            RuleFor(x => x.Aseguradora)
+                .NotEmpty().WithMessage("La aseguradora es requerida")
+                .Must(x => x == "Instituto Nacional de Seguros (INS)" || 
+                          x == "ASSA Compañía de Seguros S.A." || 
+                          x == "Pan-American Life Insurance de Costa Rica, S.A. (PALIG)" || 
+                          x == "Davivienda Seguros (Costa Rica)" || 
+                          x == "MNK Seguros Compañía Aseguradora" || 
+                          x == "Aseguradora del Istmo (ADISA)")
+                .WithMessage("La aseguradora debe ser una de las opciones válidas del sistema");
+
+            RuleFor(x => x.MontoAsegurado)
+                .GreaterThan(0).WithMessage("El monto asegurado debe ser mayor a 0");
+
+            RuleFor(x => x.Moneda)
+                .NotEmpty().WithMessage("La moneda es requerida")
+                .Must(x => x == "CRC" || x == "USD" || x == "EUR")
+                .WithMessage("La moneda debe ser CRC, USD o EUR");
         }
     }
 }

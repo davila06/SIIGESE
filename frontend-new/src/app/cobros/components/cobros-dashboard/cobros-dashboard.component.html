@@ -154,7 +154,7 @@
           <ng-container matColumnDef="fechaVencimiento">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimiento</th>
             <td mat-cell *matCellDef="let cobro">
-              {{ cobro.fechaVencimiento | date:'dd/MM/yyyy' }}
+              {{ cobro.fechaVencimiento | date:'dd-MM-yyyy' }}
             </td>
           </ng-container>
 
@@ -181,7 +181,7 @@
           <ng-container matColumnDef="fechaCobro">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Cobro</th>
             <td mat-cell *matCellDef="let cobro">
-              {{ cobro.fechaCobro ? (cobro.fechaCobro | date:'dd/MM/yyyy') : '-' }}
+              {{ cobro.fechaCobro ? (cobro.fechaCobro | date:'dd-MM-yyyy') : '-' }}
             </td>
           </ng-container>
 

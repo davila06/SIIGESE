@@ -117,6 +117,8 @@ export class EmailTemplateManagerComponent implements OnInit {
     this.loadTemplates();
     this.loadAvailableVariables();
     this.setupFormSubscriptions();
+    // Asegurar que el formulario esté limpio al iniciar
+    this.resetForm();
   }
 
   loadTemplates() {
@@ -268,6 +270,17 @@ export class EmailTemplateManagerComponent implements OnInit {
       isDefault: false
     });
     this.previewHtml = '';
+    
+    // Limpiar completamente los estados de validación
+    Object.keys(this.templateForm.controls).forEach(key => {
+      const control = this.templateForm.get(key);
+      if (control) {
+        control.markAsUntouched();
+        control.markAsPristine();
+        control.setErrors(null);
+        control.updateValueAndValidity();
+      }
+    });
   }
 
   getDefaultTemplate() {

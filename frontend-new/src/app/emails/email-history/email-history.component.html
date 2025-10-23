@@ -48,7 +48,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</th>
             <td mat-cell *matCellDef="let email">
               <div class="date-cell">
-                <span class="date">{{ email.sentAt | date:'dd/MM/yyyy' }}</span>
+                <span class="date">{{ email.sentAt | date:'dd-MM-yyyy' }}</span>
                 <span class="time">{{ email.sentAt | date:'HH:mm' }}</span>
               </div>
             </td>
