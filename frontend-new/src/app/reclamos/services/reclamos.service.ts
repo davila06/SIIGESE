@@ -31,6 +31,11 @@ export class ReclamosService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
+  // Obtener reclamo por ID (alias más descriptivo)
+  getReclamoById(id: number): Observable<any> {
+    return this.getReclamo(id);
+  }
+
   // Crear nuevo reclamo
   createReclamo(reclamo: CreateReclamoDto): Observable<any> {
     return this.http.post<any>(this.apiUrl, reclamo);

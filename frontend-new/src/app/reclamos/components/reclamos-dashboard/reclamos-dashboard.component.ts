@@ -180,11 +180,6 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
     this.dataSource.data = this.reclamos;
   }
 
-  verDetalle(reclamo: Reclamo): void {
-    console.log('Ver detalle:', reclamo);
-    this.showMessage('Funcionalidad de detalles en desarrollo');
-  }
-
   asignarReclamo(reclamo: Reclamo): void {
     console.log('Asignar reclamo:', reclamo);
     this.showMessage('Funcionalidad de asignación en desarrollo');
@@ -278,6 +273,10 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
   crearNuevoReclamo(): void {
     this.router.navigate(['/reclamos/crear']);
+  }
+
+  verDetalle(reclamo: Reclamo): void {
+    this.router.navigate(['/reclamos/detalle', reclamo.id]);
   }
 
   private showMessage(message: string): void {

@@ -406,51 +406,66 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   selectPolizaAndScroll(poliza: Poliza): void {
+    console.log('🔄 Iniciando edición de póliza:', poliza.numeroPoliza);
+    
     // Configurar datos primero
     this.selectedPoliza = poliza;
     this.isEditMode = true;
     this.loadPolizaToForm(poliza);
     
-    console.log('Seleccionando póliza y preparando scroll:', poliza.numeroPoliza);
+    console.log('📝 Datos cargados en formulario:', {
+      numeroPoliza: poliza.numeroPoliza,
+      nombreAsegurado: poliza.nombreAsegurado,
+      prima: poliza.prima,
+      isEditMode: this.isEditMode
+    });
     
     // Forzar detección de cambios para que Angular actualice el DOM completamente
     this.cdr.detectChanges();
     
-    // Usar la misma lógica exitosa del forceScrollToTop con delay
+    // Scroll suave al formulario con múltiples métodos para compatibilidad
     setTimeout(() => {
-      console.log('Ejecutando scroll con lógica exitosa...');
+      console.log('🎯 Ejecutando scroll al formulario...');
       
-      const scrollElements = [document.documentElement, document.body, window];
-      
-      scrollElements.forEach(element => {
-        if (element === window) {
-          element.scrollTo(0, 0);
-        } else {
-          (element as HTMLElement).scrollTop = 0;
-        }
+      // Método 1: Scroll nativo del browser
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
       });
       
-      // También intentar con todos los elementos scrollables
-      const scrollableElements = document.querySelectorAll('*');
-      scrollableElements.forEach(el => {
-        if (el.scrollTop > 0) {
-          el.scrollTop = 0;
-        }
-      });
+      // Método 2: Backup para navegadores que no soportan behavior smooth
+      if (window.scrollY > 0) {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
       
-      console.log('Scroll completado, posición:', window.scrollY);
+      // Método 3: Scroll a elemento específico si existe
+      if (this.formSection?.nativeElement) {
+        this.formSection.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
       
-    }, 150); // Delay un poco más largo para Edge
+      console.log('✅ Scroll completado, posición final:', window.scrollY);
+      
+    }, 100);
     
-    // Efecto visual después del scroll
+    // Efecto visual de confirmación
     setTimeout(() => {
       if (this.formSection?.nativeElement) {
+        console.log('✨ Aplicando efecto visual de edición...');
         this.formSection.nativeElement.classList.add('editing-highlight');
+        
+        // Mostrar mensaje de confirmación
+        this.showMessage(`📝 Editando póliza: ${poliza.numeroPoliza}`);
+        
         setTimeout(() => {
           this.formSection.nativeElement.classList.remove('editing-highlight');
-        }, 1500);
+        }, 2000);
       }
-    }, 400);
+    }, 500);
   }
 
   // Método de prueba para forzar scroll
@@ -476,10 +491,13 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   loadPolizaToForm(poliza: Poliza): void {
+    console.log('📋 Cargando datos de póliza al formulario:', poliza);
+    
     // Formatear la fecha para el input tipo date
     const fechaVigencia = new Date(poliza.fechaVigencia).toISOString().split('T')[0];
     
-    this.polizaForm.patchValue({
+    // Preparar los valores para el formulario
+    const formValues = {
       perfilId: poliza.perfilId || 1,
       numeroPoliza: poliza.numeroPoliza,
       modalidad: poliza.modalidad,
@@ -492,11 +510,26 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       placa: poliza.placa || '',
       marca: poliza.marca || '',
       modelo: poliza.modelo || ''
-    });
+    };
+    
+    console.log('💾 Valores a cargar en formulario:', formValues);
+    
+    // Cargar los valores al formulario
+    this.polizaForm.patchValue(formValues);
     
     // Marcar el formulario como pristine y untouched después de cargar los datos
     this.polizaForm.markAsPristine();
     this.polizaForm.markAsUntouched();
+    
+    // Verificar que los valores se cargaron correctamente
+    setTimeout(() => {
+      console.log('✅ Verificación del formulario cargado:', {
+        formValid: this.polizaForm.valid,
+        formValue: this.polizaForm.value,
+        isEditMode: this.isEditMode,
+        selectedPoliza: this.selectedPoliza?.numeroPoliza
+      });
+    }, 50);
   }
 
   resetForm(): void {

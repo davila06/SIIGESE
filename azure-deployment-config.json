@@ -1,0 +1,31 @@
+{
+  "azure": {
+    "resources": {
+      "sqlServer": "siinadseg-sqlserver-1019.database.windows.net",
+      "database": "SiinadsegDB",
+      "backendContainer": "http://siinadseg-backend-1019.eastus.azurecontainer.io",
+      "staticWebApp": "https://agreeable-water-06170cf10.1.azurestaticapps.net",
+      "resourceGroup": "siinadseg-rg",
+      "region": "westus2"
+    },
+    "credentials": {
+      "sqlUsername": "siinadmin",
+      "sqlPassword": "Siinadseg2025#@"
+    },
+    "endpoints": {
+      "api": "http://siinadseg-backend-1019.eastus.azurecontainer.io/api",
+      "auth": "http://siinadseg-backend-1019.eastus.azurecontainer.io/api/auth",
+      "polizas": "http://siinadseg-backend-1019.eastus.azurecontainer.io/api/polizas"
+    }
+  },
+  "deployment": {
+    "lastUpdate": "2025-10-19 22:10:00",
+    "status": "All Azure resources created successfully",
+    "components": {
+      "frontend": "Azure Static Web Apps",
+      "backend": "Azure Container Instance", 
+      "database": "Azure SQL Database",
+      "storage": "Azure SQL Basic tier"
+    }
+  }
+}

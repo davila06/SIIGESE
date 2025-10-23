@@ -155,7 +155,9 @@ export class AuthService {
   }
 
   private storeAuthData(response: LoginResponse): void {
-    localStorage.setItem(this.TOKEN_KEY, response.token);
+    // Limpiar el token del prefijo "Bearer " si existe
+    const cleanToken = response.token.replace('Bearer ', '');
+    localStorage.setItem(this.TOKEN_KEY, cleanToken);
     localStorage.setItem(this.REFRESH_TOKEN_KEY, response.refreshToken);
     localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
   }

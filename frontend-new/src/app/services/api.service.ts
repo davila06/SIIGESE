@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { 
   User, 
@@ -16,6 +16,7 @@ import {
   Poliza,
   CreatePoliza
 } from '../interfaces/user.interface';
+import { ResponseMapper } from '../utils/response-mapper';
 
 @Injectable({
   providedIn: 'root'
@@ -154,11 +155,17 @@ export class ApiService {
       headers = headers.set('Authorization', `Bearer ${token}`);
     }
 
-    return this.http.post<DataUploadResult>(
+    return this.http.post<any>(
       `${this.apiUrl}/polizas/upload`,
       formData,
       { headers }
-    ).pipe(catchError(this.handleError));
+    ).pipe(
+      map(response => {
+        console.log('🔄 Raw API response:', response);
+        return ResponseMapper.mapDataUploadResult(response);
+      }),
+      catchError(this.handleError)
+    );
   }
 
   downloadPolizasTemplate(): Observable<Blob> {

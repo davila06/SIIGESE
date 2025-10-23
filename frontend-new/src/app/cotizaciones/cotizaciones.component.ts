@@ -63,6 +63,10 @@ export class CotizacionesComponent implements OnInit {
   selectedCotizacion: Cotizacion | null = null;
   isLoading = false;
   
+  // Protección contra doble envío
+  private lastSubmitTime = 0;
+  private readonly MIN_SUBMIT_INTERVAL = 2000; // 2 segundos
+  
   // Configuración de columnas de la tabla
   displayedColumns: string[] = [
     'numeroCotizacion',
@@ -155,7 +159,17 @@ export class CotizacionesComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.cotizacionForm.valid) {
+    const currentTime = Date.now();
+    
+    // Verificar si han pasado al menos 2 segundos desde el último envío
+    if (currentTime - this.lastSubmitTime < this.MIN_SUBMIT_INTERVAL) {
+      console.log('Submit ignored: too soon after last submit');
+      this.showMessage('Por favor espera un momento antes de enviar nuevamente', 'warning');
+      return;
+    }
+    
+    if (this.cotizacionForm.valid && !this.isLoading) {
+      this.lastSubmitTime = currentTime;
       this.isLoading = true;
       const cotizacionData: CreateCotizacion = this.cotizacionForm.value;
 
@@ -195,6 +209,8 @@ export class CotizacionesComponent implements OnInit {
           }
         });
       }
+    } else if (this.isLoading) {
+      console.log('Submit ignored: already processing');
     }
   }
 

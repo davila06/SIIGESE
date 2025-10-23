@@ -19,6 +19,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatListModule } from '@angular/material/list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 
 import { ConfiguracionRoutingModule } from './configuracion-routing.module';
 import { ConfiguracionLayout } from './components/configuracion-layout/configuracion-layout';
@@ -54,7 +57,10 @@ import { EmailTest } from './components/email-test/email-test';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatListModule
+    MatListModule,
+    MatSlideToggleModule,
+    MatMenuModule,
+    MatDividerModule
   ]
 })
 export class ConfiguracionModule { }

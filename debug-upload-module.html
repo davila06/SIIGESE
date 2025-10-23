@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Módulo de Carga de Pólizas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .debug-step {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .code {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Debug - Módulo de Carga de Pólizas</h1>
+        
+        <div class="debug-step warning">
+            <h3>📋 Pasos para verificar el módulo:</h3>
+            <ol>
+                <li>Abrir la aplicación: <a href="https://polite-flower-0f3168a1e.3.azurestaticapps.net" target="_blank">SIIGESE</a></li>
+                <li>Abrir herramientas de desarrollador (F12)</li>
+                <li>Ir a la pestaña Console</li>
+                <li>Hacer login con: admin@sinseg.com / password123</li>
+                <li>Buscar en el menú lateral: "Subir Pólizas Excel"</li>
+                <li>Revisar logs en la consola</li>
+            </ol>
+        </div>
+
+        <div class="debug-step">
+            <h3>🔍 Logs esperados en la consola:</h3>
+            <div class="code">
+✅ Mock Login successful for: admin@sinseg.com<br>
+✅ User roles assigned: [{id: 1, name: "Admin", description: "Administrador"}, {id: 2, name: "DataLoader", description: "Cargador de Datos"}]<br>
+🔍 canUploadExcel check: {user: {...}, userRoles: [...], hasRole: true, lookingFor: ["Admin", "DataLoader"]}<br>
+DEBUG: canUpload=true, roles=[{"id":1,"name":"Admin","description":"Administrador"},{"id":2,"name":"DataLoader","description":"Cargador de Datos"}]
+            </div>
+        </div>
+
+        <div class="debug-step success">
+            <h3>✅ Si ves estos logs:</h3>
+            <p>El módulo "Subir Pólizas Excel" debería aparecer en el menú lateral con un ícono de nube.</p>
+        </div>
+
+        <div class="debug-step error">
+            <h3>❌ Si NO ves el módulo:</h3>
+            <ul>
+                <li>Verificar que hasRole sea <code>true</code> en los logs</li>
+                <li>Verificar que los roles incluyan "Admin" o "DataLoader"</li>
+                <li>Refrescar la página (Ctrl+F5)</li>
+                <li>Borrar cache del navegador</li>
+            </ul>
+        </div>
+
+        <div class="debug-step">
+            <h3>🛠️ Usuarios de prueba disponibles:</h3>
+            <ul>
+                <li><strong>admin@sinseg.com</strong> / password123 → Roles: Admin + DataLoader</li>
+                <li><strong>dataloader@sinseg.com</strong> / password123 → Rol: DataLoader</li>
+                <li><strong>user@sinseg.com</strong> / password123 → Rol: User (NO ve el módulo)</li>
+            </ul>
+        </div>
+
+        <div class="debug-step warning">
+            <h3>🔧 Cambios aplicados:</h3>
+            <ul>
+                <li>✅ Roles corregidos en Mock API (Admin, DataLoader, User)</li>
+                <li>✅ Logs de debugging agregados</li>
+                <li>✅ Temporalmente forzado *ngIf="true" para test</li>
+                <li>✅ Build y deploy aplicados</li>
+            </ul>
+        </div>
+
+        <div class="debug-step">
+            <h3>📱 Acceso directo:</h3>
+            <button onclick="window.open('https://polite-flower-0f3168a1e.3.azurestaticapps.net', '_blank')">
+                🌐 Abrir Aplicación
+            </button>
+            <button onclick="window.open('https://polite-flower-0f3168a1e.3.azurestaticapps.net/polizas/upload', '_blank')">
+                📤 Ir Directamente al Módulo
+            </button>
+        </div>
+
+        <div class="debug-step warning">
+            <h3>🔍 Nuevos logs agregados:</h3>
+            <div class="code">
+🛡️ DataLoaderGuard - canActivate check: {isAuthenticated, hasRole, user, userRoles, lookingFor}<br>
+✅ DataLoaderGuard - Access granted<br>
+🏗️ UploadPolizasComponent - ngOnInit<br>
+🔐 Upload component - isAuthenticated: true<br>
+🔐 Upload component - canUploadExcel: true<br>
+✅ Upload component - Access granted, component ready
+            </div>
+            <p>Si ves estos logs, el componente debería cargar correctamente.</p>
+        </div>
+
+        <div class="debug-step error">
+            <h3>❌ Si sigue sin abrir:</h3>
+            <ul>
+                <li>Revisar si aparece "❌ DataLoaderGuard - Access denied" en logs</li>
+                <li>Revisar si aparece redirección a /polizas</li>
+                <li>Verificar que no hay errores de JavaScript en consola</li>
+                <li>Probar acceso directo a /polizas/upload después de login</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        console.log('🔍 Debug page loaded - verificar módulo de carga de pólizas');
+    </script>
+</body>
+</html>

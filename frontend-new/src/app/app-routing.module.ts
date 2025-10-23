@@ -42,7 +42,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { 
+    enableTracing: false, // Cambiar a true para debugging
+    useHash: false // Usar HTML5 routing
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

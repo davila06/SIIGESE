@@ -15,10 +15,25 @@ export class DataLoaderGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    if (this.authService.isAuthenticated() && this.authService.hasAnyRole(['Admin', 'DataLoader'])) {
+    const isAuth = this.authService.isAuthenticated();
+    const hasRole = this.authService.hasAnyRole(['Admin', 'DataLoader']);
+    const user = this.authService.getCurrentUser();
+    
+    console.log('🛡️ DataLoaderGuard - canActivate check:', {
+      isAuthenticated: isAuth,
+      hasRole: hasRole,
+      user: user,
+      userRoles: user?.roles,
+      lookingFor: ['Admin', 'DataLoader']
+    });
+
+    if (isAuth && hasRole) {
+      console.log('✅ DataLoaderGuard - Access granted');
       return true;
     }
 
+    console.log('❌ DataLoaderGuard - Access denied');
+    
     // Mostrar mensaje de acceso denegado
     this.snackBar.open(
       'Acceso denegado. Solo los administradores y cargadores de datos pueden acceder a esta sección.',

@@ -1,1 +1,170 @@
-<p>email-config-list works!</p>
+<div class="email-config-list-container">
+  <!-- Header -->
+  <div class="list-header">
+    <div class="header-content">
+      <h2>
+        <mat-icon>email</mat-icon>
+        Configuraciones de Email SMTP
+      </h2>
+      <p>Administra las configuraciones de correo electrónico del sistema</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button 
+              color="primary"
+              (click)="onNew()">
+        <mat-icon>add</mat-icon>
+        Nueva Configuración
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando configuraciones...</p>
+  </div>
+
+  <!-- Content -->
+  <mat-card class="list-card" *ngIf="!loading">
+    <mat-card-content>
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="emailConfigs.length === 0">
+        <mat-icon class="empty-icon">mail_outline</mat-icon>
+        <h3>No hay configuraciones de email</h3>
+        <p>Comienza creando tu primera configuración SMTP</p>
+        <button mat-raised-button 
+                color="primary"
+                (click)="onNew()">
+          <mat-icon>add</mat-icon>
+          Crear Primera Configuración
+        </button>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container" *ngIf="emailConfigs.length > 0">
+        <table mat-table [dataSource]="emailConfigs" class="email-configs-table">
+          
+          <!-- Name Column -->
+          <ng-container matColumnDef="configName">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let config">
+              <div class="config-name">
+                <strong>{{ config.configName }}</strong>
+                <div class="config-badges">
+                  <span class="badge default" *ngIf="config.isDefault">
+                    <mat-icon>star</mat-icon>
+                    Predeterminada
+                  </span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- SMTP Server Column -->
+          <ng-container matColumnDef="smtpServer">
+            <th mat-header-cell *matHeaderCellDef>Servidor SMTP</th>
+            <td mat-cell *matCellDef="let config">
+              <div class="server-info">
+                {{ config.smtpServer }}:{{ config.smtpPort }}
+                <div class="security-info">
+                  <span class="security-badge" *ngIf="config.useSSL">SSL</span>
+                  <span class="security-badge" *ngIf="config.useTLS">TLS</span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- From Email Column -->
+          <ng-container matColumnDef="fromEmail">
+            <th mat-header-cell *matHeaderCellDef>Email Remitente</th>
+            <td mat-cell *matCellDef="let config">
+              <div class="email-info">
+                {{ config.fromEmail }}
+                <div class="from-name">{{ config.fromName }}</div>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Default Column -->
+          <ng-container matColumnDef="isDefault">
+            <th mat-header-cell *matHeaderCellDef>Predeterminada</th>
+            <td mat-cell *matCellDef="let config">
+              <button mat-icon-button
+                      [disabled]="config.isDefault"
+                      (click)="onSetDefault(config)"
+                      matTooltip="Establecer como predeterminada">
+                <mat-icon [color]="config.isDefault ? 'warn' : 'primary'">
+                  {{ config.isDefault ? 'star' : 'star_border' }}
+                </mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let config">
+              <mat-slide-toggle
+                      [checked]="config.isActive"
+                      (change)="onToggleActive(config)"
+                      [color]="config.isActive ? 'primary' : 'warn'"
+                      matTooltip="Activar/Desactivar configuración">
+              </mat-slide-toggle>
+              <span class="status-text" [class.active]="config.isActive" [class.inactive]="!config.isActive">
+                {{ config.isActive ? 'Activa' : 'Inactiva' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let config">
+              <div class="action-buttons">
+                <button mat-icon-button
+                        (click)="onEdit(config)"
+                        matTooltip="Editar configuración"
+                        color="primary">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                
+                <button mat-icon-button
+                        [matMenuTriggerFor]="actionMenu"
+                        matTooltip="Más opciones">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                
+                <mat-menu #actionMenu="matMenu">
+                  <button mat-menu-item (click)="onEdit(config)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Editar</span>
+                  </button>
+                  <button mat-menu-item 
+                          (click)="onSetDefault(config)"
+                          [disabled]="config.isDefault">
+                    <mat-icon>star</mat-icon>
+                    <span>Predeterminada</span>
+                  </button>
+                  <button mat-menu-item (click)="onToggleActive(config)">
+                    <mat-icon>{{ config.isActive ? 'pause' : 'play_arrow' }}</mat-icon>
+                    <span>{{ config.isActive ? 'Desactivar' : 'Activar' }}</span>
+                  </button>
+                  <mat-divider></mat-divider>
+                  <button mat-menu-item 
+                          (click)="onDelete(config)"
+                          class="delete-action">
+                    <mat-icon>delete</mat-icon>
+                    <span>Eliminar</span>
+                  </button>
+                </mat-menu>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

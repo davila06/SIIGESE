@@ -411,7 +411,8 @@
 
                 <button mat-raised-button 
                         color="primary" 
-                        type="submit"
+                        type="button"
+                        (click)="onSubmit()"
                         [disabled]="!cotizacionForm.valid || isLoading">
                   <mat-icon>{{isEditMode ? 'save' : 'add'}}</mat-icon>
                   {{submitButtonText}}

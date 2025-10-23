@@ -48,8 +48,12 @@ export class LoginComponent implements OnInit {
 
       this.authService.login(email, password).subscribe({
         next: (response: LoginResponse) => {
+          console.log('✅ Login successful, response:', response);
+          console.log('✅ About to navigate to /polizas');
           this.showMessage('Inicio de sesión exitoso');
-          this.router.navigate(['/polizas']);
+          this.router.navigate(['/polizas']).then(success => {
+            console.log('✅ Navigation to /polizas result:', success);
+          });
           this.isLoading = false;
         },
         error: (error: any) => {

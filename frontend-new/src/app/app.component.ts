@@ -38,7 +38,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     
     // Verificar autenticación al iniciar la app
     this.currentUser$.pipe(takeUntil(this.destroy$)).subscribe(user => {
+      console.log('🔄 App.component - User state changed:', user);
+      console.log('🔄 App.component - Current URL:', this.router.url);
+      
       if (!user && !this.router.url.includes('login')) {
+        console.log('🔄 App.component - Redirecting to login');
         this.router.navigate(['/login']);
       }
     });
@@ -110,7 +114,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   canUploadExcel(): boolean {
-    return this.authService.hasAnyRole(['Admin', 'DataLoader']);
+    const user = this.authService.getCurrentUser();
+    const hasRole = this.authService.hasAnyRole(['Admin', 'DataLoader']);
+    console.log('🔍 canUploadExcel check:', {
+      user: user,
+      userRoles: user?.roles,
+      hasRole: hasRole,
+      lookingFor: ['Admin', 'DataLoader']
+    });
+    return hasRole;
   }
 
   getCurrentModule(): string {

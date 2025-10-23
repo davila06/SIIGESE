@@ -1,0 +1,270 @@
+<div class="reclamo-detalle-container">
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="loading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando detalle del reclamo...</p>
+  </div>
+
+  <!-- Content -->
+  <div class="detalle-content" *ngIf="!loading && reclamo">
+    <!-- Header -->
+    <div class="header-section">
+      <div class="header-content">
+        <button mat-icon-button 
+                (click)="onBack()" 
+                class="back-button"
+                matTooltip="Volver al listado">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        
+        <div class="header-info">
+          <h1>
+            <mat-icon [color]="getEstadoColor(reclamo.estado)">
+              {{ getEstadoIcon(reclamo.estado) }}
+            </mat-icon>
+            Reclamo {{ reclamo.numeroReclamo }}
+          </h1>
+          <p>{{ reclamo.clienteNombre }} {{ reclamo.clienteApellido }}</p>
+        </div>
+        
+        <div class="header-actions">
+          <button mat-raised-button 
+                  color="primary"
+                  (click)="onEdit()"
+                  *ngIf="reclamo.estado !== EstadoReclamo.Cerrado">
+            <mat-icon>edit</mat-icon>
+            Editar
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Badges -->
+      <div class="status-badges">
+        <mat-chip [color]="getEstadoColor(reclamo.estado)" selected>
+          <mat-icon>{{ getEstadoIcon(reclamo.estado) }}</mat-icon>
+          {{ getEstadoReclamoLabel(reclamo.estado) }}
+        </mat-chip>
+        
+        <mat-chip [color]="getPrioridadColor(reclamo.prioridad)" selected>
+          <mat-icon>flag</mat-icon>
+          {{ getPrioridadReclamoLabel(reclamo.prioridad) }}
+        </mat-chip>
+        
+        <mat-chip color="accent" selected>
+          <mat-icon>{{ getTipoIcon(reclamo.tipoReclamo) }}</mat-icon>
+          {{ getTipoReclamoLabel(reclamo.tipoReclamo) }}
+        </mat-chip>
+      </div>
+    </div>
+
+    <!-- Main Content with Tabs -->
+    <mat-tab-group class="content-tabs">
+      
+      <!-- Tab: Información General -->
+      <mat-tab label="Información General">
+        <div class="tab-content">
+          <div class="info-grid">
+            
+            <!-- Información de la Póliza -->
+            <mat-card class="info-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>business</mat-icon>
+                  Información de la Póliza
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="info-item">
+                  <label>Número de Póliza:</label>
+                  <span class="value">{{ reclamo.numeroPoliza }}</span>
+                </div>
+                <div class="info-item">
+                  <label>ID de Póliza:</label>
+                  <span class="value">{{ reclamo.polizaId }}</span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Información del Cliente -->
+            <mat-card class="info-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>person</mat-icon>
+                  Información del Cliente
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="info-item">
+                  <label>Nombre Completo:</label>
+                  <span class="value">{{ reclamo.clienteNombre }} {{ reclamo.clienteApellido }}</span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Fechas -->
+            <mat-card class="info-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>schedule</mat-icon>
+                  Fechas Importantes
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="info-item">
+                  <label>Fecha de Reclamo:</label>
+                  <span class="value">{{ reclamo.fechaReclamo | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+                <div class="info-item" *ngIf="reclamo.fechaLimiteRespuesta">
+                  <label>Fecha Límite:</label>
+                  <span class="value">{{ reclamo.fechaLimiteRespuesta | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="info-item" *ngIf="reclamo.updatedAt">
+                  <label>Última Actualización:</label>
+                  <span class="value">{{ reclamo.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Montos -->
+            <mat-card class="info-card" *ngIf="reclamo.montoReclamado || reclamo.montoAprobado">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>monetization_on</mat-icon>
+                  Información Financiera
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="info-item" *ngIf="reclamo.montoReclamado">
+                  <label>Monto Reclamado:</label>
+                  <span class="value amount">
+                    {{ reclamo.montoReclamado | currency:reclamo.moneda:'symbol':'1.2-2' }}
+                  </span>
+                </div>
+                <div class="info-item" *ngIf="reclamo.montoAprobado">
+                  <label>Monto Aprobado:</label>
+                  <span class="value amount approved">
+                    {{ reclamo.montoAprobado | currency:reclamo.moneda:'symbol':'1.2-2' }}
+                  </span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+
+            <!-- Asignación -->
+            <mat-card class="info-card">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>assignment_ind</mat-icon>
+                  Asignación
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <div class="info-item">
+                  <label>Asignado a:</label>
+                  <span class="value" *ngIf="reclamo.usuarioAsignadoNombre">
+                    {{ reclamo.usuarioAsignadoNombre }}
+                  </span>
+                  <span class="value sin-asignar" *ngIf="!reclamo.usuarioAsignadoNombre">
+                    Sin asignar
+                  </span>
+                </div>
+                <div class="info-item">
+                  <label>Creado por:</label>
+                  <span class="value">{{ reclamo.createdBy }}</span>
+                </div>
+                <div class="info-item" *ngIf="reclamo.updatedBy">
+                  <label>Actualizado por:</label>
+                  <span class="value">{{ reclamo.updatedBy }}</span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Tab: Descripción -->
+      <mat-tab label="Descripción del Reclamo">
+        <div class="tab-content">
+          <mat-card class="description-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>description</mat-icon>
+                Descripción Detallada
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="description-content">
+                <p>{{ reclamo.descripcion }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Observaciones -->
+          <mat-card class="observations-card" *ngIf="reclamo.observaciones">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>notes</mat-icon>
+                Observaciones
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="observations-content">
+                <p>{{ reclamo.observaciones }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Tab: Histórico -->
+      <mat-tab label="Histórico" disabled>
+        <div class="tab-content">
+          <mat-card class="timeline-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>timeline</mat-icon>
+                Línea de Tiempo
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="timeline-placeholder">
+                <mat-icon>construction</mat-icon>
+                <p>Funcionalidad de histórico en desarrollo</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Tab: Documentos -->
+      <mat-tab label="Documentos" disabled>
+        <div class="tab-content">
+          <mat-card class="documents-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>attach_file</mat-icon>
+                Documentos Adjuntos
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="documents-placeholder">
+                <mat-icon>cloud_upload</mat-icon>
+                <p>Funcionalidad de documentos en desarrollo</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-state" *ngIf="!loading && !reclamo">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h3>No se pudo cargar el reclamo</h3>
+    <p>El reclamo solicitado no existe o no tienes permisos para verlo.</p>
+    <button mat-raised-button color="primary" (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver al listado
+    </button>
+  </div>
+</div>

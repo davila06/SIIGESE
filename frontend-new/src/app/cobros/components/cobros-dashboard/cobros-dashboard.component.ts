@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,6 +24,8 @@ import {
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
+import { ExportService, ExportColumn } from '../../../shared/services/export.service';
+import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 
 @Component({
   selector: 'app-cobros-dashboard',
@@ -76,7 +80,10 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   constructor(
     private cobrosService: CobrosService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private dialog: MatDialog,
+    private exportService: ExportService
   ) { }
 
   ngOnInit(): void {
@@ -142,9 +149,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   verDetalle(cobro: Cobro): void {
-    // Aquí se abriría un diálogo con los detalles del cobro
-    console.log('Ver detalle:', cobro);
-    this.showMessage('Funcionalidad de detalles en desarrollo');
+    this.router.navigate(['/cobros/detalle', cobro.id]);
   }
 
   cancelarCobro(cobro: Cobro): void {
@@ -184,7 +189,92 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   exportarCobros(): void {
-    this.showMessage('Funcionalidad de exportación en desarrollo');
+    const dataToExport = this.dataSource.filteredData.length > 0 
+      ? this.dataSource.filteredData 
+      : this.cobros;
+
+    const dialogData: ExportDialogData = {
+      title: 'Exportar Cobros',
+      totalRecords: dataToExport.length,
+      defaultFilename: `cobros_${this.getCurrentDateString()}`
+    };
+
+    const dialogRef = this.dialog.open(ExportDialogComponent, {
+      width: '600px',
+      data: dialogData,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result: ExportDialogResult) => {
+      if (result) {
+        this.performExport(dataToExport, result);
+      }
+    });
+  }
+
+  private performExport(data: Cobro[], options: ExportDialogResult): void {
+    const columns: ExportColumn[] = [
+      { key: 'numeroRecibo', header: 'No. Recibo', type: 'text' },
+      { key: 'numeroPoliza', header: 'No. Póliza', type: 'text' },
+      { key: 'clienteNombre', header: 'Nombre Cliente', type: 'text' },
+      { key: 'clienteApellido', header: 'Apellido Cliente', type: 'text' },
+      { key: 'fechaVencimiento', header: 'Fecha Vencimiento', type: 'date', dateFormat: options.dateFormat },
+      { key: 'montoTotal', header: 'Monto Total', type: 'currency', currencyCode: 'CRC' },
+      { key: 'estado', header: 'Estado', type: 'text' },
+      { key: 'fechaCobro', header: 'Fecha Cobro', type: 'date', dateFormat: options.dateFormat },
+      { key: 'metodoPago', header: 'Método Pago', type: 'text' },
+      { key: 'montoCobrado', header: 'Monto Cobrado', type: 'currency', currencyCode: 'CRC' },
+      { key: 'usuarioCobroNombre', header: 'Usuario Cobro', type: 'text' },
+      { key: 'observaciones', header: 'Observaciones', type: 'text' },
+      { key: 'fechaCreacion', header: 'Fecha Creación', type: 'date', dateFormat: options.dateFormat }
+    ];
+
+    // Transformar datos para incluir labels legibles
+    const transformedData = data.map(cobro => ({
+      ...cobro,
+      estado: getEstadoCobroLabel(cobro.estado),
+      metodoPago: cobro.metodoPago ? getMetodoPagoLabel(cobro.metodoPago) : '',
+      fechaVencimiento: new Date(cobro.fechaVencimiento),
+      fechaCobro: cobro.fechaCobro ? new Date(cobro.fechaCobro) : null,
+      fechaCreacion: new Date(cobro.fechaCreacion),
+      fechaActualizacion: cobro.fechaActualizacion ? new Date(cobro.fechaActualizacion) : null
+    }));
+
+    const exportOptions = {
+      filename: options.filename,
+      format: options.format as 'csv' | 'excel' | 'pdf',
+      includeHeaders: options.includeHeaders,
+      dateFormat: options.dateFormat
+    };
+
+    try {
+      switch (options.format) {
+        case 'csv':
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+          break;
+        case 'excel':
+          this.exportService.exportToExcel(transformedData, columns, exportOptions);
+          break;
+        case 'pdf':
+          this.exportService.exportToPDF(transformedData, columns, exportOptions);
+          break;
+        default:
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+      }
+
+      this.showMessage(`Archivo exportado exitosamente como ${options.format.toUpperCase()}`);
+    } catch (error) {
+      console.error('Error al exportar:', error);
+      this.showMessage('Error al exportar el archivo');
+    }
+  }
+
+  private getCurrentDateString(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    return `${year}${month}${day}`;
   }
 
   formatCurrency(amount: number, currencyCode: string = CURRENCY_CONSTANTS.DEFAULT_CURRENCY): string {

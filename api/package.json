@@ -1,0 +1,17 @@
+{
+  "name": "azure-swa-api",
+  "version": "1.0.0",
+  "description": "Azure Static Web Apps API para SINSEG",
+  "main": "index.js",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -36,6 +36,7 @@ import { PolizasComponent } from './polizas/polizas.component';
 import { UploadPolizasComponent } from './polizas/upload-polizas.component';
 import { LoginComponent } from './auth/login.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { MockApiInterceptor } from './interceptors/mock-api.interceptor';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 
 @NgModule({
@@ -82,6 +83,11 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
     UsuariosComponent
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: MockApiInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

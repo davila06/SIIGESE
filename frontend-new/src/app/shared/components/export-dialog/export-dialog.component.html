@@ -1,0 +1,97 @@
+<div class="export-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      <mat-icon>download</mat-icon>
+      {{ data.title }}
+    </h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="exportForm" class="export-form">
+      <!-- Información general -->
+      <div class="info-section">
+        <div class="info-item">
+          <mat-icon color="primary">info</mat-icon>
+          <span>Se exportarán <strong>{{ data.totalRecords }}</strong> registros</span>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Selección de formato -->
+      <div class="form-section">
+        <h3>Formato de Archivo</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Seleccionar formato</mat-label>
+          <mat-select formControlName="format">
+            <mat-option *ngFor="let format of availableFormats" [value]="format.value">
+              <div class="format-option">
+                <mat-icon>{{ format.icon }}</mat-icon>
+                <div class="format-details">
+                  <span class="format-label">{{ format.label }}</span>
+                  <span class="format-description">{{ format.description }}</span>
+                </div>
+              </div>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Información del formato seleccionado -->
+        <div class="format-info" *ngIf="getSelectedFormat()">
+          <mat-icon color="accent">{{ getSelectedFormat()?.icon }}</mat-icon>
+          <span>{{ getSelectedFormat()?.description }}</span>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Configuración del archivo -->
+      <div class="form-section">
+        <h3>Configuración del Archivo</h3>
+        
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre del archivo</mat-label>
+          <input matInput formControlName="filename" placeholder="nombre_archivo">
+          <mat-hint>No incluir la extensión del archivo</mat-hint>
+        </mat-form-field>
+
+        <div class="checkbox-section">
+          <mat-checkbox formControlName="includeHeaders">
+            Incluir encabezados de columnas
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Formato de fechas -->
+      <div class="form-section">
+        <h3>Formato de Fechas</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Formato de fecha</mat-label>
+          <mat-select formControlName="dateFormat">
+            <mat-option *ngFor="let format of dateFormats" [value]="format.value">
+              {{ format.label }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Formato que se usará para las fechas en el archivo</mat-hint>
+        </mat-form-field>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button (click)="onCancel()">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="onExport()"
+      [disabled]="!exportForm.valid">
+      <mat-icon>download</mat-icon>
+      Exportar
+    </button>
+  </mat-dialog-actions>
+</div>

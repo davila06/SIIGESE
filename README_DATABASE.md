@@ -1,7 +1,55 @@
-# Scripts de Base de Datos para SQL Server Express
+# 🗄️ CONFIGURACIÓN DE BASE DE DATOS LOCAL - SIIGESE
 
-## Descripción
-Scripts SQL para crear la base de datos completa del sistema SINSEG en SQL Server Express.
+## 📊 Opciones de Base de Datos Local
+
+### 🐳 Opción 1: Docker SQL Server (RECOMENDADO)
+
+#### 🚀 Inicio Rápido con Docker
+```bash
+# Iniciar contenedor de SQL Server
+docker-compose up db -d
+
+# Verificar que esté funcionando
+docker ps
+```
+
+#### 📋 Configuración Docker
+- **Servidor**: `localhost,1433`
+- **Usuario**: `sa`
+- **Contraseña**: `DevPassword123!`
+- **Base de Datos**: `MiAppDb` (se crea automáticamente)
+
+#### 🔗 Connection String
+```
+Server=localhost,1433;Database=MiAppDb;User Id=sa;Password=DevPassword123!;TrustServerCertificate=true;
+```
+
+### 🖥️ Opción 2: SQL Server Express Local
+
+#### 📋 Configuración SQL Express
+- **Servidor**: `(local)\SQLEXPRESS`
+- **Base de Datos**: `SinsegAppDb`
+- **Autenticación**: Windows Authentication (Trusted_Connection=True)
+
+#### 🔗 Connection String
+```
+Server=(local)\SQLEXPRESS;Database=SinsegAppDb;Trusted_Connection=True;
+```
+
+#### 🛠️ Setup Manual
+1. **Instalar SQL Server Express** desde Microsoft
+2. **Ejecutar script de creación**:
+   ```sql
+   -- Ejecutar EJECUTAR_COMPLETO.sql en SSMS
+   ```
+
+### ☁️ Opción 3: Azure SQL (Existente)
+
+#### 📋 Configuración Azure
+- **Servidor**: `siinadseg-sqlserver-1019.database.windows.net`
+- **Base de Datos**: `SiinadsegDB`
+- **Usuario**: `siinadseg_admin`
+- **Contraseña**: `P@ssw0rd123!`
 
 ## Estructura de la Base de Datos
 

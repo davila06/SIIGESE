@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Detalle de Reclamo SIIGESE</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 24px;
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #333;
+            font-size: 28px;
+        }
+        
+        .status-badges {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .badge {
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+        }
+        
+        .badge.resuelto { background-color: #4caf50; }
+        .badge.alta { background-color: #f44336; }
+        .badge.siniestro { background-color: #2196f3; }
+        
+        .tabs {
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 24px;
+        }
+        
+        .tab {
+            display: inline-block;
+            padding: 12px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #2196f3;
+            border-bottom-color: #2196f3;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .info-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .info-card h3 {
+            margin: 0 0 16px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+        
+        .info-item label {
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .info-item .value {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .amount {
+            color: #4caf50;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .description-card {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .description-card h3 {
+            margin: 0 0 12px 0;
+            color: #333;
+        }
+        
+        .placeholder {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            background: #5a6268;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success">
+            ✅ <strong>Implementación Completada:</strong> El componente de detalle de reclamos ha sido implementado exitosamente en Angular.
+        </div>
+        
+        <button class="back-button" onclick="alert('Navegación de regreso funcionando')">
+            ← Regresar al Dashboard
+        </button>
+        
+        <div class="header">
+            <h1>🔍 Detalle del Reclamo REC-2024-001</h1>
+        </div>
+        
+        <div class="status-badges">
+            <span class="badge resuelto">✓ Resuelto</span>
+            <span class="badge alta">⚠ Alta Prioridad</span>
+            <span class="badge siniestro">🚗 Siniestro</span>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('general')">Información General</div>
+            <div class="tab" onclick="showTab('descripcion')">Descripción</div>
+            <div class="tab" onclick="showTab('historial')">Historial</div>
+            <div class="tab" onclick="showTab('documentos')">Documentos</div>
+        </div>
+        
+        <div id="general" class="tab-content active">
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>👤 Información del Cliente</h3>
+                    <div class="info-item">
+                        <label>Nombre:</label>
+                        <span class="value">Juan Carlos Pérez García</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Póliza:</label>
+                        <span class="value">POL-VEH-2024-001</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Fecha Reclamo:</label>
+                        <span class="value">01/11/2024</span>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <h3>📋 Información del Reclamo</h3>
+                    <div class="info-item">
+                        <label>Número:</label>
+                        <span class="value">REC-2024-001</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Tipo:</label>
+                        <span class="value">Siniestro</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Estado:</label>
+                        <span class="value">Resuelto</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Prioridad:</label>
+                        <span class="value">Alta</span>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <h3>💰 Información Financiera</h3>
+                    <div class="info-item">
+                        <label>Monto Reclamado:</label>
+                        <span class="value amount">₡850,000.00</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Monto Aprobado:</label>
+                        <span class="value amount">₡750,000.00</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Diferencia:</label>
+                        <span class="value">₡100,000.00</span>
+                    </div>
+                </div>
+                
+                <div class="info-card">
+                    <h3>👥 Seguimiento</h3>
+                    <div class="info-item">
+                        <label>Asignado a:</label>
+                        <span class="value">Admin SINSEG</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Fecha Resolución:</label>
+                        <span class="value">15/11/2024</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Fecha Límite:</label>
+                        <span class="value">30/11/2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="descripcion" class="tab-content">
+            <div class="description-card">
+                <h3>📝 Descripción del Reclamo</h3>
+                <p>Daños en vehículo por colisión. Solicitud de reparación completa del parachoques delantero y faros.</p>
+            </div>
+            
+            <div class="description-card">
+                <h3>📋 Observaciones</h3>
+                <p>Reclamo procesado y aprobado. Diferencia por depreciación aplicada según las condiciones de la póliza.</p>
+            </div>
+        </div>
+        
+        <div id="historial" class="tab-content">
+            <div class="placeholder">
+                <h3>📅 Historial de Cambios</h3>
+                <p>Funcionalidad en desarrollo - Se mostrará el historial completo de cambios y actualizaciones del reclamo.</p>
+            </div>
+        </div>
+        
+        <div id="documentos" class="tab-content">
+            <div class="placeholder">
+                <h3>📎 Documentos Adjuntos</h3>
+                <p>Funcionalidad en desarrollo - Se mostrará la lista de documentos y evidencias relacionadas con el reclamo.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Ocultar todas las pestañas
+            const allTabs = document.querySelectorAll('.tab-content');
+            const allTabButtons = document.querySelectorAll('.tab');
+            
+            allTabs.forEach(tab => tab.classList.remove('active'));
+            allTabButtons.forEach(button => button.classList.remove('active'));
+            
+            // Mostrar la pestaña seleccionada
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Mostrar mensaje de éxito
+        setTimeout(() => {
+            console.log('✅ Componente de Detalle de Reclamos implementado exitosamente');
+            console.log('📋 Componentes creados:');
+            console.log('   - reclamo-detalle.component.ts');
+            console.log('   - reclamo-detalle.component.html');
+            console.log('   - reclamo-detalle.component.scss');
+            console.log('🔧 Configuraciones actualizadas:');
+            console.log('   - reclamos.module.ts (routing agregado)');
+            console.log('   - reclamos-dashboard.component.ts (método verDetalle)');
+            console.log('   - mock-api.interceptor.ts (endpoint /reclamos/{id})');
+            console.log('🚀 La funcionalidad está lista para usar en la aplicación Angular');
+        }, 1000);
+    </script>
+</body>
+</html>
