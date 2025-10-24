@@ -99,7 +99,6 @@ export interface Poliza {
   id: number;
   perfilId: number;
   numeroPoliza: string;
-  modalidad: string;
   nombreAsegurado: string;
   numeroCedula: string;
   prima: number;
@@ -123,7 +122,6 @@ export interface Poliza {
 export interface CreatePoliza {
   perfilId: number;
   numeroPoliza: string;
-  modalidad: string;
   nombreAsegurado: string;
   numeroCedula: string;
   prima: number;

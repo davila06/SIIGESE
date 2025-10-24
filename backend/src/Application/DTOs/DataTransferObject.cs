@@ -113,7 +113,6 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public string NumeroPoliza { get; set; } = string.Empty;
-        public string Modalidad { get; set; } = string.Empty;
         public string NombreAsegurado { get; set; } = string.Empty;
         public string NumeroCedula { get; set; } = string.Empty;
         public decimal Prima { get; set; }
@@ -134,7 +133,6 @@ namespace Application.DTOs
     public class CreatePolizaDto
     {
         public string NumeroPoliza { get; set; } = string.Empty;
-        public string Modalidad { get; set; } = string.Empty;
         public string NombreAsegurado { get; set; } = string.Empty;
         public string NumeroCedula { get; set; } = string.Empty;
         public decimal Prima { get; set; }

@@ -5,7 +5,6 @@ namespace Domain.Entities
     public class Poliza : BaseEntity
     {
         public string NumeroPoliza { get; set; } = string.Empty;
-        public string Modalidad { get; set; } = string.Empty;
         public string NombreAsegurado { get; set; } = string.Empty;
         public string NumeroCedula { get; set; } = string.Empty;
         public decimal Prima { get; set; }

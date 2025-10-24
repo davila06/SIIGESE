@@ -586,35 +586,57 @@ export class MockApiInterceptor implements HttpInterceptor {
         console.log('➕ Mock handling CREATE reclamo');
         return this.handleCreateReclamo(req);
       } else if (method === 'PUT') {
-        console.log('✏️ Mock handling UPDATE reclamo');
-        return this.handleUpdateReclamo(req);
+        if (url.includes('/estado')) {
+          console.log('🔄 Mock handling CHANGE ESTADO reclamo');
+          return this.handleChangeEstadoReclamo(req);
+        } else if (url.includes('/asignar')) {
+          console.log('👤 Mock handling ASIGNAR reclamo');
+          return this.handleAsignarReclamo(req);
+        } else if (url.includes('/resolver')) {
+          console.log('✅ Mock handling RESOLVER reclamo');
+          return this.handleResolverReclamo(req);
+        } else if (url.includes('/rechazar')) {
+          console.log('❌ Mock handling RECHAZAR reclamo');
+          return this.handleRechazarReclamo(req);
+        } else {
+          console.log('✏️ Mock handling UPDATE reclamo');
+          return this.handleUpdateReclamo(req);
+        }
       } else if (method === 'DELETE') {
         console.log('🗑️ Mock handling DELETE reclamo');
         return this.handleDeleteReclamo(req);
       }
     }
 
-    // Email Config endpoints
-    if (url.includes('/email-config')) {
+    // Email Config endpoints  
+    if (url.includes('/emailconfig')) {
       if (method === 'GET') {
-        console.log('📧 Mock handling GET email-config');
+        console.log('📧 Mock handling GET emailconfig');
         return this.handleGetEmailConfig(req);
       } else if (method === 'POST') {
         if (url.includes('/test-direct')) {
-          console.log('🧪 Mock handling TEST DIRECT email-config');
+          console.log('🧪 Mock handling TEST DIRECT emailconfig');
           return this.handleTestEmailConfigDirect(req);
         } else if (url.includes('/test')) {
-          console.log('🧪 Mock handling TEST email-config');
+          console.log('🧪 Mock handling TEST emailconfig');
           return this.handleTestEmailConfig(req);
         } else {
-          console.log('➕ Mock handling CREATE email-config');
+          console.log('➕ Mock handling CREATE emailconfig');
           return this.handleCreateEmailConfig(req);
         }
       } else if (method === 'PUT') {
-        console.log('✏️ Mock handling UPDATE email-config');
-        return this.handleUpdateEmailConfig(req);
+        if (url.includes('/set-default')) {
+          console.log('⭐ Mock handling SET DEFAULT emailconfig');
+          return this.handleSetDefaultEmailConfig(req);
+        } else if (url.includes('/toggle-status')) {
+          console.log('🔄 Mock handling TOGGLE STATUS emailconfig');
+          return this.handleToggleEmailConfigStatus(req);
+        } else {
+          console.log('✏️ Mock handling UPDATE emailconfig');
+          return this.handleUpdateEmailConfig(req);
+        }
       } else if (method === 'DELETE') {
-        console.log('🗑️ Mock handling DELETE email-config');
+        console.log('🗑️ Mock handling DELETE emailconfig');
         return this.handleDeleteEmailConfig(req);
       }
     }
@@ -1253,12 +1275,160 @@ export class MockApiInterceptor implements HttpInterceptor {
     return of(response).pipe(delay(600));
   }
 
+  private handleChangeEstadoReclamo(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    const urlParts = req.url.split('/');
+    const reclamoId = parseInt(urlParts[urlParts.length - 2]); // ID está antes de 'estado'
+    const { estado, observaciones } = req.body;
+    
+    const reclamoIndex = this.reclamos.findIndex(r => r.id === reclamoId);
+    if (reclamoIndex === -1) {
+      return of(new HttpResponse({
+        status: 404,
+        body: { message: 'Reclamo no encontrado' }
+      }));
+    }
+    
+    // Actualizar estado del reclamo
+    this.reclamos[reclamoIndex].estado = estado;
+    this.reclamos[reclamoIndex].updatedAt = new Date().toISOString();
+    this.reclamos[reclamoIndex].updatedBy = 'Admin';
+    
+    // Actualizar observaciones como string si se proporcionan
+    if (observaciones) {
+      this.reclamos[reclamoIndex].observaciones = observaciones;
+    }
+    
+    const response = new HttpResponse({
+      status: 200,
+      body: {
+        success: true,
+        message: `Estado del reclamo cambiado a ${this.getEstadoNombre(estado)} exitosamente`,
+        data: this.reclamos[reclamoIndex]
+      }
+    });
+
+    console.log('🔄 Mock reclamo estado changed:', this.reclamos[reclamoIndex].numeroReclamo, 'new estado:', estado);
+    return of(response).pipe(delay(600));
+  }
+
+  private handleAsignarReclamo(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    const urlParts = req.url.split('/');
+    const reclamoId = parseInt(urlParts[urlParts.length - 2]);
+    const { usuarioId } = req.body;
+    
+    const reclamoIndex = this.reclamos.findIndex(r => r.id === reclamoId);
+    if (reclamoIndex === -1) {
+      return of(new HttpResponse({
+        status: 404,
+        body: { message: 'Reclamo no encontrado' }
+      }));
+    }
+    
+    // Usar Object.assign para asignar propiedades dinámicamente
+    Object.assign(this.reclamos[reclamoIndex], {
+      asignadoA: usuarioId,
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'Admin'
+    });
+    
+    const response = new HttpResponse({
+      status: 200,
+      body: {
+        success: true,
+        message: 'Reclamo asignado exitosamente',
+        data: this.reclamos[reclamoIndex]
+      }
+    });
+
+    console.log('👤 Mock reclamo assigned:', this.reclamos[reclamoIndex].numeroReclamo);
+    return of(response).pipe(delay(600));
+  }
+
+  private handleResolverReclamo(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    const urlParts = req.url.split('/');
+    const reclamoId = parseInt(urlParts[urlParts.length - 2]);
+    const { montoAprobado, observaciones } = req.body;
+    
+    const reclamoIndex = this.reclamos.findIndex(r => r.id === reclamoId);
+    if (reclamoIndex === -1) {
+      return of(new HttpResponse({
+        status: 404,
+        body: { message: 'Reclamo no encontrado' }
+      }));
+    }
+    
+    this.reclamos[reclamoIndex].estado = EstadoReclamo.Resuelto;
+    this.reclamos[reclamoIndex].montoAprobado = montoAprobado;
+    this.reclamos[reclamoIndex].fechaResolucion = new Date().toISOString();
+    this.reclamos[reclamoIndex].updatedAt = new Date().toISOString();
+    this.reclamos[reclamoIndex].updatedBy = 'Admin';
+    
+    const response = new HttpResponse({
+      status: 200,
+      body: {
+        success: true,
+        message: 'Reclamo resuelto exitosamente',
+        data: this.reclamos[reclamoIndex]
+      }
+    });
+
+    console.log('✅ Mock reclamo resolved:', this.reclamos[reclamoIndex].numeroReclamo);
+    return of(response).pipe(delay(600));
+  }
+
+  private handleRechazarReclamo(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    const urlParts = req.url.split('/');
+    const reclamoId = parseInt(urlParts[urlParts.length - 2]);
+    const { observaciones } = req.body;
+    
+    const reclamoIndex = this.reclamos.findIndex(r => r.id === reclamoId);
+    if (reclamoIndex === -1) {
+      return of(new HttpResponse({
+        status: 404,
+        body: { message: 'Reclamo no encontrado' }
+      }));
+    }
+    
+    // Usar Object.assign para propiedades dinámicas
+    Object.assign(this.reclamos[reclamoIndex], {
+      estado: EstadoReclamo.Rechazado,
+      fechaRechazo: new Date().toISOString(),
+      motivoRechazo: observaciones,
+      updatedAt: new Date().toISOString(),
+      updatedBy: 'Admin'
+    });
+    
+    const response = new HttpResponse({
+      status: 200,
+      body: {
+        success: true,
+        message: 'Reclamo rechazado exitosamente',
+        data: this.reclamos[reclamoIndex]
+      }
+    });
+
+    console.log('❌ Mock reclamo rejected:', this.reclamos[reclamoIndex].numeroReclamo);
+    return of(response).pipe(delay(600));
+  }
+
+  private getEstadoNombre(estado: number): string {
+    switch (estado) {
+      case EstadoReclamo.Abierto: return 'Abierto';
+      case EstadoReclamo.EnProceso: return 'En Proceso';
+      case EstadoReclamo.Resuelto: return 'Resuelto';
+      case EstadoReclamo.Cerrado: return 'Cerrado';
+      case EstadoReclamo.Rechazado: return 'Rechazado';
+      case EstadoReclamo.Escalado: return 'Escalado';
+      default: return 'Desconocido';
+    }
+  }
+
   // Email Config handlers
   private handleGetEmailConfig(req: HttpRequest<any>): Observable<HttpEvent<any>> {
     const urlParts = req.url.split('/');
     const emailConfigId = urlParts[urlParts.length - 1];
     
-    if (emailConfigId && emailConfigId !== 'email-config') {
+    if (emailConfigId && emailConfigId !== 'emailconfig') {
       // Get specific email config by ID
       const configId = parseInt(emailConfigId);
       const emailConfig = this.emailConfigs.find(ec => ec.id === configId);
@@ -1375,6 +1545,65 @@ export class MockApiInterceptor implements HttpInterceptor {
     });
 
     console.log('✅ Mock email config deleted:', deletedConfig.configName);
+    return of(response).pipe(delay(600));
+  }
+
+  private handleSetDefaultEmailConfig(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    const urlParts = req.url.split('/');
+    const configId = parseInt(urlParts[urlParts.length - 2]); // ID está antes de 'set-default'
+    
+    const configIndex = this.emailConfigs.findIndex(ec => ec.id === configId);
+    if (configIndex === -1) {
+      return of(new HttpResponse({
+        status: 404,
+        body: { message: 'Configuración de email no encontrada' }
+      }));
+    }
+    
+    // Desactivar isDefault en todas las configuraciones
+    this.emailConfigs.forEach(config => config.isDefault = false);
+    
+    // Activar isDefault en la configuración seleccionada
+    this.emailConfigs[configIndex].isDefault = true;
+    
+    const response = new HttpResponse({
+      status: 200,
+      body: {
+        success: true,
+        message: 'Configuración establecida como predeterminada exitosamente',
+        data: true
+      }
+    });
+
+    console.log('⭐ Mock email config set as default:', this.emailConfigs[configIndex].configName);
+    return of(response).pipe(delay(600));
+  }
+
+  private handleToggleEmailConfigStatus(req: HttpRequest<any>): Observable<HttpEvent<any>> {
+    const urlParts = req.url.split('/');
+    const configId = parseInt(urlParts[urlParts.length - 2]); // ID está antes de 'toggle-status'
+    
+    const configIndex = this.emailConfigs.findIndex(ec => ec.id === configId);
+    if (configIndex === -1) {
+      return of(new HttpResponse({
+        status: 404,
+        body: { message: 'Configuración de email no encontrada' }
+      }));
+    }
+    
+    // Cambiar el estado isActive
+    this.emailConfigs[configIndex].isActive = !this.emailConfigs[configIndex].isActive;
+    
+    const response = new HttpResponse({
+      status: 200,
+      body: {
+        success: true,
+        message: `Configuración ${this.emailConfigs[configIndex].isActive ? 'activada' : 'desactivada'} exitosamente`,
+        data: true
+      }
+    });
+
+    console.log('🔄 Mock email config status toggled:', this.emailConfigs[configIndex].configName, 'isActive:', this.emailConfigs[configIndex].isActive);
     return of(response).pipe(delay(600));
   }
 

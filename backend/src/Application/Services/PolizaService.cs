@@ -206,17 +206,9 @@ namespace Application.Services
                                 Año = TruncateString(GetCellValueSafe(row, 12, "AÑO", true), 4, row.RowNumber(), "AÑO"),
                                 Correo = TruncateString(GetCellValueSafe(row, 13, "CORREO", true), 100, row.RowNumber(), "CORREO"),
                                 NumeroTelefono = TruncateString(GetCellValueSafe(row, 14, "NUMEROTELEFONO", true), 20, row.RowNumber(), "NUMEROTELEFONO"),
-                                Modalidad = "GENERAL", // Valor por defecto
                                 PerfilId = perfilId,
                                 CreatedBy = userId.ToString()
                             };
-
-                        // Corregir MOD vacío automáticamente
-                        if (string.IsNullOrEmpty(poliza.Modalidad))
-                        {
-                            poliza.Modalidad = "GENERAL"; // Valor por defecto
-                            Console.WriteLine($"Fila {row.RowNumber()}: MOD vacío, asignado 'GENERAL' por defecto");
-                        }
 
                         // Validaciones básicas
                         if (string.IsNullOrEmpty(poliza.NumeroPoliza) || 

@@ -187,7 +187,58 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
   cambiarEstado(reclamo: Reclamo): void {
     console.log('Cambiar estado:', reclamo);
-    this.showMessage('Funcionalidad de cambio de estado en desarrollo');
+    
+    // Crear una lista de estados disponibles
+    const estadosDisponibles = [
+      { value: EstadoReclamo.Abierto, label: 'Abierto' },
+      { value: EstadoReclamo.EnProceso, label: 'En Proceso' },
+      { value: EstadoReclamo.Resuelto, label: 'Resuelto' },
+      { value: EstadoReclamo.Cerrado, label: 'Cerrado' },
+      { value: EstadoReclamo.Rechazado, label: 'Rechazado' },
+      { value: EstadoReclamo.Escalado, label: 'Escalado' }
+    ];
+
+    // Filtrar el estado actual
+    const estadosParaCambio = estadosDisponibles.filter(e => e.value !== reclamo.estado);
+
+    if (estadosParaCambio.length === 0) {
+      this.showMessage('No hay estados disponibles para cambiar');
+      return;
+    }
+
+    // Para simplicidad, vamos a cambiar al siguiente estado en la secuencia
+    let nuevoEstado: EstadoReclamo;
+    
+    switch (reclamo.estado) {
+      case EstadoReclamo.Abierto:
+        nuevoEstado = EstadoReclamo.EnProceso;
+        break;
+      case EstadoReclamo.EnProceso:
+        nuevoEstado = EstadoReclamo.Resuelto;
+        break;
+      case EstadoReclamo.Resuelto:
+        nuevoEstado = EstadoReclamo.Cerrado;
+        break;
+      default:
+        nuevoEstado = EstadoReclamo.EnProceso;
+        break;
+    }
+
+    // Confirmar el cambio
+    const estadoNombre = estadosDisponibles.find(e => e.value === nuevoEstado)?.label || 'Desconocido';
+    
+    if (confirm(`¿Está seguro de cambiar el estado del reclamo ${reclamo.numeroReclamo} a "${estadoNombre}"?`)) {
+      this.reclamosService.cambiarEstado(reclamo.id, nuevoEstado, `Estado cambiado a ${estadoNombre}`).subscribe({
+        next: (response) => {
+          this.showMessage(`Estado del reclamo cambiado a "${estadoNombre}" exitosamente`);
+          this.loadReclamos(); // Recargar la lista
+        },
+        error: (error) => {
+          console.error('Error cambiando estado:', error);
+          this.showMessage('Error al cambiar el estado del reclamo');
+        }
+      });
+    }
   }
 
   subirDocumento(reclamo: Reclamo): void {

@@ -114,3 +114,537 @@ Error Number:11001,State:0,Class:20
 2025-10-23 17:54:29.628 -06:00 [INF] CORS policy execution failed.
 2025-10-23 17:54:29.629 -06:00 [INF] Request origin http://localhost:4200 does not have permission to access the resource.
 2025-10-23 17:54:29.632 -06:00 [INF] Request finished HTTP/1.1 OPTIONS http://localhost:5000/api/emailconfig - 204 null null 7.7483ms
+2025-10-23 18:28:55.354 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-23 18:28:55.406 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-23 18:28:55.555 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-23 18:28:55.556 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-23 18:29:22.269 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-23 18:29:22.306 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-23 18:29:22.413 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-23 18:29:22.416 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-23 18:29:23.555 -06:00 [INF] Executed DbCommand (95ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-23 18:29:23.659 -06:00 [INF] Executed DbCommand (85ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-23 18:29:23.739 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-23 18:29:23.938 -06:00 [INF] Executed DbCommand (135ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2025-10-23 18:29:24.029 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-23 18:29:24.115 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-23 18:29:24.258 -06:00 [INF] Executed DbCommand (137ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-23 18:29:24.293 -06:00 [INF] Applying migration '20251001170500_UpdateAdminCredentials'.
+2025-10-23 18:29:24.552 -06:00 [INF] Executed DbCommand (80ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Clientes] (
+    [Id] int NOT NULL IDENTITY,
+    [Codigo] nvarchar(20) NOT NULL,
+    [RazonSocial] nvarchar(200) NOT NULL,
+    [NombreComercial] nvarchar(200) NOT NULL,
+    [NIT] nvarchar(20) NOT NULL,
+    [Telefono] nvarchar(20) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [Direccion] nvarchar(300) NOT NULL,
+    [Ciudad] nvarchar(100) NOT NULL,
+    [Departamento] nvarchar(100) NOT NULL,
+    [Pais] nvarchar(100) NOT NULL,
+    [EsActivo] bit NOT NULL,
+    [FechaRegistro] datetime2 NULL,
+    [PerfilId] int NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Clientes] PRIMARY KEY ([Id])
+);
+2025-10-23 18:29:24.641 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Polizas] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroPoliza] nvarchar(50) NOT NULL,
+    [Modalidad] nvarchar(50) NOT NULL,
+    [NombreAsegurado] nvarchar(200) NOT NULL,
+    [Prima] decimal(18,2) NOT NULL,
+    [Moneda] nvarchar(3) NOT NULL,
+    [FechaVigencia] datetime2 NOT NULL,
+    [Frecuencia] nvarchar(50) NOT NULL,
+    [Aseguradora] nvarchar(100) NOT NULL,
+    [Placa] nvarchar(10) NOT NULL,
+    [Marca] nvarchar(50) NOT NULL,
+    [Modelo] nvarchar(50) NOT NULL,
+    [PerfilId] int NOT NULL,
+    [EsActivo] bit NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Polizas] PRIMARY KEY ([Id])
+);
+2025-10-23 18:29:24.725 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(50) NOT NULL,
+    [Description] nvarchar(200) NOT NULL,
+    [IsActive] bit NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-10-23 18:29:24.828 -06:00 [INF] Executed DbCommand (93ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] int NOT NULL IDENTITY,
+    [UserName] nvarchar(50) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [FirstName] nvarchar(50) NOT NULL,
+    [LastName] nvarchar(50) NOT NULL,
+    [PasswordHash] nvarchar(max) NOT NULL,
+    [IsActive] bit NOT NULL,
+    [LastLoginAt] datetime2 NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id])
+);
+2025-10-23 18:29:24.909 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [DataRecords] (
+    [Id] int NOT NULL IDENTITY,
+    [FileName] nvarchar(255) NOT NULL,
+    [FileType] nvarchar(50) NOT NULL,
+    [FileSize] bigint NOT NULL,
+    [TotalRecords] int NOT NULL,
+    [ProcessedRecords] int NOT NULL,
+    [ErrorRecords] int NOT NULL,
+    [Status] nvarchar(50) NOT NULL,
+    [ProcessedAt] datetime2 NOT NULL,
+    [ErrorDetails] nvarchar(max) NULL,
+    [UploadedByUserId] int NOT NULL,
+    [PerfilId] int NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_DataRecords] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_DataRecords_Users_UploadedByUserId] FOREIGN KEY ([UploadedByUserId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION
+);
+2025-10-23 18:29:24.990 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserRoles] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] int NOT NULL,
+    [RoleId] int NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_UserRoles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserRoles_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserRoles_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-10-23 18:29:25.282 -06:00 [INF] Executed DbCommand (287ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Description', N'IsActive', N'IsDeleted', N'Name', N'UpdatedAt', N'UpdatedBy') AND [object_id] = OBJECT_ID(N'[Roles]'))
+    SET IDENTITY_INSERT [Roles] ON;
+INSERT INTO [Roles] ([Id], [CreatedAt], [CreatedBy], [Description], [IsActive], [IsDeleted], [Name], [UpdatedAt], [UpdatedBy])
+VALUES (1, '2025-10-01T17:05:00.2647399Z', N'System', N'Administrador del sistema', CAST(1 AS bit), CAST(0 AS bit), N'Admin', NULL, NULL),
+(2, '2025-10-01T17:05:00.2647403Z', N'System', N'Cargador de datos', CAST(1 AS bit), CAST(0 AS bit), N'DataLoader', NULL, NULL),
+(3, '2025-10-01T17:05:00.2647404Z', N'System', N'Usuario estándar', CAST(1 AS bit), CAST(0 AS bit), N'User', NULL, NULL);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Description', N'IsActive', N'IsDeleted', N'Name', N'UpdatedAt', N'UpdatedBy') AND [object_id] = OBJECT_ID(N'[Roles]'))
+    SET IDENTITY_INSERT [Roles] OFF;
+2025-10-23 18:29:25.381 -06:00 [INF] Executed DbCommand (93ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Email', N'FirstName', N'IsActive', N'IsDeleted', N'LastLoginAt', N'LastName', N'PasswordHash', N'UpdatedAt', N'UpdatedBy', N'UserName') AND [object_id] = OBJECT_ID(N'[Users]'))
+    SET IDENTITY_INSERT [Users] ON;
+INSERT INTO [Users] ([Id], [CreatedAt], [CreatedBy], [Email], [FirstName], [IsActive], [IsDeleted], [LastLoginAt], [LastName], [PasswordHash], [UpdatedAt], [UpdatedBy], [UserName])
+VALUES (1, '2025-10-01T17:05:00.2647534Z', N'System', N'admin@sinseg.com', N'Administrador', CAST(1 AS bit), CAST(0 AS bit), NULL, N'Sistema', N'$2a$11$Xed1MsTJ.11zGnnvwDLGaeGav13ki.M4gEB5LSGg/vhxtWT5FC8Xm', NULL, NULL, N'admin');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Email', N'FirstName', N'IsActive', N'IsDeleted', N'LastLoginAt', N'LastName', N'PasswordHash', N'UpdatedAt', N'UpdatedBy', N'UserName') AND [object_id] = OBJECT_ID(N'[Users]'))
+    SET IDENTITY_INSERT [Users] OFF;
+2025-10-23 18:29:25.578 -06:00 [INF] Executed DbCommand (185ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'IsDeleted', N'RoleId', N'UpdatedAt', N'UpdatedBy', N'UserId') AND [object_id] = OBJECT_ID(N'[UserRoles]'))
+    SET IDENTITY_INSERT [UserRoles] ON;
+INSERT INTO [UserRoles] ([Id], [CreatedAt], [CreatedBy], [IsDeleted], [RoleId], [UpdatedAt], [UpdatedBy], [UserId])
+VALUES (1, '2025-10-01T17:05:00.4073752Z', N'System', CAST(0 AS bit), 1, NULL, NULL, 1);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'IsDeleted', N'RoleId', N'UpdatedAt', N'UpdatedBy', N'UserId') AND [object_id] = OBJECT_ID(N'[UserRoles]'))
+    SET IDENTITY_INSERT [UserRoles] OFF;
+2025-10-23 18:29:25.658 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Clientes_Codigo] ON [Clientes] ([Codigo]);
+2025-10-23 18:29:25.737 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Clientes_NIT] ON [Clientes] ([NIT]);
+2025-10-23 18:29:25.817 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Clientes_PerfilId] ON [Clientes] ([PerfilId]);
+2025-10-23 18:29:25.898 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_DataRecords_UploadedByUserId] ON [DataRecords] ([UploadedByUserId]);
+2025-10-23 18:29:25.984 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Polizas_Aseguradora] ON [Polizas] ([Aseguradora]);
+2025-10-23 18:29:26.066 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Polizas_NumeroPoliza] ON [Polizas] ([NumeroPoliza]);
+2025-10-23 18:29:26.145 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Polizas_PerfilId] ON [Polizas] ([PerfilId]);
+2025-10-23 18:29:26.227 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Polizas_Placa] ON [Polizas] ([Placa]);
+2025-10-23 18:29:26.408 -06:00 [INF] Executed DbCommand (173ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Roles_Name] ON [Roles] ([Name]);
+2025-10-23 18:29:26.489 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserRoles_RoleId] ON [UserRoles] ([RoleId]);
+2025-10-23 18:29:26.572 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserRoles_UserId_RoleId] ON [UserRoles] ([UserId], [RoleId]);
+2025-10-23 18:29:26.652 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2025-10-23 18:29:26.732 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_UserName] ON [Users] ([UserName]);
+2025-10-23 18:29:26.812 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251001170500_UpdateAdminCredentials', N'8.0.0');
+2025-10-23 18:29:26.913 -06:00 [INF] Applying migration '20251001224701_IncreaseFileTypeLength'.
+2025-10-23 18:29:27.110 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-01T22:47:00.6034206Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:27.190 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-01T22:47:00.6034217Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:27.277 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-01T22:47:00.6034218Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:27.368 -06:00 [INF] Executed DbCommand (84ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-01T22:47:00.8220427Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:27.462 -06:00 [INF] Executed DbCommand (88ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-01T22:47:00.6034435Z', [PasswordHash] = N'$2a$11$8nhPSmjjsP15ANy.C5nkUua8yAmLgmkY.Xpq/NYxkJ2PpSnJ0Gcju'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:27.548 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251001224701_IncreaseFileTypeLength', N'8.0.0');
+2025-10-23 18:29:27.642 -06:00 [INF] Applying migration '20251004234021_AddPasswordResetFunctionality'.
+2025-10-23 18:29:27.816 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD [LastPasswordChangeAt] datetime2 NULL;
+2025-10-23 18:29:27.904 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD [RequiresPasswordChange] bit NOT NULL DEFAULT CAST(0 AS bit);
+2025-10-23 18:29:28.353 -06:00 [INF] Executed DbCommand (442ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var0 sysname;
+SELECT @var0 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[DataRecords]') AND [c].[name] = N'FileType');
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [DataRecords] DROP CONSTRAINT [' + @var0 + '];');
+ALTER TABLE [DataRecords] ALTER COLUMN [FileType] nvarchar(100) NOT NULL;
+2025-10-23 18:29:28.441 -06:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [PasswordResetTokens] (
+    [Id] int NOT NULL IDENTITY,
+    [Token] nvarchar(255) NOT NULL,
+    [UserId] int NOT NULL,
+    [ExpiresAt] datetime2 NOT NULL,
+    [IsUsed] bit NOT NULL,
+    [UsedAt] datetime2 NULL,
+    [IpAddress] nvarchar(45) NULL,
+    [UserAgent] nvarchar(500) NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_PasswordResetTokens] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_PasswordResetTokens_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-10-23 18:29:28.524 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-04T23:40:21.1988468Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:28.608 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-04T23:40:21.1988472Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:28.689 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-04T23:40:21.1988520Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:28.773 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-04T23:40:21.4161997Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:28.857 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-04T23:40:21.1988629Z', [LastPasswordChangeAt] = '2025-10-04T23:40:21.4161338Z', [PasswordHash] = N'$2a$11$eAsTv1iZ0Cqj2oqn.Kiy/e5GJ/pgZ4SUs.i2bmWbOBEf6nqYMEvXq', [RequiresPasswordChange] = CAST(0 AS bit)
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:28.943 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PasswordResetTokens_ExpiresAt] ON [PasswordResetTokens] ([ExpiresAt]);
+2025-10-23 18:29:29.026 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_PasswordResetTokens_Token] ON [PasswordResetTokens] ([Token]);
+2025-10-23 18:29:29.110 -06:00 [INF] Executed DbCommand (81ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PasswordResetTokens_UserId] ON [PasswordResetTokens] ([UserId]);
+2025-10-23 18:29:29.192 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251004234021_AddPasswordResetFunctionality', N'8.0.0');
+2025-10-23 18:29:29.282 -06:00 [INF] Applying migration '20251005011905_AddCobrosTable'.
+2025-10-23 18:29:29.457 -06:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Cobros] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroRecibo] nvarchar(50) NOT NULL,
+    [PolizaId] int NOT NULL,
+    [NumeroPoliza] nvarchar(50) NOT NULL,
+    [ClienteNombre] nvarchar(100) NOT NULL,
+    [ClienteApellido] nvarchar(100) NOT NULL,
+    [FechaVencimiento] datetime2 NOT NULL,
+    [FechaCobro] datetime2 NULL,
+    [MontoTotal] decimal(18,2) NOT NULL,
+    [MontoCobrado] decimal(18,2) NULL,
+    [Estado] int NOT NULL,
+    [MetodoPago] int NULL,
+    [Observaciones] nvarchar(500) NULL,
+    [UsuarioCobroId] int NULL,
+    [UsuarioCobroNombre] nvarchar(100) NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Cobros] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Cobros_Polizas_PolizaId] FOREIGN KEY ([PolizaId]) REFERENCES [Polizas] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Cobros_Users_UsuarioCobroId] FOREIGN KEY ([UsuarioCobroId]) REFERENCES [Users] ([Id]) ON DELETE SET NULL
+);
+2025-10-23 18:29:29.543 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T01:19:05.0802707Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:29.621 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T01:19:05.0802714Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:29.699 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T01:19:05.0802716Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:29.778 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-05T01:19:05.2932823Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:29.862 -06:00 [INF] Executed DbCommand (80ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-05T01:19:05.0802981Z', [LastPasswordChangeAt] = '2025-10-05T01:19:05.2932067Z', [PasswordHash] = N'$2a$11$oOFuS5G5NQwxjfQXMRfTd.N5oRI7cpiTiq9HfWBfrqT.LbRplzve2'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:29.942 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_Estado] ON [Cobros] ([Estado]);
+2025-10-23 18:29:30.021 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_FechaVencimiento] ON [Cobros] ([FechaVencimiento]);
+2025-10-23 18:29:30.104 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Cobros_NumeroRecibo] ON [Cobros] ([NumeroRecibo]);
+2025-10-23 18:29:30.182 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_PolizaId] ON [Cobros] ([PolizaId]);
+2025-10-23 18:29:30.260 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_UsuarioCobroId] ON [Cobros] ([UsuarioCobroId]);
+2025-10-23 18:29:30.339 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251005011905_AddCobrosTable', N'8.0.0');
+2025-10-23 18:29:30.428 -06:00 [INF] Applying migration '20251005032933_AddMonedaAndCotizaciones'.
+2025-10-23 18:29:30.607 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cobros] ADD [Moneda] nvarchar(max) NOT NULL DEFAULT N'';
+2025-10-23 18:29:30.687 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Cotizaciones] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroCotizacion] nvarchar(50) NOT NULL,
+    [NombreSolicitante] nvarchar(200) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [Telefono] nvarchar(20) NULL,
+    [TipoSeguro] nvarchar(50) NOT NULL,
+    [Aseguradora] nvarchar(100) NOT NULL,
+    [MontoAsegurado] decimal(18,2) NOT NULL,
+    [PrimaCotizada] decimal(18,2) NULL,
+    [Moneda] nvarchar(10) NOT NULL,
+    [FechaCotizacion] datetime2 NOT NULL,
+    [FechaVencimiento] datetime2 NULL,
+    [Estado] nvarchar(20) NOT NULL,
+    [Observaciones] nvarchar(500) NULL,
+    [Placa] nvarchar(20) NULL,
+    [Marca] nvarchar(50) NULL,
+    [Modelo] nvarchar(50) NULL,
+    [Año] int NULL,
+    [Cilindraje] nvarchar(50) NULL,
+    [FechaNacimiento] datetime2 NULL,
+    [Genero] nvarchar(20) NULL,
+    [Ocupacion] nvarchar(100) NULL,
+    [DireccionInmueble] nvarchar(200) NULL,
+    [TipoInmueble] nvarchar(50) NULL,
+    [ValorInmueble] decimal(18,2) NULL,
+    [UsuarioId] int NOT NULL,
+    [FechaCreacion] datetime2 NOT NULL,
+    [FechaActualizacion] datetime2 NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Cotizaciones] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Cotizaciones_Users_UsuarioId] FOREIGN KEY ([UsuarioId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION
+);
+2025-10-23 18:29:30.767 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536921Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:30.845 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536930Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:30.924 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536932Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:31.003 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-05T03:29:31.9571018Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:31.085 -06:00 [INF] Executed DbCommand (80ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-05T03:29:31.6537296Z', [LastPasswordChangeAt] = '2025-10-05T03:29:31.9569868Z', [PasswordHash] = N'$2a$11$CmLRP9Jl1Vwz6hJmE2lYLejDJmrzwtD.fSv4TWOt16Vyl.ci9GBGS'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:31.164 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_Email] ON [Cotizaciones] ([Email]);
+2025-10-23 18:29:31.245 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_Estado] ON [Cotizaciones] ([Estado]);
+2025-10-23 18:29:31.331 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_FechaCotizacion] ON [Cotizaciones] ([FechaCotizacion]);
+2025-10-23 18:29:31.410 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Cotizaciones_NumeroCotizacion] ON [Cotizaciones] ([NumeroCotizacion]);
+2025-10-23 18:29:31.491 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_TipoSeguro] ON [Cotizaciones] ([TipoSeguro]);
+2025-10-23 18:29:31.569 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_UsuarioId] ON [Cotizaciones] ([UsuarioId]);
+2025-10-23 18:29:31.648 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251005032933_AddMonedaAndCotizaciones', N'8.0.0');
+2025-10-23 18:29:31.732 -06:00 [INF] Applying migration '20251005040644_AddReclamosModule'.
+2025-10-23 18:29:31.905 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Reclamos] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroReclamo] nvarchar(max) NOT NULL,
+    [PolizaId] int NOT NULL,
+    [NumeroPoliza] nvarchar(max) NOT NULL,
+    [ClienteNombre] nvarchar(max) NOT NULL,
+    [ClienteApellido] nvarchar(max) NOT NULL,
+    [FechaReclamo] datetime2 NOT NULL,
+    [FechaResolucion] datetime2 NULL,
+    [TipoReclamo] int NOT NULL,
+    [Estado] int NOT NULL,
+    [Descripcion] nvarchar(max) NOT NULL,
+    [MontoReclamado] decimal(18,2) NULL,
+    [MontoAprobado] decimal(18,2) NULL,
+    [Moneda] nvarchar(max) NOT NULL,
+    [Prioridad] int NOT NULL,
+    [Observaciones] nvarchar(max) NULL,
+    [DocumentosAdjuntos] nvarchar(max) NULL,
+    [UsuarioAsignadoId] int NULL,
+    [UsuarioAsignadoNombre] nvarchar(max) NULL,
+    [FechaLimiteRespuesta] datetime2 NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Reclamos] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Reclamos_Polizas_PolizaId] FOREIGN KEY ([PolizaId]) REFERENCES [Polizas] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Reclamos_Users_UsuarioAsignadoId] FOREIGN KEY ([UsuarioAsignadoId]) REFERENCES [Users] ([Id])
+);
+2025-10-23 18:29:31.983 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T04:06:43.4322376Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:32.060 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T04:06:43.4322384Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:32.139 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T04:06:43.4322385Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:32.217 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-05T04:06:43.6076992Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:32.298 -06:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-05T04:06:43.4322543Z', [LastPasswordChangeAt] = '2025-10-05T04:06:43.6076266Z', [PasswordHash] = N'$2a$11$gTPJsyPi3DZ6F.bHZ62Qv.VTvNEiOiOy25IHXu1eITRS44x9s/mxm'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:32.377 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Reclamos_PolizaId] ON [Reclamos] ([PolizaId]);
+2025-10-23 18:29:32.457 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Reclamos_UsuarioAsignadoId] ON [Reclamos] ([UsuarioAsignadoId]);
+2025-10-23 18:29:32.534 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251005040644_AddReclamosModule', N'8.0.0');
+2025-10-23 18:29:32.619 -06:00 [INF] Applying migration '20251010174908_AddEmailConfigTable'.
+2025-10-23 18:29:32.800 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [EmailConfigs] (
+    [Id] int NOT NULL IDENTITY,
+    [ConfigName] nvarchar(100) NOT NULL,
+    [SmtpServer] nvarchar(100) NOT NULL,
+    [SmtpPort] int NOT NULL,
+    [FromEmail] nvarchar(100) NOT NULL,
+    [FromName] nvarchar(100) NOT NULL,
+    [Username] nvarchar(100) NOT NULL,
+    [Password] nvarchar(200) NOT NULL,
+    [UseSSL] bit NOT NULL,
+    [UseTLS] bit NOT NULL,
+    [IsDefault] bit NOT NULL,
+    [IsActive] bit NOT NULL,
+    [Description] nvarchar(500) NULL,
+    [CompanyName] nvarchar(200) NULL,
+    [CompanyAddress] nvarchar(500) NULL,
+    [CompanyPhone] nvarchar(20) NULL,
+    [CompanyWebsite] nvarchar(100) NULL,
+    [CompanyLogo] nvarchar(500) NULL,
+    [TimeoutSeconds] int NOT NULL,
+    [MaxRetries] int NOT NULL,
+    [LastTested] datetime2 NOT NULL,
+    [LastTestSuccessful] bit NOT NULL,
+    [LastTestError] nvarchar(500) NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_EmailConfigs] PRIMARY KEY ([Id])
+);
+2025-10-23 18:29:32.878 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888264Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:32.958 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888272Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:33.035 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888273Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:33.124 -06:00 [INF] Executed DbCommand (86ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-10T17:49:08.3909329Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:33.203 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-10T17:49:08.1888456Z', [LastPasswordChangeAt] = '2025-10-10T17:49:08.3903333Z', [PasswordHash] = N'$2a$11$S3xQGzPo8/4EN8B/gY.AUOiKbE.b79bDyHPZrYibXp3yRTffQ1fLi'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-10-23 18:29:33.282 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_EmailConfigs_ConfigName] ON [EmailConfigs] ([ConfigName]);
+2025-10-23 18:29:33.361 -06:00 [INF] Executed DbCommand (77ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailConfigs_IsActive] ON [EmailConfigs] ([IsActive]);
+2025-10-23 18:29:33.441 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailConfigs_IsDefault] ON [EmailConfigs] ([IsDefault]);
+2025-10-23 18:29:33.519 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251010174908_AddEmailConfigTable', N'8.0.0');

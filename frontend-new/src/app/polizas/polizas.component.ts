@@ -74,6 +74,23 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       console.log('MatPaginator configurado:', !!this.paginator);
       console.log('DataSource data length:', this.polizasDataSource.data.length);
     }, 0);
+
+    // Debug del formulario en tiempo real
+    if (this.polizaForm) {
+      this.polizaForm.valueChanges.subscribe(value => {
+        console.log('📝 Formulario cambió:', {
+          valid: this.polizaForm.valid,
+          invalid: this.polizaForm.invalid,
+          validForSubmission: this.isFormValidForSubmission(),
+          value: value
+        });
+      });
+
+      this.polizaForm.statusChanges.subscribe(status => {
+        console.log('🔄 Estado del formulario cambió:', status);
+        console.log('📊 Validación para envío:', this.isFormValidForSubmission());
+      });
+    }
   }
 
   // Método de sorting manual
@@ -165,7 +182,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return this.fb.group({
       perfilId: [1, [Validators.required, Validators.min(1)]],
       numeroPoliza: ['', [Validators.required, Validators.maxLength(50)]],
-      modalidad: ['', [Validators.required, Validators.maxLength(100)]],
       nombreAsegurado: ['', [Validators.required, Validators.maxLength(200)]],
       prima: [0, [Validators.required, Validators.min(0)]],
       moneda: [CURRENCY_CONSTANTS.DEFAULT_CURRENCY, [Validators.required, Validators.maxLength(10)]],
@@ -339,16 +355,16 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       // Si no hay término de búsqueda, mostrar todas las pólizas
       this.filteredPolizas = [...this.polizas];
     } else {
-      const searchLower = this.searchTerm.toLowerCase().trim();
+      const searchLower = this.normalizeText(this.searchTerm.toLowerCase().trim());
       this.filteredPolizas = this.polizas.filter(poliza => {
         // Buscar en número de póliza
-        const numeroMatch = poliza.numeroPoliza?.toLowerCase().includes(searchLower);
+        const numeroMatch = this.normalizeText(poliza.numeroPoliza?.toLowerCase() || '').includes(searchLower);
         
-        // Buscar en nombre del asegurado
-        const nombreMatch = poliza.nombreAsegurado?.toLowerCase().includes(searchLower);
+        // Búsqueda mejorada en nombre del asegurado
+        const nombreMatch = this.searchInName(poliza.nombreAsegurado || '', searchLower);
         
         // Buscar en placa (si existe)
-        const placaMatch = poliza.placa?.toLowerCase().includes(searchLower);
+        const placaMatch = this.normalizeText(poliza.placa?.toLowerCase() || '').includes(searchLower);
         
         return numeroMatch || nombreMatch || placaMatch;
       });
@@ -374,6 +390,41 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     
     // Actualizar datos paginados para tarjetas
     this.updatePaginatedPolizas();
+  }
+
+  /**
+   * Normaliza texto removiendo acentos y caracteres especiales
+   */
+  private normalizeText(text: string): string {
+    return text
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remover acentos
+      .replace(/[^\w\s]/g, '') // Remover caracteres especiales excepto espacios
+      .trim();
+  }
+
+  /**
+   * Búsqueda inteligente en nombres - permite buscar palabras en cualquier orden
+   */
+  private searchInName(nombre: string, searchTerm: string): boolean {
+    const normalizedName = this.normalizeText(nombre.toLowerCase());
+    const normalizedSearch = searchTerm;
+    
+    // Búsqueda directa (búsqueda completa)
+    if (normalizedName.includes(normalizedSearch)) {
+      return true;
+    }
+    
+    // Búsqueda por palabras separadas (permite buscar "perez juan" para encontrar "Juan Pérez")
+    const searchWords = normalizedSearch.split(/\s+/).filter(word => word.length > 0);
+    const nameWords = normalizedName.split(/\s+/).filter(word => word.length > 0);
+    
+    // Verificar que todas las palabras de búsqueda estén en el nombre
+    return searchWords.every(searchWord => 
+      nameWords.some(nameWord => 
+        nameWord.includes(searchWord) || searchWord.includes(nameWord)
+      )
+    );
   }
 
   clearSearch(): void {
@@ -503,7 +554,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     const formValues = {
       perfilId: poliza.perfilId || 1,
       numeroPoliza: poliza.numeroPoliza,
-      modalidad: poliza.modalidad,
       nombreAsegurado: poliza.nombreAsegurado,
       prima: poliza.prima,
       moneda: poliza.moneda,
@@ -545,7 +595,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     this.polizaForm.patchValue({
       perfilId: 1,
       moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY,
-      prima: 0
+      prima: 0,
+      fechaVigencia: new Date().toISOString().split('T')[0] // Fecha actual por defecto
     });
     
     // Limpiar completamente los estados de validación
@@ -573,6 +624,35 @@ export class PolizasComponent implements OnInit, AfterViewInit {
 
   get submitButtonText(): string {
     return this.isEditMode ? 'Actualizar Póliza' : 'Guardar Póliza';
+  }
+
+  // Método para validar si el formulario es válido para envío
+  isFormValidForSubmission(): boolean {
+    const requiredFields = ['numeroPoliza', 'nombreAsegurado', 
+                           'prima', 'fechaVigencia', 'frecuencia', 'aseguradora'];
+    
+    const isValid = requiredFields.every(field => {
+      const control = this.polizaForm.get(field);
+      return control && control.valid && control.value !== '' && control.value !== null;
+    });
+
+    // Debug logging
+    if (!isValid) {
+      console.log('🔍 Formulario inválido. Campos con problemas:');
+      requiredFields.forEach(field => {
+        const control = this.polizaForm.get(field);
+        if (!control || !control.valid || control.value === '' || control.value === null) {
+          console.log(`❌ ${field}:`, {
+            exists: !!control,
+            valid: control?.valid,
+            value: control?.value,
+            errors: control?.errors
+          });
+        }
+      });
+    }
+
+    return isValid;
   }
 
 }

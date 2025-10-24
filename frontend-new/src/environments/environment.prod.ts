@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://siinadseg-backend-1019.eastus.azurecontainer.io/api',
-  version: '20251022-1750-azure-fixed-upload',
+  apiUrl: '/api',  // Usar la API integrada de Static Web App
+  version: '20251024-0245-mixed-content-fix',
   enableLogging: true, // Habilitar logs para debugging
+  mockApi: false, // Deshabilitar Mock API en producción
   azure: {
-    sqlServer: 'siinadseg-sqlserver-1019.database.windows.net',
+    sqlServer: 'sql-siinadseg-7266.database.windows.net',
     database: 'SiinadsegDB',
-    containerUrl: 'http://siinadseg-backend-1019.eastus.azurecontainer.io'
+    staticWebApp: 'https://gentle-dune-0a2edab0f.3.azurestaticapps.net'
   }
 };

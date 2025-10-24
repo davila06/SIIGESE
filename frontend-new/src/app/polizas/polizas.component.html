@@ -25,11 +25,6 @@
           </mat-form-field>
           
           <mat-form-field>
-            <mat-label>Modalidad</mat-label>
-            <input matInput formControlName="modalidad" required>
-          </mat-form-field>
-          
-          <mat-form-field>
             <mat-label>Nombre Asegurado</mat-label>
             <input matInput formControlName="nombreAsegurado" required>
           </mat-form-field>
@@ -98,7 +93,7 @@
           <button mat-raised-button 
                   color="primary" 
                   type="submit" 
-                  [disabled]="polizaForm.invalid || isLoading">
+                  [disabled]="!isFormValidForSubmission() || isLoading">
             <mat-icon>{{isEditMode ? 'update' : 'save'}}</mat-icon>
             {{submitButtonText}}
           </button>
@@ -136,12 +131,15 @@
           <mat-form-field appearance="outline" class="search-field">
             <mat-label>Buscar pólizas</mat-label>
             <input matInput 
-                   placeholder="Buscar por número, nombre o placa..."
+                   placeholder="Ej: Juan Pérez, POL-001, SJJ-123, perez juan..."
                    [(ngModel)]="searchTerm"
                    (input)="onSearch($event)">
             <mat-icon matSuffix>search</mat-icon>
             <mat-hint *ngIf="searchTerm">
               {{filteredPolizasCount}} de {{polizas.length}} pólizas encontradas
+            </mat-hint>
+            <mat-hint *ngIf="!searchTerm" class="search-hint">
+              Busca por nombre (en cualquier orden), número de póliza o placa
             </mat-hint>
           </mat-form-field>
         </div>
@@ -208,14 +206,6 @@
                 <mat-icon class="info-icon">business</mat-icon>
                 <span class="info-label">Aseguradora:</span>
                 <span class="info-value">{{poliza.aseguradora}}</span>
-              </div>
-            </div>
-            
-            <div class="info-row">
-              <div class="info-item">
-                <mat-icon class="info-icon">category</mat-icon>
-                <span class="info-label">Modalidad:</span>
-                <span class="info-value">{{poliza.modalidad}}</span>
               </div>
             </div>
             
