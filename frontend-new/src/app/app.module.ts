@@ -41,6 +41,8 @@ import { AppComponent } from './app.component';
 import { PolizasComponent } from './polizas/polizas.component';
 import { UploadPolizasComponent } from './polizas/upload-polizas.component';
 import { LoginComponent } from './auth/login.component';
+import { CotizacionesComponent } from './cotizaciones/cotizaciones.component';
+import { ChangePasswordComponent } from './auth/change-password/change-password.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { MockApiInterceptor } from './interceptors/mock-api.interceptor';
 import { UsuariosComponent } from './usuarios/usuarios.component';
@@ -66,7 +68,8 @@ export const CUSTOM_DATE_FORMATS = {
     AppComponent,
     PolizasComponent,
     UploadPolizasComponent,
-    LoginComponent
+    LoginComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,

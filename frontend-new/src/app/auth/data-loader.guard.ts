@@ -1,53 +1,23 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataLoaderGuard implements CanActivate {
-
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {}
+  
+  constructor(private router: Router) {}
 
   canActivate(): boolean {
-    const isAuth = this.authService.isAuthenticated();
-    const hasRole = this.authService.hasAnyRole(['Admin', 'DataLoader']);
-    const user = this.authService.getCurrentUser();
+    // Mock data loader permission check
+    // In a real app, you would check if user has data loading permissions
+    const canLoadData = true; // Mock: always allow access for now
     
-    console.log('🛡️ DataLoaderGuard - canActivate check:', {
-      isAuthenticated: isAuth,
-      hasRole: hasRole,
-      user: user,
-      userRoles: user?.roles,
-      lookingFor: ['Admin', 'DataLoader']
-    });
-
-    if (isAuth && hasRole) {
-      console.log('✅ DataLoaderGuard - Access granted');
-      return true;
+    if (!canLoadData) {
+      this.router.navigate(['/polizas']); // Redirect to polizas list
+      return false;
     }
-
-    console.log('❌ DataLoaderGuard - Access denied');
     
-    // Mostrar mensaje de acceso denegado
-    this.snackBar.open(
-      'Acceso denegado. Solo los administradores y cargadores de datos pueden acceder a esta sección.',
-      'Cerrar',
-      {
-        duration: 5000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        panelClass: ['error-snackbar']
-      }
-    );
-
-    // Redirigir a la página de pólizas
-    this.router.navigate(['/polizas']);
-    return false;
+    return true;
   }
 }

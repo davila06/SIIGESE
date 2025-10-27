@@ -8,7 +8,7 @@
       <h2 class="brand-name">SINSEG</h2>
       <p class="brand-subtitle">Sistema Integral de Administración de Seguros</p>
     </div>
-    
+
     <mat-card-header>
       <mat-card-title class="login-title">
         {{ showResetForm ? 'Resetear Contraseña' : 'Iniciar Sesión' }}
@@ -66,7 +66,7 @@
 
         <!-- Enlace para resetear contraseña -->
         <div class="reset-link-container">
-          <button mat-button 
+          <button mat-button
                   type="button"
                   color="primary"
                   (click)="toggleResetForm()"
@@ -77,7 +77,7 @@
       </form>
 
       <!-- Formulario de Reset Password -->
-      <form *ngIf="showResetForm" [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="reset-form">
+      <form *ngIf="showResetForm" [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="reset-form">    
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
           <input matInput
@@ -86,7 +86,7 @@
                  placeholder="tu@email.com"
                  autocomplete="email">
           <mat-icon matSuffix>email</mat-icon>
-          <mat-error *ngIf="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
+          <mat-error *ngIf="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">        
             {{ getErrorMessage('email') }}
           </mat-error>
         </mat-form-field>
@@ -103,7 +103,7 @@
 
         <!-- Enlace para volver al login -->
         <div class="back-link-container">
-          <button mat-button 
+          <button mat-button
                   type="button"
                   color="primary"
                   (click)="toggleResetForm()"

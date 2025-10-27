@@ -1,75 +1,34 @@
-using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace Domain.Entities
 {
-    public class EmailConfig : BaseEntity
+    public class EmailConfig : Entity
     {
-        [Required]
-        [MaxLength(100)]
         public string ConfigName { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(100)]
         public string SmtpServer { get; set; } = string.Empty;
-
-        [Required]
-        [Range(1, 65535)]
-        public int SmtpPort { get; set; } = 587;
-
-        [Required]
-        [EmailAddress]
-        [MaxLength(100)]
-        public string FromEmail { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(100)]
-        public string FromName { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(100)]
+        public int SmtpPort { get; set; }
         public string Username { get; set; } = string.Empty;
-
-        [Required]
-        [MaxLength(200)]
         public string Password { get; set; } = string.Empty;
-
-        public bool UseSSL { get; set; } = true;
-
-        public bool UseTLS { get; set; } = true;
-
+        public bool EnableSsl { get; set; }
+        public bool UseSSL { get; set; }
+        public bool UseTLS { get; set; }
+        public string FromEmail { get; set; } = string.Empty;
+        public string FromName { get; set; } = string.Empty;
         public bool IsDefault { get; set; } = false;
-
         public bool IsActive { get; set; } = true;
-
-        [MaxLength(500)]
-        public string? Description { get; set; }
-
-        // Configuraciones adicionales para plantillas
-        [MaxLength(200)]
-        public string? CompanyName { get; set; }
-
-        [MaxLength(500)]
-        public string? CompanyAddress { get; set; }
-
-        [MaxLength(20)]
-        public string? CompanyPhone { get; set; }
-
-        [MaxLength(100)]
-        public string? CompanyWebsite { get; set; }
-
-        [MaxLength(500)]
-        public string? CompanyLogo { get; set; }
-
-        // Configuraciones de timeouts y reintento
+        public string Description { get; set; } = string.Empty;
+        public string CompanyName { get; set; } = string.Empty;
+        public string CompanyAddress { get; set; } = string.Empty;
+        public string CompanyPhone { get; set; } = string.Empty;
+        public string CompanyWebsite { get; set; } = string.Empty;
+        public string CompanyLogo { get; set; } = string.Empty;
         public int TimeoutSeconds { get; set; } = 30;
-
         public int MaxRetries { get; set; } = 3;
-
-        public DateTime LastTested { get; set; } = DateTime.UtcNow;
-
+        public DateTime? LastTested { get; set; }
         public bool LastTestSuccessful { get; set; } = false;
-
-        [MaxLength(500)]
         public string? LastTestError { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public string CreatedBy { get; set; } = string.Empty;
+        public string? UpdatedBy { get; set; }
     }
 }

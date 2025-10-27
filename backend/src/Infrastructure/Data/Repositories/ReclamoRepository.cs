@@ -12,12 +12,11 @@ namespace Infrastructure.Data.Repositories
         {
         }
 
-        public async Task<IEnumerable<Reclamo>> GetReclamosByPolizaIdAsync(int polizaId)
+        public async Task<IEnumerable<Reclamo>> GetReclamosByPolizaIdAsync(string numeroPoliza)
         {
             return await _context.Set<Reclamo>()
-                .Include(r => r.Poliza)
                 .Include(r => r.UsuarioAsignado)
-                .Where(r => r.PolizaId == polizaId && !r.IsDeleted)
+                .Where(r => r.NumeroPoliza == numeroPoliza && !r.IsDeleted)
                 .OrderByDescending(r => r.FechaReclamo)
                 .ToListAsync();
         }

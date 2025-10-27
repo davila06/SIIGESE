@@ -2,7 +2,7 @@ using System;
 
 namespace Domain.Entities
 {
-    public class Cliente : BaseEntity
+    public class Cliente : Entity
     {
         public string Codigo { get; set; } = string.Empty;
         public string RazonSocial { get; set; } = string.Empty;
@@ -17,5 +17,8 @@ namespace Domain.Entities
         public bool EsActivo { get; set; } = true;
         public DateTime? FechaRegistro { get; set; }
         public int PerfilId { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public string CreatedBy { get; set; } = string.Empty;
+        public string? UpdatedBy { get; set; }
     }
 }

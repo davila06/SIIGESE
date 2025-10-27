@@ -2,9 +2,10 @@ using System;
 
 namespace Domain.Entities
 {
-    public class Poliza : BaseEntity
+    public class Poliza : Entity
     {
         public string NumeroPoliza { get; set; } = string.Empty;
+        public string Modalidad { get; set; } = string.Empty;
         public string NombreAsegurado { get; set; } = string.Empty;
         public string NumeroCedula { get; set; } = string.Empty;
         public decimal Prima { get; set; }
@@ -20,5 +21,8 @@ namespace Domain.Entities
         public string NumeroTelefono { get; set; } = string.Empty;
         public int PerfilId { get; set; }
         public bool EsActivo { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
+        public string CreatedBy { get; set; } = string.Empty;
+        public string? UpdatedBy { get; set; }
     }
 }

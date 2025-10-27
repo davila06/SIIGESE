@@ -322,7 +322,10 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return formatCurrencyByCode(amount, currency);
   }
 
-  formatDate(date: Date): string {
+  formatDate(date: Date | string): string {
+    if (typeof date === 'string') {
+      return formatDateCR(new Date(date));
+    }
     return formatDateCR(date);
   }
 

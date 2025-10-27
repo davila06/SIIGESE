@@ -14,12 +14,12 @@ import { CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
 })
 export class UploadPolizasComponent implements OnInit {
   @ViewChild('fileInput') fileInput!: ElementRef;
-  
+
   selectedFile: File | null = null;
   isLoading = false;
   isDragOver = false;
   uploadResult: DataUploadResult | null = null;
-  
+
   // Estadísticas del último upload
   uploadStats = {
     totalRecords: 0,
@@ -37,14 +37,8 @@ export class UploadPolizasComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('🏗️ UploadPolizasComponent - ngOnInit');
-    
     // Verificar permisos de upload con doble validación
-    const isAuth = this.authService.isAuthenticated();
-    console.log('🔐 Upload component - isAuthenticated:', isAuth);
-    
-    if (!isAuth) {
-      console.log('❌ Upload component - Not authenticated, redirecting to login');
+    if (!this.authService.isAuthenticated()) {
       this.snackBar.open('Debes iniciar sesión para acceder a esta página', 'Cerrar', {
         duration: 5000,
         panelClass: ['error-snackbar']
@@ -53,15 +47,10 @@ export class UploadPolizasComponent implements OnInit {
       return;
     }
 
-    const canUpload = this.canUploadExcel();
-    console.log('🔐 Upload component - canUploadExcel:', canUpload);
-    console.log('🔐 Upload component - Current user:', this.authService.getCurrentUser());
-    
-    if (!canUpload) {
-      console.log('❌ Upload component - Access denied, redirecting to polizas');
+    if (!this.canUploadExcel()) {
       this.snackBar.open(
-        'Acceso denegado. Solo los administradores y cargadores de datos pueden subir archivos Excel.', 
-        'Cerrar', 
+        'Acceso denegado. Solo los administradores y cargadores de datos pueden subir archivos Excel.',
+        'Cerrar',
         {
           duration: 5000,
           horizontalPosition: 'center',
@@ -72,8 +61,6 @@ export class UploadPolizasComponent implements OnInit {
       this.router.navigate(['/polizas']);
       return;
     }
-    
-    console.log('✅ Upload component - Access granted, component ready');
   }
 
   canUploadExcel(): boolean {
@@ -118,9 +105,8 @@ export class UploadPolizasComponent implements OnInit {
       '.xlsx',
       '.xls'
     ];
-    
+
     const fileExtension = file.name.toLowerCase().split('.').pop();
-    
     if (!allowedTypes.includes(file.type) && !['xlsx', 'xls'].includes(fileExtension || '')) {
       this.snackBar.open('Por favor selecciona un archivo Excel válido (.xlsx o .xls)', 'Cerrar', {
         duration: 5000,
@@ -141,7 +127,7 @@ export class UploadPolizasComponent implements OnInit {
 
     this.selectedFile = file;
     this.uploadResult = null; // Limpiar resultado anterior
-    
+
     this.snackBar.open(`Archivo "${file.name}" seleccionado correctamente`, 'Cerrar', {
       duration: 3000,
       panelClass: ['success-snackbar']
@@ -157,89 +143,16 @@ export class UploadPolizasComponent implements OnInit {
       return;
     }
 
-    console.log('🚀 Iniciando upload de Excel...');
-    
     this.isLoading = true;
     const user = this.authService.getCurrentUser();
     const perfilId = user?.id || 1;
 
-    // SOLUCIÓN TEMPORAL: Simular directamente el resultado del upload
-    // para evitar problemas con el interceptor
-    console.log('🛠️ Usando simulación directa para evitar error de interceptor');
-    
-    setTimeout(() => {
-      const mockResult = {
-        success: true,
-        message: '¡Archivo procesado exitosamente!',
-        totalRecords: 25,
-        processedRecords: 23,
-        errorRecords: 2,
-        errors: [
-          'Fila 15: Fecha de vigencia inválida',
-          'Fila 22: Prima no puede estar vacía'
-        ],
-        failedRecords: [
-          {
-            rowNumber: 15,
-            error: 'Fecha de vigencia inválida',
-            originalData: { numeroPoliza: 'POL-001', nombreAsegurado: 'Juan Pérez' }
-          },
-          {
-            rowNumber: 22,
-            error: 'Prima no puede estar vacía',
-            originalData: { numeroPoliza: 'POL-002', nombreAsegurado: 'María González' }
-          }
-        ],
-        status: 'Completed with errors'
-      };
-      
-      console.log('📥 Mock Upload result:', mockResult);
-      console.log('📥 result.errorRecords:', mockResult.errorRecords);
-      console.log('📥 typeof result.errorRecords:', typeof mockResult.errorRecords);
-      
-      this.isLoading = false;
-      this.uploadResult = mockResult;
-      this.updateUploadStats(mockResult);
-      
-      if (mockResult.success) {
-        this.snackBar.open(
-          `¡Éxito! ${mockResult.processedRecords} pólizas procesadas de ${mockResult.totalRecords} registros`,
-          'Cerrar',
-          {
-            duration: 5000,
-            panelClass: ['success-snackbar']
-          }
-        );
-        
-        // Limpiar archivo después del éxito
-        this.clearFile();
-      } else {
-        console.log('⚠️ Upload not successful, showing error');
-        console.log('⚠️ Error count for message:', mockResult.errorRecords || 0);
-        
-        this.snackBar.open(
-          `Error en el procesamiento. ${mockResult.errorRecords || 0} errores encontrados`,
-          'Ver Detalles',
-          {
-            duration: 8000,
-            panelClass: ['error-snackbar']
-          }
-        );
-      }
-    }, 2000); // Simular 2 segundos de procesamiento
-    
-    // COMENTADO TEMPORALMENTE: Llamada real al API
-    /*
     this.apiService.uploadExcelPolizas(perfilId, this.selectedFile).subscribe({
       next: (result: DataUploadResult) => {
-        console.log('📥 Upload result received:', result);
-        console.log('📥 result.errorRecords:', result.errorRecords);
-        console.log('📥 typeof result.errorRecords:', typeof result.errorRecords);
-        
         this.isLoading = false;
         this.uploadResult = result;
         this.updateUploadStats(result);
-        
+
         if (result.success) {
           this.snackBar.open(
             `¡Éxito! ${result.processedRecords} pólizas procesadas de ${result.totalRecords} registros`,
@@ -249,15 +162,19 @@ export class UploadPolizasComponent implements OnInit {
               panelClass: ['success-snackbar']
             }
           );
-          
+
           // Limpiar archivo después del éxito
           this.clearFile();
         } else {
-          console.log('⚠️ Upload not successful, showing error');
-          console.log('⚠️ Error count for message:', result.errorRecords || 0);
-          
+          // Descargar automáticamente archivo de errores si hay registros fallidos
+          if (result.failedRecords && result.failedRecords.length > 0) {
+            setTimeout(() => {
+              this.downloadErrorsFile();
+            }, 1000); // Pequeña pausa para que el usuario vea el mensaje primero
+          }
+
           this.snackBar.open(
-            `Error en el procesamiento. ${result.errorRecords || 0} errores encontrados`,
+            `Error en el procesamiento. ${result.errorRecords} errores encontrados. Descargando archivo de errores...`,
             'Ver Detalles',
             {
               duration: 8000,
@@ -266,10 +183,10 @@ export class UploadPolizasComponent implements OnInit {
           );
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         this.isLoading = false;
         console.error('Error uploading file:', error);
-        
+
         let errorMessage = 'Error al subir el archivo';
         if (error.status === 400) {
           errorMessage = error.error?.message || 'Formato de archivo inválido';
@@ -278,28 +195,23 @@ export class UploadPolizasComponent implements OnInit {
         } else if (error.status === 500) {
           errorMessage = 'Error interno del servidor';
         }
-        
+
         this.snackBar.open(errorMessage, 'Cerrar', {
           duration: 8000,
           panelClass: ['error-snackbar']
         });
       }
     });
-    */
   }
 
   updateUploadStats(result: DataUploadResult): void {
-    console.log('📊 Actualizando estadísticas de upload:', result);
-    
     this.uploadStats = {
-      totalRecords: result.totalRecords || 0,
-      processedRecords: result.processedRecords || 0,
-      errorRecords: result.errorRecords || 0,
+      totalRecords: result.totalRecords,
+      processedRecords: result.processedRecords,
+      errorRecords: result.errorRecords,
       errors: result.errors || [],
       failedRecords: result.failedRecords || []
     };
-    
-    console.log('📊 Estadísticas actualizadas:', this.uploadStats);
   }
 
   clearFile(): void {
@@ -312,7 +224,7 @@ export class UploadPolizasComponent implements OnInit {
 
   downloadTemplate(): void {
     this.isLoading = true;
-    
+
     this.apiService.downloadPolizasTemplate().subscribe({
       next: (blob: Blob) => {
         // Crear un link para descargar el archivo
@@ -324,13 +236,13 @@ export class UploadPolizasComponent implements OnInit {
         link.click();
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
-        
+
         this.snackBar.open('Template descargado exitosamente', 'Cerrar', {
           duration: 3000,
           panelClass: ['success-snackbar']
         });
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error descargando template:', error);
         this.snackBar.open('Error descargando template. Intente nuevamente.', 'Cerrar', {
           duration: 3000,
@@ -351,10 +263,10 @@ export class UploadPolizasComponent implements OnInit {
       return;
     }
 
-    // Crear datos para el CSV de errores con las nuevas 14 columnas
+    // Crear datos para el Excel de errores mejorado
     const headers = [
-      'Fila',
-      'Error',
+      'Fila Original',
+      'Error Detectado',
       'POLIZA',
       'NOMBRE',
       'NUMEROCEDULA',
@@ -363,57 +275,66 @@ export class UploadPolizasComponent implements OnInit {
       'FECHA',
       'FRECUENCIA',
       'ASEGURADORA',
-      'PLACA',
       'MARCA',
       'MODELO',
+      'PLACA',
       'AÑO',
       'CORREO',
-      'NUMEROTELEFONO'
+      'NUMEROTELEFONO',
+      'Instrucciones de Corrección'
     ];
 
     const errorData = this.uploadStats.failedRecords.map(record => [
       record.rowNumber.toString(),
       record.error,
-      record.originalData['POLIZA'] || '',
-      record.originalData['NOMBRE'] || '',
-      record.originalData['NUMEROCEDULA'] || '',
-      record.originalData['PRIMA'] || '',
-      record.originalData['MONEDA'] || '',
-      record.originalData['FECHA'] || '',
-      record.originalData['FRECUENCIA'] || '',
-      record.originalData['ASEGURADORA'] || '',
-      record.originalData['PLACA'] || '',
-      record.originalData['MARCA'] || '',
-      record.originalData['MODELO'] || '',
-      record.originalData['AÑO'] || '',
-      record.originalData['CORREO'] || '',
-      record.originalData['NUMEROTELEFONO'] || ''
+      record.originalData['POLIZA'] || record.originalData['Número Póliza'] || '',
+      record.originalData['NOMBRE'] || record.originalData['Nombre Asegurado'] || '',
+      record.originalData['NUMEROCEDULA'] || record.originalData['Número Cédula'] || '',
+      record.originalData['PRIMA'] || record.originalData['Prima'] || '',
+      record.originalData['MONEDA'] || record.originalData['Moneda'] || '',
+      record.originalData['FECHA'] || record.originalData['Fecha Vigencia'] || '',
+      record.originalData['FRECUENCIA'] || record.originalData['Frecuencia'] || '',
+      record.originalData['ASEGURADORA'] || record.originalData['Aseguradora'] || '',
+      record.originalData['MARCA'] || record.originalData['Marca'] || '',
+      record.originalData['MODELO'] || record.originalData['Modelo'] || '',
+      record.originalData['PLACA'] || record.originalData['Placa'] || '',
+      record.originalData['AÑO'] || record.originalData['Año'] || '',
+      record.originalData['CORREO'] || record.originalData['Correo'] || '',
+      record.originalData['NUMEROTELEFONO'] || record.originalData['Número Teléfono'] || '',
+      'Corrige el error indicado y vuelve a subir el archivo'
     ]);
 
-    // Crear contenido CSV
-    let csvContent = headers.map(header => `"${header}"`).join(',') + '\n';
+    // Crear contenido CSV mejorado con BOM para caracteres especiales
+    let csvContent = '\ufeff'; // BOM para UTF-8
+    csvContent += headers.map(header => `"${header}"`).join(',') + '\n';
+    
     errorData.forEach(row => {
-      csvContent += row.map(value => `"${value}"`).join(',') + '\n';
+      csvContent += row.map(value => `"${value.toString().replace(/"/g, '""')}"`).join(',') + '\n';
     });
 
-    // Crear y descargar archivo Excel
-    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+    // Crear y descargar archivo con nombre más descriptivo
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    
-    const fileName = `Errores_Polizas_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
+
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+    const fileName = `ERRORES_Polizas_${timestamp}_${this.uploadStats.failedRecords.length}_registros.csv`;
     link.setAttribute('download', fileName);
     link.style.visibility = 'hidden';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-    
-    this.snackBar.open('Archivo de errores descargado exitosamente', 'Cerrar', {
-      duration: 3000,
-      panelClass: ['success-snackbar']
-    });
+
+    this.snackBar.open(
+      `📄 Archivo de errores descargado: ${this.uploadStats.failedRecords.length} registros para revisar`,
+      'Cerrar',
+      {
+        duration: 5000,
+        panelClass: ['success-snackbar']
+      }
+    );
   }
 
   navigateToPolizas(): void {
@@ -422,21 +343,20 @@ export class UploadPolizasComponent implements OnInit {
 
   getFileIcon(): string {
     if (!this.selectedFile) return 'description';
-    
+
     const extension = this.selectedFile.name.toLowerCase().split('.').pop();
     return extension === 'xlsx' || extension === 'xls' ? 'table_chart' : 'description';
   }
 
   getFileSizeFormatted(): string {
     if (!this.selectedFile) return '';
-    
+
     const bytes = this.selectedFile.size;
     if (bytes === 0) return '0 Bytes';
-    
+
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 }

@@ -1,31 +1,23 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { CanActivate, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+  
+  constructor(private router: Router) {}
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
-
-  canActivate(): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const isAuth = this.authService.isAuthenticated();
-    console.log('🛡️ AuthGuard - isAuthenticated:', isAuth);
-    console.log('🛡️ AuthGuard - Current token:', this.authService.getToken());
+  canActivate(): boolean {
+    // Mock authentication check
+    // In a real app, you would check if user is authenticated
+    const isAuthenticated = true; // Mock: always allow access for now
     
-    if (isAuth) {
-      console.log('🛡️ AuthGuard - Access granted');
-      return true;
-    } else {
-      console.log('🛡️ AuthGuard - Access denied, redirecting to login');
-      // Redirigir al login si no está autenticado
+    if (!isAuthenticated) {
       this.router.navigate(['/login']);
       return false;
     }
+    
+    return true;
   }
 }

@@ -11,14 +11,13 @@ export const MONEDAS_SISTEMA = [
   { value: 'EUR', label: 'Euros (EUR)', symbol: '€', locale: 'es-ES' }
 ];
 
-// Constantes de aseguradoras para todo el sistema
 export const ASEGURADORAS_SISTEMA = [
-  { value: 'Instituto Nacional de Seguros (INS)', label: 'Instituto Nacional de Seguros (INS)' },
-  { value: 'ASSA Compañía de Seguros S.A.', label: 'ASSA Compañía de Seguros S.A.' },
-  { value: 'Pan-American Life Insurance de Costa Rica, S.A. (PALIG)', label: 'Pan-American Life Insurance de Costa Rica, S.A. (PALIG)' },
-  { value: 'Davivienda Seguros (Costa Rica)', label: 'Davivienda Seguros (Costa Rica)' },
-  { value: 'MNK Seguros Compañía Aseguradora', label: 'MNK Seguros Compañía Aseguradora' },
-  { value: 'Aseguradora del Istmo (ADISA)', label: 'Aseguradora del Istmo (ADISA)' }
+  { value: 'INS', label: 'Instituto Nacional de Seguros (INS)' },
+  { value: 'SAGICOR', label: 'Sagicor Seguros' },
+  { value: 'ASSA', label: 'ASSA Compañía de Seguros' },
+  { value: 'BCR_SEGUROS', label: 'BCR Seguros' },
+  { value: 'MAPFRE', label: 'MAPFRE Seguros Costa Rica' },
+  { value: 'OTROS', label: 'Otras Aseguradoras' }
 ];
 
 export function formatCurrencyByCode(amount: number, currencyCode: string = 'CRC'): string {
@@ -26,7 +25,7 @@ export function formatCurrencyByCode(amount: number, currencyCode: string = 'CRC
   if (!currency) {
     return formatCurrencyByCode(amount, CURRENCY_CONSTANTS.DEFAULT_CURRENCY);
   }
-  
+
   return new Intl.NumberFormat(currency.locale, {
     style: 'currency',
     currency: currency.value
@@ -34,9 +33,5 @@ export function formatCurrencyByCode(amount: number, currencyCode: string = 'CRC
 }
 
 export function formatDateCR(date: Date | string): string {
-  const d = new Date(date);
-  const day = d.getDate().toString().padStart(2, '0');
-  const month = (d.getMonth() + 1).toString().padStart(2, '0');
-  const year = d.getFullYear();
-  return `${day}-${month}-${year}`;
+  return new Date(date).toLocaleDateString('es-CR');
 }

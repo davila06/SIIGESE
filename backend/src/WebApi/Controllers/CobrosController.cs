@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Application.DTOs;
 using Application.Interfaces;
+using Domain.Entities;
 
 namespace WebApi.Controllers
 {
@@ -107,7 +108,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                var cobros = await _cobrosService.GetCobrosByEstadoAsync(estado);
+                if (!Enum.TryParse<EstadoCobro>(estado, true, out var estadoEnum))
+                {
+                    return BadRequest($"Estado '{estado}' no válido. Estados válidos: {string.Join(", ", Enum.GetNames(typeof(EstadoCobro)))}");
+                }
+                
+                var cobros = await _cobrosService.GetCobrosByEstadoAsync(estadoEnum);
                 return Ok(cobros);
             }
             catch (ArgumentException ex)
@@ -278,12 +284,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var result = await _cobrosService.DeleteCobroAsync(id);
-                if (!result)
-                {
-                    return NotFound($"Cobro con ID {id} no encontrado");
-                }
-
+                await _cobrosService.DeleteCobroAsync(id);
                 return NoContent();
             }
             catch (InvalidOperationException ex)

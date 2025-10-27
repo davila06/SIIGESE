@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -17,11 +17,11 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule, MatTabGroup } from '@angular/material/tabs';
 
 import { CotizacionService } from '../services/cotizacion.service';
 import { Cotizacion, CreateCotizacion, UpdateCotizacion, TIPOS_SEGURO, ESTADOS_COTIZACION, MONEDAS, GENEROS, TIPOS_INMUEBLE } from '../models/cotizacion.model';
-import { formatCurrencyByCode, formatDateCR, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
+import { formatCurrencyByCode, formatDateCR, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-cotizaciones',
@@ -54,6 +54,7 @@ import { formatCurrencyByCode, formatDateCR, CURRENCY_CONSTANTS, ASEGURADORAS_SI
 export class CotizacionesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
 
   cotizaciones: Cotizacion[] = [];
   cotizacionesDataSource = new MatTableDataSource<Cotizacion>();
@@ -63,11 +64,7 @@ export class CotizacionesComponent implements OnInit {
   selectedCotizacion: Cotizacion | null = null;
   isLoading = false;
   
-  // Protección contra doble envío
-  private lastSubmitTime = 0;
-  private readonly MIN_SUBMIT_INTERVAL = 2000; // 2 segundos
-  
-  // Configuración de columnas de la tabla
+  // Configuraci├│n de columnas de la tabla
   displayedColumns: string[] = [
     'numeroCotizacion',
     'nombreSolicitante',
@@ -86,9 +83,8 @@ export class CotizacionesComponent implements OnInit {
   monedas = MONEDAS;
   generos = GENEROS;
   tiposInmueble = TIPOS_INMUEBLE;
-  aseguradorasSistema = ASEGURADORAS_SISTEMA;
 
-  // Filtros de búsqueda
+  // Filtros de b├║squeda
   searchTerm = '';
   selectedTipoSeguro = '';
   selectedEstado = '';
@@ -104,8 +100,6 @@ export class CotizacionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCotizaciones();
-    // Asegurar que el formulario esté siempre limpio al iniciar
-    this.resetForm();
   }
 
   ngAfterViewInit(): void {
@@ -126,19 +120,19 @@ export class CotizacionesComponent implements OnInit {
       fechaVencimiento: [''],
       observaciones: ['', [Validators.maxLength(500)]],
       
-      // Campos específicos para auto
+      // Campos espec├¡ficos para auto
       placa: ['', [Validators.maxLength(20)]],
       marca: ['', [Validators.maxLength(50)]],
       modelo: ['', [Validators.maxLength(50)]],
       año: [null, [Validators.min(1900), Validators.max(2100)]],
       cilindraje: ['', [Validators.maxLength(50)]],
       
-      // Campos específicos para vida
+      // Campos espec├¡ficos para vida
       fechaNacimiento: [''],
       genero: [''],
       ocupacion: ['', [Validators.maxLength(100)]],
       
-      // Campos específicos para hogar
+      // Campos espec├¡ficos para hogar
       direccionInmueble: ['', [Validators.maxLength(200)]],
       tipoInmueble: [''],
       valorInmueble: [0, [Validators.min(0)]]
@@ -162,22 +156,12 @@ export class CotizacionesComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const currentTime = Date.now();
-    
-    // Verificar si han pasado al menos 2 segundos desde el último envío
-    if (currentTime - this.lastSubmitTime < this.MIN_SUBMIT_INTERVAL) {
-      console.log('Submit ignored: too soon after last submit');
-      this.showMessage('Por favor espera un momento antes de enviar nuevamente', 'warning');
-      return;
-    }
-    
-    if (this.cotizacionForm.valid && !this.isLoading) {
-      this.lastSubmitTime = currentTime;
+    if (this.cotizacionForm.valid) {
       this.isLoading = true;
       const cotizacionData: CreateCotizacion = this.cotizacionForm.value;
 
       if (this.isEditMode && this.selectedCotizacion) {
-        // Actualizar cotización existente
+        // Actualizar cotizaci├│n existente
         this.cotizacionService.updateCotizacion(this.selectedCotizacion.id, cotizacionData).subscribe({
           next: (updatedCotizacion: Cotizacion) => {
             const index = this.cotizaciones.findIndex(c => c.id === updatedCotizacion.id);
@@ -186,38 +170,38 @@ export class CotizacionesComponent implements OnInit {
               this.cotizacionesDataSource.data = [...this.cotizaciones];
             }
             this.resetForm();
-            this.showMessage('Cotización actualizada exitosamente');
+            this.showMessage('Cotizaci├│n actualizada exitosamente');
             this.isLoading = false;
           },
           error: (error: any) => {
             console.error('Error updating cotizacion:', error);
-            this.showMessage('Error al actualizar la cotización', 'error');
+            this.showMessage('Error al actualizar la cotizaci├│n', 'error');
             this.isLoading = false;
           }
         });
       } else {
-        // Crear nueva cotización
+        // Crear nueva cotizaci├│n
         this.cotizacionService.createCotizacion(cotizacionData).subscribe({
           next: (cotizacion: Cotizacion) => {
             this.cotizaciones.unshift(cotizacion);
             this.cotizacionesDataSource.data = [...this.cotizaciones];
             this.resetForm();
-            this.showMessage('Cotización creada exitosamente');
+            this.showMessage('Cotizaci├│n creada exitosamente');
             this.isLoading = false;
           },
           error: (error: any) => {
             console.error('Error creating cotizacion:', error);
-            this.showMessage('Error al crear la cotización', 'error');
+            this.showMessage('Error al crear la cotizaci├│n', 'error');
             this.isLoading = false;
           }
         });
       }
-    } else if (this.isLoading) {
-      console.log('Submit ignored: already processing');
     }
   }
 
   editCotizacion(cotizacion: Cotizacion): void {
+    console.log('🔄 Iniciando edición de cotización:', cotizacion.numeroCotizacion);
+    
     this.selectedCotizacion = cotizacion;
     this.isEditMode = true;
     
@@ -234,7 +218,7 @@ export class CotizacionesComponent implements OnInit {
       fechaVencimiento: cotizacion.fechaVencimiento ? new Date(cotizacion.fechaVencimiento) : null,
       observaciones: cotizacion.observaciones,
       
-      // Campos específicos
+      // Campos espec├¡ficos
       placa: cotizacion.placa,
       marca: cotizacion.marca,
       modelo: cotizacion.modelo,
@@ -247,15 +231,34 @@ export class CotizacionesComponent implements OnInit {
       tipoInmueble: cotizacion.tipoInmueble,
       valorInmueble: cotizacion.valorInmueble
     });
+    
+    // Marcar el formulario como pristine después de cargar los datos
+    this.cotizacionForm.markAsPristine();
+    this.cotizacionForm.markAsUntouched();
+    
+    console.log('📝 Datos cargados en formulario:', {
+      numeroCotizacion: cotizacion.numeroCotizacion,
+      nombreSolicitante: cotizacion.nombreSolicitante,
+      tipoSeguro: cotizacion.tipoSeguro,
+      isEditMode: this.isEditMode
+    });
+    
+    // Cambiar automáticamente al tab del formulario
+    setTimeout(() => {
+      if (this.tabGroup) {
+        this.tabGroup.selectedIndex = 1; // Índice 1 = tab del formulario
+        console.log('✅ Cambiado al tab del formulario para edición');
+      }
+    }, 100);
   }
 
   deleteCotizacion(cotizacion: Cotizacion): void {
-    if (confirm(`¿Está seguro de eliminar la cotización ${cotizacion.numeroCotizacion}?`)) {
+    if (confirm(`┬┐Est├í seguro de eliminar la cotizaci├│n ${cotizacion.numeroCotizacion}?`)) {
       this.cotizacionService.deleteCotizacion(cotizacion.id).subscribe({
         next: () => {
           this.cotizaciones = this.cotizaciones.filter(c => c.id !== cotizacion.id);
           this.cotizacionesDataSource.data = [...this.cotizaciones];
-          this.showMessage('Cotización eliminada exitosamente');
+          this.showMessage('Cotizaci├│n eliminada exitosamente');
           
           if (this.selectedCotizacion?.id === cotizacion.id) {
             this.resetForm();
@@ -263,7 +266,7 @@ export class CotizacionesComponent implements OnInit {
         },
         error: (error: any) => {
           console.error('Error deleting cotizacion:', error);
-          this.showMessage('Error al eliminar la cotización', 'error');
+          this.showMessage('Error al eliminar la cotizaci├│n', 'error');
         }
       });
     }
@@ -287,7 +290,6 @@ export class CotizacionesComponent implements OnInit {
   }
 
   resetForm(): void {
-    // Resetear completamente el formulario
     this.cotizacionForm.reset();
     this.selectedCotizacion = null;
     this.isEditMode = false;
@@ -300,7 +302,7 @@ export class CotizacionesComponent implements OnInit {
       valorInmueble: 0
     });
     
-    // Limpiar completamente los estados de validación
+    // Limpiar estados de validación
     Object.keys(this.cotizacionForm.controls).forEach(key => {
       const control = this.cotizacionForm.get(key);
       if (control) {
@@ -310,25 +312,21 @@ export class CotizacionesComponent implements OnInit {
         control.updateValueAndValidity();
       }
     });
-  }
-
-  // Método para manejar cambio de tabs
-  onTabChange(event: any): void {
-    if (event.index === 1) { // Tab de formulario (Nueva/Editar Cotización)
-      if (!this.isEditMode) {
-        // Solo resetear si no estamos editando
-        setTimeout(() => {
-          this.resetForm();
-        }, 100);
+    
+    // Regresar al tab de lista cuando se cancela
+    setTimeout(() => {
+      if (this.tabGroup) {
+        this.tabGroup.selectedIndex = 0; // Índice 0 = tab de lista
+        console.log('↩️ Regresado al tab de lista');
       }
-    }
+    }, 100);
   }
 
-  // Filtros y búsqueda
+  // Filtros y b├║squeda
   applyFilter(): void {
     let filteredData = this.cotizaciones;
 
-    // Filtro por término de búsqueda
+    // Filtro por t├®rmino de b├║squeda
     if (this.searchTerm) {
       const searchLower = this.searchTerm.toLowerCase();
       filteredData = filteredData.filter(c => 
@@ -378,14 +376,14 @@ export class CotizacionesComponent implements OnInit {
   }
 
   get formTitle(): string {
-    return this.isEditMode ? 'Editar Cotización' : 'Nueva Cotización';
+    return this.isEditMode ? 'Editar Cotizaci├│n' : 'Nueva Cotizaci├│n';
   }
 
   get submitButtonText(): string {
-    return this.isEditMode ? 'Actualizar Cotización' : 'Crear Cotización';
+    return this.isEditMode ? 'Actualizar Cotizaci├│n' : 'Crear Cotizaci├│n';
   }
 
-  // Campos específicos por tipo de seguro
+  // Campos espec├¡ficos por tipo de seguro
   get isAutoSeguro(): boolean {
     return this.cotizacionForm.get('tipoSeguro')?.value === 'AUTO';
   }

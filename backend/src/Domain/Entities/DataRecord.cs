@@ -2,7 +2,7 @@ using System;
 
 namespace Domain.Entities
 {
-    public class DataRecord : BaseEntity
+    public class DataRecord : Entity
     {
         public string FileName { get; set; } = string.Empty;
         public string FileType { get; set; } = string.Empty;
@@ -15,7 +15,8 @@ namespace Domain.Entities
         public string? ErrorDetails { get; set; }
         public int UploadedByUserId { get; set; }
         public int PerfilId { get; set; }
-        
+        public bool IsDeleted { get; set; } = false;
+
         // Navigation properties
         public virtual User UploadedBy { get; set; } = null!;
     }

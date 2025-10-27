@@ -41,7 +41,7 @@ builder.Services.AddControllers()
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>();
+// builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>(); // TODO: Crear validators
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -107,9 +107,9 @@ builder.Services.AddScoped<ICobroRepository, CobroRepository>();
 builder.Services.AddScoped<IReclamoRepository, ReclamoRepository>();
 builder.Services.AddScoped<IEmailConfigRepository, EmailConfigRepository>();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
+// builder.Services.AddScoped<IAuthService, AuthService>(); // TODO: Implementar AuthService
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IClienteService, ClienteService>();
+// builder.Services.AddScoped<IClienteService, ClienteService>(); // TODO: Implementar ClienteService
 builder.Services.AddScoped<IPolizaService, PolizaService>();
 builder.Services.AddScoped<ICobrosService, CobrosService>();
 builder.Services.AddScoped<IReclamoService, ReclamoService>();

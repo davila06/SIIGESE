@@ -9,7 +9,7 @@ using Domain.Entities;
 
 namespace Infrastructure.Data.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : BaseEntity
+    public class Repository<T> : IRepository<T> where T : Entity
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;

@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDialog } from '@angular/material/dialog';
 import { 
   Reclamo,
   ReclamosStats,
@@ -26,6 +27,7 @@ import {
   FiltroReclamos 
 } from '../../interfaces/reclamo.interface';
 import { ReclamosService } from '../../services/reclamos.service';
+import { AsignarReclamoDialogComponent } from '../asignar-reclamo-dialog/asignar-reclamo-dialog.component';
 
 @Component({
   selector: 'app-reclamos-dashboard',
@@ -89,7 +91,8 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   constructor(
     private reclamosService: ReclamosService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -100,6 +103,28 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    
+    // Configurar sortingDataAccessor personalizado para campos complejos
+    this.dataSource.sortingDataAccessor = (data: Reclamo, sortHeaderId: string) => {
+      switch (sortHeaderId) {
+        case 'cliente':
+          return `${data.clienteNombre} ${data.clienteApellido}`.toLowerCase();
+        case 'asignadoA':
+          return data.usuarioAsignadoNombre?.toLowerCase() || 'zzz'; // 'zzz' para que aparezcan al final
+        case 'tipoReclamo':
+          return data.tipoReclamo; // Usar el valor del enum directamente
+        case 'estado':
+          return data.estado; // Usar el valor del enum directamente
+        case 'prioridad':
+          return data.prioridad; // Usar el valor del enum directamente
+        case 'fechaReclamo':
+          return new Date(data.fechaReclamo);
+        case 'montoReclamado':
+          return data.montoReclamado || 0;
+        default:
+          return (data as any)[sortHeaderId];
+      }
+    };
   }
 
   loadReclamos(): void {
@@ -181,8 +206,39 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   asignarReclamo(reclamo: Reclamo): void {
-    console.log('Asignar reclamo:', reclamo);
-    this.showMessage('Funcionalidad de asignación en desarrollo');
+    const dialogRef = this.dialog.open(AsignarReclamoDialogComponent, {
+      width: '500px',
+      data: { reclamo }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loading = true;
+        this.reclamosService.asignarReclamo(reclamo.id, result.usuarioId).subscribe({
+          next: (response) => {
+            this.showMessage(`Reclamo asignado exitosamente a ${result.usuarioNombre}`);
+            // Actualizar el reclamo en la lista local
+            const index = this.reclamos.findIndex(r => r.id === reclamo.id);
+            if (index !== -1) {
+              this.reclamos[index] = { 
+                ...this.reclamos[index], 
+                usuarioAsignadoId: result.usuarioId,
+                usuarioAsignadoNombre: result.usuarioNombre 
+              };
+              this.dataSource.data = [...this.reclamos];
+            }
+            // Recargar estadísticas
+            this.loadStats();
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error('Error asignando reclamo:', error);
+            this.showMessage('Error al asignar el reclamo');
+            this.loading = false;
+          }
+        });
+      }
+    });
   }
 
   cambiarEstado(reclamo: Reclamo): void {
@@ -315,6 +371,59 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
         return 'help_outline';
       default:
         return 'assignment';
+    }
+  }
+
+  getTipoReclamoText(tipo: TipoReclamo): string {
+    switch (tipo) {
+      case TipoReclamo.Siniestro:
+        return 'Siniestro';
+      case TipoReclamo.Servicio:
+        return 'Servicio';
+      case TipoReclamo.Facturacion:
+        return 'Facturación';
+      case TipoReclamo.Cobertura:
+        return 'Cobertura';
+      case TipoReclamo.Proceso:
+        return 'Proceso';
+      case TipoReclamo.Otro:
+        return 'Otro';
+      default:
+        return 'Desconocido';
+    }
+  }
+
+  getEstadoText(estado: EstadoReclamo): string {
+    switch (estado) {
+      case EstadoReclamo.Abierto:
+        return 'Abierto';
+      case EstadoReclamo.EnProceso:
+        return 'En Proceso';
+      case EstadoReclamo.Resuelto:
+        return 'Resuelto';
+      case EstadoReclamo.Cerrado:
+        return 'Cerrado';
+      case EstadoReclamo.Rechazado:
+        return 'Rechazado';
+      case EstadoReclamo.Escalado:
+        return 'Escalado';
+      default:
+        return 'Desconocido';
+    }
+  }
+
+  getPrioridadText(prioridad: PrioridadReclamo): string {
+    switch (prioridad) {
+      case PrioridadReclamo.Baja:
+        return 'Baja';
+      case PrioridadReclamo.Media:
+        return 'Media';
+      case PrioridadReclamo.Alta:
+        return 'Alta';
+      case PrioridadReclamo.Critica:
+        return 'Crítica';
+      default:
+        return 'Desconocida';
     }
   }
 

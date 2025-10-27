@@ -7,57 +7,62 @@ import { filter } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class TitleService {
-  private readonly baseTitle = 'SIIGESE';
-  
-  private moduleNames: { [key: string]: string } = {
-    'dashboard': 'Dashboard',
-    'polizas': 'Gestión de Pólizas',
-    'clientes': 'Gestión de Clientes',
-    'cobros': 'Gestión de Cobros',
-    'emails': 'Sistema de Emails',
-    'reclamos': 'Gestión de Reclamos',
-    'usuarios': 'Gestión de Usuarios',
-    'reportes': 'Reportes y Estadísticas',
-    'configuracion': 'Configuración del Sistema'
+  private titleMap: { [key: string]: string } = {
+    '/login': 'Iniciar Sesión',
+    '/polizas': 'Gestión de Pólizas',
+    '/polizas/upload': 'Cargar Pólizas Excel',
+    '/cobros': 'Gestión de Cobros',
+    '/reclamos': 'Gestión de Reclamos',
+    '/cotizaciones': 'Gestión de Cotizaciones',
+    '/emails': 'Notificaciones Email',
+    '/usuarios': 'Gestión de Usuarios',
+    '/configuracion': 'Configuración del Sistema',
+    '/change-password': 'Cambiar Contraseña'
   };
 
   constructor(
-    private titleService: Title,
+    private title: Title,
     private router: Router
   ) {
-    this.initTitleUpdates();
-  }
-
-  private initTitleUpdates(): void {
+    // Escuchar cambios de ruta para actualizar el título automáticamente
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        this.updateTitle((event as NavigationEnd).url);
+      .subscribe((event: NavigationEnd) => {
+        this.updateTitle(event.url);
       });
   }
 
   updateTitle(url: string): void {
-    const segments = url.split('/').filter(segment => segment);
-    let moduleName = '';
+    // Obtener el módulo actual basado en la URL
+    const moduleTitle = this.getModuleTitle(url);
+    const fullTitle = `${moduleTitle} - SIIGESE`;
+    this.title.setTitle(fullTitle);
+  }
 
-    if (segments.length > 0) {
-      const mainModule = segments[0];
-      moduleName = this.moduleNames[mainModule] || this.capitalizeFirst(mainModule);
+  getModuleTitle(url: string): string {
+    // Buscar coincidencia exacta primero
+    if (this.titleMap[url]) {
+      return this.titleMap[url];
     }
 
-    const title = moduleName 
-      ? `${this.baseTitle} - ${moduleName}`
-      : this.baseTitle;
+    // Buscar coincidencia parcial para rutas dinámicas
+    for (const route in this.titleMap) {
+      if (url.startsWith(route) && route !== '/') {
+        return this.titleMap[route];
+      }
+    }
 
-    this.titleService.setTitle(title);
+    // Título por defecto
+    return 'Sistema Integral de Gestión de Seguros';
+  }
+
+  getCurrentModule(): string {
+    const url = this.router.url;
+    return this.getModuleTitle(url);
   }
 
   setCustomTitle(customTitle: string): void {
-    const title = `${this.baseTitle} - ${customTitle}`;
-    this.titleService.setTitle(title);
-  }
-
-  private capitalizeFirst(str: string): string {
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    const fullTitle = `${customTitle} - SIIGESE`;
+    this.title.setTitle(fullTitle);
   }
 }
