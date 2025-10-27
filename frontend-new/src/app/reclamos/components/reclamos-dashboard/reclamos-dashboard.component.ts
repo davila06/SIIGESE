@@ -206,8 +206,13 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   asignarReclamo(reclamo: Reclamo): void {
+    console.log('=== MÉTODO ASIGNAR RECLAMO ACTUALIZADO - TIMESTAMP: 2025-10-27 23:51 ===');
+    console.log('Iniciando proceso de asignación para reclamo:', reclamo);
+    
     // Importación dinámica del componente del diálogo
     import('../asignar-reclamo-dialog/asignar-reclamo-dialog.component').then(({ AsignarReclamoDialogComponent }) => {
+      console.log('Componente del diálogo cargado exitosamente');
+      
       const dialogRef = this.dialog.open(AsignarReclamoDialogComponent, {
         width: '500px',
         data: { reclamo }
@@ -215,9 +220,11 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
+          console.log('Usuario seleccionado:', result);
           this.loading = true;
           this.reclamosService.asignarReclamo(reclamo.id, result.usuarioId).subscribe({
             next: (response) => {
+              console.log('Asignación exitosa:', response);
               this.showMessage(`Reclamo asignado exitosamente a ${result.usuarioNombre}`);
               // Actualizar el reclamo en la lista local
               const index = this.reclamos.findIndex(r => r.id === reclamo.id);
@@ -239,6 +246,8 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
               this.loading = false;
             }
           });
+        } else {
+          console.log('Asignación cancelada por el usuario');
         }
       });
     }).catch(error => {
