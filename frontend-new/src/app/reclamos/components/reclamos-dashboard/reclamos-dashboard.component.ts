@@ -17,7 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { 
   Reclamo,
   ReclamosStats,
@@ -51,6 +51,7 @@ import { AsignarReclamoDialogComponent } from '../asignar-reclamo-dialog/asignar
     MatTooltipModule,
     MatMenuModule,
     MatBadgeModule,
+    MatDialogModule,
     DatePipe,
     DecimalPipe
   ],
