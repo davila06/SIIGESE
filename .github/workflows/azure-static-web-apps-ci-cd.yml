@@ -1,21 +1,24 @@
-name: Azure Static Web Apps CI/CD
+name: Azure Static Web Apps CI/CD (DISABLED - Billing Issue)
 
+# Temporarily disabled due to GitHub Actions billing limit
+# Re-enable when billing is resolved
 on:
-  push:
-    branches:
-      - V1
-      - main
-      - develop
-    paths:
-      - 'frontend-new/**'
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - V1
-      - main
-      - develop
-    paths:
-      - 'frontend-new/**'
+  workflow_dispatch: # Manual trigger only
+  # push:
+  #   branches:
+  #     - V1
+  #     - main
+  #     - develop
+  #   paths:
+  #     - 'frontend-new/**'
+  # pull_request:
+  #   types: [opened, synchronize, reopened, closed]
+  #   branches:
+  #     - V1
+  #     - main
+  #     - develop
+  #   paths:
+  #     - 'frontend-new/**'
 
 jobs:
   build_and_deploy_job:
