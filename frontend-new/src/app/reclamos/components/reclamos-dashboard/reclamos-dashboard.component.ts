@@ -27,7 +27,6 @@ import {
   FiltroReclamos 
 } from '../../interfaces/reclamo.interface';
 import { ReclamosService } from '../../services/reclamos.service';
-import { AsignarReclamoDialogComponent } from '../asignar-reclamo-dialog/asignar-reclamo-dialog.component';
 
 @Component({
   selector: 'app-reclamos-dashboard',
@@ -207,38 +206,44 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   asignarReclamo(reclamo: Reclamo): void {
-    const dialogRef = this.dialog.open(AsignarReclamoDialogComponent, {
-      width: '500px',
-      data: { reclamo }
-    });
+    // Importación dinámica del componente del diálogo
+    import('../asignar-reclamo-dialog/asignar-reclamo-dialog.component').then(({ AsignarReclamoDialogComponent }) => {
+      const dialogRef = this.dialog.open(AsignarReclamoDialogComponent, {
+        width: '500px',
+        data: { reclamo }
+      });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.loading = true;
-        this.reclamosService.asignarReclamo(reclamo.id, result.usuarioId).subscribe({
-          next: (response) => {
-            this.showMessage(`Reclamo asignado exitosamente a ${result.usuarioNombre}`);
-            // Actualizar el reclamo en la lista local
-            const index = this.reclamos.findIndex(r => r.id === reclamo.id);
-            if (index !== -1) {
-              this.reclamos[index] = { 
-                ...this.reclamos[index], 
-                usuarioAsignadoId: result.usuarioId,
-                usuarioAsignadoNombre: result.usuarioNombre 
-              };
-              this.dataSource.data = [...this.reclamos];
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.loading = true;
+          this.reclamosService.asignarReclamo(reclamo.id, result.usuarioId).subscribe({
+            next: (response) => {
+              this.showMessage(`Reclamo asignado exitosamente a ${result.usuarioNombre}`);
+              // Actualizar el reclamo en la lista local
+              const index = this.reclamos.findIndex(r => r.id === reclamo.id);
+              if (index !== -1) {
+                this.reclamos[index] = { 
+                  ...this.reclamos[index], 
+                  usuarioAsignadoId: result.usuarioId,
+                  usuarioAsignadoNombre: result.usuarioNombre 
+                };
+                this.dataSource.data = [...this.reclamos];
+              }
+              // Recargar estadísticas
+              this.loadStats();
+              this.loading = false;
+            },
+            error: (error) => {
+              console.error('Error asignando reclamo:', error);
+              this.showMessage('Error al asignar el reclamo');
+              this.loading = false;
             }
-            // Recargar estadísticas
-            this.loadStats();
-            this.loading = false;
-          },
-          error: (error) => {
-            console.error('Error asignando reclamo:', error);
-            this.showMessage('Error al asignar el reclamo');
-            this.loading = false;
-          }
-        });
-      }
+          });
+        }
+      });
+    }).catch(error => {
+      console.error('Error cargando el diálogo:', error);
+      this.showMessage('Error al cargar el diálogo de asignación');
     });
   }
 
