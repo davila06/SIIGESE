@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['admin@sinseg.com', [Validators.required, Validators.email]],
@@ -37,11 +39,19 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      // Mock login - redirect to reclamos after a short delay
-      setTimeout(() => {
-        this.router.navigate(['/reclamos']);
-        this.isLoading = false;
-      }, 1000);
+      const { email, password } = this.loginForm.value;
+      
+      this.authService.login(email, password).subscribe({
+        next: (response) => {
+          console.log('✅ Login exitoso:', response);
+          this.router.navigate(['/dashboard']);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('❌ Error en login:', error);
+          this.isLoading = false;
+        }
+      });
     }
   }
 

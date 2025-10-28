@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { User, CreateUser, UpdateUser, Role } from '../interfaces/user.interface';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
+import { MockUsersService } from '../services/mock-users.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -45,7 +46,7 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.scss']
 })
-export class UsuariosComponent implements OnInit {
+export class UsuariosComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   users: User[] = [];
@@ -60,14 +61,15 @@ export class UsuariosComponent implements OnInit {
   selectedUser: User | null = null;
   currentUserId: number | null = null;
   
-  displayedColumns: string[] = ['avatar', 'name', 'email', 'roles', 'status', 'lastLogin', 'actions'];
+  displayedColumns: string[] = ['userName', 'fullName', 'roles', 'isActive', 'lastLoginAt', 'actions'];
   pageSizeOptions = [5, 10, 25, 50];
   pageSize = 10;
 
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
-    private authService: AuthService
+    private authService: AuthService,
+    private mockUsersService: MockUsersService
   ) {
     this.initForm();
   }
@@ -76,6 +78,16 @@ export class UsuariosComponent implements OnInit {
     this.loadUsers();
     this.loadRoles();
     this.currentUserId = this.authService.getCurrentUserId();
+  }
+
+  ngAfterViewInit() {
+    // Configurar paginator después de que la vista esté inicializada
+    if (this.paginator) {
+      this.usersDataSource.paginator = this.paginator;
+      console.log('✅ Paginator configurado correctamente');
+    } else {
+      console.warn('⚠️ Paginator no encontrado');
+    }
   }
 
   private initForm() {
@@ -122,29 +134,66 @@ export class UsuariosComponent implements OnInit {
 
   loadUsers() {
     this.isLoading = true;
-    this.apiService.getUsers().subscribe({
+    
+    // Usar temporalmente el servicio mock debido a problemas de autenticación
+    console.log('📱 UsuariosComponent: Usando MockUsersService temporalmente');
+    this.mockUsersService.getUsers().subscribe({
       next: (users) => {
+        console.log('✅ Usuarios cargados desde mock:', users);
+        console.log('📊 Total usuarios recibidos:', users.length);
+        
         this.users = users;
         this.filteredUsers = users;
         this.usersDataSource.data = users;
+        
+        console.log('📋 DataSource actualizado:', this.usersDataSource.data);
+        console.log('📋 Usuarios array:', this.users);
+        console.log('📋 Usuarios filtrados:', this.filteredUsers);
+        
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading users:', error);
+        console.error('❌ Error loading users from mock:', error);
         this.isLoading = false;
       }
     });
+    
+    // Código original comentado para debugging
+    // this.apiService.getUsers().subscribe({
+    //   next: (users) => {
+    //     this.users = users;
+    //     this.filteredUsers = users;
+    //     this.usersDataSource.data = users;
+    //     this.isLoading = false;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error loading users:', error);
+    //     this.isLoading = false;
+    //   }
+    // });
   }
 
   loadRoles() {
-    this.apiService.getRoles().subscribe({
+    // Usar temporalmente el servicio mock
+    this.mockUsersService.getRoles().subscribe({
       next: (roles) => {
+        console.log('✅ Roles cargados desde mock:', roles);
         this.availableRoles = roles;
       },
       error: (error) => {
-        console.error('Error loading roles:', error);
+        console.error('❌ Error loading roles from mock:', error);
       }
     });
+    
+    // Código original comentado
+    // this.apiService.getRoles().subscribe({
+    //   next: (roles) => {
+    //     this.availableRoles = roles;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error loading roles:', error);
+    //   }
+    // });
   }
 
   applyFilter() {

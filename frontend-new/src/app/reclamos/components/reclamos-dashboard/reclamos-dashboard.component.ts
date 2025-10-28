@@ -259,57 +259,58 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   cambiarEstado(reclamo: Reclamo): void {
     console.log('Cambiar estado:', reclamo);
     
-    // Crear una lista de estados disponibles
-    const estadosDisponibles = [
-      { value: EstadoReclamo.Abierto, label: 'Abierto' },
-      { value: EstadoReclamo.EnProceso, label: 'En Proceso' },
-      { value: EstadoReclamo.Resuelto, label: 'Resuelto' },
-      { value: EstadoReclamo.Cerrado, label: 'Cerrado' },
-      { value: EstadoReclamo.Rechazado, label: 'Rechazado' },
-      { value: EstadoReclamo.Escalado, label: 'Escalado' }
-    ];
-
-    // Filtrar el estado actual
-    const estadosParaCambio = estadosDisponibles.filter(e => e.value !== reclamo.estado);
-
-    if (estadosParaCambio.length === 0) {
-      this.showMessage('No hay estados disponibles para cambiar');
-      return;
-    }
-
-    // Para simplicidad, vamos a cambiar al siguiente estado en la secuencia
-    let nuevoEstado: EstadoReclamo;
-    
-    switch (reclamo.estado) {
-      case EstadoReclamo.Abierto:
-        nuevoEstado = EstadoReclamo.EnProceso;
-        break;
-      case EstadoReclamo.EnProceso:
-        nuevoEstado = EstadoReclamo.Resuelto;
-        break;
-      case EstadoReclamo.Resuelto:
-        nuevoEstado = EstadoReclamo.Cerrado;
-        break;
-      default:
-        nuevoEstado = EstadoReclamo.EnProceso;
-        break;
-    }
-
-    // Confirmar el cambio
-    const estadoNombre = estadosDisponibles.find(e => e.value === nuevoEstado)?.label || 'Desconocido';
-    
-    if (confirm(`¿Está seguro de cambiar el estado del reclamo ${reclamo.numeroReclamo} a "${estadoNombre}"?`)) {
-      this.reclamosService.cambiarEstado(reclamo.id, nuevoEstado, `Estado cambiado a ${estadoNombre}`).subscribe({
-        next: (response) => {
-          this.showMessage(`Estado del reclamo cambiado a "${estadoNombre}" exitosamente`);
-          this.loadReclamos(); // Recargar la lista
+    // Usar import dinámico para el diálogo
+    import('../cambiar-estado-dialog').then(module => {
+      const dialogRef = this.dialog.open(module.CambiarEstadoDialogComponent, {
+        width: '500px',
+        data: {
+          numeroReclamo: reclamo.numeroReclamo,
+          estadoActual: reclamo.estado
         },
-        error: (error) => {
-          console.error('Error cambiando estado:', error);
-          this.showMessage('Error al cambiar el estado del reclamo');
+        disableClose: false,
+        autoFocus: true
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('🔄 Cambiando estado del reclamo:', {
+            reclamoId: reclamo.id,
+            numeroReclamo: reclamo.numeroReclamo,
+            estadoActual: reclamo.estado,
+            nuevoEstado: result.nuevoEstado,
+            comentario: result.comentario
+          });
+
+          this.reclamosService.cambiarEstado(reclamo.id, result.nuevoEstado, result.comentario || `Estado cambiado a ${this.getEstadoLabel(result.nuevoEstado)}`).subscribe({
+            next: (response) => {
+              const estadoLabel = this.getEstadoLabel(result.nuevoEstado);
+              this.showMessage(`Estado del reclamo ${reclamo.numeroReclamo} cambiado a "${estadoLabel}" exitosamente`);
+              this.loadReclamos(); // Recargar la lista
+              this.loadStats(); // Recargar estadísticas
+            },
+            error: (error) => {
+              console.error('❌ Error cambiando estado:', error);
+              this.showMessage('Error al cambiar el estado del reclamo');
+            }
+          });
         }
       });
-    }
+    }).catch(error => {
+      console.error('❌ Error cargando diálogo de cambio de estado:', error);
+      this.showMessage('Error al cargar el diálogo de cambio de estado');
+    });
+  }
+
+  private getEstadoLabel(estado: EstadoReclamo): string {
+    const estadosLabels = {
+      [EstadoReclamo.Abierto]: 'Abierto',
+      [EstadoReclamo.EnProceso]: 'En Proceso',
+      [EstadoReclamo.Resuelto]: 'Resuelto',
+      [EstadoReclamo.Cerrado]: 'Cerrado',
+      [EstadoReclamo.Rechazado]: 'Rechazado',
+      [EstadoReclamo.Escalado]: 'Escalado'
+    };
+    return estadosLabels[estado] || 'Desconocido';
   }
 
   subirDocumento(reclamo: Reclamo): void {

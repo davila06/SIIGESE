@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'change-password', component: ChangePasswordComponent },
+  { path: 'dashboard', redirectTo: '/polizas', pathMatch: 'full' }, // Redirect dashboard to polizas
   { path: 'polizas', component: PolizasComponent, canActivate: [AuthGuard] },
   { path: 'polizas/upload', component: UploadPolizasComponent, canActivate: [AuthGuard, DataLoaderGuard] },
   { path: 'cotizaciones', component: CotizacionesComponent, canActivate: [AuthGuard] },

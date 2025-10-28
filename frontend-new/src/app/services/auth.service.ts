@@ -60,12 +60,15 @@ export class AuthService {
       try {
         const user = JSON.parse(savedUser);
         this.currentUserSubject.next(user);
+        console.log('✅ Usuario cargado desde localStorage:', user);
       } catch (error) {
         // Si hay error al parsear, limpiar localStorage
+        console.error('❌ Error parseando usuario desde localStorage:', error);
         localStorage.removeItem('currentUser');
         localStorage.removeItem('authToken');
       }
     }
+    // Removido el auto-login - el usuario debe hacer login manualmente
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
