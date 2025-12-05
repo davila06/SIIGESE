@@ -23,6 +23,7 @@ import {
   getMetodoPagoLabel
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
+import { MockCobrosService } from '../../services/mock-cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
@@ -79,14 +80,17 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
 
   constructor(
-    private cobrosService: CobrosService,
+    private cobrosService: MockCobrosService,  // Usando MockCobrosService temporalmente
     private snackBar: MatSnackBar,
     private router: Router,
     private dialog: MatDialog,
     private exportService: ExportService
-  ) { }
+  ) { 
+    console.log('🔧 CobrosDashboardComponent inicializado con MockCobrosService');
+  }
 
   ngOnInit(): void {
+    console.log('🚀 CobrosDashboardComponent.ngOnInit()');
     this.loadCobros();
     this.loadStats();
   }
@@ -97,16 +101,18 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   loadCobros(): void {
+    console.log('📥 Cargando cobros...');
     this.loading = true;
     
     this.cobrosService.getCobros().subscribe({
       next: (cobros) => {
+        console.log('✅ Cobros cargados:', cobros.length);
         this.cobros = cobros;
         this.dataSource.data = cobros;
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar cobros:', error);
+        console.error('❌ Error al cargar cobros:', error);
         this.showMessage('Error al cargar los cobros');
         this.loading = false;
       }
@@ -114,12 +120,14 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   loadStats(): void {
+    console.log('📊 Cargando estadísticas...');
     this.cobrosService.getCobroStats().subscribe({
       next: (stats) => {
+        console.log('✅ Estadísticas cargadas:', stats);
         this.stats = stats;
       },
       error: (error) => {
-        console.error('Error al cargar estadísticas:', error);
+        console.error('❌ Error al cargar estadísticas:', error);
       }
     });
   }
