@@ -24,19 +24,22 @@ namespace Application.Services
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
-            return users.Select(MapToDto);
+            // Filtrar usuarios eliminados
+            return users.Where(u => !u.IsDeleted).Select(MapToDto);
         }
 
         public async Task<UserDto?> GetUserByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            return user != null ? MapToDto(user) : null;
+            // No retornar usuarios eliminados
+            return user != null && !user.IsDeleted ? MapToDto(user) : null;
         }
 
         public async Task<UserDto?> GetByEmailAsync(string email)
         {
             var user = await _userRepository.GetByEmailAsync(email);
-            return user != null ? MapToDto(user) : null;
+            // No retornar usuarios eliminados
+            return user != null && !user.IsDeleted ? MapToDto(user) : null;
         }
 
         public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
