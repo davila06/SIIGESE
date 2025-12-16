@@ -1,20 +1,27 @@
 <div class="login-container">
+  <!-- Decorative elements -->
+  <div class="floating-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
   <mat-card class="login-card">
     <!-- Logo/Icono -->
     <div class="login-logo">
       <div class="logo-icon">
-        <mat-icon class="security-icon">security</mat-icon>
+        <mat-icon class="security-icon">shield</mat-icon>
       </div>
-      <h2 class="brand-name">SINSEG</h2>
-      <p class="brand-subtitle">Sistema Integral de Administración de Seguros</p>
+      <h1 class="brand-name">SINSEG</h1>
+      <p class="brand-subtitle">Sistema Integral de Seguros</p>
     </div>
 
     <mat-card-header>
       <mat-card-title class="login-title">
-        {{ showResetForm ? 'Resetear Contraseña' : 'Iniciar Sesión' }}
+        {{ showResetForm ? 'Recuperar Contraseña' : 'Bienvenido' }}
       </mat-card-title>
-      <mat-card-subtitle>
-        {{ showResetForm ? 'Ingresa tu email para recibir instrucciones' : 'Accede a tu cuenta SINSEG' }}
+      <mat-card-subtitle class="login-subtitle">
+        {{ showResetForm ? 'Ingresa tu email para recibir instrucciones' : 'Ingresa tus credenciales para continuar' }}
       </mat-card-subtitle>
     </mat-card-header>
 
@@ -115,12 +122,12 @@
       </form>
     </mat-card-content>
 
-    <mat-card-actions class="login-actions" *ngIf="!showResetForm">
-      <p class="demo-credentials">
-        <strong>Credenciales de prueba:</strong><br>
-        Email: admin@sinseg.com<br>
-        Contraseña: password123
-      </p>
-    </mat-card-actions>
+    <!-- Footer -->
+    <mat-card-footer class="login-footer" *ngIf="!showResetForm">
+      <div class="footer-content">
+        <p class="copyright">© 2025 SINSEG. Todos los derechos reservados.</p>
+        <p class="version">v1.0.0</p>
+      </div>
+    </mat-card-footer>
   </mat-card>
 </div>
