@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { EstadoCobro, MetodoPago } from '../cobros/interfaces/cobro.interface';
 import { TipoReclamo, EstadoReclamo, PrioridadReclamo } from '../reclamos/interfaces/reclamo.interface';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class MockApiInterceptor implements HttpInterceptor {
@@ -494,6 +495,11 @@ export class MockApiInterceptor implements HttpInterceptor {
   ];
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    // Si useMockApi es false, pasar directamente al backend real
+    if (!environment.useMockApi) {
+      return next.handle(req);
+    }
+
     const { url, method } = req;
 
     console.log('🔍 Mock Interceptor - URL:', url, 'Method:', method);
