@@ -1,0 +1,8 @@
+﻿{
+    "password":  "Siinadseg2025!SecureProdPass",
+    "connectionString":  "Server=tcp:siinadseg-sql-prod-4451.database.windows.net,1433;Initial Catalog=SiinadsegProdDB;Persist Security Info=False;User ID=sqladmin;Password=Siinadseg2025!SecureProdPass;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+    "server":  "siinadseg-sql-prod-4451.database.windows.net",
+    "createdDate":  "2025-12-15 22:31:47",
+    "username":  "sqladmin",
+    "database":  "SiinadsegProdDB"
+}

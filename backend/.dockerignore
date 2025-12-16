@@ -1,0 +1,17 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/.vs/
+**/.vscode/
+**/.git/
+**/.gitignore
+**/*.md
+**/publish/
+**/dist/
+**/.dockerignore
+**/Dockerfile
+**/*.log
+**/.env
+**/.env.*
+**/secrets.json
+**/appsettings.Development.json

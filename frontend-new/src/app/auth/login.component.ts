@@ -33,7 +33,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Mock authentication check
+    // Si el usuario ya está autenticado, redirigir al dashboard
+    if (this.authService.isAuthenticated()) {
+      console.log('✅ Usuario ya autenticado, redirigiendo a dashboard desde login');
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   onSubmit(): void {

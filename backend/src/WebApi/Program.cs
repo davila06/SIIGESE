@@ -103,11 +103,13 @@ builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IDataRecordRepository, DataRecordRepository>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+builder.Services.AddScoped<IPolizaRepository, PolizaRepository>();
 builder.Services.AddScoped<ICobroRepository, CobroRepository>();
 builder.Services.AddScoped<IReclamoRepository, ReclamoRepository>();
+builder.Services.AddScoped<ICotizacionRepository, CotizacionRepository>();
 builder.Services.AddScoped<IEmailConfigRepository, EmailConfigRepository>();
 
-// builder.Services.AddScoped<IAuthService, AuthService>(); // TODO: Implementar AuthService
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 // builder.Services.AddScoped<IClienteService, ClienteService>(); // TODO: Implementar ClienteService
 builder.Services.AddScoped<IPolizaService, PolizaService>();

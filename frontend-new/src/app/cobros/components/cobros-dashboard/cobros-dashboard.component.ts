@@ -80,13 +80,13 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
 
   constructor(
-    private cobrosService: MockCobrosService,  // Usando MockCobrosService temporalmente
+    private cobrosService: CobrosService,
     private snackBar: MatSnackBar,
     private router: Router,
     private dialog: MatDialog,
     private exportService: ExportService
   ) { 
-    console.log('🔧 CobrosDashboardComponent inicializado con MockCobrosService');
+    console.log('🔧 CobrosDashboardComponent inicializado con CobrosService');
   }
 
   ngOnInit(): void {

@@ -167,7 +167,16 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
 
+              <!-- Mensaje cuando no hay datos -->
+              <div class="no-data" *ngIf="cotizacionesDataSource.data.length === 0" style="text-align: center; padding: 40px;">
+                <mat-icon style="font-size: 64px; height: 64px; width: 64px; color: #999;">request_quote</mat-icon>
+                <h3 style="color: #666; margin-top: 16px;">No hay cotizaciones disponibles</h3>
+                <p style="color: #999;">No se encontraron cotizaciones en la base de datos.</p>
+                <p style="color: #999;">Haga clic en "Nueva Cotización" para agregar una.</p>
+              </div>
+
               <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" 
+                             *ngIf="cotizacionesDataSource.data.length > 0"
                              showFirstLastButtons>
               </mat-paginator>
             </div>

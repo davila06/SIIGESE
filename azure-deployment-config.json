@@ -1,31 +1,31 @@
-{
-  "azure": {
-    "resources": {
-      "sqlServer": "sql-siinadseg-7266.database.windows.net",
-      "database": "SiinadsegDB",
-      "backendContainer": "http://siinadseg-backend-1019.eastus.azurecontainer.io",
-      "staticWebApp": "https://agreeable-water-06170cf10.1.azurestaticapps.net",
-      "resourceGroup": "siinadseg-rg",
-      "region": "westus2"
-    },
-    "credentials": {
-      "sqlUsername": "sqladmin",
-      "sqlPassword": "TempPassword123!"
-    },
-    "endpoints": {
-      "api": "http://siinadseg-backend-1019.eastus.azurecontainer.io/api",
-      "auth": "http://siinadseg-backend-1019.eastus.azurecontainer.io/api/auth",
-      "polizas": "http://siinadseg-backend-1019.eastus.azurecontainer.io/api/polizas"
-    }
-  },
-  "deployment": {
-    "lastUpdate": "2025-10-19 22:10:00",
-    "status": "All Azure resources created successfully",
-    "components": {
-      "frontend": "Azure Static Web Apps",
-      "backend": "Azure Container Instance", 
-      "database": "Azure SQL Database",
-      "storage": "Azure SQL Basic tier"
-    }
-  }
+﻿{
+    "azure":  {
+                  "resources":  {
+                                    "sqlServer":  "siinadseg-sql-prod-4451.database.windows.net",
+                                    "database":  "SiinadsegProdDB",
+                                    "backendContainer":  "http://siinadseg-backend.westus.azurecontainer.io",
+                                    "staticWebApp":  "https://gentle-dune-0a2edab0f.3.azurestaticapps.net",
+                                    "resourceGroup":  "siinadseg-rg",
+                                    "region":  "westus2"
+                                },
+                  "credentials":  {
+                                      "sqlUsername":  "sqladmin",
+                                      "sqlPassword":  "Siinadseg2025!SecureProdPass"
+                                  },
+                  "endpoints":  {
+                                    "api":  "http://siinadseg-backend.westus.azurecontainer.io/api",
+                                    "auth":  "http://siinadseg-backend.westus.azurecontainer.io/api/auth",
+                                    "polizas":  "http://siinadseg-backend.westus.azurecontainer.io/api/polizas"
+                                }
+              },
+    "deployment":  {
+                       "lastUpdate":  "2025-12-16 15:45:00",
+                       "status":  "All Azure resources deployed successfully with new database",
+                       "components":  {
+                                          "frontend":  "Azure Static Web Apps",
+                                          "backend":  "Azure Container Instance",
+                                          "database":  "Azure SQL Database",
+                                          "storage":  "Azure SQL Basic tier"
+                                      }
+                   }
 }
