@@ -168,11 +168,11 @@
               </table>
 
               <!-- Mensaje cuando no hay datos -->
-              <div class="no-data" *ngIf="cotizacionesDataSource.data.length === 0" style="text-align: center; padding: 40px;">
-                <mat-icon style="font-size: 64px; height: 64px; width: 64px; color: #999;">request_quote</mat-icon>
-                <h3 style="color: #666; margin-top: 16px;">No hay cotizaciones disponibles</h3>
-                <p style="color: #999;">No se encontraron cotizaciones en la base de datos.</p>
-                <p style="color: #999;">Haga clic en "Nueva Cotización" para agregar una.</p>
+              <div class="no-data" *ngIf="cotizacionesDataSource.data.length === 0">
+                <mat-icon class="no-data-icon">request_quote</mat-icon>
+                <h3 class="no-data-title">No hay cotizaciones disponibles</h3>
+                <p class="no-data-text">No se encontraron cotizaciones en la base de datos.</p>
+                <p class="no-data-text">Haga clic en "Nueva Cotización" para agregar una.</p>
               </div>
 
               <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" 
@@ -203,16 +203,28 @@
                 <h3 class="section-title">Información del Solicitante</h3>
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="form-field">
-                    <mat-label>Nombre Completo *</mat-label>
-                    <input matInput formControlName="nombreSolicitante" required>
+                    <mat-label>Nombre Solicitante *</mat-label>
+                    <input matInput formControlName="nombreSolicitante" placeholder="Ingrese nombre completo" required>
                     <mat-error *ngIf="cotizacionForm.get('nombreSolicitante')?.hasError('required')">
                       El nombre es obligatorio
                     </mat-error>
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Nombre Asegurado</mat-label>
+                    <input matInput formControlName="nombreAsegurado" placeholder="Nombre del asegurado">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Número de Cédula</mat-label>
+                    <input matInput formControlName="numeroCedula" placeholder="0-0000-0000">
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Email *</mat-label>
-                    <input matInput type="email" formControlName="email" required>
+                    <input matInput type="email" formControlName="email" placeholder="correo@ejemplo.com" required>
                     <mat-error *ngIf="cotizacionForm.get('email')?.hasError('required')">
                       El email es obligatorio
                     </mat-error>
@@ -223,7 +235,15 @@
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Teléfono</mat-label>
-                    <input matInput formControlName="telefono">
+                    <input matInput formControlName="telefono" placeholder="0000-0000">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Correo Adicional</mat-label>
+                    <input matInput type="email" formControlName="correo" placeholder="correo@ejemplo.com">
+                    <mat-error *ngIf="cotizacionForm.get('correo')?.hasError('email')">
+                      Formato de email inválido
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </div>
@@ -240,10 +260,27 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Modalidad</mat-label>
+                    <input matInput formControlName="modalidad" placeholder="Ej: Básico, Plus, Premium">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Frecuencia de Pago</mat-label>
+                    <mat-select formControlName="frecuencia">
+                      <mat-option value="MENSUAL">Mensual</mat-option>
+                      <mat-option value="TRIMESTRAL">Trimestral</mat-option>
+                      <mat-option value="SEMESTRAL">Semestral</mat-option>
+                      <mat-option value="ANUAL">Anual</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Aseguradora *</mat-label>
-                    <input matInput formControlName="aseguradora" required>
+                    <input matInput formControlName="aseguradora" placeholder="Nombre de la aseguradora" required>
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
@@ -254,22 +291,27 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field">
+                    <mat-label>Perfil ID</mat-label>
+                    <input matInput type="number" formControlName="perfilId" placeholder="Opcional">
+                  </mat-form-field>
                 </div>
 
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Monto Asegurado *</mat-label>
-                    <input matInput type="number" formControlName="montoAsegurado" required>
+                    <input matInput type="number" formControlName="montoAsegurado" placeholder="0.00" required>
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Prima Cotizada</mat-label>
-                    <input matInput type="number" formControlName="primaCotizada">
+                    <input matInput type="number" formControlName="primaCotizada" placeholder="0.00">
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Fecha de Vencimiento</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="fechaVencimiento">
+                    <input matInput [matDatepicker]="picker" formControlName="fechaVencimiento" placeholder="dd/mm/aaaa">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                   </mat-form-field>
@@ -282,29 +324,29 @@
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Placa</mat-label>
-                    <input matInput formControlName="placa">
+                    <input matInput formControlName="placa" placeholder="ABC-123">
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Marca</mat-label>
-                    <input matInput formControlName="marca">
+                    <input matInput formControlName="marca" placeholder="Ej: Toyota">
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Modelo</mat-label>
-                    <input matInput formControlName="modelo">
+                    <input matInput formControlName="modelo" placeholder="Ej: Corolla">
                   </mat-form-field>
                 </div>
 
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Año</mat-label>
-                    <input matInput type="number" formControlName="año">
+                    <input matInput type="number" formControlName="año" placeholder="2024">
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Cilindraje</mat-label>
-                    <input matInput formControlName="cilindraje">
+                    <input matInput formControlName="cilindraje" placeholder="Ej: 1600cc">
                   </mat-form-field>
                 </div>
               </div>
@@ -315,7 +357,7 @@
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Fecha de Nacimiento</mat-label>
-                    <input matInput [matDatepicker]="pickerNacimiento" formControlName="fechaNacimiento">
+                    <input matInput [matDatepicker]="pickerNacimiento" formControlName="fechaNacimiento" placeholder="dd/mm/aaaa">
                     <mat-datepicker-toggle matSuffix [for]="pickerNacimiento"></mat-datepicker-toggle>
                     <mat-datepicker #pickerNacimiento></mat-datepicker>
                   </mat-form-field>
@@ -331,7 +373,7 @@
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Ocupación</mat-label>
-                    <input matInput formControlName="ocupacion">
+                    <input matInput formControlName="ocupacion" placeholder="Profesión u oficio">
                   </mat-form-field>
                 </div>
               </div>
@@ -342,7 +384,7 @@
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Dirección del Inmueble</mat-label>
-                    <input matInput formControlName="direccionInmueble">
+                    <input matInput formControlName="direccionInmueble" placeholder="Dirección completa">
                   </mat-form-field>
                   
                   <mat-form-field appearance="outline" class="form-field">
@@ -356,7 +398,7 @@
                   
                   <mat-form-field appearance="outline" class="form-field">
                     <mat-label>Valor del Inmueble</mat-label>
-                    <input matInput type="number" formControlName="valorInmueble">
+                    <input matInput type="number" formControlName="valorInmueble" placeholder="0.00">
                   </mat-form-field>
                 </div>
               </div>

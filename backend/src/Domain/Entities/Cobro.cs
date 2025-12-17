@@ -15,8 +15,8 @@ namespace Domain.Entities
         public string Observaciones { get; set; } = string.Empty;
         public int PolizaId { get; set; }
         public string NumeroPoliza { get; set; } = string.Empty;
-        public string ClienteNombre { get; set; } = string.Empty;
-        public string ClienteApellido { get; set; } = string.Empty;
+        public string ClienteNombreCompleto { get; set; } = string.Empty;
+        public string? CorreoElectronico { get; set; }
         public int UsuarioCobroId { get; set; }
         public string UsuarioCobroNombre { get; set; } = string.Empty;
         public bool IsDeleted { get; set; } = false;

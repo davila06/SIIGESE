@@ -1,0 +1,30 @@
+import openpyxl
+
+# Crear workbook
+wb = openpyxl.Workbook()
+ws = wb.active
+
+# Headers
+ws.append(['POLIZA', 'NOMBRE', 'NUMEROCEDULA', 'PRIMA', 'MONEDA', 'FECHA', 
+           'FRECUENCIA', 'ASEGURADORA', 'PLACA', 'MARCA', 'MODELO', 'AÑO', 
+           'CORREO', 'NUMEROTELEFONO'])
+
+# Datos
+ws.append(['POL-TEST-001', 'Juan Pérez López', '1-1234-5678', 1500.50, 'CRC', 
+           '01/12/2024', 'MENSUAL', 'Instituto Nacional de Seguros (INS)', 
+           'ABC123', 'Toyota', 'Corolla', '2020', 'juan.perez@email.com', 
+           '+506 8888-1234'])
+
+ws.append(['POL-TEST-002', 'María García Rodríguez', '2-2345-6789', 2000.00, 'USD', 
+           '15/01/2025', 'ANUAL', 'ASSA Compañía de Seguros S.A.', 
+           'DEF456', 'Honda', 'Civic', '2019', 'maria.garcia@email.com', 
+           '+506 7777-5678'])
+
+ws.append(['POL-TEST-003', 'Carlos López Martínez', '3-3456-7890', 800.75, 'CRC', 
+           '20/02/2024', 'TRIMESTRAL', 'MNK Seguros Compañía Aseguradora', 
+           'GHI789', 'Nissan', 'Sentra', '2021', 'carlos.lopez@email.com', 
+           '+506 6666-9012'])
+
+# Guardar
+wb.save('ejemplo_polizas.xlsx')
+print('✅ Excel creado: ejemplo_polizas.xlsx')

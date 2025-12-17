@@ -3,8 +3,7 @@ export interface Reclamo {
   numeroReclamo: string;
   polizaId: number;
   numeroPoliza: string;
-  clienteNombre: string;
-  clienteApellido: string;
+  clienteNombreCompleto: string;
   fechaReclamo: string;
   fechaResolucion?: string;
   tipoReclamo: TipoReclamo;
@@ -31,8 +30,7 @@ export interface Reclamo {
 export interface CreateReclamoDto {
   polizaId: number;
   numeroPoliza: string;
-  clienteNombre: string;
-  clienteApellido: string;
+  clienteNombreCompleto: string;
   tipoReclamo: number;
   descripcion: string;
   montoReclamado?: number;
@@ -46,8 +44,7 @@ export interface CreateReclamoDto {
 
 export interface UpdateReclamoDto {
   numeroPoliza?: string;
-  clienteNombre?: string;
-  clienteApellido?: string;
+  clienteNombreCompleto?: string;
   tipoReclamo?: number;
   estado?: number;
   descripcion?: string;
@@ -80,7 +77,7 @@ export interface FiltroReclamos {
   estado?: number;
   tipoReclamo?: number;
   prioridad?: number;
-  clienteNombre?: string;
+  clienteNombreCompleto?: string;
   numeroPoliza?: string;
   fechaDesde?: string;
   fechaHasta?: string;

@@ -1,0 +1,26 @@
+﻿{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information",
+      "Microsoft.EntityFrameworkCore": "Warning"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=tcp:siinadseg-sql-prod-4451.database.windows.net,1433;Initial Catalog=SiinadsegProdDB;Persist Security Info=False;User ID=sqladmin;Password=Siinadseg2025!SecureProdPass;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+  },
+  "Jwt": {
+    "Secret": "SuperSecretKeyForJWT2025!@#MinLength32CharactersRequired",
+    "Issuer": "SiinadsegAPI",
+    "Audience": "SiinadsegClient",
+    "ExpirationHours": 8
+  },
+  "Cors": {
+    "AllowedOrigins": [
+      "https://gentle-dune-0a2edab0f.3.azurestaticapps.net",
+      "https://green-beach-02a282f0f.3.azurestaticapps.net"
+    ]
+  },
+  "AllowedHosts": "*"
+}

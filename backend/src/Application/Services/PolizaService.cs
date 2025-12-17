@@ -145,29 +145,7 @@ namespace Application.Services
                         Console.WriteLine($"Procesando fila {row.RowNumber()}...");
                         try
                         {
-                            // Verificar que la fila tenga al menos las columnas mínimas requeridas
-                            if (row.CellsUsed().Count() < 14) // Al menos 14 columnas según el nuevo formato
-                            {
-                                var error = $"Faltan columnas. Se requieren al menos 14 columnas (POLIZA, NOMBRE, NUMEROCEDULA, PRIMA, MONEDA, FECHA, FRECUENCIA, ASEGURADORA, PLACA, MARCA, MODELO, AÑO, CORREO, NUMEROTELEFONO)";
-                                errors.Add($"Fila {row.RowNumber()}: {error}");
-                                
-                                // Capturar datos originales para el registro fallido
-                                var originalData = new Dictionary<string, string>();
-                                for (int i = 1; i <= Math.Max(14, row.CellsUsed().Count()); i++)
-                                {
-                                    originalData[$"Columna{i}"] = GetCellValueSafe(row, i, $"Col{i}", true);
-                                }
-                                
-                                result.FailedRecords.Add(new FailedRecordDto
-                                {
-                                    RowNumber = row.RowNumber(),
-                                    Error = error,
-                                    OriginalData = originalData
-                                });
-                                
-                                result.ErrorRecords++;
-                                continue;
-                            }
+                            // No validar cantidad de columnas, aceptar cualquier data
 
                             // Capturar datos originales de la fila para uso posterior
                             var rowData = new Dictionary<string, string>
@@ -210,27 +188,16 @@ namespace Application.Services
                                 CreatedBy = userId.ToString()
                             };
 
-                        // Validaciones básicas
-                        if (string.IsNullOrEmpty(poliza.NumeroPoliza) || 
-                            string.IsNullOrEmpty(poliza.NombreAsegurado) || 
-                            string.IsNullOrEmpty(poliza.Aseguradora))
+                        // No validar campos obligatorios, subir la data como viene
+                        // Validar y corregir moneda automáticamente si existe
+                        if (!string.IsNullOrEmpty(poliza.Moneda))
                         {
-                            var error = "Campos obligatorios vacíos (POLIZA, NOMBRE, ASEGURADORA)";
-                            errors.Add($"Fila {row.RowNumber()}: {error}");
-                            
-                            result.FailedRecords.Add(new FailedRecordDto
-                            {
-                                RowNumber = row.RowNumber(),
-                                Error = error,
-                                OriginalData = rowData
-                            });
-                            
-                            result.ErrorRecords++;
-                            continue;
+                            poliza.Moneda = NormalizeAndValidateCurrency(poliza.Moneda, row.RowNumber());
                         }
-
-                        // Validar y corregir moneda automáticamente
-                        poliza.Moneda = NormalizeAndValidateCurrency(poliza.Moneda, row.RowNumber());
+                        else
+                        {
+                            poliza.Moneda = "CRC"; // Default si está vacío
+                        }
 
                         Console.WriteLine($"Fila {row.RowNumber()}: Datos procesados, verificando duplicados...");
 
@@ -400,23 +367,17 @@ namespace Application.Services
                 var cell = row.Cell(columnNumber);
                 if (cell == null || cell.IsEmpty())
                 {
-                    if (optional)
-                        return string.Empty;
-                    else
-                        throw new InvalidOperationException($"Fila {row.RowNumber()}: Columna '{columnName}' (columna {columnNumber}) está vacía");
+                    return string.Empty; // Siempre retornar vacío si no hay valor
                 }
 
                 var value = cell.GetString().Trim();
-                if (string.IsNullOrEmpty(value) && !optional)
-                {
-                    throw new InvalidOperationException($"Fila {row.RowNumber()}: Columna '{columnName}' (columna {columnNumber}) está vacía");
-                }
-
-                return value;
+                return value ?? string.Empty; // Retornar vacío si es null
             }
-            catch (Exception ex) when (!(ex is InvalidOperationException))
+            catch (Exception ex)
             {
-                throw new InvalidOperationException($"Fila {row.RowNumber()}: Error leyendo columna '{columnName}' (columna {columnNumber}): {ex.Message}");
+                // En caso de error, retornar vacío en lugar de lanzar excepción
+                Console.WriteLine($"Advertencia fila {row.RowNumber()}, columna '{columnName}': {ex.Message}");
+                return string.Empty;
             }
         }
 
@@ -439,36 +400,47 @@ namespace Application.Services
                 return 0;
 
             // Remover caracteres no numéricos excepto punto y coma
-            var cleanValue = value.Replace("$", "").Replace(",", "").Trim();
+            var cleanValue = value.Replace("$", "").Replace(",", "").Replace(" ", "").Trim();
             
             if (decimal.TryParse(cleanValue, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal result))
                 return result;
             
-            throw new FormatException($"Valor inválido para prima: '{value}'");
+            // Si no puede parsear, retornar 0 en lugar de error
+            Console.WriteLine($"Advertencia: Valor inválido para prima '{value}', usando 0");
+            return 0;
         }
 
         private DateTime ParseDate(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
-                return DateTime.Today;
+                return DateTime.Today; // Fecha actual por defecto
 
             // Intentar múltiples formatos de fecha
             var formats = new[]
             {
                 "dd/MM/yyyy",
+                "dd-MM-yyyy",
+                "dd/MM/yy",
+                "dd-MM-yy",
                 "MM/dd/yyyy",
                 "yyyy-MM-dd",
-                "dd-MM-yyyy",
-                "yyyy/MM/dd"
+                "yyyy/MM/dd",
+                "d/M/yyyy",
+                "d-M-yyyy"
             };
 
             foreach (var format in formats)
             {
                 if (DateTime.TryParseExact(value.Trim(), format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result))
-                    return result;
+                {
+                    // Retornar solo la fecha sin horas ni minutos (fecha normalizada a medianoche)
+                    return result.Date;
+                }
             }
 
-            throw new FormatException($"Formato de fecha inválido: '{value}'");
+            // Si no puede parsear, retornar fecha actual en lugar de error
+            Console.WriteLine($"Advertencia: Formato de fecha inválido '{value}', usando fecha actual");
+            return DateTime.Today;
         }
 
         private bool IsValidCurrency(string currency)
@@ -521,28 +493,7 @@ namespace Application.Services
             
             foreach (var error in errors)
             {
-                if (error.Contains("Columna") && error.Contains("está vacía"))
-                {
-                    var columnName = ExtractColumnName(error);
-                    var key = $"Campo '{columnName}' vacío";
-                    errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
-                }
-                else if (error.Contains("Moneda inválida"))
-                {
-                    var key = "Moneda inválida (use: CRC, USD, EUR)";
-                    errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
-                }
-                else if (error.Contains("Faltan columnas"))
-                {
-                    var key = "Faltan columnas requeridas en el Excel";
-                    errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
-                }
-                else if (error.Contains("Campos obligatorios vacíos"))
-                {
-                    var key = "Campos obligatorios sin datos";
-                    errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
-                }
-                else if (error.Contains("Póliza ya existe"))
+                if (error.Contains("Póliza ya existe"))
                 {
                     var key = "Números de póliza duplicados";
                     errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
@@ -552,19 +503,9 @@ namespace Application.Services
                     var key = "Pólizas duplicadas en el mismo archivo";
                     errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
                 }
-                else if (error.Contains("Formato de fecha inválido"))
-                {
-                    var key = "Fechas con formato incorrecto";
-                    errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
-                }
-                else if (error.Contains("Valor inválido para prima"))
-                {
-                    var key = "Valores de prima inválidos";
-                    errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
-                }
                 else
                 {
-                    var key = "Otros errores de formato";
+                    var key = "Otros errores de procesamiento";
                     errorTypes[key] = errorTypes.GetValueOrDefault(key, 0) + 1;
                 }
             }

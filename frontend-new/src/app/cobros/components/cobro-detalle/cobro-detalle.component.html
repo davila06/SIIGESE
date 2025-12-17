@@ -19,7 +19,7 @@
           Cobro #{{ cobro.numeroRecibo }}
         </mat-card-title>
         <mat-card-subtitle>
-          Póliza {{ cobro.numeroPoliza }} - {{ cobro.clienteNombre }} {{ cobro.clienteApellido }}
+          Póliza {{ cobro.numeroPoliza }} - {{ cobro.clienteNombreCompleto }}
         </mat-card-subtitle>
       </mat-card-header>
 
@@ -115,7 +115,7 @@
               <div class="info-grid">
                 <div class="info-item">
                   <span class="label">Nombre:</span>
-                  <span>{{ cobro.clienteNombre }} {{ cobro.clienteApellido }}</span>
+                  <span>{{ cobro.clienteNombreCompleto }}</span>
                 </div>
                 <div class="info-item">
                   <span class="label">Número de Póliza:</span>

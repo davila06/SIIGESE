@@ -112,18 +112,22 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Poliza>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.NumeroPoliza).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.NumeroPoliza).HasMaxLength(50);
                 entity.Property(e => e.Modalidad).HasMaxLength(50);
-                entity.Property(e => e.NombreAsegurado).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.NombreAsegurado).HasMaxLength(200);
+                entity.Property(e => e.NumeroCedula).HasMaxLength(50);
                 entity.Property(e => e.Prima).HasColumnType("decimal(18,2)");
-                entity.Property(e => e.Moneda).IsRequired().HasMaxLength(3);
+                entity.Property(e => e.Moneda).HasMaxLength(3);
                 entity.Property(e => e.Frecuencia).HasMaxLength(50);
-                entity.Property(e => e.Aseguradora).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Aseguradora).HasMaxLength(100);
                 entity.Property(e => e.Placa).HasMaxLength(10);
                 entity.Property(e => e.Marca).HasMaxLength(50);
                 entity.Property(e => e.Modelo).HasMaxLength(50);
+                entity.Property(e => e.Año).HasMaxLength(4);
+                entity.Property(e => e.Correo).HasMaxLength(100);
+                entity.Property(e => e.NumeroTelefono).HasMaxLength(20);
 
-                entity.HasIndex(e => e.NumeroPoliza).IsUnique();
+                entity.HasIndex(e => e.NumeroPoliza);
                 entity.HasIndex(e => e.Placa);
                 entity.HasIndex(e => e.PerfilId);
                 entity.HasIndex(e => e.Aseguradora);

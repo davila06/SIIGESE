@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
@@ -12,11 +13,13 @@ namespace Application.Services
     public class CobrosService : ICobrosService
     {
         private readonly ICobroRepository _cobroRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CobrosService(ICobroRepository cobroRepository, IMapper mapper)
+        public CobrosService(ICobroRepository cobroRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _cobroRepository = cobroRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -86,9 +89,36 @@ namespace Application.Services
 
         public async Task<CobroDto> CreateCobroAsync(CobroRequestDto request)
         {
-            var cobro = _mapper.Map<Cobro>(request);
-            cobro.CreatedAt = DateTime.UtcNow;
-            cobro.CreatedBy = "Sistema"; // En un caso real, obtendríamos esto del usuario autenticado
+            // Obtener la póliza para llenar los datos del cobro
+            var poliza = await _unitOfWork.Polizas.GetByIdAsync(request.PolizaId);
+            if (poliza == null)
+                throw new ArgumentException($"Póliza con ID {request.PolizaId} no encontrada");
+
+            // Generar número de recibo
+            var numeroRecibo = await GenerateNumeroReciboAsync();
+
+            // Crear el cobro con datos de la póliza
+            var cobro = new Cobro
+            {
+                NumeroRecibo = numeroRecibo,
+                PolizaId = poliza.Id,
+                NumeroPoliza = poliza.NumeroPoliza,
+                ClienteNombreCompleto = poliza.NombreAsegurado,
+                CorreoElectronico = request.CorreoElectronico ?? poliza.Correo,
+                MontoTotal = request.MontoTotal,
+                MontoCobrado = 0,
+                FechaVencimiento = request.FechaVencimiento,
+                FechaCobro = DateTime.MinValue,
+                Estado = EstadoCobro.Pendiente,
+                MetodoPago = request.MetodoPago,
+                Moneda = request.Moneda,
+                Observaciones = request.Observaciones ?? string.Empty,
+                UsuarioCobroId = 0,
+                UsuarioCobroNombre = string.Empty,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "Sistema",
+                IsDeleted = false
+            };
 
             var createdCobro = await _cobroRepository.AddAsync(cobro);
             return _mapper.Map<CobroDto>(createdCobro);

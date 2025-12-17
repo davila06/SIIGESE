@@ -2,15 +2,21 @@ import { MONEDAS_SISTEMA } from '../shared/constants/currency.constants';
 
 export interface CreateCotizacion {
   nombreSolicitante: string;
+  nombreAsegurado?: string;
+  numeroCedula?: string;
   email: string;
   telefono?: string;
+  correo?: string;
   tipoSeguro: string; // AUTO, VIDA, HOGAR, EMPRESARIAL
+  modalidad?: string;
+  frecuencia?: string;
   aseguradora: string;
   montoAsegurado: number;
   primaCotizada?: number;
   moneda: string;
   fechaVencimiento?: Date;
   observaciones?: string;
+  perfilId?: number;
 
   // Datos específicos para seguros de auto
   placa?: string;
@@ -38,9 +44,14 @@ export interface Cotizacion {
   id: number;
   numeroCotizacion: string;
   nombreSolicitante: string;
+  nombreAsegurado?: string;
+  numeroCedula?: string;
   email: string;
   telefono?: string;
+  correo?: string;
   tipoSeguro: string;
+  modalidad?: string;
+  frecuencia?: string;
   aseguradora: string;
   montoAsegurado: number;
   primaCotizada?: number;
@@ -49,6 +60,7 @@ export interface Cotizacion {
   fechaVencimiento?: Date;
   estado: string; // PENDIENTE, APROBADA, RECHAZADA, CONVERTIDA
   observaciones?: string;
+  perfilId?: number;
 
   // Datos específicos para seguros de auto
   placa?: string;
@@ -113,4 +125,18 @@ export const TIPOS_INMUEBLE = [
   { value: 'LOCAL', label: 'Local Comercial' },
   { value: 'BODEGA', label: 'Bodega' },
   { value: 'OTRO', label: 'Otro' }
+];
+
+export const MODALIDADES = [
+  { value: 'BASICO', label: 'Básico' },
+  { value: 'PLUS', label: 'Plus' },
+  { value: 'PREMIUM', label: 'Premium' },
+  { value: 'TOTAL', label: 'Total' }
+];
+
+export const FRECUENCIAS = [
+  { value: 'MENSUAL', label: 'Mensual' },
+  { value: 'TRIMESTRAL', label: 'Trimestral' },
+  { value: 'SEMESTRAL', label: 'Semestral' },
+  { value: 'ANUAL', label: 'Anual' }
 ];

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
@@ -12,11 +13,13 @@ namespace Application.Services
     public class ReclamoService : IReclamoService
     {
         private readonly IReclamoRepository _reclamoRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReclamoService(IReclamoRepository reclamoRepository, IMapper mapper)
+        public ReclamoService(IReclamoRepository reclamoRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _reclamoRepository = reclamoRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
@@ -87,8 +90,8 @@ namespace Application.Services
             if (filtro.UsuarioAsignadoId.HasValue)
                 query = query.Where(r => r.UsuarioAsignadoId == filtro.UsuarioAsignadoId.Value);
 
-            if (!string.IsNullOrEmpty(filtro.ClienteNombre))
-                query = query.Where(r => r.ClienteNombre.Contains(filtro.ClienteNombre));
+            if (!string.IsNullOrEmpty(filtro.ClienteNombreCompleto))
+                query = query.Where(r => r.ClienteNombreCompleto.Contains(filtro.ClienteNombreCompleto));
 
             // Paginación
             var resultado = query
@@ -130,7 +133,27 @@ namespace Application.Services
 
         public async Task<ReclamoDto> CreateReclamoAsync(CreateReclamoDto request)
         {
+            // Buscar la póliza si se proporcionó numeroPoliza
+            Poliza? poliza = null;
+            if (!string.IsNullOrEmpty(request.NumeroPoliza))
+            {
+                poliza = await _unitOfWork.Polizas.GetByNumeroPolizaAsync(request.NumeroPoliza);
+            }
+
             var reclamo = _mapper.Map<Reclamo>(request);
+            
+            // Si encontramos la póliza, usar sus datos
+            if (poliza != null)
+            {
+                reclamo.NombreAsegurado = poliza.NombreAsegurado;
+                reclamo.ClienteNombreCompleto = poliza.NombreAsegurado;
+                reclamo.NumeroPoliza = poliza.NumeroPoliza;
+            }
+            else if (string.IsNullOrEmpty(reclamo.ClienteNombreCompleto))
+            {
+                // Si no hay póliza ni nombre completo, usar el del request
+                reclamo.ClienteNombreCompleto = request.NombreAsegurado;
+            }
             
             if (string.IsNullOrEmpty(reclamo.NumeroReclamo))
             {

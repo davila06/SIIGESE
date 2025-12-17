@@ -17,13 +17,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { 
   Cobro, 
   CobroStats, 
+  CobroRequest,
   EstadoCobro, 
   MetodoPago,
   getEstadoCobroLabel,
   getMetodoPagoLabel
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
-import { MockCobrosService } from '../../services/mock-cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
@@ -57,6 +57,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     'numeroRecibo',
     'numeroPoliza',
     'cliente',
+    'correoElectronico',
     'fechaVencimiento',
     'montoTotal',
     'estado',
@@ -148,6 +149,35 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
       this.dataSource.data = this.cobros.filter(cobro => cobro.estado === estado);
     }
     this.filtroEstado = estado;
+  }
+
+  agregarCobro(): void {
+    // Importar el componente del diálogo dinámicamente
+    import('../agregar-cobro-dialog/agregar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.AgregarCobroDialogComponent, {
+        width: '600px',
+        disableClose: true,
+        panelClass: 'agregar-cobro-dialog'
+      });
+
+      dialogRef.afterClosed().subscribe((result: CobroRequest | undefined) => {
+        if (result) {
+          console.log('✅ Guardando nuevo cobro:', result);
+          this.cobrosService.createCobro(result).subscribe({
+            next: (cobro) => {
+              console.log('✅ Cobro creado exitosamente:', cobro);
+              this.showMessage('Cobro creado exitosamente');
+              this.loadCobros(); // Recargar lista
+              this.loadStats(); // Recargar estadísticas
+            },
+            error: (error) => {
+              console.error('❌ Error al crear cobro:', error);
+              this.showMessage('Error al crear el cobro: ' + (error.error?.message || error.message));
+            }
+          });
+        }
+      });
+    });
   }
 
   registrarCobro(cobro: Cobro): void {

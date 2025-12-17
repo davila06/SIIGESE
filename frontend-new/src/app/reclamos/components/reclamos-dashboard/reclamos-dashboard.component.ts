@@ -108,7 +108,7 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
     this.dataSource.sortingDataAccessor = (data: Reclamo, sortHeaderId: string) => {
       switch (sortHeaderId) {
         case 'cliente':
-          return `${data.clienteNombre} ${data.clienteApellido}`.toLowerCase();
+          return `${data.clienteNombreCompleto}`.toLowerCase();
         case 'asignadoA':
           return data.usuarioAsignadoNombre?.toLowerCase() || 'zzz'; // 'zzz' para que aparezcan al final
         case 'tipoReclamo':

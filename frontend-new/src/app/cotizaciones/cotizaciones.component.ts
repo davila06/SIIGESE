@@ -20,7 +20,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule, MatTabGroup } from '@angular/material/tabs';
 
 import { CotizacionService } from '../services/cotizacion.service';
-import { Cotizacion, CreateCotizacion, UpdateCotizacion, TIPOS_SEGURO, ESTADOS_COTIZACION, MONEDAS, GENEROS, TIPOS_INMUEBLE } from '../models/cotizacion.model';
+import { Cotizacion, CreateCotizacion, UpdateCotizacion, TIPOS_SEGURO, ESTADOS_COTIZACION, MONEDAS, GENEROS, TIPOS_INMUEBLE, MODALIDADES, FRECUENCIAS } from '../models/cotizacion.model';
 import { formatCurrencyByCode, formatDateCR, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
 
 @Component({
@@ -83,6 +83,8 @@ export class CotizacionesComponent implements OnInit {
   monedas = MONEDAS;
   generos = GENEROS;
   tiposInmueble = TIPOS_INMUEBLE;
+  modalidades = MODALIDADES;
+  frecuencias = FRECUENCIAS;
 
   // Filtros de b├║squeda
   searchTerm = '';
@@ -110,15 +112,21 @@ export class CotizacionesComponent implements OnInit {
   createForm(): FormGroup {
     return this.fb.group({
       nombreSolicitante: ['', [Validators.required, Validators.maxLength(200)]],
+      nombreAsegurado: ['', [Validators.maxLength(200)]],
+      numeroCedula: ['', [Validators.maxLength(20)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       telefono: ['', [Validators.maxLength(20)]],
+      correo: ['', [Validators.email, Validators.maxLength(100)]],
       tipoSeguro: ['', [Validators.required]],
+      modalidad: ['', [Validators.maxLength(50)]],
+      frecuencia: ['', [Validators.maxLength(50)]],
       aseguradora: ['', [Validators.required, Validators.maxLength(100)]],
       montoAsegurado: [0, [Validators.required, Validators.min(1)]],
       primaCotizada: [0, [Validators.min(0)]],
       moneda: [CURRENCY_CONSTANTS.DEFAULT_CURRENCY, [Validators.required]],
       fechaVencimiento: [''],
       observaciones: ['', [Validators.maxLength(500)]],
+      perfilId: [null],
       
       // Campos espec├¡ficos para auto
       placa: ['', [Validators.maxLength(20)]],
@@ -208,15 +216,21 @@ export class CotizacionesComponent implements OnInit {
     // Cargar datos en el formulario
     this.cotizacionForm.patchValue({
       nombreSolicitante: cotizacion.nombreSolicitante,
+      nombreAsegurado: cotizacion.nombreAsegurado,
+      numeroCedula: cotizacion.numeroCedula,
       email: cotizacion.email,
       telefono: cotizacion.telefono,
+      correo: cotizacion.correo,
       tipoSeguro: cotizacion.tipoSeguro,
+      modalidad: cotizacion.modalidad,
+      frecuencia: cotizacion.frecuencia,
       aseguradora: cotizacion.aseguradora,
       montoAsegurado: cotizacion.montoAsegurado,
       primaCotizada: cotizacion.primaCotizada,
       moneda: cotizacion.moneda,
       fechaVencimiento: cotizacion.fechaVencimiento ? new Date(cotizacion.fechaVencimiento) : null,
       observaciones: cotizacion.observaciones,
+      perfilId: cotizacion.perfilId,
       
       // Campos espec├¡ficos
       placa: cotizacion.placa,

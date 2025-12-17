@@ -110,6 +110,34 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// Buscar pólizas por término (número o nombre)
+        /// </summary>
+        [HttpGet("buscar")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PolizaDto>))]
+        public async Task<IActionResult> Buscar([FromQuery] string termino)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(termino))
+                    return Ok(Array.Empty<PolizaDto>());
+
+                var polizas = await _polizaService.GetAllAsync();
+                var resultado = polizas.Where(p =>
+                    p.NumeroPoliza.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
+                    p.NombreAsegurado.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
+                    p.NumeroCedula.Contains(termino, StringComparison.OrdinalIgnoreCase)
+                ).Take(10).ToList();
+
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error buscando pólizas con término {Termino}", termino);
+                return BadRequest(new { message = "Error buscando pólizas" });
+            }
+        }
+
+        /// <summary>
         /// Obtener pólizas por aseguradora
         /// </summary>
         [HttpGet("aseguradora/{aseguradora}")]

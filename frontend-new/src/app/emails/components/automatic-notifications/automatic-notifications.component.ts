@@ -20,7 +20,6 @@ import {
   PolizaVencimiento, 
   NotificationStatistics 
 } from '../../services/notification.service';
-import { MockNotificationService } from '../../services/mock-notification.service';
 
 @Component({
   selector: 'app-automatic-notifications',
@@ -55,7 +54,6 @@ export class AutomaticNotificationsComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private mockNotificationService: MockNotificationService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog
   ) { }
@@ -66,36 +64,35 @@ export class AutomaticNotificationsComponent implements OnInit {
 
   loadData(): void {
     this.isLoading = true;
-    console.log('📧 AutomaticNotificationsComponent: Usando MockNotificationService temporalmente');
     
-    // Cargar estadísticas usando servicio mock
-    this.mockNotificationService.getNotificationStatistics(this.daysBeforeExpiration).subscribe({
+    // Cargar estadísticas
+    this.notificationService.getNotificationStatistics(this.daysBeforeExpiration).subscribe({
       next: (stats) => {
-        console.log('✅ Estadísticas cargadas desde mock:', stats);
+        console.log('✅ Estadísticas cargadas:', stats);
         this.statistics = stats;
       },
       error: (error) => {
-        console.error('❌ Error cargando estadísticas desde mock:', error);
+        console.error('❌ Error cargando estadísticas:', error);
         this.showMessage('Error cargando estadísticas');
       }
     });
 
-    // Cargar cobros vencidos usando servicio mock
-    this.mockNotificationService.getOverduePayments().subscribe({
+    // Cargar cobros vencidos
+    this.notificationService.getOverduePayments().subscribe({
       next: (cobros) => {
-        console.log('✅ Cobros vencidos cargados desde mock:', cobros);
+        console.log('✅ Cobros vencidos cargados:', cobros);
         this.overduePayments = cobros;
       },
       error: (error) => {
-        console.error('❌ Error cargando cobros vencidos desde mock:', error);
+        console.error('❌ Error cargando cobros vencidos:', error);
         this.showMessage('Error cargando cobros vencidos');
       }
     });
 
-    // Cargar pólizas por vencer usando servicio mock
-    this.mockNotificationService.getExpiringPolicies(this.daysBeforeExpiration).subscribe({
+    // Cargar pólizas por vencer
+    this.notificationService.getExpiringPolicies(this.daysBeforeExpiration).subscribe({
       next: (polizas) => {
-        console.log('✅ Pólizas por vencer cargadas desde mock:', polizas);
+        console.log('✅ Pólizas por vencer cargadas:', polizas);
         this.expiringPolicies = polizas;
         this.isLoading = false;
       },
@@ -120,14 +117,13 @@ export class AutomaticNotificationsComponent implements OnInit {
 
   processOverduePayments(): void {
     this.isLoading = true;
-    // Usar servicio mock temporalmente
-    this.mockNotificationService.processOverduePayments().subscribe({
+    this.notificationService.processOverduePayments().subscribe({
       next: (result: NotificationResult) => {
         console.log('✅ Procesamiento de cobros vencidos completado:', result);
         this.handleNotificationResult(result, 'Cobros Vencidos');
         this.loadData(); // Recargar datos
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('❌ Error procesando cobros vencidos:', error);
         this.showMessage('Error procesando cobros vencidos');
         this.isLoading = false;
@@ -137,14 +133,13 @@ export class AutomaticNotificationsComponent implements OnInit {
 
   processExpiringPolicies(): void {
     this.isLoading = true;
-    // Usar servicio mock temporalmente
-    this.mockNotificationService.processExpiringPolicies(this.daysBeforeExpiration).subscribe({
+    this.notificationService.processExpiringPolicies(this.daysBeforeExpiration).subscribe({
       next: (result: NotificationResult) => {
         console.log('✅ Procesamiento de pólizas por vencer completado:', result);
         this.handleNotificationResult(result, 'Pólizas por Vencer');
         this.loadData(); // Recargar datos
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('❌ Error procesando pólizas por vencer:', error);
         this.showMessage('Error procesando pólizas por vencer');
         this.isLoading = false;
@@ -154,14 +149,13 @@ export class AutomaticNotificationsComponent implements OnInit {
 
   processAllNotifications(): void {
     this.isLoading = true;
-    // Usar servicio mock temporalmente
-    this.mockNotificationService.processAllNotifications(this.daysBeforeExpiration).subscribe({
+    this.notificationService.processAllNotifications(this.daysBeforeExpiration).subscribe({
       next: (result: NotificationResult) => {
         console.log('✅ Procesamiento de todas las notificaciones completado:', result);
         this.handleNotificationResult(result, 'Todas las Notificaciones');
         this.loadData(); // Recargar datos
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('❌ Error procesando todas las notificaciones:', error);
         this.showMessage('Error procesando todas las notificaciones');
         this.isLoading = false;

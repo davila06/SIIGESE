@@ -3,8 +3,8 @@ export interface Cobro {
   numeroRecibo: string;
   polizaId: number;
   numeroPoliza: string;
-  clienteNombre: string;
-  clienteApellido: string;
+  clienteNombreCompleto: string;
+  correoElectronico?: string;
   fechaVencimiento: Date;
   fechaCobro?: Date;
   montoTotal: number;
@@ -39,6 +39,7 @@ export interface CobroRequest {
   fechaVencimiento: Date;
   montoTotal: number;
   moneda?: string; // Código de moneda (CRC por defecto)
+  correoElectronico?: string;
   observaciones?: string;
 }
 

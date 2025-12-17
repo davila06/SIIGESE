@@ -16,8 +16,7 @@ namespace Domain.Entities
         public decimal MontoReclamado { get; set; }
         public decimal? MontoAprobado { get; set; }
         public string NombreAsegurado { get; set; } = string.Empty;
-        public string ClienteNombre { get; set; } = string.Empty;
-        public string ClienteApellido { get; set; } = string.Empty;
+        public string ClienteNombreCompleto { get; set; } = string.Empty;
         public string Observaciones { get; set; } = string.Empty;
         public string DocumentosAdjuntos { get; set; } = string.Empty;
         public int? UsuarioAsignadoId { get; set; }

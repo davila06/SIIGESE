@@ -119,6 +119,7 @@ builder.Services.AddScoped<ICotizacionService, Infrastructure.Services.Cotizacio
 builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEmailConfigService, EmailConfigService>();
+builder.Services.AddScoped<INotificationService, Infrastructure.Services.NotificationService>();
 
 // Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();

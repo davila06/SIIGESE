@@ -12,8 +12,7 @@ namespace Application.DTOs
         public PrioridadReclamo Prioridad { get; set; } = PrioridadReclamo.Media;
         public decimal MontoReclamado { get; set; }
         public string NombreAsegurado { get; set; } = string.Empty;
-        public string ClienteNombre { get; set; } = string.Empty;
-        public string ClienteApellido { get; set; } = string.Empty;
+        public string ClienteNombreCompleto { get; set; } = string.Empty;
         public string Observaciones { get; set; } = string.Empty;
         public int? UsuarioAsignadoId { get; set; }
         public string Moneda { get; set; } = "CRC";
@@ -57,7 +56,7 @@ namespace Application.DTOs
         public DateTime? FechaDesde { get; set; }
         public DateTime? FechaHasta { get; set; }
         public int? UsuarioAsignadoId { get; set; }
-        public string? ClienteNombre { get; set; }
+        public string? ClienteNombreCompleto { get; set; }
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
     }
