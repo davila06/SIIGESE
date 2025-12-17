@@ -182,7 +182,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return this.fb.group({
       perfilId: [1, [Validators.required, Validators.min(1)]],
       numeroPoliza: ['', [Validators.required, Validators.maxLength(50)]],
+      modalidad: ['', Validators.maxLength(50)],
       nombreAsegurado: ['', [Validators.required, Validators.maxLength(200)]],
+      numeroCedula: ['', Validators.maxLength(50)],
       prima: [0, [Validators.required, Validators.min(0)]],
       moneda: [CURRENCY_CONSTANTS.DEFAULT_CURRENCY, [Validators.required, Validators.maxLength(10)]],
       fechaVigencia: ['', Validators.required],
@@ -191,6 +193,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       placa: ['', Validators.maxLength(20)],
       marca: ['', Validators.maxLength(50)],
       modelo: ['', Validators.maxLength(50)],
+      año: ['', Validators.maxLength(4)],
+      correo: ['', [Validators.email, Validators.maxLength(100)]],
+      numeroTelefono: ['', Validators.maxLength(20)],
       observaciones: ['', Validators.maxLength(500)]
     });
   }
@@ -569,7 +574,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     const formValues = {
       perfilId: poliza.perfilId || 1,
       numeroPoliza: poliza.numeroPoliza,
+      modalidad: poliza.modalidad || '',
       nombreAsegurado: poliza.nombreAsegurado,
+      numeroCedula: poliza.numeroCedula || '',
       prima: poliza.prima,
       moneda: poliza.moneda,
       fechaVigencia: fechaVigencia,
@@ -578,6 +585,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       placa: poliza.placa || '',
       marca: poliza.marca || '',
       modelo: poliza.modelo || '',
+      año: poliza.año || '',
+      correo: poliza.correo || '',
+      numeroTelefono: poliza.numeroTelefono || '',
       observaciones: poliza.observaciones || ''
     };
     

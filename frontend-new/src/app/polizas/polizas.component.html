@@ -25,8 +25,20 @@
           </mat-form-field>
           
           <mat-form-field>
+            <mat-label>Modalidad (Opcional)</mat-label>
+            <input matInput formControlName="modalidad">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field>
             <mat-label>Nombre Asegurado</mat-label>
             <input matInput formControlName="nombreAsegurado" required>
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Número de Cédula (Opcional)</mat-label>
+            <input matInput formControlName="numeroCedula">
           </mat-form-field>
         </div>
 
@@ -86,6 +98,23 @@
           <mat-form-field>
             <mat-label>Modelo (Opcional)</mat-label>
             <input matInput formControlName="modelo">
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Año (Opcional)</mat-label>
+            <input matInput formControlName="año" maxlength="4">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field>
+            <mat-label>Correo Electrónico (Opcional)</mat-label>
+            <input matInput type="email" formControlName="correo">
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Número de Teléfono (Opcional)</mat-label>
+            <input matInput formControlName="numeroTelefono">
           </mat-form-field>
         </div>
 
