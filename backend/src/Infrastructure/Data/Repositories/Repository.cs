@@ -245,7 +245,7 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Poliza>> GetActivasAsync()
         {
-            return await _dbSet.Where(p => p.EsActivo).ToListAsync();
+            return await _dbSet.Where(p => p.EsActivo && !p.IsDeleted).ToListAsync();
         }
 
         public async Task<IEnumerable<Poliza>> GetByPlacaAsync(string placa)
