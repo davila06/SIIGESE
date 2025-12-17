@@ -19,3 +19,1186 @@
 2025-12-17 00:00:52.919 -06:00 [WRN] No store type was specified for the decimal property 'Prima' on entity type 'Cotizacion'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
 2025-12-17 00:00:52.920 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
 2025-12-17 00:00:52.921 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-12-17 00:14:06.754 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-12-17 00:14:06.795 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'PasswordResetToken'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-12-17 00:14:06.875 -06:00 [WRN] No store type was specified for the decimal property 'MontoCobrado' on entity type 'Cobro'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-12-17 00:14:06.878 -06:00 [WRN] No store type was specified for the decimal property 'MontoTotal' on entity type 'Cobro'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-12-17 00:14:06.879 -06:00 [WRN] No store type was specified for the decimal property 'Prima' on entity type 'Cotizacion'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-12-17 00:14:06.880 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-12-17 00:14:06.881 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-12-17 00:14:08.079 -06:00 [INF] Executed DbCommand (87ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-17 00:14:08.176 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-12-17 00:14:08.253 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-17 00:14:08.426 -06:00 [INF] Executed DbCommand (121ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);
+2025-12-17 00:14:08.502 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-12-17 00:14:08.579 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-12-17 00:14:08.674 -06:00 [INF] Executed DbCommand (90ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-12-17 00:14:08.688 -06:00 [INF] Applying migration '20251001170500_UpdateAdminCredentials'.
+2025-12-17 00:14:08.897 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Clientes] (
+    [Id] int NOT NULL IDENTITY,
+    [Codigo] nvarchar(20) NOT NULL,
+    [RazonSocial] nvarchar(200) NOT NULL,
+    [NombreComercial] nvarchar(200) NOT NULL,
+    [NIT] nvarchar(20) NOT NULL,
+    [Telefono] nvarchar(20) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [Direccion] nvarchar(300) NOT NULL,
+    [Ciudad] nvarchar(100) NOT NULL,
+    [Departamento] nvarchar(100) NOT NULL,
+    [Pais] nvarchar(100) NOT NULL,
+    [EsActivo] bit NOT NULL,
+    [FechaRegistro] datetime2 NULL,
+    [PerfilId] int NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Clientes] PRIMARY KEY ([Id])
+);
+2025-12-17 00:14:08.979 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Polizas] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroPoliza] nvarchar(50) NOT NULL,
+    [Modalidad] nvarchar(50) NOT NULL,
+    [NombreAsegurado] nvarchar(200) NOT NULL,
+    [Prima] decimal(18,2) NOT NULL,
+    [Moneda] nvarchar(3) NOT NULL,
+    [FechaVigencia] datetime2 NOT NULL,
+    [Frecuencia] nvarchar(50) NOT NULL,
+    [Aseguradora] nvarchar(100) NOT NULL,
+    [Placa] nvarchar(10) NOT NULL,
+    [Marca] nvarchar(50) NOT NULL,
+    [Modelo] nvarchar(50) NOT NULL,
+    [PerfilId] int NOT NULL,
+    [EsActivo] bit NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Polizas] PRIMARY KEY ([Id])
+);
+2025-12-17 00:14:09.057 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Roles] (
+    [Id] int NOT NULL IDENTITY,
+    [Name] nvarchar(50) NOT NULL,
+    [Description] nvarchar(200) NOT NULL,
+    [IsActive] bit NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Roles] PRIMARY KEY ([Id])
+);
+2025-12-17 00:14:09.135 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Users] (
+    [Id] int NOT NULL IDENTITY,
+    [UserName] nvarchar(50) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [FirstName] nvarchar(50) NOT NULL,
+    [LastName] nvarchar(50) NOT NULL,
+    [PasswordHash] nvarchar(max) NOT NULL,
+    [IsActive] bit NOT NULL,
+    [LastLoginAt] datetime2 NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Users] PRIMARY KEY ([Id])
+);
+2025-12-17 00:14:09.214 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [DataRecords] (
+    [Id] int NOT NULL IDENTITY,
+    [FileName] nvarchar(255) NOT NULL,
+    [FileType] nvarchar(50) NOT NULL,
+    [FileSize] bigint NOT NULL,
+    [TotalRecords] int NOT NULL,
+    [ProcessedRecords] int NOT NULL,
+    [ErrorRecords] int NOT NULL,
+    [Status] nvarchar(50) NOT NULL,
+    [ProcessedAt] datetime2 NOT NULL,
+    [ErrorDetails] nvarchar(max) NULL,
+    [UploadedByUserId] int NOT NULL,
+    [PerfilId] int NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_DataRecords] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_DataRecords_Users_UploadedByUserId] FOREIGN KEY ([UploadedByUserId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION
+);
+2025-12-17 00:14:09.292 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserRoles] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] int NOT NULL,
+    [RoleId] int NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_UserRoles] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserRoles_Roles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Roles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserRoles_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-12-17 00:14:09.434 -06:00 [INF] Executed DbCommand (138ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Description', N'IsActive', N'IsDeleted', N'Name', N'UpdatedAt', N'UpdatedBy') AND [object_id] = OBJECT_ID(N'[Roles]'))
+    SET IDENTITY_INSERT [Roles] ON;
+INSERT INTO [Roles] ([Id], [CreatedAt], [CreatedBy], [Description], [IsActive], [IsDeleted], [Name], [UpdatedAt], [UpdatedBy])
+VALUES (1, '2025-10-01T17:05:00.2647399Z', N'System', N'Administrador del sistema', CAST(1 AS bit), CAST(0 AS bit), N'Admin', NULL, NULL),
+(2, '2025-10-01T17:05:00.2647403Z', N'System', N'Cargador de datos', CAST(1 AS bit), CAST(0 AS bit), N'DataLoader', NULL, NULL),
+(3, '2025-10-01T17:05:00.2647404Z', N'System', N'Usuario estándar', CAST(1 AS bit), CAST(0 AS bit), N'User', NULL, NULL);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Description', N'IsActive', N'IsDeleted', N'Name', N'UpdatedAt', N'UpdatedBy') AND [object_id] = OBJECT_ID(N'[Roles]'))
+    SET IDENTITY_INSERT [Roles] OFF;
+2025-12-17 00:14:09.523 -06:00 [INF] Executed DbCommand (86ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Email', N'FirstName', N'IsActive', N'IsDeleted', N'LastLoginAt', N'LastName', N'PasswordHash', N'UpdatedAt', N'UpdatedBy', N'UserName') AND [object_id] = OBJECT_ID(N'[Users]'))
+    SET IDENTITY_INSERT [Users] ON;
+INSERT INTO [Users] ([Id], [CreatedAt], [CreatedBy], [Email], [FirstName], [IsActive], [IsDeleted], [LastLoginAt], [LastName], [PasswordHash], [UpdatedAt], [UpdatedBy], [UserName])
+VALUES (1, '2025-10-01T17:05:00.2647534Z', N'System', N'admin@sinseg.com', N'Administrador', CAST(1 AS bit), CAST(0 AS bit), NULL, N'Sistema', N'$2a$11$Xed1MsTJ.11zGnnvwDLGaeGav13ki.M4gEB5LSGg/vhxtWT5FC8Xm', NULL, NULL, N'admin');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'Email', N'FirstName', N'IsActive', N'IsDeleted', N'LastLoginAt', N'LastName', N'PasswordHash', N'UpdatedAt', N'UpdatedBy', N'UserName') AND [object_id] = OBJECT_ID(N'[Users]'))
+    SET IDENTITY_INSERT [Users] OFF;
+2025-12-17 00:14:09.608 -06:00 [INF] Executed DbCommand (80ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'IsDeleted', N'RoleId', N'UpdatedAt', N'UpdatedBy', N'UserId') AND [object_id] = OBJECT_ID(N'[UserRoles]'))
+    SET IDENTITY_INSERT [UserRoles] ON;
+INSERT INTO [UserRoles] ([Id], [CreatedAt], [CreatedBy], [IsDeleted], [RoleId], [UpdatedAt], [UpdatedBy], [UserId])
+VALUES (1, '2025-10-01T17:05:00.4073752Z', N'System', CAST(0 AS bit), 1, NULL, NULL, 1);
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'CreatedAt', N'CreatedBy', N'IsDeleted', N'RoleId', N'UpdatedAt', N'UpdatedBy', N'UserId') AND [object_id] = OBJECT_ID(N'[UserRoles]'))
+    SET IDENTITY_INSERT [UserRoles] OFF;
+2025-12-17 00:14:09.683 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Clientes_Codigo] ON [Clientes] ([Codigo]);
+2025-12-17 00:14:09.758 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Clientes_NIT] ON [Clientes] ([NIT]);
+2025-12-17 00:14:09.832 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Clientes_PerfilId] ON [Clientes] ([PerfilId]);
+2025-12-17 00:14:09.907 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_DataRecords_UploadedByUserId] ON [DataRecords] ([UploadedByUserId]);
+2025-12-17 00:14:09.982 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Polizas_Aseguradora] ON [Polizas] ([Aseguradora]);
+2025-12-17 00:14:10.056 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Polizas_NumeroPoliza] ON [Polizas] ([NumeroPoliza]);
+2025-12-17 00:14:10.131 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Polizas_PerfilId] ON [Polizas] ([PerfilId]);
+2025-12-17 00:14:10.205 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Polizas_Placa] ON [Polizas] ([Placa]);
+2025-12-17 00:14:10.299 -06:00 [INF] Executed DbCommand (91ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Roles_Name] ON [Roles] ([Name]);
+2025-12-17 00:14:10.375 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_UserRoles_RoleId] ON [UserRoles] ([RoleId]);
+2025-12-17 00:14:10.450 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_UserRoles_UserId_RoleId] ON [UserRoles] ([UserId], [RoleId]);
+2025-12-17 00:14:10.527 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_Email] ON [Users] ([Email]);
+2025-12-17 00:14:10.605 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Users_UserName] ON [Users] ([UserName]);
+2025-12-17 00:14:10.683 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251001170500_UpdateAdminCredentials', N'8.0.0');
+2025-12-17 00:14:10.770 -06:00 [INF] Applying migration '20251001224701_IncreaseFileTypeLength'.
+2025-12-17 00:14:10.944 -06:00 [INF] Executed DbCommand (81ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-01T22:47:00.6034206Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:11.024 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-01T22:47:00.6034217Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:11.100 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-01T22:47:00.6034218Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:11.182 -06:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-01T22:47:00.8220427Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:11.267 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-01T22:47:00.6034435Z', [PasswordHash] = N'$2a$11$8nhPSmjjsP15ANy.C5nkUua8yAmLgmkY.Xpq/NYxkJ2PpSnJ0Gcju'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:11.344 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251001224701_IncreaseFileTypeLength', N'8.0.0');
+2025-12-17 00:14:11.438 -06:00 [INF] Applying migration '20251004234021_AddPasswordResetFunctionality'.
+2025-12-17 00:14:11.604 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD [LastPasswordChangeAt] datetime2 NULL;
+2025-12-17 00:14:11.684 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Users] ADD [RequiresPasswordChange] bit NOT NULL DEFAULT CAST(0 AS bit);
+2025-12-17 00:14:11.876 -06:00 [INF] Executed DbCommand (189ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var0 sysname;
+SELECT @var0 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[DataRecords]') AND [c].[name] = N'FileType');
+IF @var0 IS NOT NULL EXEC(N'ALTER TABLE [DataRecords] DROP CONSTRAINT [' + @var0 + '];');
+ALTER TABLE [DataRecords] ALTER COLUMN [FileType] nvarchar(100) NOT NULL;
+2025-12-17 00:14:11.953 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [PasswordResetTokens] (
+    [Id] int NOT NULL IDENTITY,
+    [Token] nvarchar(255) NOT NULL,
+    [UserId] int NOT NULL,
+    [ExpiresAt] datetime2 NOT NULL,
+    [IsUsed] bit NOT NULL,
+    [UsedAt] datetime2 NULL,
+    [IpAddress] nvarchar(45) NULL,
+    [UserAgent] nvarchar(500) NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_PasswordResetTokens] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_PasswordResetTokens_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE
+);
+2025-12-17 00:14:12.027 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-04T23:40:21.1988468Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:12.103 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-04T23:40:21.1988472Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:12.182 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-04T23:40:21.1988520Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:12.257 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-04T23:40:21.4161997Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:12.332 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-04T23:40:21.1988629Z', [LastPasswordChangeAt] = '2025-10-04T23:40:21.4161338Z', [PasswordHash] = N'$2a$11$eAsTv1iZ0Cqj2oqn.Kiy/e5GJ/pgZ4SUs.i2bmWbOBEf6nqYMEvXq', [RequiresPasswordChange] = CAST(0 AS bit)
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:12.407 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PasswordResetTokens_ExpiresAt] ON [PasswordResetTokens] ([ExpiresAt]);
+2025-12-17 00:14:12.483 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_PasswordResetTokens_Token] ON [PasswordResetTokens] ([Token]);
+2025-12-17 00:14:12.559 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_PasswordResetTokens_UserId] ON [PasswordResetTokens] ([UserId]);
+2025-12-17 00:14:12.634 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251004234021_AddPasswordResetFunctionality', N'8.0.0');
+2025-12-17 00:14:12.715 -06:00 [INF] Applying migration '20251005011905_AddCobrosTable'.
+2025-12-17 00:14:12.876 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Cobros] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroRecibo] nvarchar(50) NOT NULL,
+    [PolizaId] int NOT NULL,
+    [NumeroPoliza] nvarchar(50) NOT NULL,
+    [ClienteNombre] nvarchar(100) NOT NULL,
+    [ClienteApellido] nvarchar(100) NOT NULL,
+    [FechaVencimiento] datetime2 NOT NULL,
+    [FechaCobro] datetime2 NULL,
+    [MontoTotal] decimal(18,2) NOT NULL,
+    [MontoCobrado] decimal(18,2) NULL,
+    [Estado] int NOT NULL,
+    [MetodoPago] int NULL,
+    [Observaciones] nvarchar(500) NULL,
+    [UsuarioCobroId] int NULL,
+    [UsuarioCobroNombre] nvarchar(100) NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Cobros] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Cobros_Polizas_PolizaId] FOREIGN KEY ([PolizaId]) REFERENCES [Polizas] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Cobros_Users_UsuarioCobroId] FOREIGN KEY ([UsuarioCobroId]) REFERENCES [Users] ([Id]) ON DELETE SET NULL
+);
+2025-12-17 00:14:12.951 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T01:19:05.0802707Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:13.024 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T01:19:05.0802714Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:13.098 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T01:19:05.0802716Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:13.174 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-05T01:19:05.2932823Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:13.252 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-05T01:19:05.0802981Z', [LastPasswordChangeAt] = '2025-10-05T01:19:05.2932067Z', [PasswordHash] = N'$2a$11$oOFuS5G5NQwxjfQXMRfTd.N5oRI7cpiTiq9HfWBfrqT.LbRplzve2'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:13.331 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_Estado] ON [Cobros] ([Estado]);
+2025-12-17 00:14:13.405 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_FechaVencimiento] ON [Cobros] ([FechaVencimiento]);
+2025-12-17 00:14:13.483 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Cobros_NumeroRecibo] ON [Cobros] ([NumeroRecibo]);
+2025-12-17 00:14:13.559 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_PolizaId] ON [Cobros] ([PolizaId]);
+2025-12-17 00:14:13.636 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cobros_UsuarioCobroId] ON [Cobros] ([UsuarioCobroId]);
+2025-12-17 00:14:13.713 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251005011905_AddCobrosTable', N'8.0.0');
+2025-12-17 00:14:13.793 -06:00 [INF] Applying migration '20251005032933_AddMonedaAndCotizaciones'.
+2025-12-17 00:14:13.953 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cobros] ADD [Moneda] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:14.029 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Cotizaciones] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroCotizacion] nvarchar(50) NOT NULL,
+    [NombreSolicitante] nvarchar(200) NOT NULL,
+    [Email] nvarchar(100) NOT NULL,
+    [Telefono] nvarchar(20) NULL,
+    [TipoSeguro] nvarchar(50) NOT NULL,
+    [Aseguradora] nvarchar(100) NOT NULL,
+    [MontoAsegurado] decimal(18,2) NOT NULL,
+    [PrimaCotizada] decimal(18,2) NULL,
+    [Moneda] nvarchar(10) NOT NULL,
+    [FechaCotizacion] datetime2 NOT NULL,
+    [FechaVencimiento] datetime2 NULL,
+    [Estado] nvarchar(20) NOT NULL,
+    [Observaciones] nvarchar(500) NULL,
+    [Placa] nvarchar(20) NULL,
+    [Marca] nvarchar(50) NULL,
+    [Modelo] nvarchar(50) NULL,
+    [Año] int NULL,
+    [Cilindraje] nvarchar(50) NULL,
+    [FechaNacimiento] datetime2 NULL,
+    [Genero] nvarchar(20) NULL,
+    [Ocupacion] nvarchar(100) NULL,
+    [DireccionInmueble] nvarchar(200) NULL,
+    [TipoInmueble] nvarchar(50) NULL,
+    [ValorInmueble] decimal(18,2) NULL,
+    [UsuarioId] int NOT NULL,
+    [FechaCreacion] datetime2 NOT NULL,
+    [FechaActualizacion] datetime2 NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Cotizaciones] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Cotizaciones_Users_UsuarioId] FOREIGN KEY ([UsuarioId]) REFERENCES [Users] ([Id]) ON DELETE NO ACTION
+);
+2025-12-17 00:14:14.107 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536921Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:14.183 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536930Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:14.260 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T03:29:31.6536932Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:14.335 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-05T03:29:31.9571018Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:14.414 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-05T03:29:31.6537296Z', [LastPasswordChangeAt] = '2025-10-05T03:29:31.9569868Z', [PasswordHash] = N'$2a$11$CmLRP9Jl1Vwz6hJmE2lYLejDJmrzwtD.fSv4TWOt16Vyl.ci9GBGS'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:14.490 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_Email] ON [Cotizaciones] ([Email]);
+2025-12-17 00:14:14.568 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_Estado] ON [Cotizaciones] ([Estado]);
+2025-12-17 00:14:14.646 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_FechaCotizacion] ON [Cotizaciones] ([FechaCotizacion]);
+2025-12-17 00:14:14.721 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_Cotizaciones_NumeroCotizacion] ON [Cotizaciones] ([NumeroCotizacion]);
+2025-12-17 00:14:14.800 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_TipoSeguro] ON [Cotizaciones] ([TipoSeguro]);
+2025-12-17 00:14:14.875 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Cotizaciones_UsuarioId] ON [Cotizaciones] ([UsuarioId]);
+2025-12-17 00:14:14.950 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251005032933_AddMonedaAndCotizaciones', N'8.0.0');
+2025-12-17 00:14:15.031 -06:00 [INF] Applying migration '20251005040644_AddReclamosModule'.
+2025-12-17 00:14:15.192 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Reclamos] (
+    [Id] int NOT NULL IDENTITY,
+    [NumeroReclamo] nvarchar(max) NOT NULL,
+    [PolizaId] int NOT NULL,
+    [NumeroPoliza] nvarchar(max) NOT NULL,
+    [ClienteNombre] nvarchar(max) NOT NULL,
+    [ClienteApellido] nvarchar(max) NOT NULL,
+    [FechaReclamo] datetime2 NOT NULL,
+    [FechaResolucion] datetime2 NULL,
+    [TipoReclamo] int NOT NULL,
+    [Estado] int NOT NULL,
+    [Descripcion] nvarchar(max) NOT NULL,
+    [MontoReclamado] decimal(18,2) NULL,
+    [MontoAprobado] decimal(18,2) NULL,
+    [Moneda] nvarchar(max) NOT NULL,
+    [Prioridad] int NOT NULL,
+    [Observaciones] nvarchar(max) NULL,
+    [DocumentosAdjuntos] nvarchar(max) NULL,
+    [UsuarioAsignadoId] int NULL,
+    [UsuarioAsignadoNombre] nvarchar(max) NULL,
+    [FechaLimiteRespuesta] datetime2 NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_Reclamos] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Reclamos_Polizas_PolizaId] FOREIGN KEY ([PolizaId]) REFERENCES [Polizas] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Reclamos_Users_UsuarioAsignadoId] FOREIGN KEY ([UsuarioAsignadoId]) REFERENCES [Users] ([Id])
+);
+2025-12-17 00:14:15.268 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T04:06:43.4322376Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:15.348 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T04:06:43.4322384Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:15.424 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-05T04:06:43.4322385Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:15.501 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-05T04:06:43.6076992Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:15.579 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-05T04:06:43.4322543Z', [LastPasswordChangeAt] = '2025-10-05T04:06:43.6076266Z', [PasswordHash] = N'$2a$11$gTPJsyPi3DZ6F.bHZ62Qv.VTvNEiOiOy25IHXu1eITRS44x9s/mxm'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:15.654 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Reclamos_PolizaId] ON [Reclamos] ([PolizaId]);
+2025-12-17 00:14:15.729 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Reclamos_UsuarioAsignadoId] ON [Reclamos] ([UsuarioAsignadoId]);
+2025-12-17 00:14:15.805 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251005040644_AddReclamosModule', N'8.0.0');
+2025-12-17 00:14:15.894 -06:00 [INF] Applying migration '20251010174908_AddEmailConfigTable'.
+2025-12-17 00:14:16.060 -06:00 [INF] Executed DbCommand (76ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [EmailConfigs] (
+    [Id] int NOT NULL IDENTITY,
+    [ConfigName] nvarchar(100) NOT NULL,
+    [SmtpServer] nvarchar(100) NOT NULL,
+    [SmtpPort] int NOT NULL,
+    [FromEmail] nvarchar(100) NOT NULL,
+    [FromName] nvarchar(100) NOT NULL,
+    [Username] nvarchar(100) NOT NULL,
+    [Password] nvarchar(200) NOT NULL,
+    [UseSSL] bit NOT NULL,
+    [UseTLS] bit NOT NULL,
+    [IsDefault] bit NOT NULL,
+    [IsActive] bit NOT NULL,
+    [Description] nvarchar(500) NULL,
+    [CompanyName] nvarchar(200) NULL,
+    [CompanyAddress] nvarchar(500) NULL,
+    [CompanyPhone] nvarchar(20) NULL,
+    [CompanyWebsite] nvarchar(100) NULL,
+    [CompanyLogo] nvarchar(500) NULL,
+    [TimeoutSeconds] int NOT NULL,
+    [MaxRetries] int NOT NULL,
+    [LastTested] datetime2 NOT NULL,
+    [LastTestSuccessful] bit NOT NULL,
+    [LastTestError] nvarchar(500) NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    [IsDeleted] bit NOT NULL,
+    CONSTRAINT [PK_EmailConfigs] PRIMARY KEY ([Id])
+);
+2025-12-17 00:14:16.135 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888264Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:16.209 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888272Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:16.284 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-10-10T17:49:08.1888273Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:16.358 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-10-10T17:49:08.3909329Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:16.432 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-10-10T17:49:08.1888456Z', [LastPasswordChangeAt] = '2025-10-10T17:49:08.3903333Z', [PasswordHash] = N'$2a$11$S3xQGzPo8/4EN8B/gY.AUOiKbE.b79bDyHPZrYibXp3yRTffQ1fLi'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:16.506 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [IX_EmailConfigs_ConfigName] ON [EmailConfigs] ([ConfigName]);
+2025-12-17 00:14:16.583 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailConfigs_IsActive] ON [EmailConfigs] ([IsActive]);
+2025-12-17 00:14:16.659 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailConfigs_IsDefault] ON [EmailConfigs] ([IsDefault]);
+2025-12-17 00:14:16.735 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251010174908_AddEmailConfigTable', N'8.0.0');
+2025-12-17 00:14:16.820 -06:00 [INF] Applying migration '20251217060042_AddCorreoElectronicoToCobro'.
+2025-12-17 00:14:16.988 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cobros] DROP CONSTRAINT [FK_Cobros_Polizas_PolizaId];
+2025-12-17 00:14:17.063 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cobros] DROP CONSTRAINT [FK_Cobros_Users_UsuarioCobroId];
+2025-12-17 00:14:17.138 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] DROP CONSTRAINT [FK_Cotizaciones_Users_UsuarioId];
+2025-12-17 00:14:17.214 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Reclamos] DROP CONSTRAINT [FK_Reclamos_Polizas_PolizaId];
+2025-12-17 00:14:17.289 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Polizas_NumeroPoliza] ON [Polizas];
+2025-12-17 00:14:17.363 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_PasswordResetTokens_ExpiresAt] ON [PasswordResetTokens];
+2025-12-17 00:14:17.437 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_PasswordResetTokens_Token] ON [PasswordResetTokens];
+2025-12-17 00:14:17.514 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_EmailConfigs_ConfigName] ON [EmailConfigs];
+2025-12-17 00:14:17.591 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_EmailConfigs_IsActive] ON [EmailConfigs];
+2025-12-17 00:14:17.667 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_EmailConfigs_IsDefault] ON [EmailConfigs];
+2025-12-17 00:14:17.743 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cotizaciones_Email] ON [Cotizaciones];
+2025-12-17 00:14:17.819 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cotizaciones_Estado] ON [Cotizaciones];
+2025-12-17 00:14:17.896 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cotizaciones_FechaCotizacion] ON [Cotizaciones];
+2025-12-17 00:14:17.972 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cotizaciones_NumeroCotizacion] ON [Cotizaciones];
+2025-12-17 00:14:18.049 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cotizaciones_TipoSeguro] ON [Cotizaciones];
+2025-12-17 00:14:18.126 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cobros_Estado] ON [Cobros];
+2025-12-17 00:14:18.202 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cobros_FechaVencimiento] ON [Cobros];
+2025-12-17 00:14:18.282 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cobros_NumeroRecibo] ON [Cobros];
+2025-12-17 00:14:18.358 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cobros_PolizaId] ON [Cobros];
+2025-12-17 00:14:18.434 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX [IX_Cobros_UsuarioCobroId] ON [Cobros];
+2025-12-17 00:14:18.521 -06:00 [INF] Executed DbCommand (84ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var1 sysname;
+SELECT @var1 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Reclamos]') AND [c].[name] = N'UsuarioAsignadoNombre');
+IF @var1 IS NOT NULL EXEC(N'ALTER TABLE [Reclamos] DROP CONSTRAINT [' + @var1 + '];');
+ALTER TABLE [Reclamos] DROP COLUMN [UsuarioAsignadoNombre];
+2025-12-17 00:14:18.607 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var2 sysname;
+SELECT @var2 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PasswordResetTokens]') AND [c].[name] = N'IpAddress');
+IF @var2 IS NOT NULL EXEC(N'ALTER TABLE [PasswordResetTokens] DROP CONSTRAINT [' + @var2 + '];');
+ALTER TABLE [PasswordResetTokens] DROP COLUMN [IpAddress];
+2025-12-17 00:14:18.694 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var3 sysname;
+SELECT @var3 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PasswordResetTokens]') AND [c].[name] = N'UserAgent');
+IF @var3 IS NOT NULL EXEC(N'ALTER TABLE [PasswordResetTokens] DROP CONSTRAINT [' + @var3 + '];');
+ALTER TABLE [PasswordResetTokens] DROP COLUMN [UserAgent];
+2025-12-17 00:14:18.780 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var4 sysname;
+SELECT @var4 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Cilindraje');
+IF @var4 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var4 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [Cilindraje];
+2025-12-17 00:14:18.866 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var5 sysname;
+SELECT @var5 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'DireccionInmueble');
+IF @var5 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var5 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [DireccionInmueble];
+2025-12-17 00:14:19.033 -06:00 [INF] Executed DbCommand (165ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var6 sysname;
+SELECT @var6 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'FechaNacimiento');
+IF @var6 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var6 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [FechaNacimiento];
+2025-12-17 00:14:19.143 -06:00 [INF] Executed DbCommand (106ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var7 sysname;
+SELECT @var7 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'FechaVencimiento');
+IF @var7 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var7 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [FechaVencimiento];
+2025-12-17 00:14:19.252 -06:00 [INF] Executed DbCommand (103ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var8 sysname;
+SELECT @var8 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Genero');
+IF @var8 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var8 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [Genero];
+2025-12-17 00:14:19.378 -06:00 [INF] Executed DbCommand (117ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var9 sysname;
+SELECT @var9 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Observaciones');
+IF @var9 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var9 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [Observaciones];
+2025-12-17 00:14:19.487 -06:00 [INF] Executed DbCommand (104ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var10 sysname;
+SELECT @var10 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Ocupacion');
+IF @var10 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var10 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [Ocupacion];
+2025-12-17 00:14:19.596 -06:00 [INF] Executed DbCommand (101ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var11 sysname;
+SELECT @var11 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'PrimaCotizada');
+IF @var11 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var11 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [PrimaCotizada];
+2025-12-17 00:14:19.705 -06:00 [INF] Executed DbCommand (108ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var12 sysname;
+SELECT @var12 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Telefono');
+IF @var12 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var12 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [Telefono];
+2025-12-17 00:14:19.831 -06:00 [INF] Executed DbCommand (123ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var13 sysname;
+SELECT @var13 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'TipoInmueble');
+IF @var13 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var13 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [TipoInmueble];
+2025-12-17 00:14:19.971 -06:00 [INF] Executed DbCommand (137ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var14 sysname;
+SELECT @var14 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'ValorInmueble');
+IF @var14 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var14 + '];');
+ALTER TABLE [Cotizaciones] DROP COLUMN [ValorInmueble];
+2025-12-17 00:14:20.096 -06:00 [INF] Executed DbCommand (121ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var15 sysname;
+SELECT @var15 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'ClienteApellido');
+IF @var15 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var15 + '];');
+ALTER TABLE [Cobros] DROP COLUMN [ClienteApellido];
+2025-12-17 00:14:20.206 -06:00 [INF] Executed DbCommand (106ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var16 sysname;
+SELECT @var16 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'ClienteNombre');
+IF @var16 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var16 + '];');
+ALTER TABLE [Cobros] DROP COLUMN [ClienteNombre];
+2025-12-17 00:14:22.599 -06:00 [INF] Executed DbCommand (2,387ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+EXEC sp_rename N'[Reclamos].[ClienteNombre]', N'NombreAsegurado', N'COLUMN';
+2025-12-17 00:14:22.676 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+EXEC sp_rename N'[Reclamos].[ClienteApellido]', N'ClienteNombreCompleto', N'COLUMN';
+2025-12-17 00:14:22.753 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+EXEC sp_rename N'[Cotizaciones].[MontoAsegurado]', N'Prima', N'COLUMN';
+2025-12-17 00:14:22.842 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var17 sysname;
+SELECT @var17 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Reclamos]') AND [c].[name] = N'PolizaId');
+IF @var17 IS NOT NULL EXEC(N'ALTER TABLE [Reclamos] DROP CONSTRAINT [' + @var17 + '];');
+ALTER TABLE [Reclamos] ALTER COLUMN [PolizaId] int NULL;
+2025-12-17 00:14:22.931 -06:00 [INF] Executed DbCommand (85ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var18 sysname;
+SELECT @var18 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Reclamos]') AND [c].[name] = N'Observaciones');
+IF @var18 IS NOT NULL EXEC(N'ALTER TABLE [Reclamos] DROP CONSTRAINT [' + @var18 + '];');
+UPDATE [Reclamos] SET [Observaciones] = N'' WHERE [Observaciones] IS NULL;
+ALTER TABLE [Reclamos] ALTER COLUMN [Observaciones] nvarchar(max) NOT NULL;
+ALTER TABLE [Reclamos] ADD DEFAULT N'' FOR [Observaciones];
+2025-12-17 00:14:23.021 -06:00 [INF] Executed DbCommand (85ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var19 sysname;
+SELECT @var19 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Reclamos]') AND [c].[name] = N'MontoReclamado');
+IF @var19 IS NOT NULL EXEC(N'ALTER TABLE [Reclamos] DROP CONSTRAINT [' + @var19 + '];');
+UPDATE [Reclamos] SET [MontoReclamado] = 0.0 WHERE [MontoReclamado] IS NULL;
+ALTER TABLE [Reclamos] ALTER COLUMN [MontoReclamado] decimal(18,2) NOT NULL;
+ALTER TABLE [Reclamos] ADD DEFAULT 0.0 FOR [MontoReclamado];
+2025-12-17 00:14:23.238 -06:00 [INF] Executed DbCommand (211ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var20 sysname;
+SELECT @var20 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Reclamos]') AND [c].[name] = N'DocumentosAdjuntos');
+IF @var20 IS NOT NULL EXEC(N'ALTER TABLE [Reclamos] DROP CONSTRAINT [' + @var20 + '];');
+UPDATE [Reclamos] SET [DocumentosAdjuntos] = N'' WHERE [DocumentosAdjuntos] IS NULL;
+ALTER TABLE [Reclamos] ALTER COLUMN [DocumentosAdjuntos] nvarchar(max) NOT NULL;
+ALTER TABLE [Reclamos] ADD DEFAULT N'' FOR [DocumentosAdjuntos];
+2025-12-17 00:14:23.335 -06:00 [INF] Executed DbCommand (95ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var21 sysname;
+SELECT @var21 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'Placa');
+IF @var21 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var21 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [Placa] nvarchar(10) NULL;
+2025-12-17 00:14:23.459 -06:00 [INF] Executed DbCommand (116ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var22 sysname;
+SELECT @var22 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'NumeroPoliza');
+IF @var22 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var22 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [NumeroPoliza] nvarchar(50) NULL;
+2025-12-17 00:14:23.569 -06:00 [INF] Executed DbCommand (107ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var23 sysname;
+SELECT @var23 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'NombreAsegurado');
+IF @var23 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var23 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [NombreAsegurado] nvarchar(200) NULL;
+2025-12-17 00:14:23.694 -06:00 [INF] Executed DbCommand (121ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var24 sysname;
+SELECT @var24 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'Moneda');
+IF @var24 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var24 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [Moneda] nvarchar(3) NULL;
+2025-12-17 00:14:23.804 -06:00 [INF] Executed DbCommand (108ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var25 sysname;
+SELECT @var25 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'Modelo');
+IF @var25 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var25 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [Modelo] nvarchar(50) NULL;
+2025-12-17 00:14:23.960 -06:00 [INF] Executed DbCommand (150ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var26 sysname;
+SELECT @var26 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'Modalidad');
+IF @var26 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var26 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [Modalidad] nvarchar(50) NULL;
+2025-12-17 00:14:24.070 -06:00 [INF] Executed DbCommand (104ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var27 sysname;
+SELECT @var27 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'Marca');
+IF @var27 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var27 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [Marca] nvarchar(50) NULL;
+2025-12-17 00:14:24.210 -06:00 [INF] Executed DbCommand (133ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var28 sysname;
+SELECT @var28 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'Frecuencia');
+IF @var28 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var28 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [Frecuencia] nvarchar(50) NULL;
+2025-12-17 00:14:24.364 -06:00 [INF] Executed DbCommand (145ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var29 sysname;
+SELECT @var29 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Polizas]') AND [c].[name] = N'Aseguradora');
+IF @var29 IS NOT NULL EXEC(N'ALTER TABLE [Polizas] DROP CONSTRAINT [' + @var29 + '];');
+ALTER TABLE [Polizas] ALTER COLUMN [Aseguradora] nvarchar(100) NULL;
+2025-12-17 00:14:24.438 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Polizas] ADD [Año] nvarchar(4) NULL;
+2025-12-17 00:14:24.512 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Polizas] ADD [Correo] nvarchar(100) NULL;
+2025-12-17 00:14:24.587 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Polizas] ADD [NumeroCedula] nvarchar(50) NULL;
+2025-12-17 00:14:24.662 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Polizas] ADD [NumeroTelefono] nvarchar(20) NULL;
+2025-12-17 00:14:24.748 -06:00 [INF] Executed DbCommand (84ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var30 sysname;
+SELECT @var30 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[PasswordResetTokens]') AND [c].[name] = N'Token');
+IF @var30 IS NOT NULL EXEC(N'ALTER TABLE [PasswordResetTokens] DROP CONSTRAINT [' + @var30 + '];');
+ALTER TABLE [PasswordResetTokens] ALTER COLUMN [Token] nvarchar(max) NOT NULL;
+2025-12-17 00:14:24.836 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var31 sysname;
+SELECT @var31 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'Username');
+IF @var31 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var31 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [Username] nvarchar(max) NOT NULL;
+2025-12-17 00:14:24.924 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var32 sysname;
+SELECT @var32 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'SmtpServer');
+IF @var32 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var32 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [SmtpServer] nvarchar(max) NOT NULL;
+2025-12-17 00:14:25.013 -06:00 [INF] Executed DbCommand (84ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var33 sysname;
+SELECT @var33 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'Password');
+IF @var33 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var33 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [Password] nvarchar(max) NOT NULL;
+2025-12-17 00:14:25.101 -06:00 [INF] Executed DbCommand (83ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var34 sysname;
+SELECT @var34 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'LastTested');
+IF @var34 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var34 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [LastTested] datetime2 NULL;
+2025-12-17 00:14:25.238 -06:00 [INF] Executed DbCommand (129ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var35 sysname;
+SELECT @var35 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'LastTestError');
+IF @var35 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var35 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [LastTestError] nvarchar(max) NULL;
+2025-12-17 00:14:25.363 -06:00 [INF] Executed DbCommand (122ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var36 sysname;
+SELECT @var36 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'FromName');
+IF @var36 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var36 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [FromName] nvarchar(max) NOT NULL;
+2025-12-17 00:14:25.491 -06:00 [INF] Executed DbCommand (124ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var37 sysname;
+SELECT @var37 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'FromEmail');
+IF @var37 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var37 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [FromEmail] nvarchar(max) NOT NULL;
+2025-12-17 00:14:25.617 -06:00 [INF] Executed DbCommand (124ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var38 sysname;
+SELECT @var38 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'Description');
+IF @var38 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var38 + '];');
+UPDATE [EmailConfigs] SET [Description] = N'' WHERE [Description] IS NULL;
+ALTER TABLE [EmailConfigs] ALTER COLUMN [Description] nvarchar(max) NOT NULL;
+ALTER TABLE [EmailConfigs] ADD DEFAULT N'' FOR [Description];
+2025-12-17 00:14:25.754 -06:00 [INF] Executed DbCommand (134ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var39 sysname;
+SELECT @var39 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'ConfigName');
+IF @var39 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var39 + '];');
+ALTER TABLE [EmailConfigs] ALTER COLUMN [ConfigName] nvarchar(max) NOT NULL;
+2025-12-17 00:14:25.896 -06:00 [INF] Executed DbCommand (139ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var40 sysname;
+SELECT @var40 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'CompanyWebsite');
+IF @var40 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var40 + '];');
+UPDATE [EmailConfigs] SET [CompanyWebsite] = N'' WHERE [CompanyWebsite] IS NULL;
+ALTER TABLE [EmailConfigs] ALTER COLUMN [CompanyWebsite] nvarchar(max) NOT NULL;
+ALTER TABLE [EmailConfigs] ADD DEFAULT N'' FOR [CompanyWebsite];
+2025-12-17 00:14:26.036 -06:00 [INF] Executed DbCommand (137ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var41 sysname;
+SELECT @var41 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'CompanyPhone');
+IF @var41 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var41 + '];');
+UPDATE [EmailConfigs] SET [CompanyPhone] = N'' WHERE [CompanyPhone] IS NULL;
+ALTER TABLE [EmailConfigs] ALTER COLUMN [CompanyPhone] nvarchar(max) NOT NULL;
+ALTER TABLE [EmailConfigs] ADD DEFAULT N'' FOR [CompanyPhone];
+2025-12-17 00:14:26.255 -06:00 [INF] Executed DbCommand (214ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var42 sysname;
+SELECT @var42 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'CompanyName');
+IF @var42 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var42 + '];');
+UPDATE [EmailConfigs] SET [CompanyName] = N'' WHERE [CompanyName] IS NULL;
+ALTER TABLE [EmailConfigs] ALTER COLUMN [CompanyName] nvarchar(max) NOT NULL;
+ALTER TABLE [EmailConfigs] ADD DEFAULT N'' FOR [CompanyName];
+2025-12-17 00:14:26.411 -06:00 [INF] Executed DbCommand (150ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var43 sysname;
+SELECT @var43 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'CompanyLogo');
+IF @var43 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var43 + '];');
+UPDATE [EmailConfigs] SET [CompanyLogo] = N'' WHERE [CompanyLogo] IS NULL;
+ALTER TABLE [EmailConfigs] ALTER COLUMN [CompanyLogo] nvarchar(max) NOT NULL;
+ALTER TABLE [EmailConfigs] ADD DEFAULT N'' FOR [CompanyLogo];
+2025-12-17 00:14:26.552 -06:00 [INF] Executed DbCommand (138ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var44 sysname;
+SELECT @var44 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[EmailConfigs]') AND [c].[name] = N'CompanyAddress');
+IF @var44 IS NOT NULL EXEC(N'ALTER TABLE [EmailConfigs] DROP CONSTRAINT [' + @var44 + '];');
+UPDATE [EmailConfigs] SET [CompanyAddress] = N'' WHERE [CompanyAddress] IS NULL;
+ALTER TABLE [EmailConfigs] ALTER COLUMN [CompanyAddress] nvarchar(max) NOT NULL;
+ALTER TABLE [EmailConfigs] ADD DEFAULT N'' FOR [CompanyAddress];
+2025-12-17 00:14:26.628 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [EmailConfigs] ADD [EnableSsl] bit NOT NULL DEFAULT CAST(0 AS bit);
+2025-12-17 00:14:26.717 -06:00 [INF] Executed DbCommand (84ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var45 sysname;
+SELECT @var45 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'TipoSeguro');
+IF @var45 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var45 + '];');
+ALTER TABLE [Cotizaciones] ALTER COLUMN [TipoSeguro] nvarchar(max) NOT NULL;
+2025-12-17 00:14:26.833 -06:00 [INF] Executed DbCommand (110ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var46 sysname;
+SELECT @var46 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Placa');
+IF @var46 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var46 + '];');
+UPDATE [Cotizaciones] SET [Placa] = N'' WHERE [Placa] IS NULL;
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Placa] nvarchar(max) NOT NULL;
+ALTER TABLE [Cotizaciones] ADD DEFAULT N'' FOR [Placa];
+2025-12-17 00:14:26.957 -06:00 [INF] Executed DbCommand (123ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var47 sysname;
+SELECT @var47 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'NumeroCotizacion');
+IF @var47 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var47 + '];');
+ALTER TABLE [Cotizaciones] ALTER COLUMN [NumeroCotizacion] nvarchar(max) NOT NULL;
+2025-12-17 00:14:27.082 -06:00 [INF] Executed DbCommand (121ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var48 sysname;
+SELECT @var48 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'NombreSolicitante');
+IF @var48 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var48 + '];');
+ALTER TABLE [Cotizaciones] ALTER COLUMN [NombreSolicitante] nvarchar(max) NOT NULL;
+2025-12-17 00:14:27.301 -06:00 [INF] Executed DbCommand (215ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var49 sysname;
+SELECT @var49 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Moneda');
+IF @var49 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var49 + '];');
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Moneda] nvarchar(max) NOT NULL;
+2025-12-17 00:14:27.443 -06:00 [INF] Executed DbCommand (140ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var50 sysname;
+SELECT @var50 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Modelo');
+IF @var50 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var50 + '];');
+UPDATE [Cotizaciones] SET [Modelo] = N'' WHERE [Modelo] IS NULL;
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Modelo] nvarchar(max) NOT NULL;
+ALTER TABLE [Cotizaciones] ADD DEFAULT N'' FOR [Modelo];
+2025-12-17 00:14:27.583 -06:00 [INF] Executed DbCommand (139ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var51 sysname;
+SELECT @var51 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Marca');
+IF @var51 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var51 + '];');
+UPDATE [Cotizaciones] SET [Marca] = N'' WHERE [Marca] IS NULL;
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Marca] nvarchar(max) NOT NULL;
+ALTER TABLE [Cotizaciones] ADD DEFAULT N'' FOR [Marca];
+2025-12-17 00:14:27.707 -06:00 [INF] Executed DbCommand (115ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var52 sysname;
+SELECT @var52 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Estado');
+IF @var52 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var52 + '];');
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Estado] nvarchar(max) NOT NULL;
+2025-12-17 00:14:27.833 -06:00 [INF] Executed DbCommand (122ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var53 sysname;
+SELECT @var53 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Email');
+IF @var53 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var53 + '];');
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Email] nvarchar(max) NOT NULL;
+2025-12-17 00:14:27.974 -06:00 [INF] Executed DbCommand (132ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var54 sysname;
+SELECT @var54 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Año');
+IF @var54 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var54 + '];');
+UPDATE [Cotizaciones] SET [Año] = N'' WHERE [Año] IS NULL;
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Año] nvarchar(max) NOT NULL;
+ALTER TABLE [Cotizaciones] ADD DEFAULT N'' FOR [Año];
+2025-12-17 00:14:28.098 -06:00 [INF] Executed DbCommand (122ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var55 sysname;
+SELECT @var55 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cotizaciones]') AND [c].[name] = N'Aseguradora');
+IF @var55 IS NOT NULL EXEC(N'ALTER TABLE [Cotizaciones] DROP CONSTRAINT [' + @var55 + '];');
+ALTER TABLE [Cotizaciones] ALTER COLUMN [Aseguradora] nvarchar(max) NOT NULL;
+2025-12-17 00:14:28.174 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [Correo] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:28.251 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [FechaVigencia] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+2025-12-17 00:14:28.329 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [Frecuencia] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:28.405 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [Modalidad] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:28.481 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [NombreAsegurado] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:28.555 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [NumeroCedula] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:28.632 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [NumeroPoliza] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:28.708 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [NumeroTelefono] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:28.785 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD [PerfilId] int NOT NULL DEFAULT 0;
+2025-12-17 00:14:28.874 -06:00 [INF] Executed DbCommand (85ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var56 sysname;
+SELECT @var56 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'UsuarioCobroNombre');
+IF @var56 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var56 + '];');
+UPDATE [Cobros] SET [UsuarioCobroNombre] = N'' WHERE [UsuarioCobroNombre] IS NULL;
+ALTER TABLE [Cobros] ALTER COLUMN [UsuarioCobroNombre] nvarchar(max) NOT NULL;
+ALTER TABLE [Cobros] ADD DEFAULT N'' FOR [UsuarioCobroNombre];
+2025-12-17 00:14:28.963 -06:00 [INF] Executed DbCommand (85ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var57 sysname;
+SELECT @var57 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'UsuarioCobroId');
+IF @var57 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var57 + '];');
+UPDATE [Cobros] SET [UsuarioCobroId] = 0 WHERE [UsuarioCobroId] IS NULL;
+ALTER TABLE [Cobros] ALTER COLUMN [UsuarioCobroId] int NOT NULL;
+ALTER TABLE [Cobros] ADD DEFAULT 0 FOR [UsuarioCobroId];
+2025-12-17 00:14:29.050 -06:00 [INF] Executed DbCommand (85ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var58 sysname;
+SELECT @var58 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'Observaciones');
+IF @var58 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var58 + '];');
+UPDATE [Cobros] SET [Observaciones] = N'' WHERE [Observaciones] IS NULL;
+ALTER TABLE [Cobros] ALTER COLUMN [Observaciones] nvarchar(max) NOT NULL;
+ALTER TABLE [Cobros] ADD DEFAULT N'' FOR [Observaciones];
+2025-12-17 00:14:29.138 -06:00 [INF] Executed DbCommand (84ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var59 sysname;
+SELECT @var59 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'NumeroRecibo');
+IF @var59 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var59 + '];');
+ALTER TABLE [Cobros] ALTER COLUMN [NumeroRecibo] nvarchar(max) NOT NULL;
+2025-12-17 00:14:29.287 -06:00 [INF] Executed DbCommand (144ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var60 sysname;
+SELECT @var60 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'NumeroPoliza');
+IF @var60 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var60 + '];');
+ALTER TABLE [Cobros] ALTER COLUMN [NumeroPoliza] nvarchar(max) NOT NULL;
+2025-12-17 00:14:29.430 -06:00 [INF] Executed DbCommand (138ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var61 sysname;
+SELECT @var61 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'MontoCobrado');
+IF @var61 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var61 + '];');
+UPDATE [Cobros] SET [MontoCobrado] = 0.0 WHERE [MontoCobrado] IS NULL;
+ALTER TABLE [Cobros] ALTER COLUMN [MontoCobrado] decimal(18,2) NOT NULL;
+ALTER TABLE [Cobros] ADD DEFAULT 0.0 FOR [MontoCobrado];
+2025-12-17 00:14:29.570 -06:00 [INF] Executed DbCommand (137ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var62 sysname;
+SELECT @var62 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'MetodoPago');
+IF @var62 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var62 + '];');
+UPDATE [Cobros] SET [MetodoPago] = 0 WHERE [MetodoPago] IS NULL;
+ALTER TABLE [Cobros] ALTER COLUMN [MetodoPago] int NOT NULL;
+ALTER TABLE [Cobros] ADD DEFAULT 0 FOR [MetodoPago];
+2025-12-17 00:14:29.726 -06:00 [INF] Executed DbCommand (154ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DECLARE @var63 sysname;
+SELECT @var63 = [d].[name]
+FROM [sys].[default_constraints] [d]
+INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Cobros]') AND [c].[name] = N'FechaCobro');
+IF @var63 IS NOT NULL EXEC(N'ALTER TABLE [Cobros] DROP CONSTRAINT [' + @var63 + '];');
+UPDATE [Cobros] SET [FechaCobro] = '0001-01-01T00:00:00.0000000' WHERE [FechaCobro] IS NULL;
+ALTER TABLE [Cobros] ALTER COLUMN [FechaCobro] datetime2 NOT NULL;
+ALTER TABLE [Cobros] ADD DEFAULT '0001-01-01T00:00:00.0000000' FOR [FechaCobro];
+2025-12-17 00:14:29.802 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cobros] ADD [ClienteNombreCompleto] nvarchar(max) NOT NULL DEFAULT N'';
+2025-12-17 00:14:29.879 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cobros] ADD [CorreoElectronico] nvarchar(max) NULL;
+2025-12-17 00:14:29.955 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-12-17T06:00:40.6962574Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:30.035 -06:00 [INF] Executed DbCommand (75ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-12-17T06:00:40.6962586Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:30.109 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2025-12-17T06:00:40.6962588Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:30.183 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2025-12-17T06:00:40.8480175Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:30.259 -06:00 [INF] Executed DbCommand (74ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2025-12-17T06:00:40.6963578Z', [LastPasswordChangeAt] = NULL, [PasswordHash] = N'$2a$11$CJLovmV.NTNLOh0qmFEPVuupea22NPMOGy4JHuojT5Op.UizUQwi.'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2025-12-17 00:14:30.335 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_Polizas_NumeroPoliza] ON [Polizas] ([NumeroPoliza]);
+2025-12-17 00:14:30.412 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Cotizaciones] ADD CONSTRAINT [FK_Cotizaciones_Users_UsuarioId] FOREIGN KEY ([UsuarioId]) REFERENCES [Users] ([Id]) ON DELETE CASCADE;
+2025-12-17 00:14:30.488 -06:00 [INF] Executed DbCommand (73ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE [Reclamos] ADD CONSTRAINT [FK_Reclamos_Polizas_PolizaId] FOREIGN KEY ([PolizaId]) REFERENCES [Polizas] ([Id]);
+2025-12-17 00:14:30.565 -06:00 [INF] Executed DbCommand (72ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20251217060042_AddCorreoElectronicoToCobro', N'8.0.0');

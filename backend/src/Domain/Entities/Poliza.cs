@@ -19,6 +19,7 @@ namespace Domain.Entities
         public string? Año { get; set; }
         public string? Correo { get; set; }
         public string? NumeroTelefono { get; set; }
+        public string? Observaciones { get; set; }
         public int PerfilId { get; set; }
         public bool EsActivo { get; set; } = true;
         public bool IsDeleted { get; set; } = false;

@@ -49,6 +49,7 @@ export interface Poliza {
   numeroTelefono: string;
   perfilId: number;
   esActivo: boolean;
+  observaciones?: string;
   fechaCreacion: string;
   usuarioCreacion: string;
 }
@@ -70,6 +71,7 @@ export interface CreatePoliza {
   correo: string;
   numeroTelefono: string;
   perfilId: number;
+  observaciones?: string;
 }
 
 export interface Role {

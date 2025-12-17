@@ -1,27 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map, delay } from 'rxjs/operators';
-
-export interface User {
-  id: number;
-  email: string;
-  firstName: string;
-  lastName: string;
-  roles: Role[];
-  lastLoginAt: Date;
-}
-
-export interface Role {
-  id: number;
-  name: string;
-  permissions: string[];
-}
-
-export interface LoginResponse {
-  user: User;
-  token: string;
-  message: string;
-}
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap, catchError, map } from 'rxjs/operators';
+import { ApiService } from './api.service';
+import { User, LoginResponse, Role } from '../interfaces/user.interface';
 
 export interface ResetPasswordResponse {
   message: string;
@@ -35,23 +16,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  // Mock user data
-  private mockUser: User = {
-    id: 1,
-    email: 'admin@sinseg.com',
-    firstName: 'Administrador',
-    lastName: 'Sistema',
-    roles: [
-      {
-        id: 1,
-        name: 'Admin',
-        permissions: ['read', 'write', 'delete', 'admin']
-      }
-    ],
-    lastLoginAt: new Date()
-  };
-
-  constructor() {
+  constructor(private apiService: ApiService) {
     // Verificar si hay usuario guardado en localStorage
     const savedUser = localStorage.getItem('currentUser');
     const authToken = localStorage.getItem('authToken');
@@ -68,22 +33,19 @@ export class AuthService {
         localStorage.removeItem('authToken');
       }
     }
-    // Removido el auto-login - el usuario debe hacer login manualmente
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    // Mock login - siempre exitoso para desarrollo
-    return of({
-      user: this.mockUser,
-      token: 'mock-jwt-token',
-      message: 'Login exitoso'
-    }).pipe(
-      delay(1000), // Simular delay de red
-      map(response => {
+    return this.apiService.login({ email, password }).pipe(
+      tap(response => {
+        console.log('✅ Login response from API:', response);
         this.currentUserSubject.next(response.user);
         localStorage.setItem('currentUser', JSON.stringify(response.user));
         localStorage.setItem('authToken', response.token);
-        return response;
+      }),
+      catchError(error => {
+        console.error('❌ Login error:', error);
+        throw error;
       })
     );
   }
@@ -95,11 +57,16 @@ export class AuthService {
   }
 
   resetPassword(email: string): Observable<ResetPasswordResponse> {
-    // Mock reset password
-    return of({
-      message: 'Se ha enviado un enlace de reseteo a tu email',
-      success: true
-    }).pipe(delay(1000));
+    // TODO: Implementar reset password con backend real
+    return new Observable(observer => {
+      setTimeout(() => {
+        observer.next({
+          message: 'Se ha enviado un enlace de reseteo a tu email',
+          success: true
+        });
+        observer.complete();
+      }, 1000);
+    });
   }
 
   isAuthenticated(): boolean {

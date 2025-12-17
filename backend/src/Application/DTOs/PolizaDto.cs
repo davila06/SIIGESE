@@ -20,6 +20,7 @@ namespace Application.DTOs
         public string Año { get; set; } = string.Empty;
         public string Correo { get; set; } = string.Empty;
         public string NumeroTelefono { get; set; } = string.Empty;
+        public string? Observaciones { get; set; }
         public int PerfilId { get; set; }
         public bool EsActivo { get; set; } = true;
         public string CreatedBy { get; set; } = string.Empty;

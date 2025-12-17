@@ -39,7 +39,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   searchTerm: string = '';
   filteredPolizas: Poliza[] = [];
   filteredPolizasCount = 0;
-  displayedColumns: string[] = ['numeroPoliza', 'nombreAsegurado', 'prima', 'aseguradora', 'fechaVigencia', 'vehiculo', 'actions'];
+  displayedColumns: string[] = ['numeroPoliza', 'nombreAsegurado', 'aseguradora', 'fechaVigencia', 'frecuencia', 'observaciones', 'actions'];
 
   // Datos para selectores
   monedasSistema = MONEDAS_SISTEMA;
@@ -190,7 +190,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       aseguradora: ['', [Validators.required, Validators.maxLength(100)]],
       placa: ['', Validators.maxLength(20)],
       marca: ['', Validators.maxLength(50)],
-      modelo: ['', Validators.maxLength(50)]
+      modelo: ['', Validators.maxLength(50)],
+      observaciones: ['', Validators.maxLength(500)]
     });
   }
 
@@ -323,10 +324,21 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   formatDate(date: Date | string): string {
-    if (typeof date === 'string') {
-      return formatDateCR(new Date(date));
+    if (!date) return '-';
+    
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      
+      // Verificar si la fecha es válida
+      if (isNaN(dateObj.getTime())) {
+        return '-';
+      }
+      
+      return formatDateCR(dateObj);
+    } catch (error) {
+      console.error('Error formateando fecha:', error, date);
+      return '-';
     }
-    return formatDateCR(date);
   }
 
   // Métodos para paginación de tarjetas
@@ -565,7 +577,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       aseguradora: poliza.aseguradora,
       placa: poliza.placa || '',
       marca: poliza.marca || '',
-      modelo: poliza.modelo || ''
+      modelo: poliza.modelo || '',
+      observaciones: poliza.observaciones || ''
     };
     
     console.log('💾 Valores a cargar en formulario:', formValues);

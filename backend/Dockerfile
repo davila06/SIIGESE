@@ -3,15 +3,15 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy project files and restore dependencies
-COPY ["backend/src/WebApi/WebApi.csproj", "src/WebApi/"]
-COPY ["backend/src/Application/Application.csproj", "src/Application/"]
-COPY ["backend/src/Domain/Domain.csproj", "src/Domain/"]
-COPY ["backend/src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
+COPY ["src/WebApi/WebApi.csproj", "src/WebApi/"]
+COPY ["src/Application/Application.csproj", "src/Application/"]
+COPY ["src/Domain/Domain.csproj", "src/Domain/"]
+COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
 
 RUN dotnet restore "src/WebApi/WebApi.csproj"
 
 # Copy source code and build
-COPY backend/ .
+COPY . .
 WORKDIR "/src/src/WebApi"
 RUN dotnet build "WebApi.csproj" -c Release -o /app/build
 

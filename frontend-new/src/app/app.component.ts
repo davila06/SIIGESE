@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material/sidenav';
-import { AuthService, User } from './services/auth.service';
+import { AuthService } from './services/auth.service';
+import { User } from './interfaces/user.interface';
 import { TitleService } from './services/title.service';
 
 @Component({
