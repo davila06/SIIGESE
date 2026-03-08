@@ -14,7 +14,6 @@ namespace Domain.Entities
         public DateTime? LastLoginAt { get; set; }
         public DateTime? LastPasswordChangeAt { get; set; }
         public bool RequiresPasswordChange { get; set; } = false;
-        public bool IsDeleted { get; set; } = false;
 
         // Navigation properties
         public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();

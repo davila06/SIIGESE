@@ -62,10 +62,10 @@ namespace Infrastructure.Data.Repositories
                       && c.Estado == EstadoCobro.Pendiente
                       && (
                           // Periodicidad mensual: listar siempre
-                          p.Frecuencia.ToUpper() == "MENSUAL"
+                          (p.Frecuencia ?? string.Empty).ToUpper() == "MENSUAL"
                           ||
                           // Otras periodicidades: solo dentro del próximo mes
-                          (p.Frecuencia.ToUpper() != "MENSUAL" && c.FechaVencimiento <= fechaLimite)
+                          ((p.Frecuencia ?? string.Empty).ToUpper() != "MENSUAL" && c.FechaVencimiento <= fechaLimite)
                       )
                 orderby c.FechaVencimiento
                 select c

@@ -73,16 +73,16 @@ export class AuthService {
   }
 
   resetPassword(email: string): Observable<ResetPasswordResponse> {
-    // TODO: Implementar reset password con backend real
-    return new Observable(observer => {
-      setTimeout(() => {
-        observer.next({
-          message: 'Se ha enviado un enlace de reseteo a tu email',
-          success: true
-        });
-        observer.complete();
-      }, 1000);
-    });
+    return this.apiService.forgotPassword(email).pipe(
+      map(response => ({ message: response.message, success: true })),
+      catchError(error => {
+        throw error;
+      })
+    );
+  }
+
+  changePassword(currentPassword: string, newPassword: string, confirmPassword: string): Observable<void> {
+    return this.apiService.changePassword({ currentPassword, newPassword, confirmPassword });
   }
 
   isAuthenticated(): boolean {

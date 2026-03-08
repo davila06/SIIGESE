@@ -27,8 +27,5 @@ namespace Domain.Entities
         public DateTime? LastTested { get; set; }
         public bool LastTestSuccessful { get; set; } = false;
         public string? LastTestError { get; set; }
-        public bool IsDeleted { get; set; } = false;
-        public string CreatedBy { get; set; } = string.Empty;
-        public string? UpdatedBy { get; set; }
     }
 }

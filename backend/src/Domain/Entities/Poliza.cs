@@ -22,8 +22,5 @@ namespace Domain.Entities
         public string? Observaciones { get; set; }
         public int PerfilId { get; set; }
         public bool EsActivo { get; set; } = true;
-        public bool IsDeleted { get; set; } = false;
-        public string CreatedBy { get; set; } = string.Empty;
-        public string? UpdatedBy { get; set; }
     }
 }

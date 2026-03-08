@@ -17,6 +17,14 @@ export class ApiService {
     return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials);
   }
 
+  changePassword(request: { currentPassword: string; newPassword: string; confirmPassword: string }): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/auth/change-password`, request);
+  }
+
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/forgot-password`, { email });
+  }
+
   // Polizas endpoints
   getPolizas(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/polizas`);

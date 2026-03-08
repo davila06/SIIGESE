@@ -4,7 +4,6 @@ namespace Domain.Entities
     {
         public int UserId { get; set; }
         public int RoleId { get; set; }
-        public bool IsDeleted { get; set; } = false;
 
         // Navigation properties
         public virtual User User { get; set; } = null!;

@@ -145,9 +145,9 @@ namespace Application.Services
             // Si encontramos la póliza, usar sus datos
             if (poliza != null)
             {
-                reclamo.NombreAsegurado = poliza.NombreAsegurado;
-                reclamo.ClienteNombreCompleto = poliza.NombreAsegurado;
-                reclamo.NumeroPoliza = poliza.NumeroPoliza;
+                reclamo.NombreAsegurado = poliza.NombreAsegurado ?? string.Empty;
+                reclamo.ClienteNombreCompleto = poliza.NombreAsegurado ?? string.Empty;
+                reclamo.NumeroPoliza = poliza.NumeroPoliza ?? string.Empty;
             }
             else if (string.IsNullOrEmpty(reclamo.ClienteNombreCompleto))
             {

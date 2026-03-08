@@ -26,27 +26,27 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<bool> ValidateExcelFileAsync(IFormFile file)
+        public Task<bool> ValidateExcelFileAsync(IFormFile file)
         {
             try
             {
                 if (file == null || file.Length == 0)
                 {
                     _logger.LogWarning("Archivo no proporcionado o vacío");
-                    return false;
+                    return Task.FromResult(false);
                 }
 
                 if (file.Length > MaxFileSize)
                 {
                     _logger.LogWarning("Archivo excede el tamaño máximo permitido: {Size}MB", file.Length / 1024 / 1024);
-                    return false;
+                    return Task.FromResult(false);
                 }
 
                 var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
                 if (!Array.Exists(_allowedExtensions, ext => ext == extension))
                 {
                     _logger.LogWarning("Extensión de archivo no permitida: {Extension}", extension);
-                    return false;
+                    return Task.FromResult(false);
                 }
 
                 // Validar que realmente sea un archivo Excel
@@ -56,15 +56,15 @@ namespace Infrastructure.Services
                 if (workbook.Worksheets.Count == 0)
                 {
                     _logger.LogWarning("El archivo Excel no contiene hojas de trabajo");
-                    return false;
+                    return Task.FromResult(false);
                 }
 
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error validando archivo Excel");
-                return false;
+                return Task.FromResult(false);
             }
         }
 

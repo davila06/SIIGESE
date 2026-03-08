@@ -19,8 +19,5 @@ namespace Domain.Entities
         public string? CorreoElectronico { get; set; }
         public int UsuarioCobroId { get; set; }
         public string UsuarioCobroNombre { get; set; } = string.Empty;
-        public bool IsDeleted { get; set; } = false;
-        public string CreatedBy { get; set; } = string.Empty;
-        public string? UpdatedBy { get; set; }
     }
 }

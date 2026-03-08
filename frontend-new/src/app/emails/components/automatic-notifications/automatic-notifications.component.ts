@@ -65,66 +65,48 @@ export class AutomaticNotificationsComponent implements OnInit {
   loadData(): void {
     this.isLoading = true;
     
-    // Cargar estadísticas
     this.notificationService.getNotificationStatistics(this.daysBeforeExpiration).subscribe({
       next: (stats) => {
-        console.log('✅ Estadísticas cargadas:', stats);
         this.statistics = stats;
       },
       error: (error) => {
-        console.error('❌ Error cargando estadísticas:', error);
+        console.error('Error cargando estadísticas:', error);
         this.showMessage('Error cargando estadísticas');
       }
     });
 
-    // Cargar cobros vencidos
     this.notificationService.getOverduePayments().subscribe({
       next: (cobros) => {
-        console.log('✅ Cobros vencidos cargados:', cobros);
         this.overduePayments = cobros;
       },
       error: (error) => {
-        console.error('❌ Error cargando cobros vencidos:', error);
+        console.error('Error cargando cobros vencidos:', error);
         this.showMessage('Error cargando cobros vencidos');
       }
     });
 
-    // Cargar pólizas por vencer
     this.notificationService.getExpiringPolicies(this.daysBeforeExpiration).subscribe({
       next: (polizas) => {
-        console.log('✅ Pólizas por vencer cargadas:', polizas);
         this.expiringPolicies = polizas;
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('❌ Error cargando pólizas por vencer desde mock:', error);
+        console.error('Error cargando pólizas por vencer:', error);
         this.showMessage('Error cargando pólizas por vencer');
         this.isLoading = false;
       }
     });
-    
-    // Código original comentado para debugging
-    // this.notificationService.getNotificationStatistics(this.daysBeforeExpiration).subscribe({
-    //   next: (stats) => {
-    //     this.statistics = stats;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error cargando estadísticas:', error);
-    //     this.showMessage('Error cargando estadísticas');
-    //   }
-    // });
   }
 
   processOverduePayments(): void {
     this.isLoading = true;
     this.notificationService.processOverduePayments().subscribe({
       next: (result: NotificationResult) => {
-        console.log('✅ Procesamiento de cobros vencidos completado:', result);
         this.handleNotificationResult(result, 'Cobros Vencidos');
-        this.loadData(); // Recargar datos
+        this.loadData();
       },
       error: (error: any) => {
-        console.error('❌ Error procesando cobros vencidos:', error);
+        console.error('Error procesando cobros vencidos:', error);
         this.showMessage('Error procesando cobros vencidos');
         this.isLoading = false;
       }
@@ -135,12 +117,11 @@ export class AutomaticNotificationsComponent implements OnInit {
     this.isLoading = true;
     this.notificationService.processExpiringPolicies(this.daysBeforeExpiration).subscribe({
       next: (result: NotificationResult) => {
-        console.log('✅ Procesamiento de pólizas por vencer completado:', result);
         this.handleNotificationResult(result, 'Pólizas por Vencer');
-        this.loadData(); // Recargar datos
+        this.loadData();
       },
       error: (error: any) => {
-        console.error('❌ Error procesando pólizas por vencer:', error);
+        console.error('Error procesando pólizas por vencer:', error);
         this.showMessage('Error procesando pólizas por vencer');
         this.isLoading = false;
       }
@@ -151,12 +132,11 @@ export class AutomaticNotificationsComponent implements OnInit {
     this.isLoading = true;
     this.notificationService.processAllNotifications(this.daysBeforeExpiration).subscribe({
       next: (result: NotificationResult) => {
-        console.log('✅ Procesamiento de todas las notificaciones completado:', result);
         this.handleNotificationResult(result, 'Todas las Notificaciones');
-        this.loadData(); // Recargar datos
+        this.loadData();
       },
       error: (error: any) => {
-        console.error('❌ Error procesando todas las notificaciones:', error);
+        console.error('Error procesando todas las notificaciones:', error);
         this.showMessage('Error procesando todas las notificaciones');
         this.isLoading = false;
       }

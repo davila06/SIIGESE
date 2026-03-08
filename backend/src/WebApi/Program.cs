@@ -41,7 +41,7 @@ builder.Services.AddControllers()
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters();
-// builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestValidator>(); // TODO: Crear validators
+builder.Services.AddValidatorsFromAssemblyContaining<LoginRequestDtoValidator>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -64,7 +64,7 @@ builder.Services.AddAuthentication(x =>
 })
 .AddJwtBearer(x =>
 {
-    x.RequireHttpsMetadata = false;
+    x.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
     x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
     {
@@ -111,7 +111,7 @@ builder.Services.AddScoped<IEmailConfigRepository, EmailConfigRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
-// builder.Services.AddScoped<IClienteService, ClienteService>(); // TODO: Implementar ClienteService
+builder.Services.AddScoped<IClienteService, ClienteService>();
 builder.Services.AddScoped<IPolizaService, PolizaService>();
 builder.Services.AddScoped<ICobrosService, CobrosService>();
 builder.Services.AddScoped<IReclamoService, ReclamoService>();

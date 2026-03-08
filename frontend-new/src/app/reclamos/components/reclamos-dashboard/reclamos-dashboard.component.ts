@@ -23,10 +23,11 @@ import {
   ReclamosStats,
   TipoReclamo,
   EstadoReclamo,
-  PrioridadReclamo,
-  FiltroReclamos 
+  PrioridadReclamo
 } from '../../interfaces/reclamo.interface';
 import { ReclamosService } from '../../services/reclamos.service';
+import { ExportService, ExportColumn } from '../../../shared/services/export.service';
+import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 
 @Component({
   selector: 'app-reclamos-dashboard',
@@ -92,7 +93,8 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
     private readonly reclamosService: ReclamosService,
     private readonly snackBar: MatSnackBar,
     private readonly router: Router,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly exportService: ExportService
   ) { }
 
   ngOnInit(): void {
@@ -444,7 +446,85 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   exportarReclamos(): void {
-    this.showMessage('Funcionalidad de exportación en desarrollo');
+    const dataToExport = this.dataSource.filteredData.length > 0
+      ? this.dataSource.filteredData
+      : this.reclamos;
+
+    const dialogData: ExportDialogData = {
+      title: 'Exportar Reclamos',
+      totalRecords: dataToExport.length,
+      defaultFilename: `reclamos_${this.getCurrentDateString()}`
+    };
+
+    const dialogRef = this.dialog.open(ExportDialogComponent, {
+      width: '600px',
+      data: dialogData,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result: ExportDialogResult) => {
+      if (result) {
+        this.performExport(dataToExport, result);
+      }
+    });
+  }
+
+  private performExport(data: Reclamo[], options: ExportDialogResult): void {
+    const columns: ExportColumn[] = [
+      { key: 'numeroReclamo', header: 'No. Reclamo', type: 'text' },
+      { key: 'numeroPoliza', header: 'No. Póliza', type: 'text' },
+      { key: 'clienteNombreCompleto', header: 'Cliente', type: 'text' },
+      { key: 'tipoReclamo', header: 'Tipo', type: 'text' },
+      { key: 'estado', header: 'Estado', type: 'text' },
+      { key: 'prioridad', header: 'Prioridad', type: 'text' },
+      { key: 'fechaReclamo', header: 'Fecha Reclamo', type: 'date', dateFormat: options.dateFormat },
+      { key: 'fechaResolucion', header: 'Fecha Resolución', type: 'date', dateFormat: options.dateFormat },
+      { key: 'montoReclamado', header: 'Monto Reclamado', type: 'currency', currencyCode: 'CRC' },
+      { key: 'montoAprobado', header: 'Monto Aprobado', type: 'currency', currencyCode: 'CRC' },
+      { key: 'usuarioAsignadoNombre', header: 'Asignado A', type: 'text' },
+      { key: 'observaciones', header: 'Observaciones', type: 'text' }
+    ];
+
+    const transformedData = data.map(r => ({
+      ...r,
+      tipoReclamo: this.getTipoReclamoText(r.tipoReclamo),
+      estado: this.getEstadoText(r.estado),
+      prioridad: this.getPrioridadText(r.prioridad),
+      fechaReclamo: r.fechaReclamo ? new Date(r.fechaReclamo) : null,
+      fechaResolucion: r.fechaResolucion ? new Date(r.fechaResolucion) : null
+    }));
+
+    const exportOptions = {
+      filename: options.filename,
+      format: options.format as 'csv' | 'excel' | 'pdf',
+      includeHeaders: options.includeHeaders,
+      dateFormat: options.dateFormat
+    };
+
+    try {
+      switch (options.format) {
+        case 'csv':
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+          break;
+        case 'excel':
+          this.exportService.exportToExcel(transformedData, columns, exportOptions);
+          break;
+        case 'pdf':
+          this.exportService.exportToPDF(transformedData, columns, exportOptions);
+          break;
+        default:
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+      }
+      this.showMessage(`Archivo exportado exitosamente como ${options.format.toUpperCase()}`);
+    } catch (error) {
+      console.error('Error al exportar:', error);
+      this.showMessage('Error al exportar el archivo');
+    }
+  }
+
+  private getCurrentDateString(): string {
+    const now = new Date();
+    return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
   }
 
   crearNuevoReclamo(): void {

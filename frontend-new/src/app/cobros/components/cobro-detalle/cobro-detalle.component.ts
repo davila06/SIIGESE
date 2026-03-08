@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { 
   Cobro, 
   EstadoCobro, 
@@ -59,7 +60,8 @@ interface DocumentoCobro {
     MatSnackBarModule,
     MatListModule,
     MatTableModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatDialogModule
   ],
   templateUrl: './cobro-detalle.component.html',
   styleUrls: ['./cobro-detalle.component.scss']
@@ -84,10 +86,11 @@ export class CobroDetalleComponent implements OnInit {
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private cobrosService: CobrosService,
-    private snackBar: MatSnackBar
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly cobrosService: CobrosService,
+    private readonly snackBar: MatSnackBar,
+    private readonly dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -96,7 +99,6 @@ export class CobroDetalleComponent implements OnInit {
       if (id) {
         this.cobroId = +id;
         this.loadCobroDetalle();
-        this.loadMovimientos();
         this.loadDocumentos();
       } else {
         this.showMessage('ID de cobro no válido');
@@ -113,6 +115,7 @@ export class CobroDetalleComponent implements OnInit {
       next: (cobro: Cobro) => {
         this.cobro = cobro;
         this.loading = false;
+        this.loadMovimientos();
       },
       error: (error: any) => {
         console.error('Error al cargar detalle del cobro:', error);
@@ -124,64 +127,48 @@ export class CobroDetalleComponent implements OnInit {
   }
 
   loadMovimientos(): void {
-    if (!this.cobroId) return;
+    if (!this.cobro) return;
 
-    // Datos mock para movimientos
-    this.movimientos = [
+    const movimientos: MovimientoCobro[] = [
       {
         id: 1,
-        fecha: new Date('2024-01-15T09:00:00'),
-        descripcion: 'Cobro creado automáticamente',
+        fecha: new Date(this.cobro.fechaCreacion),
+        descripcion: 'Cobro creado',
         usuario: 'Sistema',
         tipo: 'creacion'
-      },
-      {
-        id: 2,
-        fecha: new Date('2024-01-20T14:30:00'),
-        descripcion: 'Fecha de vencimiento extendida',
-        usuario: 'admin@sinseg.com',
-        tipo: 'modificacion'
       }
     ];
 
-    // Si el cobro está cobrado, agregar movimiento de cobro
-    if (this.cobro && this.cobro.estado === EstadoCobro.Cobrado) {
-      this.movimientos.push({
-        id: 3,
-        fecha: this.cobro.fechaCobro || new Date(),
-        descripcion: 'Cobro registrado exitosamente',
-        usuario: 'admin@sinseg.com',
+    if (this.cobro.estado === EstadoCobro.Cobrado && this.cobro.fechaCobro) {
+      movimientos.push({
+        id: 2,
+        fecha: new Date(this.cobro.fechaCobro),
+        descripcion: 'Cobro registrado',
+        usuario: this.cobro.usuarioCobroNombre || 'Sistema',
         tipo: 'cobro',
         estadoAnterior: EstadoCobro.Pendiente,
         estadoNuevo: EstadoCobro.Cobrado
       });
     }
+
+    if (this.cobro.estado === EstadoCobro.Cancelado && this.cobro.fechaActualizacion) {
+      movimientos.push({
+        id: 3,
+        fecha: new Date(this.cobro.fechaActualizacion),
+        descripcion: 'Cobro cancelado',
+        usuario: 'Sistema',
+        tipo: 'cancelacion',
+        estadoAnterior: EstadoCobro.Pendiente,
+        estadoNuevo: EstadoCobro.Cancelado
+      });
+    }
+
+    this.movimientos = [...movimientos].sort((a, b) => b.fecha.getTime() - a.fecha.getTime());
   }
 
   loadDocumentos(): void {
-    if (!this.cobroId) return;
-
-    // Datos mock para documentos
-    this.documentos = [
-      {
-        id: 1,
-        nombre: `recibo_${this.cobroId}.pdf`,
-        tipo: 'PDF',
-        tamanio: 245760, // 240 KB
-        fechaSubida: new Date('2024-01-15T09:00:00'),
-        usuario: 'Sistema',
-        url: '#'
-      },
-      {
-        id: 2,
-        nombre: `comprobante_pago_${this.cobroId}.jpg`,
-        tipo: 'Imagen',
-        tamanio: 512000, // 500 KB
-        fechaSubida: new Date('2024-01-18T16:45:00'),
-        usuario: 'admin@sinseg.com',
-        url: '#'
-      }
-    ];
+    // Document management is not yet implemented in the backend.
+    this.documentos = [];
   }
 
   volver(): void {
@@ -190,40 +177,80 @@ export class CobroDetalleComponent implements OnInit {
 
   registrarCobro(): void {
     if (!this.cobro) return;
-    
-    // Implementar lógica de registro de cobro
-    this.showMessage('Funcionalidad de registro de cobro en desarrollo');
+
+    import('../registrar-cobro-dialog/registrar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.RegistrarCobroDialogComponent, {
+        width: '500px',
+        disableClose: true,
+        data: { cobro: this.cobro }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.cobrosService.registrarCobro(result).subscribe({
+            next: (updated) => {
+              this.cobro = updated;
+              this.showMessage('Cobro registrado exitosamente');
+              this.loadMovimientos();
+            },
+            error: (err) => {
+              this.showMessage('Error al registrar cobro: ' + (err?.error?.message || 'Error desconocido'));
+            }
+          });
+        }
+      });
+    });
   }
 
   cancelarCobro(): void {
     if (!this.cobro) return;
-    
-    // Implementar lógica de cancelación
-    this.showMessage('Funcionalidad de cancelación en desarrollo');
+
+    import('../cancelar-cobro-dialog/cancelar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.CancelarCobroDialogComponent, {
+        width: '450px',
+        disableClose: true,
+        data: { cobro: this.cobro }
+      });
+
+      dialogRef.afterClosed().subscribe((motivo: string | undefined) => {
+        if (motivo !== undefined) {
+          this.cobrosService.cancelarCobro(this.cobro!.id, motivo).subscribe({
+            next: (updated) => {
+              this.cobro = updated;
+              this.showMessage('Cobro cancelado exitosamente');
+              this.loadMovimientos();
+            },
+            error: (err) => {
+              this.showMessage('Error al cancelar cobro: ' + (err?.error?.message || 'Error desconocido'));
+            }
+          });
+        }
+      });
+    });
   }
 
   editarCobro(): void {
     if (!this.cobro) return;
-    
-    // Navegar a formulario de edición
-    this.showMessage('Funcionalidad de edición en desarrollo');
+    this.showMessage('La edición de cobros aún no está disponible');
   }
 
   imprimirRecibo(): void {
-    if (!this.cobro) return;
-    
-    // Implementar impresión de recibo
-    this.showMessage('Funcionalidad de impresión en desarrollo');
+    globalThis.print();
   }
 
   descargarDocumento(documento: DocumentoCobro): void {
-    // Implementar descarga de documento
-    this.showMessage(`Descargando ${documento.nombre}...`);
+    if (documento.url && documento.url !== '#') {
+      const link = document.createElement('a');
+      link.href = documento.url;
+      link.download = documento.nombre;
+      link.click();
+    } else {
+      this.showMessage('Documento no disponible para descarga');
+    }
   }
 
-  eliminarDocumento(documento: DocumentoCobro): void {
-    // Implementar eliminación de documento
-    this.showMessage('Funcionalidad de eliminación de documentos en desarrollo');
+  eliminarDocumento(_documento: DocumentoCobro): void {
+    this.showMessage('La gestión de documentos aún no está disponible');
   }
 
   getEstadoColor(estado: EstadoCobro): string {
@@ -300,7 +327,7 @@ export class CobroDetalleComponent implements OnInit {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return Number.parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
   // Funciones helper para obtener labels de enums

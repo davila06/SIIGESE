@@ -62,12 +62,19 @@ export class LoginComponent implements OnInit {
   onResetPassword(): void {
     if (this.resetPasswordForm.valid) {
       this.isResettingPassword = true;
-      // Mock reset password
-      setTimeout(() => {
-        this.showResetForm = false;
-        this.resetPasswordForm.reset();
-        this.isResettingPassword = false;
-      }, 1000);
+      const { email } = this.resetPasswordForm.value;
+
+      this.authService.resetPassword(email).subscribe({
+        next: () => {
+          this.showResetForm = false;
+          this.resetPasswordForm.reset();
+          this.isResettingPassword = false;
+        },
+        error: (err) => {
+          console.error('❌ Error en recuperación de contraseña:', err);
+          this.isResettingPassword = false;
+        }
+      });
     }
   }
 

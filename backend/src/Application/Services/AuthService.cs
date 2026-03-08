@@ -109,7 +109,7 @@ namespace Application.Services
             }
         }
 
-        public async Task<bool> ValidateTokenAsync(string token)
+        public Task<bool> ValidateTokenAsync(string token)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace Application.Services
                 // Verificar si el token ha sido invalidado
                 if (_invalidatedTokens.TryGetValue(token, out _))
                 {
-                    return false;
+                    return Task.FromResult(false);
                 }
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -143,12 +143,12 @@ namespace Application.Services
                 };
 
                 tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-                return true;
+                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Token inválido");
-                return false;
+                return Task.FromResult(false);
             }
         }
 

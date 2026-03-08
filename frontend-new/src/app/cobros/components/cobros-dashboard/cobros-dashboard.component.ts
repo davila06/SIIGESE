@@ -211,9 +211,32 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   registrarCobro(cobro: Cobro): void {
-    // Aquí se abriría un diálogo para registrar el cobro
-    console.log('Registrar cobro:', cobro);
-    this.showMessage('Funcionalidad de registro de cobro en desarrollo');
+    import('../registrar-cobro-dialog/registrar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.RegistrarCobroDialogComponent, {
+        width: '500px',
+        disableClose: true,
+        data: { cobro }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.cobrosService.registrarCobro(result).subscribe({
+            next: () => {
+              this.showMessage('Cobro registrado exitosamente');
+              if (this.vistaProximos) {
+                this.loadCobrosProximos();
+              } else {
+                this.loadCobros();
+              }
+              this.loadStats();
+            },
+            error: (err) => {
+              this.showMessage('Error al registrar cobro: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+            }
+          });
+        }
+      });
+    });
   }
 
   verDetalle(cobro: Cobro): void {
@@ -221,9 +244,32 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   cancelarCobro(cobro: Cobro): void {
-    // Aquí se confirmaría y cancelaría el cobro
-    console.log('Cancelar cobro:', cobro);
-    this.showMessage('Funcionalidad de cancelación en desarrollo');
+    import('../cancelar-cobro-dialog/cancelar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.CancelarCobroDialogComponent, {
+        width: '450px',
+        disableClose: true,
+        data: { cobro }
+      });
+
+      dialogRef.afterClosed().subscribe((motivo: string | undefined) => {
+        if (motivo !== undefined) {
+          this.cobrosService.cancelarCobro(cobro.id, motivo).subscribe({
+            next: () => {
+              this.showMessage('Cobro cancelado exitosamente');
+              if (this.vistaProximos) {
+                this.loadCobrosProximos();
+              } else {
+                this.loadCobros();
+              }
+              this.loadStats();
+            },
+            error: (err) => {
+              this.showMessage('Error al cancelar cobro: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+            }
+          });
+        }
+      });
+    });
   }
 
   getEstadoColor(estado: EstadoCobro): string {

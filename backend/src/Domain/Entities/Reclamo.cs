@@ -21,9 +21,6 @@ namespace Domain.Entities
         public string DocumentosAdjuntos { get; set; } = string.Empty;
         public int? UsuarioAsignadoId { get; set; }
         public string Moneda { get; set; } = "CRC";
-        public bool IsDeleted { get; set; } = false;
-        public string CreatedBy { get; set; } = string.Empty;
-        public string? UpdatedBy { get; set; }
         
         // Navigation properties
         public virtual User? UsuarioAsignado { get; set; }

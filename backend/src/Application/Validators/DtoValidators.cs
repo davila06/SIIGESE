@@ -112,4 +112,48 @@ namespace Application.Validators
                 .NotEmpty().WithMessage("El apellido es requerido");
         }
     }
+
+    public class ChangePasswordDtoValidator : AbstractValidator<ChangePasswordDto>
+    {
+        public ChangePasswordDtoValidator()
+        {
+            RuleFor(x => x.CurrentPassword)
+                .NotEmpty().WithMessage("La contraseña actual es requerida");
+
+            RuleFor(x => x.NewPassword)
+                .NotEmpty().WithMessage("La nueva contraseña es requerida")
+                .MinimumLength(6).WithMessage("La nueva contraseña debe tener al menos 6 caracteres");
+
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("La confirmación de contraseña es requerida")
+                .Equal(x => x.NewPassword).WithMessage("Las contraseñas no coinciden");
+        }
+    }
+
+    public class ForgotPasswordDtoValidator : AbstractValidator<ForgotPasswordDto>
+    {
+        public ForgotPasswordDtoValidator()
+        {
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("El email es requerido")
+                .EmailAddress().WithMessage("El email debe tener un formato válido");
+        }
+    }
+
+    public class ResetPasswordDtoValidator : AbstractValidator<ResetPasswordDto>
+    {
+        public ResetPasswordDtoValidator()
+        {
+            RuleFor(x => x.Token)
+                .NotEmpty().WithMessage("El token de reseteo es requerido");
+
+            RuleFor(x => x.NewPassword)
+                .NotEmpty().WithMessage("La nueva contraseña es requerida")
+                .MinimumLength(6).WithMessage("La nueva contraseña debe tener al menos 6 caracteres");
+
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("La confirmación de contraseña es requerida")
+                .Equal(x => x.NewPassword).WithMessage("Las contraseñas no coinciden");
+        }
+    }
 }

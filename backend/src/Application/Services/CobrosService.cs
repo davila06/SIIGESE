@@ -108,8 +108,8 @@ namespace Application.Services
             {
                 NumeroRecibo = numeroRecibo,
                 PolizaId = poliza.Id,
-                NumeroPoliza = poliza.NumeroPoliza,
-                ClienteNombreCompleto = poliza.NombreAsegurado,
+                NumeroPoliza = poliza.NumeroPoliza ?? string.Empty,
+                ClienteNombreCompleto = poliza.NombreAsegurado ?? string.Empty,
                 CorreoElectronico = request.CorreoElectronico ?? poliza.Correo,
                 MontoTotal = request.MontoTotal,
                 MontoCobrado = 0,
@@ -302,8 +302,8 @@ namespace Application.Services
                 {
                     NumeroRecibo = numeroRecibo,
                     PolizaId = poliza.Id,
-                    NumeroPoliza = poliza.NumeroPoliza,
-                    ClienteNombreCompleto = poliza.NombreAsegurado,
+                    NumeroPoliza = poliza.NumeroPoliza ?? string.Empty,
+                    ClienteNombreCompleto = poliza.NombreAsegurado ?? string.Empty,
                     CorreoElectronico = poliza.Correo,
                     MontoTotal = poliza.Prima,
                     MontoCobrado = 0,
@@ -325,7 +325,7 @@ namespace Application.Services
                 cobrosGenerados.Add(new CobroGeneradoDto
                 {
                     NumeroRecibo = numeroRecibo,
-                    NumeroPoliza = poliza.NumeroPoliza,
+                    NumeroPoliza = poliza.NumeroPoliza ?? string.Empty,
                     FechaVencimiento = fechaVencimiento,
                     MontoTotal = poliza.Prima,
                     Moneda = poliza.Moneda ?? "CRC"
