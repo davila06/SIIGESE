@@ -10,10 +10,9 @@ namespace Application.Interfaces
         Task<IEnumerable<ReclamoDto>> GetAllReclamosAsync();
         Task<ReclamoDto> GetReclamoByIdAsync(int id);
         Task<IEnumerable<ReclamoDto>> GetReclamosByPolizaAsync(string numeroPoliza);
-        Task<IEnumerable<ReclamoDto>> GetReclamosByPolizaIdAsync(string numeroPoliza);
         Task<IEnumerable<ReclamoDto>> GetReclamosByEstadoAsync(EstadoReclamo estado);
         Task<IEnumerable<ReclamoDto>> GetReclamosVencidosAsync();
-        Task<IEnumerable<ReclamoDto>> GetReclamosByFiltroAsync(ReclamoFilterDto filtro);
+        Task<PagedResultDto<ReclamoDto>> GetReclamosByFiltroAsync(ReclamoFilterDto filtro);
         Task<ReclamoStatsDto> GetReclamosStatsAsync();
         Task<string> GenerateNumeroReclamoAsync();
         Task<ReclamoDto> CreateReclamoAsync(CreateReclamoDto request);

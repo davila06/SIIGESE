@@ -21,6 +21,7 @@ namespace UnitTests.Services
         private readonly Mock<IEmailService> _mockEmailService;
         private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<ILogger<AuthService>> _mockLogger;
+        private readonly Mock<ITokenBlacklistService> _mockTokenBlacklist;
         private readonly AuthService _authService;
 
         public AuthServiceTests()
@@ -31,6 +32,7 @@ namespace UnitTests.Services
             _mockEmailService = new Mock<IEmailService>();
             _mockConfiguration = new Mock<IConfiguration>();
             _mockLogger = new Mock<ILogger<AuthService>>();
+            _mockTokenBlacklist = new Mock<ITokenBlacklistService>();
 
             _mockConfiguration.Setup(x => x["Jwt:Secret"]).Returns("test-secret-key-for-unit-testing-min32chars!!");
             _mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("TestIssuer");
@@ -43,7 +45,8 @@ namespace UnitTests.Services
                 _mockTokenRepository.Object,
                 _mockEmailService.Object,
                 _mockConfiguration.Object,
-                _mockLogger.Object);
+                _mockLogger.Object,
+                _mockTokenBlacklist.Object);
         }
 
         [Fact]

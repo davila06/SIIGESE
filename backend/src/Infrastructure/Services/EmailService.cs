@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Mail;
+using Application.DTOs;
 using Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -39,6 +40,26 @@ namespace Infrastructure.Services
             var smtpUser = _configuration["Email:SmtpUser"];
             
             return await Task.FromResult(!string.IsNullOrEmpty(smtpServer) && !string.IsNullOrEmpty(smtpUser));
+        }
+
+        public async Task SendCobroVencidoNotificationAsync(CobroVencidoDto cobro)
+        {
+            if (string.IsNullOrWhiteSpace(cobro.ClienteEmail))
+                return;
+
+            var subject = $"SINSEG - Cobro Vencido: Póliza {cobro.NumeroPoliza}";
+            var body = GenerateCobroVencidoEmailBody(cobro);
+            await SendEmailAsync(cobro.ClienteEmail, subject, body);
+        }
+
+        public async Task SendPolizaVencimientoNotificationAsync(PolizaVencimientoDto poliza)
+        {
+            if (string.IsNullOrWhiteSpace(poliza.ClienteEmail))
+                return;
+
+            var subject = $"SINSEG - Póliza por Vencer: {poliza.NumeroPoliza}";
+            var body = GeneratePolizaVencimientoEmailBody(poliza);
+            await SendEmailAsync(poliza.ClienteEmail, subject, body);
         }
 
         private async Task SendEmailAsync(string to, string subject, string body)
@@ -179,6 +200,53 @@ namespace Infrastructure.Services
     </div>
 </body>
 </html>";
+        }
+
+        private string GenerateCobroVencidoEmailBody(CobroVencidoDto cobro)
+        {
+            return $@"<!DOCTYPE html>
+<html>
+<head><meta charset='utf-8'><title>Cobro Vencido - SINSEG</title>
+<style>body{{font-family:Arial,sans-serif;color:#333;}}.container{{max-width:600px;margin:0 auto;padding:20px;}}.header{{background:#c0392b;color:white;padding:20px;text-align:center;}}.content{{padding:20px;background:#f9f9f9;}}.footer{{text-align:center;padding:20px;font-size:12px;color:#666;}}</style></head>
+<body><div class='container'>
+  <div class='header'><h2>Aviso de Cobro Vencido</h2></div>
+  <div class='content'>
+    <p>Estimado/a <strong>{cobro.ClienteNombre}</strong>,</p>
+    <p>Le informamos que tiene un cobro vencido con los siguientes detalles:</p>
+    <ul>
+      <li><strong>Póliza:</strong> {cobro.NumeroPoliza}</li>
+      <li><strong>Monto vencido:</strong> {cobro.MontoVencido:C}</li>
+      <li><strong>Fecha de vencimiento:</strong> {cobro.FechaVencimiento:dd/MM/yyyy}</li>
+      <li><strong>Días en mora:</strong> {cobro.DiasMora}</li>
+    </ul>
+    <p>Por favor, regularice su situación a la brevedad posible para evitar inconvenientes con su cobertura.</p>
+  </div>
+  <div class='footer'><p>© 2025 SINSEG - Sistema Integral de Administración de Seguros</p></div>
+</div></body></html>";
+        }
+
+        private string GeneratePolizaVencimientoEmailBody(PolizaVencimientoDto poliza)
+        {
+            return $@"<!DOCTYPE html>
+<html>
+<head><meta charset='utf-8'><title>Póliza por Vencer - SINSEG</title>
+<style>body{{font-family:Arial,sans-serif;color:#333;}}.container{{max-width:600px;margin:0 auto;padding:20px;}}.header{{background:#e67e22;color:white;padding:20px;text-align:center;}}.content{{padding:20px;background:#f9f9f9;}}.footer{{text-align:center;padding:20px;font-size:12px;color:#666;}}</style></head>
+<body><div class='container'>
+  <div class='header'><h2>Aviso de Vencimiento de Póliza</h2></div>
+  <div class='content'>
+    <p>Estimado/a <strong>{poliza.ClienteNombre}</strong>,</p>
+    <p>Le informamos que su póliza está próxima a vencer:</p>
+    <ul>
+      <li><strong>Número de póliza:</strong> {poliza.NumeroPoliza}</li>
+      <li><strong>Tipo:</strong> {poliza.TipoPoliza}</li>
+      <li><strong>Fecha de vencimiento:</strong> {poliza.FechaVencimiento:dd/MM/yyyy}</li>
+      <li><strong>Días hasta el vencimiento:</strong> {poliza.DiasHastaVencimiento}</li>
+      <li><strong>Prima:</strong> {poliza.Prima:C}</li>
+    </ul>
+    <p>Le recomendamos contactar a su asesor para gestionar la renovación.</p>
+  </div>
+  <div class='footer'><p>© 2025 SINSEG - Sistema Integral de Administración de Seguros</p></div>
+</div></body></html>";
         }
     }
 }

@@ -148,7 +148,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var reclamos = await _reclamoService.GetReclamosByPolizaIdAsync(numeroPoliza);
+                var reclamos = await _reclamoService.GetReclamosByPolizaAsync(numeroPoliza);
                 return Ok(reclamos);
             }
             catch (Exception ex)
@@ -199,15 +199,15 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Obtener reclamos con filtros
+        /// Obtener reclamos con filtros (paginado)
         /// </summary>
         [HttpPost("filtrar")]
-        public async Task<ActionResult<IEnumerable<ReclamoDto>>> GetByFiltro([FromBody] ReclamoFilterDto filtro)
+        public async Task<ActionResult<PagedResultDto<ReclamoDto>>> GetByFiltro([FromBody] ReclamoFilterDto filtro)
         {
             try
             {
-                var reclamos = await _reclamoService.GetReclamosByFiltroAsync(filtro);
-                return Ok(reclamos);
+                var result = await _reclamoService.GetReclamosByFiltroAsync(filtro);
+                return Ok(result);
             }
             catch (Exception ex)
             {

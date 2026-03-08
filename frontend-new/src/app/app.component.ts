@@ -39,11 +39,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     
     // Verificar autenticación al iniciar la app
     this.currentUser$.pipe(takeUntil(this.destroy$)).subscribe(user => {
-      console.log('🔄 App.component - User state changed:', user);
-      console.log('🔄 App.component - Current URL:', this.router.url);
-      
       if (!user && !this.router.url.includes('login')) {
-        console.log('🔄 App.component - Redirecting to login');
         this.router.navigate(['/login']);
       }
     });
@@ -71,14 +67,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isMobile) {
       this.isCollapsed = false; // En móvil no usar collapsed state
     }
-    console.log('Screen size check:', { isMobile: this.isMobile, isCollapsed: this.isCollapsed });
     this.updateContentMargin();
   }
 
   toggleSidebar(): void {
     if (!this.isMobile) {
       this.isCollapsed = !this.isCollapsed;
-      console.log('Sidebar toggled:', this.isCollapsed ? 'collapsed' : 'expanded');
       setTimeout(() => {
         this.updateContentMargin();
       }, 50);
@@ -115,15 +109,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   canUploadExcel(): boolean {
-    const user = this.authService.getCurrentUser();
-    const hasRole = this.authService.hasAnyRole(['Admin', 'DataLoader']);
-    console.log('🔍 canUploadExcel check:', {
-      user: user,
-      userRoles: user?.roles,
-      hasRole: hasRole,
-      lookingFor: ['Admin', 'DataLoader']
-    });
-    return hasRole;
+    return this.authService.hasAnyRole(['Admin', 'DataLoader']);
   }
 
   getCurrentModule(): string {

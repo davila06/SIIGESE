@@ -35,7 +35,6 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Si el usuario ya está autenticado, redirigir al dashboard
     if (this.authService.isAuthenticated()) {
-      console.log('✅ Usuario ya autenticado, redirigiendo a dashboard desde login');
       this.router.navigate(['/dashboard']);
     }
   }
@@ -47,7 +46,6 @@ export class LoginComponent implements OnInit {
       
       this.authService.login(email, password).subscribe({
         next: (response) => {
-          console.log('✅ Login exitoso:', response);
           this.router.navigate(['/dashboard']);
           this.isLoading = false;
         },

@@ -14,9 +14,15 @@ namespace Domain.Interfaces
         Task<IEnumerable<Cobro>> GetCobrosVencidosAsync();
         Task<IEnumerable<Cobro>> GetCobrosProximosVencerAsync(int dias);
         Task<IEnumerable<Cobro>> GetCobrosProximosPorPeriodicidadAsync();
+
+        // Efficient aggregate methods — no full table load
+        Task<int> GetTotalCountAsync();
         Task<int> GetTotalCobrosPendientesAsync();
+        Task<int> GetCobrosVencidosCountAsync();
+        Task<int> GetCobrosProximosVencerCountAsync(int dias);
         Task<decimal> GetMontoTotalPendienteAsync();
         Task<decimal> GetTotalCobradoAsync();
+
         Task<bool> ExisteNumeroReciboAsync(string numeroRecibo);
         Task<Cobro> AddAsync(Cobro cobro);
         Task UpdateAsync(Cobro cobro);

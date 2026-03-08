@@ -5,7 +5,6 @@ using Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -21,8 +20,7 @@ namespace Application.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
-        // Stores invalidated tokens mapped to their expiry time so expired entries can be purged
-        private static readonly ConcurrentDictionary<string, DateTime> _invalidatedTokens = new ConcurrentDictionary<string, DateTime>();
+        private readonly ITokenBlacklistService _tokenBlacklist;
 
         public AuthService(
             IUserRepository userRepository,
@@ -30,7 +28,8 @@ namespace Application.Services
             IPasswordResetTokenRepository tokenRepository,
             IEmailService emailService,
             IConfiguration configuration,
-            ILogger<AuthService> logger)
+            ILogger<AuthService> logger,
+            ITokenBlacklistService tokenBlacklist)
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
@@ -38,6 +37,7 @@ namespace Application.Services
             _emailService = emailService;
             _configuration = configuration;
             _logger = logger;
+            _tokenBlacklist = tokenBlacklist;
         }
 
         public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request)
@@ -109,22 +109,14 @@ namespace Application.Services
             }
         }
 
-        public Task<bool> ValidateTokenAsync(string token)
+        public async Task<bool> ValidateTokenAsync(string token)
         {
             try
             {
-                // Purge expired entries to prevent unbounded growth
-                var now = DateTime.UtcNow;
-                foreach (var tokenKey in _invalidatedTokens.Keys)
+                // Check distributed blacklist before crypto-validation
+                if (await _tokenBlacklist.IsBlacklistedAsync(token))
                 {
-                    if (_invalidatedTokens.TryGetValue(tokenKey, out var exp) && exp <= now)
-                        _invalidatedTokens.TryRemove(tokenKey, out _);
-                }
-
-                // Verificar si el token ha sido invalidado
-                if (_invalidatedTokens.TryGetValue(token, out _))
-                {
-                    return Task.FromResult(false);
+                    return false;
                 }
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -143,21 +135,20 @@ namespace Application.Services
                 };
 
                 tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
-                return Task.FromResult(true);
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Token inválido");
-                return Task.FromResult(false);
+                return false;
             }
         }
 
         public async Task LogoutAsync(string token)
         {
-            // Store token with its expiry so it can be purged later
             var expirationHours = int.Parse(_configuration["Jwt:ExpirationHours"] ?? "8");
-            _invalidatedTokens[token] = DateTime.UtcNow.AddHours(expirationHours);
-            await Task.CompletedTask;
+            var ttl = TimeSpan.FromHours(expirationHours + 1); // +1 hour buffer
+            await _tokenBlacklist.BlacklistTokenAsync(token, ttl);
         }
 
         public async Task ChangePasswordAsync(int userId, string currentPassword, string newPassword)

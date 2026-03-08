@@ -104,6 +104,28 @@ namespace Infrastructure.Data.Repositories
                 .AnyAsync(c => c.NumeroRecibo == numeroRecibo && !c.IsDeleted);
         }
 
+        public async Task<int> GetTotalCountAsync()
+            => await _context.Cobros.CountAsync(c => !c.IsDeleted);
+
+        public async Task<int> GetCobrosVencidosCountAsync()
+        {
+            var hoy = DateTime.UtcNow.Date;
+            return await _context.Cobros.CountAsync(c =>
+                c.Estado == EstadoCobro.Pendiente &&
+                c.FechaVencimiento.Date < hoy &&
+                !c.IsDeleted);
+        }
+
+        public async Task<int> GetCobrosProximosVencerCountAsync(int dias)
+        {
+            var fechaLimite = DateTime.UtcNow.AddDays(dias);
+            return await _context.Cobros.CountAsync(c =>
+                c.FechaVencimiento <= fechaLimite &&
+                c.FechaVencimiento > DateTime.UtcNow &&
+                c.Estado != EstadoCobro.Pagado &&
+                !c.IsDeleted);
+        }
+
         // Implementación explícita para evitar conflictos con Repository base
         async Task<Cobro> ICobroRepository.AddAsync(Cobro cobro)
         {

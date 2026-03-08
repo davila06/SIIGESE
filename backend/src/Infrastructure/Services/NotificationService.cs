@@ -1,4 +1,5 @@
 using Application.DTOs;
+using Application.Interfaces;
 using Application.Services;
 using Domain.Entities;
 using Infrastructure.Data;
@@ -10,13 +11,16 @@ namespace Infrastructure.Services
     public class NotificationService : INotificationService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
         private readonly ILogger<NotificationService> _logger;
 
         public NotificationService(
             ApplicationDbContext context,
+            IEmailService emailService,
             ILogger<NotificationService> logger)
         {
             _context = context;
+            _emailService = emailService;
             _logger = logger;
         }
 
@@ -36,8 +40,7 @@ namespace Infrastructure.Services
                 {
                     try
                     {
-                        // Aquí se puede implementar el envío de email
-                        // await _emailService.SendCobroVencidoNotificationAsync(cobro);
+                        await _emailService.SendCobroVencidoNotificationAsync(cobro);
                         result.OverduePaymentsSent++;
                     }
                     catch (Exception ex)
@@ -76,8 +79,7 @@ namespace Infrastructure.Services
                 {
                     try
                     {
-                        // Aquí se puede implementar el envío de email
-                        // await _emailService.SendPolizaVencimientoNotificationAsync(poliza);
+                        await _emailService.SendPolizaVencimientoNotificationAsync(poliza);
                         result.ExpiringPoliciesSent++;
                     }
                     catch (Exception ex)

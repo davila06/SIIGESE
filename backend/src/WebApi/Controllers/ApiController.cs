@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Logging;
 using Application.DTOs;
 using Application.Interfaces;
@@ -25,6 +26,7 @@ namespace WebApi.Controllers
         /// Iniciar sesión de usuario
         /// </summary>
         [HttpPost("login")]
+        [EnableRateLimiting("auth")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

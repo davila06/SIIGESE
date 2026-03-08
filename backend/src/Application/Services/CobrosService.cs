@@ -73,22 +73,25 @@ namespace Application.Services
 
         public async Task<CobroStatsDto> GetCobrosStatsAsync()
         {
-            var totalCobros = (await _cobroRepository.GetAllAsync()).Count();
-            var cobrosPendientes = await _cobroRepository.GetTotalCobrosPendientesAsync();
-            var cobrosVencidos = (await _cobroRepository.GetCobrosVencidosAsync()).Count();
+            // Use dedicated SQL COUNT/SUM queries — no full table scan
+            var totalCobros         = await _cobroRepository.GetTotalCountAsync();
+            var cobrosPendientes    = await _cobroRepository.GetTotalCobrosPendientesAsync();
+            var cobrosVencidos      = await _cobroRepository.GetCobrosVencidosCountAsync();
             var montoTotalPendiente = await _cobroRepository.GetMontoTotalPendienteAsync();
-            var montoTotalCobrado = await _cobroRepository.GetTotalCobradoAsync();
-            var cobrosProximosVencer = (await _cobroRepository.GetCobrosProximosVencerAsync(7)).Count();
+            var montoTotalCobrado   = await _cobroRepository.GetTotalCobradoAsync();
+            var cobrosProximosVencer = await _cobroRepository.GetCobrosProximosVencerCountAsync(7);
 
             return new CobroStatsDto
             {
-                TotalCobros = totalCobros,
-                CobrosPendientes = cobrosPendientes,
-                CobrosPagados = totalCobros - cobrosPendientes,
-                CobrosVencidos = cobrosVencidos,
+                TotalCobros         = totalCobros,
+                CobrosPendientes    = cobrosPendientes,
+                CobrosPagados       = totalCobros - cobrosPendientes,
+                CobrosVencidos      = cobrosVencidos,
                 MontoTotalPendiente = montoTotalPendiente,
-                MontoTotalCobrado = montoTotalCobrado,
-                PorcentajeCobrado = totalCobros > 0 ? (decimal)(totalCobros - cobrosPendientes) / totalCobros * 100 : 0,
+                MontoTotalCobrado   = montoTotalCobrado,
+                PorcentajeCobrado   = totalCobros > 0
+                    ? (decimal)(totalCobros - cobrosPendientes) / totalCobros * 100
+                    : 0,
                 CobrosProximosVencer = cobrosProximosVencer
             };
         }

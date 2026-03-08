@@ -1,8 +1,36 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+﻿import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { DataUploadResult, LoginRequest, LoginResponse, ApiResponse } from '../interfaces/user.interface';
+import {
+  DataUploadResult,
+  LoginRequest,
+  LoginResponse,
+  User,
+  CreateUser,
+  UpdateUser,
+  Poliza,
+  CreatePoliza,
+  Cobro,
+  CreateCobro,
+  RegistrarCobroRequest,
+  CancelarCobroRequest,
+  CobroStats,
+  Reclamo,
+  CreateReclamo,
+  ChangeEstadoReclamoRequest,
+  AsignarReclamoRequest,
+  ResolverReclamoRequest,
+  RechazarReclamoRequest,
+  ReclamoFilterParams,
+  ReclamoStats,
+  PagedResult,
+  Cotizacion,
+  CreateCotizacion,
+  EmailConfig,
+  CreateEmailConfig,
+  Role,
+} from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -26,20 +54,20 @@ export class ApiService {
   }
 
   // Polizas endpoints
-  getPolizas(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/polizas`);
+  getPolizas(): Observable<Poliza[]> {
+    return this.http.get<Poliza[]>(`${this.apiUrl}/polizas`);
   }
 
-  createPoliza(poliza: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/polizas`, poliza);
+  createPoliza(poliza: CreatePoliza): Observable<Poliza> {
+    return this.http.post<Poliza>(`${this.apiUrl}/polizas`, poliza);
   }
 
-  updatePoliza(id: number, poliza: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/polizas/${id}`, poliza);
+  updatePoliza(id: number, poliza: Partial<CreatePoliza>): Observable<Poliza> {
+    return this.http.put<Poliza>(`${this.apiUrl}/polizas/${id}`, poliza);
   }
 
-  deletePoliza(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/polizas/${id}`);
+  deletePoliza(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/polizas/${id}`);
   }
 
   // Upload endpoints
@@ -47,168 +75,164 @@ export class ApiService {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('perfilId', perfilId.toString());
-
     return this.http.post<DataUploadResult>(`${this.apiUrl}/polizas/upload`, formData);
   }
 
   downloadPolizasTemplate(): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/polizas/template`, {
-      responseType: 'blob'
-    });
+    return this.http.get(`${this.apiUrl}/polizas/template`, { responseType: 'blob' });
   }
 
   // Users endpoints
-  getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/users`);
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`);
   }
 
-  createUser(user: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/users`, user);
+  createUser(user: CreateUser): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/users`, user);
   }
 
-  updateUser(id: number, user: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/users/${id}`, user);
+  updateUser(id: number, user: UpdateUser): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/${id}`, user);
   }
 
-  deleteUser(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/users/${id}`);
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
   }
 
   // Cotizaciones endpoints
-  getCotizaciones(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/cotizaciones`);
+  getCotizaciones(): Observable<Cotizacion[]> {
+    return this.http.get<Cotizacion[]>(`${this.apiUrl}/cotizaciones`);
   }
 
-  createCotizacion(cotizacion: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cotizaciones`, cotizacion);
+  createCotizacion(cotizacion: CreateCotizacion): Observable<Cotizacion> {
+    return this.http.post<Cotizacion>(`${this.apiUrl}/cotizaciones`, cotizacion);
   }
 
-  updateCotizacion(id: number, cotizacion: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/cotizaciones/${id}`, cotizacion);
+  updateCotizacion(id: number, cotizacion: Partial<CreateCotizacion>): Observable<Cotizacion> {
+    return this.http.put<Cotizacion>(`${this.apiUrl}/cotizaciones/${id}`, cotizacion);
   }
 
-  deleteCotizacion(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/cotizaciones/${id}`);
+  deleteCotizacion(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/cotizaciones/${id}`);
   }
 
   // Cobros endpoints
-  getCobros(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/cobros`);
+  getCobros(): Observable<Cobro[]> {
+    return this.http.get<Cobro[]>(`${this.apiUrl}/cobros`);
   }
 
-  getCobroById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cobros/${id}`);
+  getCobroById(id: number): Observable<Cobro> {
+    return this.http.get<Cobro>(`${this.apiUrl}/cobros/${id}`);
   }
 
-  createCobro(cobro: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/cobros`, cobro);
+  createCobro(cobro: CreateCobro): Observable<Cobro> {
+    return this.http.post<Cobro>(`${this.apiUrl}/cobros`, cobro);
   }
 
-  registrarCobro(id: number, data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/cobros/${id}/registrar`, data);
+  registrarCobro(id: number, data: RegistrarCobroRequest): Observable<Cobro> {
+    return this.http.put<Cobro>(`${this.apiUrl}/cobros/${id}/registrar`, data);
   }
 
-  cancelarCobro(id: number, data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/cobros/${id}/cancelar`, data);
+  cancelarCobro(id: number, data: CancelarCobroRequest): Observable<Cobro> {
+    return this.http.put<Cobro>(`${this.apiUrl}/cobros/${id}/cancelar`, data);
+  }
+
+  getCobroStats(): Observable<CobroStats> {
+    return this.http.get<CobroStats>(`${this.apiUrl}/cobros/stats`);
   }
 
   // Reclamos endpoints
-  getReclamos(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reclamos`);
+  getReclamos(): Observable<Reclamo[]> {
+    return this.http.get<Reclamo[]>(`${this.apiUrl}/reclamos`);
   }
 
-  getReclamoById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/reclamos/${id}`);
+  getReclamoById(id: number): Observable<Reclamo> {
+    return this.http.get<Reclamo>(`${this.apiUrl}/reclamos/${id}`);
   }
 
-  createReclamo(reclamo: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/reclamos`, reclamo);
+  getReclamosByFiltro(params: ReclamoFilterParams): Observable<PagedResult<Reclamo>> {
+    return this.http.get<PagedResult<Reclamo>>(`${this.apiUrl}/reclamos/filtro`, { params: params as Record<string, string | number> });
   }
 
-  updateReclamo(id: number, reclamo: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/reclamos/${id}`, reclamo);
+  createReclamo(reclamo: CreateReclamo): Observable<Reclamo> {
+    return this.http.post<Reclamo>(`${this.apiUrl}/reclamos`, reclamo);
   }
 
-  deleteReclamo(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/reclamos/${id}`);
+  updateReclamo(id: number, reclamo: Partial<CreateReclamo>): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}`, reclamo);
   }
 
-  changeEstadoReclamo(id: number, data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/reclamos/${id}/estado`, data);
+  deleteReclamo(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/reclamos/${id}`);
   }
 
-  asignarReclamo(id: number, data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/reclamos/${id}/asignar`, data);
+  changeEstadoReclamo(id: number, data: ChangeEstadoReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/estado`, data);
   }
 
-  resolverReclamo(id: number, data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/reclamos/${id}/resolver`, data);
+  asignarReclamo(id: number, data: AsignarReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/asignar`, data);
   }
 
-  rechazarReclamo(id: number, data: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/reclamos/${id}/rechazar`, data);
+  resolverReclamo(id: number, data: ResolverReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/resolver`, data);
+  }
+
+  rechazarReclamo(id: number, data: RechazarReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/rechazar`, data);
+  }
+
+  getReclamoStats(): Observable<ReclamoStats> {
+    return this.http.get<ReclamoStats>(`${this.apiUrl}/reclamos/stats`);
   }
 
   // Email Config endpoints
-  getEmailConfigs(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/emailconfig`);
+  getEmailConfigs(): Observable<EmailConfig[]> {
+    return this.http.get<EmailConfig[]>(`${this.apiUrl}/emailconfig`);
   }
 
-  createEmailConfig(config: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/emailconfig`, config);
+  createEmailConfig(config: CreateEmailConfig): Observable<EmailConfig> {
+    return this.http.post<EmailConfig>(`${this.apiUrl}/emailconfig`, config);
   }
 
-  updateEmailConfig(id: number, config: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/emailconfig/${id}`, config);
+  updateEmailConfig(id: number, config: Partial<CreateEmailConfig>): Observable<EmailConfig> {
+    return this.http.put<EmailConfig>(`${this.apiUrl}/emailconfig/${id}`, config);
   }
 
-  deleteEmailConfig(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/emailconfig/${id}`);
+  deleteEmailConfig(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/emailconfig/${id}`);
   }
 
-  testEmailConfig(id: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/emailconfig/${id}/test`, {});
+  testEmailConfig(id: number): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/emailconfig/${id}/test`, {});
   }
 
-  testEmailConfigDirect(config: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/emailconfig/test-direct`, config);
+  testEmailConfigDirect(config: CreateEmailConfig): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/emailconfig/test-direct`, config);
   }
 
-  setDefaultEmailConfig(id: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/emailconfig/${id}/set-default`, {});
+  setDefaultEmailConfig(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/emailconfig/${id}/set-default`, {});
   }
 
-  toggleEmailConfigStatus(id: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/emailconfig/${id}/toggle-status`, {});
+  toggleEmailConfigStatus(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/emailconfig/${id}/toggle-status`, {});
   }
 
   // Roles endpoints
-  getRoles(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/roles`);
+  getRoles(): Observable<Role[]> {
+    return this.http.get<Role[]>(`${this.apiUrl}/roles`);
   }
 
-  createRole(role: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/roles`, role);
+  createRole(role: Partial<Role>): Observable<Role> {
+    return this.http.post<Role>(`${this.apiUrl}/roles`, role);
   }
 
-  updateRole(id: number, role: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/roles/${id}`, role);
+  updateRole(id: number, role: Partial<Role>): Observable<Role> {
+    return this.http.put<Role>(`${this.apiUrl}/roles/${id}`, role);
   }
 
-  deleteRole(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/roles/${id}`);
-  }
-
-  assignRolesToUser(userId: number, roleIds: number[]): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/users/${userId}/roles`, { roleIds });
-  }
-
-  // Stats endpoints
-  getCobroStats(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/cobros/stats`);
-  }
-
-  getReclamosStats(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/reclamos/stats`);
+  deleteRole(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/roles/${id}`);
   }
 }

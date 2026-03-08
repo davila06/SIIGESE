@@ -82,9 +82,6 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
     // Configurar paginator después de que la vista esté inicializada
     if (this.paginator) {
       this.usersDataSource.paginator = this.paginator;
-      console.log('✅ Paginator configurado correctamente');
-    } else {
-      console.warn('⚠️ Paginator no encontrado');
     }
   }
 
@@ -225,7 +222,6 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
       this.apiService.deleteUser(user.id).subscribe({
         next: () => {
           this.loadUsers();
-          console.log('Usuario eliminado exitosamente');
         },
         error: (error) => {
           console.error('Error deleting user:', error);
@@ -262,7 +258,6 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
       next: (user) => {
         this.loadUsers();
         this.resetForm();
-        console.log('Usuario creado exitosamente');
       },
       error: (error) => {
         console.error('Error creating user:', error);
@@ -287,7 +282,6 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
       next: (user) => {
         this.loadUsers();
         this.cancelEdit();
-        console.log('Usuario actualizado exitosamente');
       },
       error: (error) => {
         console.error('Error updating user:', error);

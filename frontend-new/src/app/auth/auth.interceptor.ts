@@ -4,111 +4,83 @@ import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { TokenService } from '../services/token.service';
+import { LoginResponse } from '../interfaces/user.interface';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
-  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  
+  private refreshTokenSubject = new BehaviorSubject<string | null>(null);
+
   constructor(
     private router: Router,
     private tokenService: TokenService
   ) {}
-  
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // No agregar token a la petición de refresh-token
+
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if (req.url.includes('/auth/refresh-token')) {
       return next.handle(req);
     }
 
-    // Obtener el token de autenticación desde localStorage
-    const authToken = localStorage.getItem('authToken');
-    
-    // Si hay token, agregarlo al header Authorization
+    const authToken = sessionStorage.getItem('authToken');
+
     if (authToken) {
-      // Verificar si el token necesita renovarse antes de hacer la petición
       if (this.tokenService.shouldRefreshToken(authToken) && !this.isRefreshing) {
-        console.log('🔄 Token próximo a expirar, renovando antes de la petición...');
         return this.handleTokenRefresh(req, next);
       }
 
-      const authReq = req.clone({
-        headers: req.headers.set('Authorization', `Bearer ${authToken}`)
-      });
-      
-      console.log('🔐 AuthInterceptor: Agregando token a la request:', {
-        url: req.url,
-        method: req.method,
-        token: authToken.substring(0, 20) + '...'
-      });
-      
-      return next.handle(authReq).pipe(
+      return next.handle(this.addToken(req, authToken)).pipe(
         catchError((error: HttpErrorResponse) => {
-          if (error.status === 401) {
-            // Si es 401 y no estamos renovando, intentar renovar el token
-            if (!this.isRefreshing && !req.url.includes('/auth/login')) {
-              console.log('⚠️ Recibido 401, intentando renovar token...');
+          if (error.status === 401 && !req.url.includes('/auth/login')) {
+            if (!this.isRefreshing) {
               return this.handleTokenRefresh(req, next);
             }
-            
-            // Si ya estamos renovando o es la petición de login, hacer logout
-            console.error('❌ Token inválido o expirado. Limpiando sesión...');
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('currentUser');
-            this.router.navigate(['/login']);
+            this.clearSessionAndRedirect();
           }
           return throwError(() => error);
         })
       );
     }
-    
-    console.log('⚠️ AuthInterceptor: No hay token disponible para:', req.url);
+
     return next.handle(req);
   }
 
-  private handleTokenRefresh(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  private handleTokenRefresh(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if (!this.isRefreshing) {
       this.isRefreshing = true;
       this.refreshTokenSubject.next(null);
 
       return this.tokenService.refreshToken().pipe(
-        switchMap((response: any) => {
+        switchMap((response: LoginResponse) => {
           this.isRefreshing = false;
           this.tokenService.updateToken(response);
           this.refreshTokenSubject.next(response.token);
-          
-          // Reintentar la petición original con el nuevo token
-          const clonedRequest = this.addToken(request, response.token);
-          return next.handle(clonedRequest);
+          return next.handle(this.addToken(request, response.token));
         }),
         catchError((error) => {
           this.isRefreshing = false;
-          
-          // Si falla la renovación, hacer logout
-          console.error('❌ Error renovando token. Cerrando sesión...');
-          localStorage.removeItem('authToken');
-          localStorage.removeItem('currentUser');
-          this.router.navigate(['/login']);
-          
+          this.clearSessionAndRedirect();
           return throwError(() => error);
         })
       );
-    } else {
-      // Si ya hay una renovación en progreso, esperar a que termine
-      return this.refreshTokenSubject.pipe(
-        filter(token => token != null),
-        take(1),
-        switchMap(token => {
-          const clonedRequest = this.addToken(request, token);
-          return next.handle(clonedRequest);
-        })
-      );
     }
+
+    return this.refreshTokenSubject.pipe(
+      filter((token): token is string => token !== null),
+      take(1),
+      switchMap(token => next.handle(this.addToken(request, token)))
+    );
   }
 
-  private addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
+  private addToken(request: HttpRequest<unknown>, token: string): HttpRequest<unknown> {
     return request.clone({
       headers: request.headers.set('Authorization', `Bearer ${token}`)
     });
   }
+
+  private clearSessionAndRedirect(): void {
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('currentUser');
+    this.router.navigate(['/login']);
+  }
 }
+

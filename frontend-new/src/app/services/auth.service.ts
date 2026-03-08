@@ -4,6 +4,7 @@ import { tap, catchError, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { TokenService } from './token.service';
 import { User, LoginResponse, Role } from '../interfaces/user.interface';
+import { environment } from '../../environments/environment';
 
 export interface ResetPasswordResponse {
   message: string;
@@ -21,32 +22,23 @@ export class AuthService {
     private apiService: ApiService,
     private tokenService: TokenService
   ) {
-    // Verificar si hay usuario guardado en localStorage
-    const savedUser = localStorage.getItem('currentUser');
-    const authToken = localStorage.getItem('authToken');
-    
+    const savedUser = sessionStorage.getItem('currentUser');
+    const authToken = sessionStorage.getItem('authToken');
+
     if (savedUser && authToken) {
       try {
-        // Verificar si el token no está expirado
         if (this.tokenService.isTokenExpired(authToken)) {
-          console.warn('⚠️ Token expirado detectado al iniciar. Limpiando sesión...');
           this.logout();
         } else {
-          const user = JSON.parse(savedUser);
+          const user = JSON.parse(savedUser) as User;
           this.currentUserSubject.next(user);
-          console.log('✅ Usuario cargado desde localStorage:', user);
-          
-          // Mostrar información del token
-          const tokenInfo = this.tokenService.getTokenInfo();
-          if (tokenInfo) {
-            console.log('📋 Token info:', tokenInfo);
+          if (!environment.production) {
+            console.log('AuthService: session restored for', user.email);
           }
         }
-      } catch (error) {
-        // Si hay error al parsear, limpiar localStorage
-        console.error('❌ Error parseando usuario desde localStorage:', error);
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('authToken');
+      } catch {
+        sessionStorage.removeItem('currentUser');
+        sessionStorage.removeItem('authToken');
       }
     }
   }
@@ -54,13 +46,11 @@ export class AuthService {
   login(email: string, password: string): Observable<LoginResponse> {
     return this.apiService.login({ email, password }).pipe(
       tap(response => {
-        console.log('✅ Login response from API:', response);
         this.currentUserSubject.next(response.user);
-        localStorage.setItem('currentUser', JSON.stringify(response.user));
-        localStorage.setItem('authToken', response.token);
+        sessionStorage.setItem('currentUser', JSON.stringify(response.user));
+        sessionStorage.setItem('authToken', response.token);
       }),
       catchError(error => {
-        console.error('❌ Login error:', error);
         throw error;
       })
     );
@@ -68,8 +58,8 @@ export class AuthService {
 
   logout(): void {
     this.currentUserSubject.next(null);
-    localStorage.removeItem('currentUser');
-    localStorage.removeItem('authToken');
+    sessionStorage.removeItem('currentUser');
+    sessionStorage.removeItem('authToken');
   }
 
   resetPassword(email: string): Observable<ResetPasswordResponse> {

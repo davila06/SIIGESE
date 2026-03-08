@@ -13,14 +13,12 @@ export class LoginGuard implements CanActivate {
 
   canActivate(): boolean {
     const isAuthenticated = this.authService.isAuthenticated();
-    
+
     if (isAuthenticated) {
-      console.log('✅ Usuario ya autenticado, redirigiendo a dashboard');
       this.router.navigate(['/dashboard']);
       return false;
     }
-    
-    console.log('👤 Usuario no autenticado, permitiendo acceso a login');
+
     return true;
   }
 }

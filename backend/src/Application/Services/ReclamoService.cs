@@ -41,12 +41,6 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<ReclamoDto>>(reclamos);
         }
 
-        public async Task<IEnumerable<ReclamoDto>> GetReclamosByPolizaIdAsync(string numeroPoliza)
-        {
-            var reclamos = await _reclamoRepository.GetReclamosByPolizaIdAsync(numeroPoliza);
-            return _mapper.Map<IEnumerable<ReclamoDto>>(reclamos);
-        }
-
         public async Task<IEnumerable<ReclamoDto>> GetReclamosByEstadoAsync(EstadoReclamo estado)
         {
             var reclamos = await _reclamoRepository.GetReclamosByEstadoAsync(estado);
@@ -59,70 +53,58 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<ReclamoDto>>(reclamos);
         }
 
-        public async Task<IEnumerable<ReclamoDto>> GetReclamosByFiltroAsync(ReclamoFilterDto filtro)
+        public async Task<PagedResultDto<ReclamoDto>> GetReclamosByFiltroAsync(ReclamoFilterDto filtro)
         {
-            var reclamos = await _reclamoRepository.GetAllAsync();
-            
-            // Aplicar filtros
-            var query = reclamos.AsQueryable();
+            // Map DTO → Domain filter (keeps Domain free of Application references)
+            var queryFilter = new Domain.Queries.ReclamoQueryFilter
+            {
+                NumeroPoliza          = filtro.NumeroPoliza,
+                NumeroReclamo         = filtro.NumeroReclamo,
+                Estado                = filtro.Estado,
+                TipoReclamo           = filtro.TipoReclamo,
+                Prioridad             = filtro.Prioridad,
+                FechaDesde            = filtro.FechaDesde,
+                FechaHasta            = filtro.FechaHasta,
+                UsuarioAsignadoId     = filtro.UsuarioAsignadoId,
+                ClienteNombreCompleto = filtro.ClienteNombreCompleto,
+                PageNumber            = filtro.PageNumber,
+                PageSize              = filtro.PageSize
+            };
 
-            if (!string.IsNullOrEmpty(filtro.NumeroPoliza))
-                query = query.Where(r => r.NumeroPoliza.Contains(filtro.NumeroPoliza));
+            var (items, totalCount) = await _reclamoRepository.GetByFiltroAsync(queryFilter);
 
-            if (!string.IsNullOrEmpty(filtro.NumeroReclamo))
-                query = query.Where(r => r.NumeroReclamo.Contains(filtro.NumeroReclamo));
-
-            if (filtro.Estado.HasValue)
-                query = query.Where(r => r.Estado == filtro.Estado.Value);
-
-            if (filtro.TipoReclamo.HasValue)
-                query = query.Where(r => r.TipoReclamo == filtro.TipoReclamo.Value);
-
-            if (filtro.Prioridad.HasValue)
-                query = query.Where(r => r.Prioridad == filtro.Prioridad.Value);
-
-            if (filtro.FechaDesde.HasValue)
-                query = query.Where(r => r.FechaReclamo >= filtro.FechaDesde.Value);
-
-            if (filtro.FechaHasta.HasValue)
-                query = query.Where(r => r.FechaReclamo <= filtro.FechaHasta.Value);
-
-            if (filtro.UsuarioAsignadoId.HasValue)
-                query = query.Where(r => r.UsuarioAsignadoId == filtro.UsuarioAsignadoId.Value);
-
-            if (!string.IsNullOrEmpty(filtro.ClienteNombreCompleto))
-                query = query.Where(r => r.ClienteNombreCompleto.Contains(filtro.ClienteNombreCompleto));
-
-            // Paginación
-            var resultado = query
-                .Skip((filtro.PageNumber - 1) * filtro.PageSize)
-                .Take(filtro.PageSize)
-                .ToList();
-
-            return _mapper.Map<IEnumerable<ReclamoDto>>(resultado);
+            return new PagedResultDto<ReclamoDto>
+            {
+                Items      = _mapper.Map<IEnumerable<ReclamoDto>>(items),
+                TotalCount = totalCount,
+                PageNumber = filtro.PageNumber,
+                PageSize   = filtro.PageSize
+            };
         }
 
         public async Task<ReclamoStatsDto> GetReclamosStatsAsync()
         {
-            var reclamos = await _reclamoRepository.GetAllAsync();
-            var totalReclamos = reclamos.Count();
-            var pendientes = reclamos.Count(r => r.Estado == EstadoReclamo.Pendiente);
-            var enProceso = reclamos.Count(r => r.Estado == EstadoReclamo.EnProceso);
-            var resueltos = reclamos.Count(r => r.Estado == EstadoReclamo.Resuelto);
-            var rechazados = reclamos.Count(r => r.Estado == EstadoReclamo.Rechazado);
-            var montoTotalReclamado = reclamos.Sum(r => r.MontoReclamado);
-            var montoTotalAprobado = reclamos.Where(r => r.MontoAprobado.HasValue).Sum(r => r.MontoAprobado ?? 0);
+            // Use dedicated COUNT/SUM queries — no full table scan
+            var totalReclamos      = await _reclamoRepository.GetTotalCountAsync();
+            var pendientes         = await _reclamoRepository.GetCountByEstadoAsync(EstadoReclamo.Pendiente);
+            var enProceso          = await _reclamoRepository.GetCountByEstadoAsync(EstadoReclamo.EnProceso);
+            var resueltos          = await _reclamoRepository.GetCountByEstadoAsync(EstadoReclamo.Resuelto);
+            var rechazados         = await _reclamoRepository.GetCountByEstadoAsync(EstadoReclamo.Rechazado);
+            var montoTotalReclamado = await _reclamoRepository.GetMontoTotalReclamadoAsync();
+            var montoTotalAprobado  = await _reclamoRepository.GetMontoTotalAprobadoAsync();
 
             return new ReclamoStatsDto
             {
-                TotalReclamos = totalReclamos,
+                TotalReclamos      = totalReclamos,
                 ReclamosPendientes = pendientes,
-                ReclamosEnProceso = enProceso,
-                ReclamosResueltos = resueltos,
+                ReclamosEnProceso  = enProceso,
+                ReclamosResueltos  = resueltos,
                 ReclamosRechazados = rechazados,
                 MontoTotalReclamado = montoTotalReclamado,
-                MontoTotalAprobado = montoTotalAprobado,
-                TasaAprobacion = montoTotalReclamado > 0 ? (montoTotalAprobado / montoTotalReclamado) * 100 : 0
+                MontoTotalAprobado  = montoTotalAprobado,
+                TasaAprobacion = montoTotalReclamado > 0
+                    ? (montoTotalAprobado / montoTotalReclamado) * 100
+                    : 0
             };
         }
 
