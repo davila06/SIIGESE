@@ -9,7 +9,7 @@ using Domain.Entities;
 
 namespace Infrastructure.Data.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : BaseEntity
+    public class Repository<T> : IRepository<T> where T : Entity
     {
         protected readonly ApplicationDbContext _context;
         protected readonly DbSet<T> _dbSet;
@@ -245,7 +245,7 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Poliza>> GetActivasAsync()
         {
-            return await _dbSet.Where(p => p.EsActivo).ToListAsync();
+            return await _dbSet.Where(p => p.EsActivo && !p.IsDeleted).ToListAsync();
         }
 
         public async Task<IEnumerable<Poliza>> GetByPlacaAsync(string placa)

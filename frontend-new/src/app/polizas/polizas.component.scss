@@ -442,6 +442,12 @@
   font-weight: 500;
 }
 
+.search-field .mat-hint.search-hint {
+  color: rgba(255, 255, 255, 0.7);
+  font-style: italic;
+  font-size: 11px;
+}
+
 .section-title {
   margin: 0;
   font-size: 20px;
@@ -679,6 +685,28 @@ th.mat-header-cell.mat-sort-header.mat-sort-header-sorted::after {
     margin-left: 4px;
     vertical-align: middle;
     transition: transform 0.3s ease;
+  }
+}
+
+/* Efecto visual para indicar que se está editando */
+.editing-highlight {
+  animation: editPulse 2s ease-in-out;
+  border: 2px solid #4CAF50 !important;
+  box-shadow: 0 0 20px rgba(76, 175, 80, 0.3) !important;
+}
+
+@keyframes editPulse {
+  0% {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  50% {
+    border-color: #66BB6A;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+  }
+  100% {
+    border-color: #4CAF50;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.3);
   }
 }
 

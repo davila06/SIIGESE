@@ -1,6 +1,9 @@
 using System.Net;
 using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
@@ -19,11 +22,11 @@ namespace IntegrationTests
         public async Task Login_ReturnsOk_WhenCredentialsAreValid()
         {
             // Arrange
-            var loginData = new { Username = "testuser", Password = "testpassword" };
-            var content = new StringContent(JsonConvert.SerializeObject(loginData), Encoding.UTF8, "application/json");
+            var loginData = new { Email = "testuser@test.com", Password = "testpassword" };
+            var content = new StringContent(JsonSerializer.Serialize(loginData), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync("/api/login", content);
+            var response = await _client.PostAsync("/api/auth/login", content);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -33,11 +36,11 @@ namespace IntegrationTests
         public async Task Login_ReturnsUnauthorized_WhenCredentialsAreInvalid()
         {
             // Arrange
-            var loginData = new { Username = "invaliduser", Password = "invalidpassword" };
-            var content = new StringContent(JsonConvert.SerializeObject(loginData), Encoding.UTF8, "application/json");
+            var loginData = new { Email = "invalid@nowhere.com", Password = "wrongpassword" };
+            var content = new StringContent(JsonSerializer.Serialize(loginData), Encoding.UTF8, "application/json");
 
             // Act
-            var response = await _client.PostAsync("/api/login", content);
+            var response = await _client.PostAsync("/api/auth/login", content);
 
             // Assert
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

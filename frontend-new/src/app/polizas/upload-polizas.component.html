@@ -44,7 +44,7 @@
             <p>o haz clic para seleccionar</p>
             <small>Formatos soportados: .xlsx, .xls (máximo 10MB)</small>
           </div>
-
+          
           <!-- File selected state -->
           <div *ngIf="selectedFile" class="file-selected">
             <mat-icon class="file-icon">{{ getFileIcon() }}</mat-icon>
@@ -52,8 +52,8 @@
               <h4>{{ selectedFile.name }}</h4>
               <p>{{ getFileSizeFormatted() }}</p>
             </div>
-            <button mat-icon-button 
-                    (click)="clearFile(); $event.stopPropagation()" 
+            <button mat-icon-button
+                    (click)="clearFile(); $event.stopPropagation()"
                     class="remove-file">
               <mat-icon>close</mat-icon>
             </button>
@@ -69,7 +69,7 @@
       </mat-card-content>
 
       <mat-card-actions class="upload-actions">
-        <button mat-raised-button 
+        <button mat-raised-button
                 color="primary"
                 [disabled]="!selectedFile || isLoading"
                 (click)="uploadExcel()"
@@ -131,7 +131,7 @@
               <span class="stat-label">Total Registros</span>
             </div>
           </div>
-
+          
           <div class="stat-card processed">
             <mat-icon>check_circle</mat-icon>
             <div class="stat-info">
@@ -139,7 +139,7 @@
               <span class="stat-label">Procesados</span>
             </div>
           </div>
-
+          
           <div class="stat-card errors" *ngIf="uploadStats.errorRecords > 0">
             <mat-icon>error</mat-icon>
             <div class="stat-info">
@@ -168,11 +168,26 @@
               </div>
             </div>
           </mat-expansion-panel>
+          
+          <!-- Botón para descargar archivo de errores -->
+          <div class="error-actions" *ngIf="uploadStats.failedRecords.length > 0">
+            <div class="error-info-box">
+              <mat-icon color="warn">info</mat-icon>
+              <span>Los registros con errores se han descargado automáticamente para su corrección</span>
+            </div>
+            <button mat-raised-button
+                    color="warn"
+                    (click)="downloadErrorsFile()"
+                    class="download-errors-btn">
+              <mat-icon>download</mat-icon>
+              Descargar Errores Nuevamente ({{ uploadStats.failedRecords.length }} registros)
+            </button>
+          </div>
         </div>
 
         <!-- Success Actions -->
         <div *ngIf="uploadResult.success" class="success-actions">
-          <button mat-raised-button 
+          <button mat-raised-button
                   color="primary"
                   (click)="navigateToPolizas()">
             <mat-icon>list</mat-icon>
@@ -195,26 +210,66 @@
         <div class="instructions-content">
           <h4>📋 Formato requerido del archivo Excel:</h4>
           <ul class="instructions-list">
-            <li><strong>Número Póliza:</strong> Identificador único de la póliza</li>
-            <li><strong>Nombre Asegurado:</strong> Nombre completo del asegurado</li>
-            <li><strong>Prima:</strong> Valor numérico de la prima</li>
-            <li><strong>Aseguradora:</strong> Nombre de la aseguradora</li>
-            <li><strong>Fecha Vigencia:</strong> Fecha en formato YYYY-MM-DD</li>
-            <li><strong>Marca, Modelo, Placa:</strong> Información del vehículo</li>
-            <li><strong>Modalidad:</strong> Anual, Semestral, etc.</li>
-            <li><strong>Frecuencia:</strong> Mensual, Trimestral, etc.</li>
-            <li><strong>Moneda:</strong> CRC, USD, EUR</li>
+            <li><strong>POLIZA:</strong> Número único de la póliza (ej: POL-001-2024)</li>
+            <li><strong>NOMBRE:</strong> Nombre completo del asegurado</li>
+            <li><strong>NUMEROCEDULA:</strong> Número de cédula sin guiones (ej: 118880001)</li>
+            <li><strong>PRIMA:</strong> Valor numérico de la prima sin separadores (ej: 125000)</li>
+            <li><strong>MONEDA:</strong> CRC, USD, EUR</li>
+            <li><strong>FECHA:</strong> Fecha de vigencia de la póliza en formato YYYY-MM-DD (ej: 2024-01-15)</li>
+            <li><strong>FRECUENCIA:</strong> Mensual, Trimestral, Semestral, Anual</li>
+            <li><strong>ASEGURADORA:</strong> Nombre completo de la aseguradora</li>
+            <li><strong>PLACA:</strong> Placa del vehículo (ej: ABC123)</li>
+            <li><strong>MARCA:</strong> Marca del vehículo (ej: Toyota, Honda)</li>
+            <li><strong>MODELO:</strong> Modelo del vehículo (ej: Corolla, Civic)</li>
+            <li><strong>AÑO:</strong> Año del vehículo (ej: 2020)</li>
+            <li><strong>CORREO:</strong> Email del asegurado</li>
+            <li><strong>NUMEROTELEFONO:</strong> Teléfono sin guiones (ej: 88881234)</li>
+            <li><strong>OBSERVACIONES:</strong> Notas o comentarios sobre la póliza (opcional)</li>
           </ul>
-
+          
           <div class="tips-section">
-            <h4>💡 Consejos:</h4>
+            <h4>💡 Consejos Importantes:</h4>
             <ul class="tips-list">
-              <li>Asegúrate de que la primera fila contenga los encabezados</li>
-              <li>Verifica que no haya celdas vacías en campos obligatorios</li>
-              <li>Los números deben estar en formato numérico (sin comas o puntos como separadores de miles)</li>
-              <li>Las fechas deben estar en formato YYYY-MM-DD</li>
-              <li>Descarga el template de ejemplo para mayor precisión</li>
+              <li><strong>Encabezados:</strong> La primera fila debe contener exactamente los nombres de columna listados arriba</li>
+              <li><strong>Campos obligatorios:</strong> Todos los campos son requeridos, no dejar celdas vacías</li>
+              <li><strong>Números de cédula:</strong> Solo números, sin guiones (118880001, no 1-1888-0001)</li>
+              <li><strong>Prima:</strong> Solo números, sin comas, puntos o símbolos de moneda (125000, no ₡125,000)</li>
+              <li><strong>Fechas:</strong> Formato estricto YYYY-MM-DD (2024-01-15, no 15/01/2024)</li>
+              <li><strong>Teléfonos:</strong> Solo números, sin guiones ni espacios (88881234, no 8888-1234)</li>
+              <li><strong>Monedas válidas:</strong> Solo CRC, USD, EUR (exactamente como se muestra)</li>
+              <li><strong>Template de referencia:</strong> Descarga el template de ejemplo para el formato correcto</li>
             </ul>
+
+            <div class="error-handling-info">
+              <h4>🔄 Manejo de Errores:</h4>
+              <ul class="error-tips-list">
+                <li><strong>Descarga automática:</strong> Si hay errores, se descargará automáticamente un archivo CSV con los registros problemáticos</li>
+                <li><strong>Corrección rápida:</strong> El archivo de errores incluye todos los datos originales para facilitar la corrección</li>
+                <li><strong>Identificación clara:</strong> Cada error incluye la fila original y descripción específica del problema</li>
+                <li><strong>Reintento fácil:</strong> Corrige los errores en el archivo descargado y súbelo nuevamente</li>
+              </ul>
+            </div>
+
+            <div class="examples-info">
+              <h4>📝 Ejemplos de Formato Correcto:</h4>
+              <div class="examples-grid">
+                <div class="example-item">
+                  <strong>✅ Correcto:</strong><br>
+                  FECHA: 2024-01-15<br>
+                  PRIMA: 125000<br>
+                  NUMEROCEDULA: 118880001<br>
+                  NUMEROTELEFONO: 88881234<br>
+                  OBSERVACIONES: Cliente preferencial
+                </div>
+                <div class="example-item error">
+                  <strong>❌ Incorrecto:</strong><br>
+                  FECHA: 15/01/2024<br>
+                  PRIMA: ₡125,000<br>
+                  NUMEROCEDULA: 1-1888-0001<br>
+                  NUMEROTELEFONO: 8888-1234
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </mat-card-content>

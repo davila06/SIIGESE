@@ -1,0 +1,192 @@
+2025-10-17 15:08:06.056 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:08:06.100 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:08:06.200 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:08:06.202 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:08:07.632 -06:00 [INF] Executed DbCommand (131ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:08:07.759 -06:00 [INF] Executed DbCommand (110ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:08:07.853 -06:00 [INF] Executed DbCommand (89ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:08:07.947 -06:00 [INF] Executed DbCommand (90ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:08:08.128 -06:00 [INF] Executed DbCommand (163ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 15:08:08.156 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 15:08:08.159 -06:00 [INF] Database migration completed successfully
+2025-10-17 15:08:08.186 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 15:08:08.358 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 15:08:08.361 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 15:08:08.362 -06:00 [INF] Hosting environment: Production
+2025-10-17 15:08:08.364 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 15:28:04.115 -06:00 [INF] Application is shutting down...
+2025-10-17 15:28:24.065 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:28:24.101 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:28:24.199 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:28:24.201 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:28:25.406 -06:00 [INF] Executed DbCommand (106ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:28:25.527 -06:00 [INF] Executed DbCommand (107ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:28:25.622 -06:00 [INF] Executed DbCommand (90ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:28:25.717 -06:00 [INF] Executed DbCommand (90ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:28:25.826 -06:00 [INF] Executed DbCommand (91ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 15:28:25.846 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 15:28:25.849 -06:00 [INF] Database migration completed successfully
+2025-10-17 15:28:25.864 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 15:28:25.918 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 15:28:25.921 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 15:28:25.924 -06:00 [INF] Hosting environment: Production
+2025-10-17 15:28:25.925 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 15:29:18.220 -06:00 [INF] Application is shutting down...
+2025-10-17 15:31:34.697 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:31:34.756 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:31:34.955 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:31:34.957 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:31:36.549 -06:00 [INF] Executed DbCommand (120ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:31:36.684 -06:00 [INF] Executed DbCommand (116ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:31:36.781 -06:00 [INF] Executed DbCommand (91ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:31:36.876 -06:00 [INF] Executed DbCommand (92ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:31:36.985 -06:00 [INF] Executed DbCommand (96ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 15:31:37.017 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 15:31:37.020 -06:00 [INF] Database migration completed successfully
+2025-10-17 15:31:37.048 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 15:31:37.139 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 15:31:37.144 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 15:31:37.145 -06:00 [INF] Hosting environment: Production
+2025-10-17 15:31:37.148 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 15:32:10.856 -06:00 [INF] Application is shutting down...
+2025-10-17 15:32:42.049 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:32:42.119 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:32:42.233 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:32:42.237 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:32:44.478 -06:00 [INF] Executed DbCommand (25ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:32:44.528 -06:00 [INF] Executed DbCommand (31ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:32:44.536 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:32:44.545 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:32:44.581 -06:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 15:32:44.617 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 15:32:44.620 -06:00 [INF] Database migration completed successfully
+2025-10-17 15:32:44.648 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 15:32:44.766 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 15:32:44.769 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 15:32:44.770 -06:00 [INF] Hosting environment: Development
+2025-10-17 15:32:44.771 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 15:32:47.554 -06:00 [INF] Application is shutting down...
+2025-10-17 15:35:50.519 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:35:50.577 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:35:50.695 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:35:50.698 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:35:51.466 -06:00 [INF] Executed DbCommand (55ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:35:51.530 -06:00 [INF] Executed DbCommand (42ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:35:51.536 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:35:51.542 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:35:51.590 -06:00 [INF] Executed DbCommand (23ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 15:35:51.621 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 15:35:51.626 -06:00 [INF] Database migration completed successfully
+2025-10-17 15:35:51.651 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 15:35:51.749 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 15:35:51.751 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 15:35:51.752 -06:00 [INF] Hosting environment: Development
+2025-10-17 15:35:51.753 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 15:36:21.209 -06:00 [INF] Application is shutting down...
+2025-10-17 15:38:51.325 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:38:51.396 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 15:38:51.501 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:38:51.505 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 15:38:52.485 -06:00 [INF] Executed DbCommand (46ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:38:52.607 -06:00 [INF] Executed DbCommand (46ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:38:52.617 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 15:38:52.623 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 15:38:52.659 -06:00 [INF] Executed DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 15:38:52.697 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 15:38:52.703 -06:00 [INF] Database migration completed successfully
+2025-10-17 15:38:52.750 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 15:38:52.938 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 15:38:52.941 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 15:38:52.943 -06:00 [INF] Hosting environment: Development
+2025-10-17 15:38:52.945 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 15:39:05.126 -06:00 [INF] Application is shutting down...
+2025-10-17 16:07:26.761 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 16:07:26.807 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 16:07:26.893 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 16:07:26.895 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 16:07:28.220 -06:00 [INF] Executed DbCommand (119ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 16:07:28.357 -06:00 [INF] Executed DbCommand (120ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 16:07:28.462 -06:00 [INF] Executed DbCommand (100ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 16:07:28.565 -06:00 [INF] Executed DbCommand (101ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 16:07:28.686 -06:00 [INF] Executed DbCommand (102ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 16:07:28.704 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 16:07:28.707 -06:00 [INF] Database migration completed successfully
+2025-10-17 16:07:28.731 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 16:07:28.807 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 16:07:28.809 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 16:07:28.811 -06:00 [INF] Hosting environment: Development
+2025-10-17 16:07:28.811 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 16:07:45.796 -06:00 [INF] Application is shutting down...
+2025-10-17 16:10:04.918 -06:00 [WRN] Entity 'User' has a global query filter defined and is the required end of a relationship with the entity 'Cotizacion'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 16:10:04.968 -06:00 [WRN] Entity 'Poliza' has a global query filter defined and is the required end of a relationship with the entity 'Reclamo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+2025-10-17 16:10:05.067 -06:00 [WRN] No store type was specified for the decimal property 'MontoAprobado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 16:10:05.070 -06:00 [WRN] No store type was specified for the decimal property 'MontoReclamado' on entity type 'Reclamo'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2025-10-17 16:10:06.387 -06:00 [INF] Executed DbCommand (126ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 16:10:06.519 -06:00 [INF] Executed DbCommand (118ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 16:10:06.628 -06:00 [INF] Executed DbCommand (102ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-10-17 16:10:06.735 -06:00 [INF] Executed DbCommand (102ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-10-17 16:10:06.855 -06:00 [INF] Executed DbCommand (103ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-10-17 16:10:06.874 -06:00 [INF] No migrations were applied. The database is already up to date.
+2025-10-17 16:10:06.878 -06:00 [INF] Database migration completed successfully
+2025-10-17 16:10:06.894 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-17 16:10:06.973 -06:00 [INF] Now listening on: http://localhost:5000
+2025-10-17 16:10:06.977 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-17 16:10:06.978 -06:00 [INF] Hosting environment: Development
+2025-10-17 16:10:06.979 -06:00 [INF] Content root path: C:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2025-10-17 16:29:34.845 -06:00 [INF] Application is shutting down...

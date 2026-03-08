@@ -1,0 +1,37 @@
+# Frontend directory
+frontend-new/
+
+# Backend build outputs
+backend/**/bin/
+backend/**/obj/
+backend/**/publish/
+
+# Node modules
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# IDEs
+.vs/
+.vscode/
+
+# Documentation
+*.md
+
+# Logs and environment
+*.log
+.env
+.env.*
+secrets.json
+
+# Deployment scripts
+*.ps1
+*.sh
+
+# HTML test files
+*.html
+
+# SQL scripts in root
+/*.sql

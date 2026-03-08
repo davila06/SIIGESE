@@ -1,0 +1,337 @@
+<div class="cobro-detalle-container">
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Cargando detalle del cobro...</p>
+  </div>
+
+  <!-- Contenido del detalle -->
+  <div *ngIf="!loading && cobro" class="detalle-content">
+    <!-- Header con información básica -->
+    <mat-card class="header-card">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar-icon">
+          <mat-icon [color]="getEstadoColor(cobro.estado)">
+            {{ getEstadoIcon(cobro.estado) }}
+          </mat-icon>
+        </div>
+        <mat-card-title>
+          Cobro #{{ cobro.numeroRecibo }}
+        </mat-card-title>
+        <mat-card-subtitle>
+          Póliza {{ cobro.numeroPoliza }} - {{ cobro.clienteNombreCompleto }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Estado:</span>
+            <mat-chip [color]="getEstadoColor(cobro.estado)" selected>
+              <mat-icon>{{ getEstadoIcon(cobro.estado) }}</mat-icon>
+              {{ getEstadoLabel(cobro.estado) }}
+            </mat-chip>
+          </div>
+
+          <div class="info-item">
+            <span class="label">Monto Total:</span>
+            <span class="amount">{{ formatCurrency(cobro.montoTotal, cobro.moneda) }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">Fecha de Vencimiento:</span>
+            <span [class.vencido]="cobro.estado === EstadoCobro.Vencido">
+              {{ cobro.fechaVencimiento | date:'dd-MM-yyyy' }}
+            </span>
+          </div>
+
+          <div class="info-item" *ngIf="cobro.fechaCobro">
+            <span class="label">Fecha de Cobro:</span>
+            <span>{{ cobro.fechaCobro | date:'dd-MM-yyyy HH:mm' }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="cobro.metodoPago">
+            <span class="label">Método de Pago:</span>
+            <span>{{ getMetodoPagoLabel(cobro.metodoPago) }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="cobro.usuarioCobroNombre">
+            <span class="label">Usuario que Cobró:</span>
+            <span>{{ cobro.usuarioCobroNombre }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button (click)="volver()">
+          <mat-icon>arrow_back</mat-icon>
+          Volver
+        </button>
+        
+        <button 
+          mat-raised-button 
+          color="primary" 
+          *ngIf="cobro.estado === EstadoCobro.Pendiente"
+          (click)="registrarCobro()">
+          <mat-icon>payment</mat-icon>
+          Registrar Cobro
+        </button>
+
+        <button 
+          mat-button 
+          color="accent"
+          (click)="editarCobro()">
+          <mat-icon>edit</mat-icon>
+          Editar
+        </button>
+
+        <button 
+          mat-button 
+          (click)="imprimirRecibo()">
+          <mat-icon>print</mat-icon>
+          Imprimir Recibo
+        </button>
+
+        <button 
+          mat-button 
+          color="warn"
+          *ngIf="cobro.estado !== EstadoCobro.Cancelado && cobro.estado !== EstadoCobro.Cobrado"
+          (click)="cancelarCobro()">
+          <mat-icon>cancel</mat-icon>
+          Cancelar
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Tabs con información detallada -->
+    <mat-card class="tabs-card">
+      <mat-tab-group animationDuration="300ms">
+        <!-- Tab: Información General -->
+        <mat-tab label="Información General">
+          <div class="tab-content">
+            <div class="section">
+              <h3>Datos del Cliente</h3>
+              <mat-divider></mat-divider>
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="label">Nombre:</span>
+                  <span>{{ cobro.clienteNombreCompleto }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Número de Póliza:</span>
+                  <span>{{ cobro.numeroPoliza }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Fecha de Creación:</span>
+                  <span>{{ cobro.fechaCreacion | date:'dd-MM-yyyy' }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Detalles Financieros</h3>
+              <mat-divider></mat-divider>
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="label">Monto Total:</span>
+                  <span>{{ formatCurrency(cobro.montoTotal, cobro.moneda) }}</span>
+                </div>
+                <div class="info-item" *ngIf="cobro.montoCobrado">
+                  <span class="label">Monto Cobrado:</span>
+                  <span>{{ formatCurrency(cobro.montoCobrado, cobro.moneda) }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Estado:</span>
+                  <span>{{ getEstadoLabel(cobro.estado) }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Fecha de Vencimiento:</span>
+                  <span>{{ cobro.fechaVencimiento | date:'dd-MM-yyyy' }}</span>
+                </div>
+                <div class="info-item total">
+                  <span class="label">Total a Pagar:</span>
+                  <span class="amount">{{ formatCurrency(cobro.montoTotal, cobro.moneda) }}</span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Moneda:</span>
+                  <span>{{ getCurrencySymbol(cobro.moneda) }} ({{ cobro.moneda }})</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="section" *ngIf="cobro.observaciones">
+              <h3>Observaciones</h3>
+              <mat-divider></mat-divider>
+              <p class="observaciones">{{ cobro.observaciones }}</p>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Tab: Historial de Movimientos -->
+        <mat-tab label="Historial">
+          <div class="tab-content">
+            <div class="section">
+              <h3>Movimientos del Cobro</h3>
+              <mat-divider></mat-divider>
+              
+              <div class="movimientos-container" *ngIf="movimientos.length > 0; else noMovimientos">
+                <mat-table [dataSource]="movimientos" class="movimientos-table">
+                  <!-- Fecha Column -->
+                  <ng-container matColumnDef="fecha">
+                    <mat-header-cell *matHeaderCellDef>Fecha</mat-header-cell>
+                    <mat-cell *matCellDef="let movimiento">
+                      {{ movimiento.fecha | date:'dd-MM-yyyy HH:mm' }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Descripción Column -->
+                  <ng-container matColumnDef="descripcion">
+                    <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+                    <mat-cell *matCellDef="let movimiento">
+                      <div class="movimiento-descripcion">
+                        <mat-icon [color]="getTipoMovimientoColor(movimiento.tipo)">
+                          {{ getTipoMovimientoIcon(movimiento.tipo) }}
+                        </mat-icon>
+                        <span>{{ movimiento.descripcion }}</span>
+                      </div>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Usuario Column -->
+                  <ng-container matColumnDef="usuario">
+                    <mat-header-cell *matHeaderCellDef>Usuario</mat-header-cell>
+                    <mat-cell *matCellDef="let movimiento">{{ movimiento.usuario }}</mat-cell>
+                  </ng-container>
+
+                  <!-- Cambios Column -->
+                  <ng-container matColumnDef="cambios">
+                    <mat-header-cell *matHeaderCellDef>Cambios</mat-header-cell>
+                    <mat-cell *matCellDef="let movimiento">
+                      <div *ngIf="movimiento.estadoAnterior && movimiento.estadoNuevo" class="cambios">
+                        <mat-chip [color]="getEstadoColor(movimiento.estadoAnterior)">
+                          {{ getEstadoLabel(movimiento.estadoAnterior) }}
+                        </mat-chip>
+                        <mat-icon>arrow_forward</mat-icon>
+                        <mat-chip [color]="getEstadoColor(movimiento.estadoNuevo)">
+                          {{ getEstadoLabel(movimiento.estadoNuevo) }}
+                        </mat-chip>
+                      </div>
+                      <div *ngIf="movimiento.montoAnterior && movimiento.montoNuevo" class="cambios">
+                        <span class="monto-anterior">{{ formatCurrency(movimiento.montoAnterior) }}</span>
+                        <mat-icon>arrow_forward</mat-icon>
+                        <span class="monto-nuevo">{{ formatCurrency(movimiento.montoNuevo) }}</span>
+                      </div>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="movimientosColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: movimientosColumns;"></mat-row>
+                </mat-table>
+              </div>
+
+              <ng-template #noMovimientos>
+                <div class="no-data">
+                  <mat-icon>history</mat-icon>
+                  <p>No hay movimientos registrados para este cobro</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Tab: Documentos -->
+        <mat-tab label="Documentos">
+          <div class="tab-content">
+            <div class="section">
+              <h3>Documentos Adjuntos</h3>
+              <mat-divider></mat-divider>
+              
+              <div class="documentos-container" *ngIf="documentos.length > 0; else noDocumentos">
+                <mat-table [dataSource]="documentos" class="documentos-table">
+                  <!-- Nombre Column -->
+                  <ng-container matColumnDef="nombre">
+                    <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+                    <mat-cell *matCellDef="let documento">
+                      <div class="documento-nombre">
+                        <mat-icon>{{ documento.tipo === 'PDF' ? 'picture_as_pdf' : 'image' }}</mat-icon>
+                        <span>{{ documento.nombre }}</span>
+                      </div>
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Tipo Column -->
+                  <ng-container matColumnDef="tipo">
+                    <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+                    <mat-cell *matCellDef="let documento">{{ documento.tipo }}</mat-cell>
+                  </ng-container>
+
+                  <!-- Tamaño Column -->
+                  <ng-container matColumnDef="tamaño">
+                    <mat-header-cell *matHeaderCellDef>Tamaño</mat-header-cell>
+                    <mat-cell *matCellDef="let documento">{{ formatFileSize(documento.tamanio) }}</mat-cell>
+                  </ng-container>
+
+                  <!-- Fecha de Subida Column -->
+                  <ng-container matColumnDef="fechaSubida">
+                    <mat-header-cell *matHeaderCellDef>Fecha de Subida</mat-header-cell>
+                    <mat-cell *matCellDef="let documento">
+                      {{ documento.fechaSubida | date:'dd-MM-yyyy HH:mm' }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <!-- Usuario Column -->
+                  <ng-container matColumnDef="usuario">
+                    <mat-header-cell *matHeaderCellDef>Usuario</mat-header-cell>
+                    <mat-cell *matCellDef="let documento">{{ documento.usuario }}</mat-cell>
+                  </ng-container>
+
+                  <!-- Acciones Column -->
+                  <ng-container matColumnDef="acciones">
+                    <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                    <mat-cell *matCellDef="let documento">
+                      <button 
+                        mat-icon-button 
+                        color="primary"
+                        matTooltip="Descargar"
+                        (click)="descargarDocumento(documento)">
+                        <mat-icon>download</mat-icon>
+                      </button>
+                      <button 
+                        mat-icon-button 
+                        color="warn"
+                        matTooltip="Eliminar"
+                        (click)="eliminarDocumento(documento)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="documentosColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: documentosColumns;"></mat-row>
+                </mat-table>
+              </div>
+
+              <ng-template #noDocumentos>
+                <div class="no-data">
+                  <mat-icon>folder_open</mat-icon>
+                  <p>No hay documentos adjuntos para este cobro</p>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </mat-card>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!loading && !cobro" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <h2>Cobro no encontrado</h2>
+    <p>El cobro solicitado no existe o no tienes permisos para verlo.</p>
+    <button mat-raised-button color="primary" (click)="volver()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver a Cobros
+    </button>
+  </div>
+</div>

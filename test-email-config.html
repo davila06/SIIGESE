@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Configuración SMTP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .test-header {
+            background: linear-gradient(135deg, #1976d2 0%, #42a5f5 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .test-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 500;
+        }
+        
+        .test-header p {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .test-content {
+            padding: 32px;
+        }
+        
+        .test-info {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .test-info h3 {
+            color: #1976d2;
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .test-info ul {
+            color: #333;
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .test-info li {
+            margin-bottom: 6px;
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        
+        .status-success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #4caf50;
+        }
+        
+        .status-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #2196f3;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            padding: 12px 24px;
+            background: #1976d2;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-button:hover {
+            background: #1565c0;
+        }
+        
+        .nav-button.secondary {
+            background: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .nav-button.secondary:hover {
+            background: #eeeeee;
+        }
+        
+        .angular-app-frame {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            min-height: 600px;
+            background: #fafafa;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .frame-header {
+            background: #f5f5f5;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .material-icons {
+            font-size: 18px;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .test-content {
+                padding: 20px;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+            }
+            
+            .nav-button {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🔧 Test - Configuración SMTP</h1>
+            <p>Formulario de configuración de correo electrónico</p>
+        </div>
+        
+        <div class="test-content">
+            <div class="status-indicator status-success">
+                <span class="material-icons">check_circle</span>
+                Mock API Interceptor - Email Config implementado
+            </div>
+            
+            <div class="test-info">
+                <h3>
+                    <span class="material-icons">info</span>
+                    Funcionalidades del Formulario SMTP
+                </h3>
+                <ul>
+                    <li><strong>Configuraciones Predefinidas:</strong> Gmail, Outlook, Amazon SES</li>
+                    <li><strong>Validación Completa:</strong> Todos los campos con validación en tiempo real</li>
+                    <li><strong>Test de Conexión:</strong> Simula prueba de conectividad SMTP</li>
+                    <li><strong>Seguridad:</strong> Opciones SSL/TLS configurables</li>
+                    <li><strong>Campos Avanzados:</strong> Timeout, reintentos, configuración del remitente</li>
+                    <li><strong>Mock API:</strong> 2 configuraciones de prueba precargadas</li>
+                </ul>
+            </div>
+            
+            <div class="navigation-buttons">
+                <a href="http://localhost:4200/configuracion/email/new" class="nav-button">
+                    <span class="material-icons">add</span>
+                    Nueva Configuración SMTP
+                </a>
+                <a href="http://localhost:4200/configuracion/email" class="nav-button secondary">
+                    <span class="material-icons">list</span>
+                    Lista de Configuraciones
+                </a>
+                <a href="test-reclamos-fix.html" class="nav-button secondary">
+                    <span class="material-icons">assignment</span>
+                    Test Reclamos
+                </a>
+            </div>
+            
+            <div class="angular-app-frame">
+                <div class="frame-header">
+                    <span class="material-icons">web</span>
+                    Angular App - Configuración SMTP
+                    <div style="margin-left: auto; font-size: 12px;">
+                        http://localhost:4200/configuracion/email/new
+                    </div>
+                </div>
+                
+                <iframe 
+                    src="http://localhost:4200/configuracion/email/new" 
+                    width="100%" 
+                    height="800"
+                    style="border: none; background: white;">
+                </iframe>
+            </div>
+            
+            <div class="test-info" style="margin-top: 24px;">
+                <h3>
+                    <span class="material-icons">settings</span>
+                    Mock Data Disponible
+                </h3>
+                <ul>
+                    <li><strong>Configuración Gmail:</strong> smtp.gmail.com:587 (TLS)</li>
+                    <li><strong>Configuración Outlook:</strong> smtp-mail.outlook.com:587 (TLS)</li>
+                    <li><strong>Test de Conexión:</strong> 80% de éxito simulado</li>
+                    <li><strong>Endpoints:</strong> GET, POST, PUT, DELETE implementados</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Monitor iframe load
+        const iframe = document.querySelector('iframe');
+        iframe.onload = function() {
+            console.log('✅ Formulario SMTP cargado correctamente');
+        };
+        
+        iframe.onerror = function() {
+            console.error('❌ Error cargando el formulario SMTP');
+        };
+        
+        // Auto-refresh every 30 seconds to catch changes
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>

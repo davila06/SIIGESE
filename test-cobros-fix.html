@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cobros - SIIGESE</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1976d2;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .test-section h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        button {
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #1565c0;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success {
+            background-color: #e8f5e8;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+        }
+        .error {
+            background-color: #ffeaea;
+            border: 1px solid #f44336;
+            color: #c62828;
+        }
+        .info {
+            background-color: #e3f2fd;
+            border: 1px solid #2196f3;
+            color: #1565c0;
+        }
+        .status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .pendiente { background-color: #fff3cd; color: #856404; }
+        .cobrado { background-color: #d4edda; color: #155724; }
+        .vencido { background-color: #f8d7da; color: #721c24; }
+        .cancelado { background-color: #e2e3e5; color: #383d41; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 TEST DE FUNCIONALIDAD - MÓDULO DE COBROS</h1>
+            <h2>SIIGESE - Sistema de Gestión de Seguros</h2>
+            <p>Verificación del Mock API Interceptor para Cobros</p>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 1. Test de Estadísticas de Cobros</h3>
+            <p>Verificar que se carguen correctamente las estadísticas de cobros</p>
+            <button onclick="testCobroStats()">Obtener Estadísticas</button>
+            <div id="statsResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💰 2. Test de Lista de Cobros</h3>
+            <p>Verificar que se cargue correctamente la lista de cobros</p>
+            <button onclick="testGetCobros()">Obtener Lista de Cobros</button>
+            <div id="cobrosResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>➕ 3. Test de Crear Cobro</h3>
+            <p>Verificar que se pueda crear un nuevo cobro</p>
+            <button onclick="testCreateCobro()">Crear Nuevo Cobro</button>
+            <div id="createResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💳 4. Test de Registrar Pago</h3>
+            <p>Verificar que se pueda registrar un pago</p>
+            <button onclick="testRegistrarCobro()">Registrar Pago</button>
+            <div id="registrarResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>❌ 5. Test de Cancelar Cobro</h3>
+            <p>Verificar que se pueda cancelar un cobro</p>
+            <button onclick="testCancelarCobro()">Cancelar Cobro</button>
+            <div id="cancelarResult" class="result"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🌐 6. Test de Navegación a Módulo</h3>
+            <p>Verificar la navegación al módulo de cobros en la aplicación</p>
+            <button onclick="navigateToCobros()">Ir al Módulo de Cobros</button>
+            <div id="navigationResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:4200/api/cobros';
+
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+        }
+
+        async function testCobroStats() {
+            showResult('statsResult', '⏳ Cargando estadísticas...', 'info');
+            
+            try {
+                const response = await fetch(`${API_URL}/stats`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer mock-token'
+                    }
+                });
+
+                if (response.ok) {
+                    const stats = await response.json();
+                    const message = `✅ Estadísticas cargadas exitosamente:
+
+📈 RESUMEN DE COBROS:
+• Total Pendientes: ${stats.totalPendientes}
+• Total Cobrados: ${stats.totalCobrados}
+• Total Vencidos: ${stats.totalVencidos}
+
+💰 MONTOS:
+• Monto Pendiente: ₡${stats.montoTotalPendiente?.toLocaleString()}
+• Monto Cobrado: ₡${stats.montoTotalCobrado?.toLocaleString()}
+• Monto Por Vencer: ₡${stats.montoPorVencer?.toLocaleString()}
+
+🔍 Datos recibidos: ${JSON.stringify(stats, null, 2)}`;
+                    showResult('statsResult', message, 'success');
+                } else {
+                    showResult('statsResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                }
+            } catch (error) {
+                showResult('statsResult', `❌ Error de conexión: ${error.message}`, 'error');
+            }
+        }
+
+        async function testGetCobros() {
+            showResult('cobrosResult', '⏳ Cargando lista de cobros...', 'info');
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer mock-token'
+                    }
+                });
+
+                if (response.ok) {
+                    const cobros = await response.json();
+                    let message = `✅ Lista de cobros cargada exitosamente (${cobros.length} registros):
+
+`;
+                    
+                    cobros.forEach((cobro, index) => {
+                        const estado = getEstadoLabel(cobro.estado);
+                        message += `${index + 1}. ${cobro.numeroRecibo}
+   • Cliente: ${cobro.clienteNombre} ${cobro.clienteApellido}
+   • Póliza: ${cobro.numeroPoliza}
+   • Monto: ₡${cobro.montoTotal?.toLocaleString()}
+   • Estado: ${estado}
+   • Vencimiento: ${new Date(cobro.fechaVencimiento).toLocaleDateString()}
+   
+`;
+                    });
+
+                    message += `\n🔍 Datos completos: ${JSON.stringify(cobros, null, 2)}`;
+                    showResult('cobrosResult', message, 'success');
+                } else {
+                    showResult('cobrosResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                }
+            } catch (error) {
+                showResult('cobrosResult', `❌ Error de conexión: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCreateCobro() {
+            showResult('createResult', '⏳ Creando nuevo cobro...', 'info');
+            
+            const newCobro = {
+                polizaId: 6,
+                fechaVencimiento: new Date('2024-12-30'),
+                montoTotal: 195000,
+                moneda: 'CRC',
+                observaciones: 'Cobro de prueba creado desde test'
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer mock-token'
+                    },
+                    body: JSON.stringify(newCobro)
+                });
+
+                if (response.ok) {
+                    const createdCobro = await response.json();
+                    const message = `✅ Cobro creado exitosamente:
+
+📄 NUEVO COBRO:
+• ID: ${createdCobro.id}
+• Número Recibo: ${createdCobro.numeroRecibo}
+• Póliza ID: ${createdCobro.polizaId}
+• Monto: ₡${createdCobro.montoTotal?.toLocaleString()}
+• Estado: ${getEstadoLabel(createdCobro.estado)}
+• Fecha Creación: ${new Date(createdCobro.fechaCreacion).toLocaleString()}
+
+🔍 Datos completos: ${JSON.stringify(createdCobro, null, 2)}`;
+                    showResult('createResult', message, 'success');
+                } else {
+                    showResult('createResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                }
+            } catch (error) {
+                showResult('createResult', `❌ Error de conexión: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRegistrarCobro() {
+            showResult('registrarResult', '⏳ Registrando pago...', 'info');
+            
+            const cobroId = 2; // Cobro pendiente
+            const registroData = {
+                cobroId: cobroId,
+                fechaCobro: new Date(),
+                montoCobrado: 225000,
+                metodoPago: 1, // Transferencia
+                observaciones: 'Pago registrado desde test'
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/${cobroId}/registrar`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer mock-token'
+                    },
+                    body: JSON.stringify(registroData)
+                });
+
+                if (response.ok) {
+                    const updatedCobro = await response.json();
+                    const message = `✅ Pago registrado exitosamente:
+
+💳 COBRO ACTUALIZADO:
+• Recibo: ${updatedCobro.numeroRecibo}
+• Cliente: ${updatedCobro.clienteNombre} ${updatedCobro.clienteApellido}
+• Monto Cobrado: ₡${updatedCobro.montoCobrado?.toLocaleString()}
+• Método de Pago: ${getMetodoPagoLabel(updatedCobro.metodoPago)}
+• Estado: ${getEstadoLabel(updatedCobro.estado)}
+• Fecha de Cobro: ${new Date(updatedCobro.fechaCobro).toLocaleString()}
+
+🔍 Datos completos: ${JSON.stringify(updatedCobro, null, 2)}`;
+                    showResult('registrarResult', message, 'success');
+                } else {
+                    showResult('registrarResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                }
+            } catch (error) {
+                showResult('registrarResult', `❌ Error de conexión: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCancelarCobro() {
+            showResult('cancelarResult', '⏳ Cancelando cobro...', 'info');
+            
+            const cobroId = 4; // Cobro pendiente
+            const cancelData = {
+                motivo: 'Cobro cancelado desde test - Cliente solicitó cancelación'
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/${cobroId}/cancelar`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer mock-token'
+                    },
+                    body: JSON.stringify(cancelData)
+                });
+
+                if (response.ok) {
+                    const canceledCobro = await response.json();
+                    const message = `✅ Cobro cancelado exitosamente:
+
+❌ COBRO CANCELADO:
+• Recibo: ${canceledCobro.numeroRecibo}
+• Cliente: ${canceledCobro.clienteNombre} ${canceledCobro.clienteApellido}
+• Monto: ₡${canceledCobro.montoTotal?.toLocaleString()}
+• Estado: ${getEstadoLabel(canceledCobro.estado)}
+• Motivo: ${canceledCobro.observaciones}
+• Fecha Actualización: ${new Date(canceledCobro.fechaActualizacion).toLocaleString()}
+
+🔍 Datos completos: ${JSON.stringify(canceledCobro, null, 2)}`;
+                    showResult('cancelarResult', message, 'success');
+                } else {
+                    showResult('cancelarResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                }
+            } catch (error) {
+                showResult('cancelarResult', `❌ Error de conexión: ${error.message}`, 'error');
+            }
+        }
+
+        function navigateToCobros() {
+            showResult('navigationResult', '🌐 Redirigiendo al módulo de cobros...', 'info');
+            setTimeout(() => {
+                window.open('http://localhost:4200/cobros', '_blank');
+                showResult('navigationResult', '✅ Navegación iniciada - Se abrió nueva pestaña con el módulo de cobros', 'success');
+            }, 1000);
+        }
+
+        function getEstadoLabel(estado) {
+            switch (estado) {
+                case 0: return 'Pendiente';
+                case 1: return 'Cobrado';
+                case 2: return 'Vencido';
+                case 3: return 'Cancelado';
+                default: return 'Desconocido';
+            }
+        }
+
+        function getMetodoPagoLabel(metodo) {
+            switch (metodo) {
+                case 0: return 'Efectivo';
+                case 1: return 'Transferencia';
+                case 2: return 'Cheque';
+                case 3: return 'Tarjeta de Crédito';
+                case 4: return 'Tarjeta de Débito';
+                default: return 'Desconocido';
+            }
+        }
+
+        // Auto-ejecutar test básico al cargar la página
+        window.onload = function() {
+            setTimeout(() => {
+                console.log('🚀 Iniciando test automático de cobros...');
+                testCobroStats();
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

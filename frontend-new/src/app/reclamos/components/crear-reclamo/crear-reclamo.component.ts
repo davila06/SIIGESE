@@ -12,13 +12,25 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Observable, of } from 'rxjs';
+import { map, startWith, debounceTime, switchMap, catchError } from 'rxjs/operators';
 
 import { ReclamosService } from '../../services/reclamos.service';
+import { PolizasService } from '../../../polizas/services/polizas.service';
 import { 
   CreateReclamoDto, 
   TipoReclamo, 
   PrioridadReclamo 
 } from '../../interfaces/reclamo.interface';
+
+interface PolizaOption {
+  id: number;
+  numeroPoliza: string;
+  nombreAsegurado: string;
+  prima: number;
+  moneda: string;
+}
 
 @Component({
   selector: 'app-crear-reclamo',
@@ -35,7 +47,8 @@ import {
     MatNativeDateModule,
     MatSnackBarModule,
     MatIconModule,
-    MatStepperModule
+    MatStepperModule,
+    MatAutocompleteModule
   ],
   templateUrl: './crear-reclamo.component.html',
   styleUrls: ['./crear-reclamo.component.scss']
@@ -43,6 +56,9 @@ import {
 export class CrearReclamoComponent implements OnInit {
   reclamoForm: FormGroup;
   loading = false;
+  
+  polizasFiltradas$!: Observable<PolizaOption[]>;
+  polizaSeleccionada: PolizaOption | null = null;
   
   // Enums para el template
   TipoReclamo = TipoReclamo;
@@ -65,16 +81,17 @@ export class CrearReclamoComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder,
-    private reclamosService: ReclamosService,
-    private router: Router,
-    private snackBar: MatSnackBar
+    private readonly fb: FormBuilder,
+    private readonly reclamosService: ReclamosService,
+    private readonly polizasService: PolizasService,
+    private readonly router: Router,
+    private readonly snackBar: MatSnackBar
   ) {
     this.reclamoForm = this.fb.group({
+      polizaBusqueda: [''],
       polizaId: [null, [Validators.required]],
       numeroPoliza: ['', [Validators.required]],
-      clienteNombre: ['', [Validators.required]],
-      clienteApellido: ['', [Validators.required]],
+      clienteNombreCompleto: ['', [Validators.required]],
       tipoReclamo: [null, [Validators.required]],
       descripcion: ['', [Validators.required, Validators.minLength(10)]],
       montoReclamado: [null],
@@ -84,7 +101,73 @@ export class CrearReclamoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Inicialización del componente
+    // Configurar autocomplete de pólizas
+    this.polizasFiltradas$ = this.reclamoForm.get('polizaBusqueda')!.valueChanges.pipe(
+      startWith(''),
+      debounceTime(300),
+      switchMap(value => {
+        const searchTerm = typeof value === 'string' ? value : value?.numeroPoliza || '';
+        if (!searchTerm || searchTerm.length < 2) {
+          return of([]);
+        }
+        return this.buscarPolizas(searchTerm);
+      })
+    );
+    
+    // Asegurar que el formulario esté siempre limpio al iniciar
+    this.resetForm();
+  }
+  
+  buscarPolizas(termino: string): Observable<PolizaOption[]> {
+    return this.polizasService.buscarPolizas(termino).pipe(
+      map(polizas => polizas.map(p => ({
+        id: p.id,
+        numeroPoliza: p.numeroPoliza,
+        nombreAsegurado: p.nombreAsegurado,
+        prima: p.prima,
+        moneda: p.moneda
+      }))),
+      catchError(error => {
+        console.error('Error buscando pólizas:', error);
+        return of([]);
+      })
+    );
+  }
+  
+  displayPoliza(poliza: PolizaOption | null): string {
+    return poliza ? `${poliza.numeroPoliza}` : '';
+  }
+  
+  onPolizaSeleccionada(poliza: PolizaOption): void {
+    this.polizaSeleccionada = poliza;
+    this.reclamoForm.patchValue({
+      polizaId: poliza.id,
+      numeroPoliza: poliza.numeroPoliza,
+      clienteNombreCompleto: poliza.nombreAsegurado,
+      moneda: poliza.moneda
+    });
+  }
+  
+  resetForm(): void {
+    this.reclamoForm.reset();
+    this.polizaSeleccionada = null;
+    
+    // Restablecer valores por defecto
+    this.reclamoForm.patchValue({
+      moneda: 'USD',
+      prioridad: PrioridadReclamo.Media
+    });
+    
+    // Limpiar completamente los estados de validación
+    Object.keys(this.reclamoForm.controls).forEach(key => {
+      const control = this.reclamoForm.get(key);
+      if (control) {
+        control.markAsUntouched();
+        control.markAsPristine();
+        control.setErrors(null);
+        control.updateValueAndValidity();
+      }
+    });
   }
 
   onSubmit(): void {

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Routing - SIIGESE</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-item {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .warning { background-color: #fff3cd; border-color: #ffeaa7; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .credentials {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test de Routing - SIIGESE</h1>
+        
+        <div class="credentials">
+            <h3>📋 Credenciales de Prueba:</h3>
+            <p><strong>Usuario:</strong> admin@sinseg.com</p>
+            <p><strong>Contraseña:</strong> password123</p>
+        </div>
+
+        <div class="test-item warning">
+            <h3>🔍 Instrucciones de Prueba:</h3>
+            <ol>
+                <li>Abrir la consola del navegador (F12)</li>
+                <li>Hacer clic en "Ir a Aplicación"</li>
+                <li>Hacer login con las credenciales</li>
+                <li>Observar los logs en la consola</li>
+                <li>Intentar navegar a diferentes secciones</li>
+            </ol>
+        </div>
+
+        <div class="test-item">
+            <h3>🚀 Pruebas de Navegación:</h3>
+            <button onclick="window.open('https://polite-flower-0f3168a1e.3.azurestaticapps.net', '_blank')">
+                🌐 Ir a Aplicación
+            </button>
+            <button onclick="window.open('https://polite-flower-0f3168a1e.3.azurestaticapps.net/login', '_blank')">
+                🔐 Ir a Login
+            </button>
+            <button onclick="window.open('https://polite-flower-0f3168a1e.3.azurestaticapps.net/polizas', '_blank')">
+                📄 Ir a Pólizas
+            </button>
+        </div>
+
+        <div class="test-item">
+            <h3>🔧 Información Técnica:</h3>
+            <p><strong>URL Principal:</strong> https://polite-flower-0f3168a1e.3.azurestaticapps.net</p>
+            <p><strong>Deployment:</strong> Octubre 19, 2025</p>
+            <p><strong>Build Hash:</strong> 49747319280500b3</p>
+        </div>
+
+        <div class="test-item success">
+            <h3>✅ Cambios Implementados:</h3>
+            <ul>
+                <li>🔧 JWT mock válido con formato correcto</li>
+                <li>🔧 Token limpio sin prefijo "Bearer"</li>
+                <li>🔧 Logs de debugging para AuthGuard</li>
+                <li>🔧 Logs de navegación en LoginComponent</li>
+                <li>🔧 Configuración de routing mejorada</li>
+            </ul>
+        </div>
+
+        <div class="test-item warning">
+            <h3>🔍 Qué Buscar en la Consola:</h3>
+            <ul>
+                <li><code>🔄 Mock API Interceptor</code> - Interceptación de login</li>
+                <li><code>✅ Mock Login successful</code> - Login exitoso</li>
+                <li><code>🛡️ AuthGuard</code> - Verificación de acceso</li>
+                <li><code>✅ Navigation to /polizas result</code> - Resultado de navegación</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        console.log('🧪 Test page loaded - SIIGESE Routing Debug');
+        console.log('📋 Use credentials: admin@sinseg.com / password123');
+    </script>
+</body>
+</html>

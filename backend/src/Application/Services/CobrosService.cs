@@ -1,239 +1,384 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
 using AutoMapper;
-using Application.DTOs;
-using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
+using Application.DTOs;
+using Application.Interfaces;
 
 namespace Application.Services
 {
     public class CobrosService : ICobrosService
     {
+        private readonly ICobroRepository _cobroRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CobrosService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CobrosService(ICobroRepository cobroRepository, IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _cobroRepository = cobroRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task<IEnumerable<CobroDto>> GetAllCobrosAsync()
         {
-            var cobros = await _unitOfWork.Cobros.GetAllAsync();
+            var cobros = await _cobroRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
 
-        public async Task<CobroDto?> GetCobroByIdAsync(int id)
+        public async Task<CobroDto> GetCobroByIdAsync(int id)
         {
-            var cobro = await _unitOfWork.Cobros.GetByIdAsync(id);
-            return cobro != null ? _mapper.Map<CobroDto>(cobro) : null;
+            var cobro = await _cobroRepository.GetByIdAsync(id);
+            return _mapper.Map<CobroDto>(cobro);
         }
 
-        public async Task<CobroDto?> GetCobroByNumeroReciboAsync(string numeroRecibo)
+        public async Task<CobroDto> GetCobroByNumeroReciboAsync(string numeroRecibo)
         {
-            var cobro = await _unitOfWork.Cobros.GetByNumeroReciboAsync(numeroRecibo);
-            return cobro != null ? _mapper.Map<CobroDto>(cobro) : null;
+            var cobro = await _cobroRepository.GetByNumeroReciboAsync(numeroRecibo);
+            return _mapper.Map<CobroDto>(cobro);
         }
 
         public async Task<IEnumerable<CobroDto>> GetCobrosByPolizaIdAsync(int polizaId)
         {
-            var cobros = await _unitOfWork.Cobros.GetCobrosByPolizaIdAsync(polizaId);
+            var cobros = await _cobroRepository.GetCobrosByPolizaIdAsync(polizaId);
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
 
-        public async Task<IEnumerable<CobroDto>> GetCobrosByEstadoAsync(string estado)
+        public async Task<IEnumerable<CobroDto>> GetCobrosByEstadoAsync(EstadoCobro estado)
         {
-            if (!Enum.TryParse<EstadoCobro>(estado, true, out var estadoCobro))
-            {
-                throw new ArgumentException($"Estado de cobro inválido: {estado}");
-            }
-
-            var cobros = await _unitOfWork.Cobros.GetCobrosByEstadoAsync(estadoCobro);
+            var cobros = await _cobroRepository.GetCobrosByEstadoAsync(estado);
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
 
         public async Task<IEnumerable<CobroDto>> GetCobrosVencidosAsync()
         {
-            var cobros = await _unitOfWork.Cobros.GetCobrosVencidosAsync();
+            var cobros = await _cobroRepository.GetCobrosVencidosAsync();
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
 
-        public async Task<IEnumerable<CobroDto>> GetCobrosProximosVencerAsync(int dias = 7)
+        public async Task<IEnumerable<CobroDto>> GetCobrosProximosVencerAsync(int dias)
         {
-            var cobros = await _unitOfWork.Cobros.GetCobrosProximosVencerAsync(dias);
+            var cobros = await _cobroRepository.GetCobrosProximosVencerAsync(dias);
+            return _mapper.Map<IEnumerable<CobroDto>>(cobros);
+        }
+
+        public async Task<IEnumerable<CobroDto>> GetCobrosProximosPorPeriodicidadAsync()
+        {
+            var cobros = await _cobroRepository.GetCobrosProximosPorPeriodicidadAsync();
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
 
         public async Task<CobroStatsDto> GetCobrosStatsAsync()
         {
-            var totalCobros = (await _unitOfWork.Cobros.GetAllAsync()).Count();
-            var cobrosPendientes = await _unitOfWork.Cobros.GetTotalCobrosPendientesAsync();
-            var cobrosCobrados = (await _unitOfWork.Cobros.GetCobrosByEstadoAsync(EstadoCobro.Cobrado)).Count();
-            var cobrosVencidos = (await _unitOfWork.Cobros.GetCobrosVencidosAsync()).Count();
-            
-            var montoTotalPendiente = await _unitOfWork.Cobros.GetMontoTotalPendienteAsync();
-            var montoTotalCobrado = await _unitOfWork.Cobros.GetTotalCobradoAsync();
-            
-            var cobrosVencidosList = await _unitOfWork.Cobros.GetCobrosVencidosAsync();
-            var montoTotalVencido = cobrosVencidosList.Sum(c => c.MontoTotal);
-            
-            var cobrosProximosVencer = await _unitOfWork.Cobros.GetCobrosProximosVencerAsync();
+            // Use dedicated SQL COUNT/SUM queries — no full table scan
+            var totalCobros         = await _cobroRepository.GetTotalCountAsync();
+            var cobrosPendientes    = await _cobroRepository.GetTotalCobrosPendientesAsync();
+            var cobrosVencidos      = await _cobroRepository.GetCobrosVencidosCountAsync();
+            var montoTotalPendiente = await _cobroRepository.GetMontoTotalPendienteAsync();
+            var montoTotalCobrado   = await _cobroRepository.GetTotalCobradoAsync();
+            var cobrosProximosVencer = await _cobroRepository.GetCobrosProximosVencerCountAsync(7);
 
             return new CobroStatsDto
             {
-                TotalCobros = totalCobros,
-                CobrosPendientes = cobrosPendientes,
-                CobrosCobrados = cobrosCobrados,
-                CobrosVencidos = cobrosVencidos,
+                TotalCobros         = totalCobros,
+                CobrosPendientes    = cobrosPendientes,
+                CobrosPagados       = totalCobros - cobrosPendientes,
+                CobrosVencidos      = cobrosVencidos,
                 MontoTotalPendiente = montoTotalPendiente,
-                MontoTotalCobrado = montoTotalCobrado,
-                MontoTotalVencido = montoTotalVencido,
-                CobrosProximosVencer = _mapper.Map<IEnumerable<CobroDto>>(cobrosProximosVencer)
+                MontoTotalCobrado   = montoTotalCobrado,
+                PorcentajeCobrado   = totalCobros > 0
+                    ? (decimal)(totalCobros - cobrosPendientes) / totalCobros * 100
+                    : 0,
+                CobrosProximosVencer = cobrosProximosVencer
             };
         }
 
         public async Task<CobroDto> CreateCobroAsync(CobroRequestDto request)
         {
-            // Validar que la póliza existe
+            // Obtener la póliza para llenar los datos del cobro
             var poliza = await _unitOfWork.Polizas.GetByIdAsync(request.PolizaId);
             if (poliza == null)
-            {
-                throw new KeyNotFoundException($"Póliza con ID {request.PolizaId} no encontrada");
-            }
+                throw new ArgumentException($"Póliza con ID {request.PolizaId} no encontrada");
 
-            // Generar número de recibo único
+            // Generar número de recibo
             var numeroRecibo = await GenerateNumeroReciboAsync();
 
+            // Crear el cobro con datos de la póliza
             var cobro = new Cobro
             {
                 NumeroRecibo = numeroRecibo,
-                PolizaId = request.PolizaId,
-                NumeroPoliza = poliza.NumeroPoliza,
-                ClienteNombre = poliza.NombreAsegurado.Split(' ').FirstOrDefault() ?? "",
-                ClienteApellido = string.Join(" ", poliza.NombreAsegurado.Split(' ').Skip(1)),
-                FechaVencimiento = request.FechaVencimiento,
+                PolizaId = poliza.Id,
+                NumeroPoliza = poliza.NumeroPoliza ?? string.Empty,
+                ClienteNombreCompleto = poliza.NombreAsegurado ?? string.Empty,
+                CorreoElectronico = request.CorreoElectronico ?? poliza.Correo,
                 MontoTotal = request.MontoTotal,
+                MontoCobrado = 0,
+                FechaVencimiento = request.FechaVencimiento,
+                FechaCobro = DateTime.MinValue,
                 Estado = EstadoCobro.Pendiente,
-                Observaciones = request.Observaciones,
-                CreatedBy = "System", // TODO: Obtener del usuario actual
-                CreatedAt = DateTime.UtcNow
+                MetodoPago = request.MetodoPago,
+                Moneda = request.Moneda,
+                Observaciones = request.Observaciones ?? string.Empty,
+                UsuarioCobroId = 0,
+                UsuarioCobroNombre = string.Empty,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = "Sistema",
+                IsDeleted = false
             };
 
-            await _unitOfWork.Cobros.AddAsync(cobro);
-            await _unitOfWork.SaveChangesAsync();
-
-            return _mapper.Map<CobroDto>(cobro);
+            var createdCobro = await _cobroRepository.AddAsync(cobro);
+            return _mapper.Map<CobroDto>(createdCobro);
         }
 
-        public async Task<CobroDto?> UpdateCobroAsync(int id, ActualizarCobroDto request)
+        public async Task<CobroDto> UpdateCobroAsync(int id, ActualizarCobroDto request)
         {
-            var cobro = await _unitOfWork.Cobros.GetByIdAsync(id);
+            var cobro = await _cobroRepository.GetByIdAsync(id);
             if (cobro == null)
-            {
-                return null;
-            }
+                throw new ArgumentException($"Cobro con ID {id} no encontrado");
 
-            // Solo permitir actualización si el cobro está pendiente
-            if (cobro.Estado != EstadoCobro.Pendiente)
-            {
-                throw new InvalidOperationException("Solo se pueden actualizar cobros en estado pendiente");
-            }
-
-            if (request.FechaVencimiento.HasValue)
-            {
-                cobro.FechaVencimiento = request.FechaVencimiento.Value;
-            }
-
-            if (request.MontoTotal.HasValue)
-            {
-                cobro.MontoTotal = request.MontoTotal.Value;
-            }
-
-            if (request.Observaciones != null)
-            {
-                cobro.Observaciones = request.Observaciones;
-            }
-
+            _mapper.Map(request, cobro);
             cobro.UpdatedAt = DateTime.UtcNow;
-            cobro.UpdatedBy = "System"; // TODO: Obtener del usuario actual
+            cobro.UpdatedBy = "Sistema";
 
-            await _unitOfWork.Cobros.UpdateAsync(cobro);
-            await _unitOfWork.SaveChangesAsync();
-
+            await _cobroRepository.UpdateAsync(cobro);
             return _mapper.Map<CobroDto>(cobro);
         }
 
-        public async Task<CobroDto?> RegistrarCobroAsync(RegistrarCobroRequestDto request)
+        public async Task<CobroDto> RegistrarCobroAsync(RegistrarCobroRequestDto request)
         {
-            var cobro = await _unitOfWork.Cobros.GetByIdAsync(request.CobroId);
+            var cobro = await _cobroRepository.GetByIdAsync(request.CobroId);
             if (cobro == null)
-            {
-                return null;
-            }
+                throw new ArgumentException($"Cobro con ID {request.CobroId} no encontrado");
 
-            if (cobro.Estado != EstadoCobro.Pendiente)
-            {
-                throw new InvalidOperationException("Solo se pueden registrar cobros en estado pendiente");
-            }
-
-            if (!Enum.TryParse<MetodoPago>(request.MetodoPago, true, out var metodoPago))
-            {
-                throw new ArgumentException($"Método de pago inválido: {request.MetodoPago}");
-            }
-
-            cobro.FechaCobro = request.FechaCobro;
             cobro.MontoCobrado = request.MontoCobrado;
-            cobro.Estado = EstadoCobro.Cobrado;
-            cobro.MetodoPago = metodoPago;
+            cobro.FechaCobro = request.FechaCobro;
+            cobro.Estado = EstadoCobro.Pagado;
+            cobro.MetodoPago = request.MetodoPago;
             cobro.Observaciones = request.Observaciones;
             cobro.UpdatedAt = DateTime.UtcNow;
-            cobro.UpdatedBy = "System"; // TODO: Obtener del usuario actual
-            cobro.UsuarioCobroId = 1; // TODO: Obtener del usuario actual
-            cobro.UsuarioCobroNombre = "Admin"; // TODO: Obtener del usuario actual
+            cobro.UpdatedBy = "Sistema";
 
-            await _unitOfWork.Cobros.UpdateAsync(cobro);
-            await _unitOfWork.SaveChangesAsync();
-
+            await _cobroRepository.UpdateAsync(cobro);
             return _mapper.Map<CobroDto>(cobro);
-        }
-
-        public async Task<bool> DeleteCobroAsync(int id)
-        {
-            var cobro = await _unitOfWork.Cobros.GetByIdAsync(id);
-            if (cobro == null)
-            {
-                return false;
-            }
-
-            // Solo permitir eliminar cobros pendientes
-            if (cobro.Estado != EstadoCobro.Pendiente)
-            {
-                throw new InvalidOperationException("Solo se pueden eliminar cobros en estado pendiente");
-            }
-
-            await _unitOfWork.Cobros.DeleteAsync(cobro);
-            await _unitOfWork.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<string> GenerateNumeroReciboAsync()
         {
-            string numeroRecibo;
-            bool existe;
+            var fecha = DateTime.Now.ToString("yyyyMM");
+            var ultimoNumero = 1;
+            
+            // Lógica para generar número consecutivo
+            var ultimoCobro = (await _cobroRepository.GetAllAsync())
+                .Where(c => c.NumeroRecibo.StartsWith($"REC-{fecha}"))
+                .OrderByDescending(c => c.NumeroRecibo)
+                .FirstOrDefault();
 
-            do
+            if (ultimoCobro != null && ultimoCobro.NumeroRecibo.Length > 11)
             {
-                // Formato: REC-YYYYMMDD-XXXX
-                var fecha = DateTime.Now.ToString("yyyyMMdd");
-                var random = new Random().Next(1000, 9999);
-                numeroRecibo = $"REC-{fecha}-{random}";
-                
-                existe = await _unitOfWork.Cobros.ExisteNumeroReciboAsync(numeroRecibo);
-            } 
-            while (existe);
+                var numeroString = ultimoCobro.NumeroRecibo.Substring(11);
+                if (int.TryParse(numeroString, out var numero))
+                {
+                    ultimoNumero = numero + 1;
+                }
+            }
 
-            return numeroRecibo;
+            return $"REC-{fecha}-{ultimoNumero:D4}";
+        }
+
+        public async Task DeleteCobroAsync(int id)
+        {
+            await _cobroRepository.DeleteAsync(id);
+        }
+
+        public async Task<CobroDto> CancelarCobroAsync(int id, string? motivo = null)
+        {
+            var cobro = await _cobroRepository.GetByIdAsync(id);
+            if (cobro == null)
+                throw new ArgumentException($"Cobro con ID {id} no encontrado");
+
+            if (cobro.Estado == EstadoCobro.Pagado)
+                throw new InvalidOperationException("No se puede cancelar un cobro ya pagado");
+
+            cobro.Estado = EstadoCobro.Cancelado;
+            if (!string.IsNullOrWhiteSpace(motivo))
+                cobro.Observaciones = motivo;
+            cobro.UpdatedAt = DateTime.UtcNow;
+            cobro.UpdatedBy = "Sistema";
+
+            await _cobroRepository.UpdateAsync(cobro);
+            return _mapper.Map<CobroDto>(cobro);
+        }
+
+        public async Task<GenerarCobrosResultDto> GenerarCobrosAutomaticosAsync(int mesesAdelante = 3)
+        {
+            var resultado = new GenerarCobrosResultDto();
+            var polizas = await _unitOfWork.Polizas.GetActivasAsync();
+
+            foreach (var poliza in polizas)
+            {
+                try
+                {
+                    var cobrosGenerados = await GenerarCobrosPorPolizaInternoAsync(poliza, mesesAdelante);
+                    resultado.PolizasProcesadas++;
+                    resultado.CobrosGenerados += cobrosGenerados.Count;
+                    resultado.CobrosCreados.AddRange(cobrosGenerados);
+                }
+                catch (Exception ex)
+                {
+                    resultado.Errores.Add($"Error en póliza {poliza.NumeroPoliza}: {ex.Message}");
+                    resultado.PolizasSaltadas++;
+                }
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            return resultado;
+        }
+
+        public async Task<GenerarCobrosResultDto> GenerarCobrosPorPolizaAsync(int polizaId, int mesesAdelante = 3)
+        {
+            var resultado = new GenerarCobrosResultDto();
+            var poliza = await _unitOfWork.Polizas.GetByIdAsync(polizaId);
+
+            if (poliza == null)
+            {
+                resultado.Errores.Add($"Póliza con ID {polizaId} no encontrada");
+                return resultado;
+            }
+
+            try
+            {
+                var cobrosGenerados = await GenerarCobrosPorPolizaInternoAsync(poliza, mesesAdelante);
+                resultado.PolizasProcesadas = 1;
+                resultado.CobrosGenerados = cobrosGenerados.Count;
+                resultado.CobrosCreados.AddRange(cobrosGenerados);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                resultado.Errores.Add($"Error: {ex.Message}");
+                resultado.PolizasSaltadas = 1;
+            }
+
+            return resultado;
+        }
+
+        private async Task<List<CobroGeneradoDto>> GenerarCobrosPorPolizaInternoAsync(Domain.Entities.Poliza poliza, int mesesAdelante)
+        {
+            var cobrosGenerados = new List<CobroGeneradoDto>();
+
+            // Validar que la póliza tenga los datos necesarios
+            if (string.IsNullOrEmpty(poliza.Frecuencia))
+            {
+                throw new InvalidOperationException("La póliza no tiene frecuencia de pago definida");
+            }
+
+            if (poliza.Prima <= 0)
+            {
+                throw new InvalidOperationException("La póliza no tiene prima definida");
+            }
+
+            // Obtener cobros existentes para esta póliza
+            var cobrosExistentes = await _cobroRepository.GetCobrosByPolizaIdAsync(poliza.Id);
+            var fechasExistentes = cobrosExistentes
+                .Select(c => c.FechaVencimiento.Date)
+                .ToHashSet();
+
+            // Calcular fechas de vencimiento según la frecuencia
+            var fechasVencimiento = CalcularFechasVencimiento(poliza.FechaVigencia, poliza.Frecuencia, mesesAdelante);
+
+            foreach (var fechaVencimiento in fechasVencimiento)
+            {
+                // Saltar si ya existe un cobro para esta fecha
+                if (fechasExistentes.Contains(fechaVencimiento.Date))
+                {
+                    continue;
+                }
+
+                // Generar número de recibo
+                var numeroRecibo = await GenerateNumeroReciboAsync();
+
+                // Crear el cobro
+                var cobro = new Cobro
+                {
+                    NumeroRecibo = numeroRecibo,
+                    PolizaId = poliza.Id,
+                    NumeroPoliza = poliza.NumeroPoliza ?? string.Empty,
+                    ClienteNombreCompleto = poliza.NombreAsegurado ?? string.Empty,
+                    CorreoElectronico = poliza.Correo,
+                    MontoTotal = poliza.Prima,
+                    MontoCobrado = 0,
+                    FechaVencimiento = fechaVencimiento,
+                    FechaCobro = DateTime.MinValue,
+                    Estado = EstadoCobro.Pendiente,
+                    MetodoPago = MetodoPago.NoDefinido,
+                    Moneda = poliza.Moneda ?? "CRC",
+                    Observaciones = $"Cobro generado automáticamente - Frecuencia: {poliza.Frecuencia}",
+                    UsuarioCobroId = 0,
+                    UsuarioCobroNombre = string.Empty,
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = "Sistema - Auto Generación",
+                    IsDeleted = false
+                };
+
+                await _cobroRepository.AddAsync(cobro);
+
+                cobrosGenerados.Add(new CobroGeneradoDto
+                {
+                    NumeroRecibo = numeroRecibo,
+                    NumeroPoliza = poliza.NumeroPoliza ?? string.Empty,
+                    FechaVencimiento = fechaVencimiento,
+                    MontoTotal = poliza.Prima,
+                    Moneda = poliza.Moneda ?? "CRC"
+                });
+            }
+
+            return cobrosGenerados;
+        }
+
+        private List<DateTime> CalcularFechasVencimiento(DateTime fechaInicio, string frecuencia, int mesesAdelante)
+        {
+            var fechas = new List<DateTime>();
+            var fechaActual = DateTime.UtcNow.Date;
+            var fechaBase = fechaInicio.Date;
+
+            // Ajustar fecha base si es anterior a hoy
+            while (fechaBase < fechaActual)
+            {
+                fechaBase = AgregarPeriodo(fechaBase, frecuencia);
+            }
+
+            // Generar fechas hacia adelante
+            var fechaLimite = fechaActual.AddMonths(mesesAdelante);
+            var fechaGeneracion = fechaBase;
+
+            while (fechaGeneracion <= fechaLimite)
+            {
+                fechas.Add(fechaGeneracion);
+                fechaGeneracion = AgregarPeriodo(fechaGeneracion, frecuencia);
+            }
+
+            return fechas;
+        }
+
+        private DateTime AgregarPeriodo(DateTime fecha, string frecuencia)
+        {
+            var frecuenciaNormalizada = frecuencia.ToUpperInvariant().Trim();
+
+            return frecuenciaNormalizada switch
+            {
+                "MENSUAL" or "MONTHLY" or "MES" or "MONTH" => fecha.AddMonths(1),
+                "BIMESTRAL" or "BIMONTHLY" or "2 MESES" => fecha.AddMonths(2),
+                "TRIMESTRAL" or "QUARTERLY" or "3 MESES" or "QUARTER" => fecha.AddMonths(3),
+                "CUATRIMESTRAL" or "4 MESES" => fecha.AddMonths(4),
+                "SEMESTRAL" or "SEMIANNUAL" or "6 MESES" or "SEMESTER" => fecha.AddMonths(6),
+                "ANUAL" or "ANNUAL" or "YEARLY" or "AÑO" or "YEAR" or "ANO" => fecha.AddYears(1),
+                "QUINCENAL" or "BIWEEKLY" or "15 DIAS" => fecha.AddDays(15),
+                "SEMANAL" or "WEEKLY" or "WEEK" or "SEMANA" => fecha.AddDays(7),
+                _ => fecha.AddMonths(1) // Por defecto mensual
+            };
         }
     }
 }

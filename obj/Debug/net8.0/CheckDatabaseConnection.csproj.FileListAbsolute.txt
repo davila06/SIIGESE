@@ -1,0 +1,6 @@
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckDatabaseConnection.csproj.AssemblyReference.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckDatabaseConnection.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckDatabaseConnection.AssemblyInfoInputs.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckDatabaseConnection.AssemblyInfo.cs
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckDatabaseConnection.csproj.CoreCompileInputs.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckDatabaseConnection.sourcelink.json

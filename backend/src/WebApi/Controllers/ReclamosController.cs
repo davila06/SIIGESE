@@ -112,10 +112,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var success = await _reclamoService.DeleteReclamoAsync(id);
-                if (!success)
-                    return NotFound($"Reclamo con ID {id} no encontrado");
-
+                await _reclamoService.DeleteReclamoAsync(id);
                 return NoContent();
             }
             catch (Exception ex)
@@ -146,17 +143,17 @@ namespace WebApi.Controllers
         /// <summary>
         /// Obtener reclamos por póliza
         /// </summary>
-        [HttpGet("poliza/{polizaId}")]
-        public async Task<ActionResult<IEnumerable<ReclamoDto>>> GetByPoliza(int polizaId)
+        [HttpGet("poliza/{numeroPoliza}")]
+        public async Task<ActionResult<IEnumerable<ReclamoDto>>> GetByPoliza(string numeroPoliza)
         {
             try
             {
-                var reclamos = await _reclamoService.GetReclamosByPolizaIdAsync(polizaId);
+                var reclamos = await _reclamoService.GetReclamosByPolizaAsync(numeroPoliza);
                 return Ok(reclamos);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener reclamos de la póliza {PolizaId}", polizaId);
+                _logger.LogError(ex, "Error al obtener reclamos de la póliza {NumeroPoliza}", numeroPoliza);
                 return StatusCode(500, "Error interno del servidor");
             }
         }
@@ -202,15 +199,15 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// Obtener reclamos con filtros
+        /// Obtener reclamos con filtros (paginado)
         /// </summary>
         [HttpPost("filtrar")]
-        public async Task<ActionResult<IEnumerable<ReclamoDto>>> GetByFiltro([FromBody] ReclamoFilterDto filtro)
+        public async Task<ActionResult<PagedResultDto<ReclamoDto>>> GetByFiltro([FromBody] ReclamoFilterDto filtro)
         {
             try
             {
-                var reclamos = await _reclamoService.GetReclamosByFiltroAsync(filtro);
-                return Ok(reclamos);
+                var result = await _reclamoService.GetReclamosByFiltroAsync(filtro);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -273,7 +270,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var reclamo = await _reclamoService.ResolverReclamoAsync(id, resolverDto.MontoAprobado, resolverDto.Observaciones);
+                var reclamo = await _reclamoService.ResolverReclamoAsync(id, resolverDto.MontoAprobado, resolverDto.Observaciones ?? string.Empty);
                 if (reclamo == null)
                     return NotFound($"Reclamo con ID {id} no encontrado");
 

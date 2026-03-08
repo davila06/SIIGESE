@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { Poliza, CreatePoliza } from '../interfaces/user.interface';
-import { formatCurrencyByCode, formatDateCR, MONEDAS_SISTEMA, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
+import { formatCurrencyByCode, formatDateCR, MONEDAS_SISTEMA, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-polizas',
@@ -39,23 +39,26 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   searchTerm: string = '';
   filteredPolizas: Poliza[] = [];
   filteredPolizasCount = 0;
-  displayedColumns: string[] = ['numeroPoliza', 'nombreAsegurado', 'prima', 'aseguradora', 'fechaVigencia', 'vehiculo', 'actions'];
+  displayedColumns: string[] = ['numeroPoliza', 'nombreAsegurado', 'aseguradora', 'fechaVigencia', 'frecuencia', 'observaciones', 'actions'];
 
   // Datos para selectores
   monedasSistema = MONEDAS_SISTEMA;
+  aseguradorasSistema = ASEGURADORAS_SISTEMA;
 
   constructor(
-    private fb: FormBuilder,
-    private apiService: ApiService,
-    public authService: AuthService,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private readonly fb: FormBuilder,
+    private readonly apiService: ApiService,
+    public readonly authService: AuthService,
+    private readonly snackBar: MatSnackBar,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.polizaForm = this.createForm();
   }
 
   ngOnInit(): void {
     this.loadPolizas();
+    // Asegurar que el formulario esté siempre limpio al iniciar
+    this.resetForm();
   }
 
   // Variables para sorting manual
@@ -71,6 +74,23 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       console.log('MatPaginator configurado:', !!this.paginator);
       console.log('DataSource data length:', this.polizasDataSource.data.length);
     }, 0);
+
+    // Debug del formulario en tiempo real
+    if (this.polizaForm) {
+      this.polizaForm.valueChanges.subscribe(value => {
+        console.log('📝 Formulario cambió:', {
+          valid: this.polizaForm.valid,
+          invalid: this.polizaForm.invalid,
+          validForSubmission: this.isFormValidForSubmission(),
+          value: value
+        });
+      });
+
+      this.polizaForm.statusChanges.subscribe(status => {
+        console.log('🔄 Estado del formulario cambió:', status);
+        console.log('📊 Validación para envío:', this.isFormValidForSubmission());
+      });
+    }
   }
 
   // Método de sorting manual
@@ -162,8 +182,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return this.fb.group({
       perfilId: [1, [Validators.required, Validators.min(1)]],
       numeroPoliza: ['', [Validators.required, Validators.maxLength(50)]],
-      modalidad: ['', [Validators.required, Validators.maxLength(100)]],
+      modalidad: ['', Validators.maxLength(50)],
       nombreAsegurado: ['', [Validators.required, Validators.maxLength(200)]],
+      numeroCedula: ['', Validators.maxLength(50)],
       prima: [0, [Validators.required, Validators.min(0)]],
       moneda: [CURRENCY_CONSTANTS.DEFAULT_CURRENCY, [Validators.required, Validators.maxLength(10)]],
       fechaVigencia: ['', Validators.required],
@@ -171,7 +192,11 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       aseguradora: ['', [Validators.required, Validators.maxLength(100)]],
       placa: ['', Validators.maxLength(20)],
       marca: ['', Validators.maxLength(50)],
-      modelo: ['', Validators.maxLength(50)]
+      modelo: ['', Validators.maxLength(50)],
+      año: ['', Validators.maxLength(4)],
+      correo: ['', [Validators.email, Validators.maxLength(100)]],
+      numeroTelefono: ['', Validators.maxLength(20)],
+      observaciones: ['', Validators.maxLength(500)]
     });
   }
 
@@ -303,8 +328,22 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return formatCurrencyByCode(amount, currency);
   }
 
-  formatDate(date: Date): string {
-    return formatDateCR(date);
+  formatDate(date: Date | string): string {
+    if (!date) return '-';
+    
+    try {
+      const dateObj = typeof date === 'string' ? new Date(date) : date;
+      
+      // Verificar si la fecha es válida
+      if (isNaN(dateObj.getTime())) {
+        return '-';
+      }
+      
+      return formatDateCR(dateObj);
+    } catch (error) {
+      console.error('Error formateando fecha:', error, date);
+      return '-';
+    }
   }
 
   // Métodos para paginación de tarjetas
@@ -336,16 +375,16 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       // Si no hay término de búsqueda, mostrar todas las pólizas
       this.filteredPolizas = [...this.polizas];
     } else {
-      const searchLower = this.searchTerm.toLowerCase().trim();
+      const searchLower = this.normalizeText(this.searchTerm.toLowerCase().trim());
       this.filteredPolizas = this.polizas.filter(poliza => {
         // Buscar en número de póliza
-        const numeroMatch = poliza.numeroPoliza?.toLowerCase().includes(searchLower);
+        const numeroMatch = this.normalizeText(poliza.numeroPoliza?.toLowerCase() || '').includes(searchLower);
         
-        // Buscar en nombre del asegurado
-        const nombreMatch = poliza.nombreAsegurado?.toLowerCase().includes(searchLower);
+        // Búsqueda mejorada en nombre del asegurado
+        const nombreMatch = this.searchInName(poliza.nombreAsegurado || '', searchLower);
         
         // Buscar en placa (si existe)
-        const placaMatch = poliza.placa?.toLowerCase().includes(searchLower);
+        const placaMatch = this.normalizeText(poliza.placa?.toLowerCase() || '').includes(searchLower);
         
         return numeroMatch || nombreMatch || placaMatch;
       });
@@ -371,6 +410,41 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     
     // Actualizar datos paginados para tarjetas
     this.updatePaginatedPolizas();
+  }
+
+  /**
+   * Normaliza texto removiendo acentos y caracteres especiales
+   */
+  private normalizeText(text: string): string {
+    return text
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remover acentos
+      .replace(/[^\w\s]/g, '') // Remover caracteres especiales excepto espacios
+      .trim();
+  }
+
+  /**
+   * Búsqueda inteligente en nombres - permite buscar palabras en cualquier orden
+   */
+  private searchInName(nombre: string, searchTerm: string): boolean {
+    const normalizedName = this.normalizeText(nombre.toLowerCase());
+    const normalizedSearch = searchTerm;
+    
+    // Búsqueda directa (búsqueda completa)
+    if (normalizedName.includes(normalizedSearch)) {
+      return true;
+    }
+    
+    // Búsqueda por palabras separadas (permite buscar "perez juan" para encontrar "Juan Pérez")
+    const searchWords = normalizedSearch.split(/\s+/).filter(word => word.length > 0);
+    const nameWords = normalizedName.split(/\s+/).filter(word => word.length > 0);
+    
+    // Verificar que todas las palabras de búsqueda estén en el nombre
+    return searchWords.every(searchWord => 
+      nameWords.some(nameWord => 
+        nameWord.includes(searchWord) || searchWord.includes(nameWord)
+      )
+    );
   }
 
   clearSearch(): void {
@@ -406,51 +480,66 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   selectPolizaAndScroll(poliza: Poliza): void {
+    console.log('🔄 Iniciando edición de póliza:', poliza.numeroPoliza);
+    
     // Configurar datos primero
     this.selectedPoliza = poliza;
     this.isEditMode = true;
     this.loadPolizaToForm(poliza);
     
-    console.log('Seleccionando póliza y preparando scroll:', poliza.numeroPoliza);
+    console.log('📝 Datos cargados en formulario:', {
+      numeroPoliza: poliza.numeroPoliza,
+      nombreAsegurado: poliza.nombreAsegurado,
+      prima: poliza.prima,
+      isEditMode: this.isEditMode
+    });
     
     // Forzar detección de cambios para que Angular actualice el DOM completamente
     this.cdr.detectChanges();
     
-    // Usar la misma lógica exitosa del forceScrollToTop con delay
+    // Scroll suave al formulario con múltiples métodos para compatibilidad
     setTimeout(() => {
-      console.log('Ejecutando scroll con lógica exitosa...');
+      console.log('🎯 Ejecutando scroll al formulario...');
       
-      const scrollElements = [document.documentElement, document.body, window];
-      
-      scrollElements.forEach(element => {
-        if (element === window) {
-          element.scrollTo(0, 0);
-        } else {
-          (element as HTMLElement).scrollTop = 0;
-        }
+      // Método 1: Scroll nativo del browser
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
       });
       
-      // También intentar con todos los elementos scrollables
-      const scrollableElements = document.querySelectorAll('*');
-      scrollableElements.forEach(el => {
-        if (el.scrollTop > 0) {
-          el.scrollTop = 0;
-        }
-      });
+      // Método 2: Backup para navegadores que no soportan behavior smooth
+      if (window.scrollY > 0) {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
       
-      console.log('Scroll completado, posición:', window.scrollY);
+      // Método 3: Scroll a elemento específico si existe
+      if (this.formSection?.nativeElement) {
+        this.formSection.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
       
-    }, 150); // Delay un poco más largo para Edge
+      console.log('✅ Scroll completado, posición final:', window.scrollY);
+      
+    }, 100);
     
-    // Efecto visual después del scroll
+    // Efecto visual de confirmación
     setTimeout(() => {
       if (this.formSection?.nativeElement) {
+        console.log('✨ Aplicando efecto visual de edición...');
         this.formSection.nativeElement.classList.add('editing-highlight');
+        
+        // Mostrar mensaje de confirmación
+        this.showMessage(`📝 Editando póliza: ${poliza.numeroPoliza}`);
+        
         setTimeout(() => {
           this.formSection.nativeElement.classList.remove('editing-highlight');
-        }, 1500);
+        }, 2000);
       }
-    }, 400);
+    }, 500);
   }
 
   // Método de prueba para forzar scroll
@@ -476,14 +565,18 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   loadPolizaToForm(poliza: Poliza): void {
+    console.log('📋 Cargando datos de póliza al formulario:', poliza);
+    
     // Formatear la fecha para el input tipo date
     const fechaVigencia = new Date(poliza.fechaVigencia).toISOString().split('T')[0];
     
-    this.polizaForm.patchValue({
+    // Preparar los valores para el formulario
+    const formValues = {
       perfilId: poliza.perfilId || 1,
       numeroPoliza: poliza.numeroPoliza,
-      modalidad: poliza.modalidad,
+      modalidad: poliza.modalidad || '',
       nombreAsegurado: poliza.nombreAsegurado,
+      numeroCedula: poliza.numeroCedula || '',
       prima: poliza.prima,
       moneda: poliza.moneda,
       fechaVigencia: fechaVigencia,
@@ -491,15 +584,35 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       aseguradora: poliza.aseguradora,
       placa: poliza.placa || '',
       marca: poliza.marca || '',
-      modelo: poliza.modelo || ''
-    });
+      modelo: poliza.modelo || '',
+      año: poliza.año || '',
+      correo: poliza.correo || '',
+      numeroTelefono: poliza.numeroTelefono || '',
+      observaciones: poliza.observaciones || ''
+    };
+    
+    console.log('💾 Valores a cargar en formulario:', formValues);
+    
+    // Cargar los valores al formulario
+    this.polizaForm.patchValue(formValues);
     
     // Marcar el formulario como pristine y untouched después de cargar los datos
     this.polizaForm.markAsPristine();
     this.polizaForm.markAsUntouched();
+    
+    // Verificar que los valores se cargaron correctamente
+    setTimeout(() => {
+      console.log('✅ Verificación del formulario cargado:', {
+        formValid: this.polizaForm.valid,
+        formValue: this.polizaForm.value,
+        isEditMode: this.isEditMode,
+        selectedPoliza: this.selectedPoliza?.numeroPoliza
+      });
+    }, 50);
   }
 
   resetForm(): void {
+    // Resetear completamente el formulario
     this.polizaForm.reset();
     this.selectedPoliza = null;
     this.isEditMode = false;
@@ -507,7 +620,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     // Restablecer valores por defecto
     this.polizaForm.patchValue({
       perfilId: 1,
-      moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY
+      moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY,
+      prima: 0,
+      fechaVigencia: new Date().toISOString().split('T')[0] // Fecha actual por defecto
     });
     
     // Limpiar completamente los estados de validación
@@ -517,8 +632,12 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         control.markAsUntouched();
         control.markAsPristine();
         control.setErrors(null);
+        control.updateValueAndValidity();
       }
     });
+    
+    // Forzar actualización de la vista
+    this.cdr.detectChanges();
   }
 
   cancelEdit(): void {
@@ -531,6 +650,35 @@ export class PolizasComponent implements OnInit, AfterViewInit {
 
   get submitButtonText(): string {
     return this.isEditMode ? 'Actualizar Póliza' : 'Guardar Póliza';
+  }
+
+  // Método para validar si el formulario es válido para envío
+  isFormValidForSubmission(): boolean {
+    const requiredFields = ['numeroPoliza', 'nombreAsegurado', 
+                           'prima', 'fechaVigencia', 'frecuencia', 'aseguradora'];
+    
+    const isValid = requiredFields.every(field => {
+      const control = this.polizaForm.get(field);
+      return control && control.valid && control.value !== '' && control.value !== null;
+    });
+
+    // Debug logging
+    if (!isValid) {
+      console.log('🔍 Formulario inválido. Campos con problemas:');
+      requiredFields.forEach(field => {
+        const control = this.polizaForm.get(field);
+        if (!control || !control.valid || control.value === '' || control.value === null) {
+          console.log(`❌ ${field}:`, {
+            exists: !!control,
+            valid: control?.valid,
+            value: control?.value,
+            errors: control?.errors
+          });
+        }
+      });
+    }
+
+    return isValid;
   }
 
 }

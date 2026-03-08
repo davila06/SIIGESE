@@ -25,13 +25,20 @@
           </mat-form-field>
           
           <mat-form-field>
-            <mat-label>Modalidad</mat-label>
-            <input matInput formControlName="modalidad" required>
+            <mat-label>Modalidad (Opcional)</mat-label>
+            <input matInput formControlName="modalidad">
           </mat-form-field>
-          
+        </div>
+
+        <div class="form-row">
           <mat-form-field>
             <mat-label>Nombre Asegurado</mat-label>
             <input matInput formControlName="nombreAsegurado" required>
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Número de Cédula (Opcional)</mat-label>
+            <input matInput formControlName="numeroCedula">
           </mat-form-field>
         </div>
 
@@ -69,7 +76,11 @@
           
           <mat-form-field>
             <mat-label>Aseguradora</mat-label>
-            <input matInput formControlName="aseguradora" required>
+            <mat-select formControlName="aseguradora" required>
+              <mat-option *ngFor="let aseguradora of aseguradorasSistema" [value]="aseguradora.value">
+                {{aseguradora.label}}
+              </mat-option>
+            </mat-select>
           </mat-form-field>
           
           <mat-form-field>
@@ -88,13 +99,38 @@
             <mat-label>Modelo (Opcional)</mat-label>
             <input matInput formControlName="modelo">
           </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Año (Opcional)</mat-label>
+            <input matInput formControlName="año" maxlength="4">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field>
+            <mat-label>Correo Electrónico (Opcional)</mat-label>
+            <input matInput type="email" formControlName="correo">
+          </mat-form-field>
+          
+          <mat-form-field>
+            <mat-label>Número de Teléfono (Opcional)</mat-label>
+            <input matInput formControlName="numeroTelefono">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width">
+            <mat-label>Observaciones (Opcional)</mat-label>
+            <textarea matInput formControlName="observaciones" rows="3" 
+                      placeholder="Notas, comentarios o información adicional sobre la póliza"></textarea>
+          </mat-form-field>
         </div>
 
         <div class="form-actions">
           <button mat-raised-button 
                   color="primary" 
                   type="submit" 
-                  [disabled]="polizaForm.invalid || isLoading">
+                  [disabled]="!isFormValidForSubmission() || isLoading">
             <mat-icon>{{isEditMode ? 'update' : 'save'}}</mat-icon>
             {{submitButtonText}}
           </button>
@@ -132,12 +168,15 @@
           <mat-form-field appearance="outline" class="search-field">
             <mat-label>Buscar pólizas</mat-label>
             <input matInput 
-                   placeholder="Buscar por número, nombre o placa..."
+                   placeholder="Ej: Juan Pérez, POL-001, SJJ-123, perez juan..."
                    [(ngModel)]="searchTerm"
                    (input)="onSearch($event)">
             <mat-icon matSuffix>search</mat-icon>
             <mat-hint *ngIf="searchTerm">
               {{filteredPolizasCount}} de {{polizas.length}} pólizas encontradas
+            </mat-hint>
+            <mat-hint *ngIf="!searchTerm" class="search-hint">
+              Busca por nombre (en cualquier orden), número de póliza o placa
             </mat-hint>
           </mat-form-field>
         </div>
@@ -209,14 +248,6 @@
             
             <div class="info-row">
               <div class="info-item">
-                <mat-icon class="info-icon">category</mat-icon>
-                <span class="info-label">Modalidad:</span>
-                <span class="info-value">{{poliza.modalidad}}</span>
-              </div>
-            </div>
-            
-            <div class="info-row">
-              <div class="info-item">
                 <mat-icon class="info-icon">event</mat-icon>
                 <span class="info-label">Vigencia:</span>
                 <span class="info-value">{{formatDate(poliza.fechaVigencia)}}</span>
@@ -283,33 +314,33 @@
               (click)="sortData('nombreAsegurado')"
               class="sortable-header"
               [class.sort-active]="currentSortColumn === 'nombreAsegurado'">
-            Asegurado
+            Nombre
             <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'nombreAsegurado'">
               {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
             </mat-icon>
           </th>
           <td mat-cell *matCellDef="let poliza">
-            <div class="asegurado-cell">
-              <span class="name">{{poliza.nombreAsegurado}}</span>
-              <span class="modalidad">{{poliza.modalidad}}</span>
+            <div class="cell-with-icon">
+              <mat-icon class="table-icon">person</mat-icon>
+              {{poliza.nombreAsegurado}}
             </div>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="prima">
+        <ng-container matColumnDef="frecuencia">
           <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('prima')"
+              (click)="sortData('frecuencia')"
               class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'prima'">
-            Prima
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'prima'">
+              [class.sort-active]="currentSortColumn === 'frecuencia'">
+            Frecuencia
+            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'frecuencia'">
               {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
             </mat-icon>
           </th>
           <td mat-cell *matCellDef="let poliza">
-            <div class="prima-cell">
-              <span class="amount">{{formatCurrency(poliza.prima)}}</span>
-              <span class="currency" [class]="'currency-' + poliza.moneda.toLowerCase()">{{poliza.moneda}}</span>
+            <div class="cell-with-icon">
+              <mat-icon class="table-icon">schedule</mat-icon>
+              <span class="frecuencia-badge">{{poliza.frecuencia}}</span>
             </div>
           </td>
         </ng-container>
@@ -337,7 +368,7 @@
               (click)="sortData('fechaVigencia')"
               class="sortable-header"
               [class.sort-active]="currentSortColumn === 'fechaVigencia'">
-            Vigencia
+            Fecha
             <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'fechaVigencia'">
               {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
             </mat-icon>
@@ -350,24 +381,21 @@
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="vehiculo">
+        <ng-container matColumnDef="observaciones">
           <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('vehiculo')"
+              (click)="sortData('observaciones')"
               class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'vehiculo'">
-            Vehículo
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'vehiculo'">
+              [class.sort-active]="currentSortColumn === 'observaciones'">
+            Observaciones
+            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'observaciones'">
               {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
             </mat-icon>
           </th>
           <td mat-cell *matCellDef="let poliza">
-            <div class="vehiculo-cell" *ngIf="poliza.placa; else noVehiculo">
-              <span class="placa">{{poliza.placa}}</span>
-              <span class="modelo">{{poliza.marca || 'N/A'}} {{poliza.modelo || ''}}</span>
+            <div class="cell-with-icon">
+              <mat-icon class="table-icon">notes</mat-icon>
+              <span class="observaciones-text">{{poliza.observaciones || '-'}}</span>
             </div>
-            <ng-template #noVehiculo>
-              <span class="no-data">-</span>
-            </ng-template>
           </td>
         </ng-container>
 
@@ -393,9 +421,9 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['numeroPoliza', 'nombreAsegurado', 'prima', 'aseguradora', 'fechaVigencia', 'vehiculo', 'actions']"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row 
-            *matRowDef="let row; columns: ['numeroPoliza', 'nombreAsegurado', 'prima', 'aseguradora', 'fechaVigencia', 'vehiculo', 'actions'];" 
+            *matRowDef="let row; columns: displayedColumns;" 
             class="table-row"
             [class.selected]="selectedPoliza?.id === row.id"
             (click)="selectPolizaAndScroll(row)"></tr>

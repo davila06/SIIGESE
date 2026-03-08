@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗃️ Información de Base de Datos - SIIGESE</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0078d4 0%, #106ebe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .db-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #0078d4;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .azure { color: #0078d4; }
+        .server { color: #28a745; }
+        .database { color: #17a2b8; }
+        .user { color: #ffc107; }
+        .security { color: #dc3545; }
+
+        .status-box {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #155724;
+        }
+
+        .connection-string {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+        }
+
+        .config-section {
+            background: #e7f3ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🗃️ Información de Base de Datos</h1>
+            <p>Configuración actual del sistema SIIGESE</p>
+        </div>
+
+        <div class="content">
+            <div class="status-box">
+                <strong>✅ ESTADO ACTUAL:</strong> El sistema está conectado a <strong>Azure SQL Database</strong> en la nube
+            </div>
+
+            <div class="db-info">
+                <h3>📊 Base de Datos Activa</h3>
+                <div class="info-item">
+                    <span class="info-icon azure">☁️</span>
+                    <div>
+                        <strong>Tipo:</strong> Azure SQL Database (Nube)
+                        <br><small>Base de datos empresarial en Microsoft Azure</small>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon server">🖥️</span>
+                    <div>
+                        <strong>Servidor:</strong> siinadseg-sql-5307.database.windows.net
+                        <br><small>Servidor dedicado en Azure</small>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon database">🗃️</span>
+                    <div>
+                        <strong>Base de Datos:</strong> SiinadsegDB
+                        <br><small>Base de datos principal del sistema</small>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon user">👤</span>
+                    <div>
+                        <strong>Usuario:</strong> siinadsegadmin
+                        <br><small>Usuario administrativo del sistema</small>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon security">🔐</span>
+                    <div>
+                        <strong>Seguridad:</strong> Conexión cifrada SSL/TLS
+                        <br><small>Puerto 1433 con cifrado completo</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>⚙️ Configuración Técnica</h3>
+                <p><strong>Cadena de Conexión (DefaultConnection):</strong></p>
+                <div class="connection-string">
+Server=tcp:siinadseg-sql-5307.database.windows.net,1433;
+Initial Catalog=SiinadsegDB;
+Persist Security Info=False;
+User ID=siinadsegadmin;
+Password=***PROTEGIDA***;
+MultipleActiveResultSets=False;
+Encrypt=True;
+TrustServerCertificate=False;
+Connection Timeout=30;
+                </div>
+            </div>
+
+            <div class="highlight">
+                <h4>🔄 Lógica de Conexión</h4>
+                <p>El sistema utiliza la siguiente prioridad para las conexiones:</p>
+                <ol>
+                    <li><strong>DefaultConnection</strong> → Azure SQL Database (ACTIVA)</li>
+                    <li><strong>LocalDbConnection</strong> → SQL Server LocalDB (Respaldo local)</li>
+                </ol>
+            </div>
+
+            <div class="db-info">
+                <h3>📋 Especificaciones de la Base de Datos</h3>
+                <div class="info-item">
+                    <span class="info-icon">🏷️</span>
+                    <div>
+                        <strong>Nombre:</strong> SiinadsegDB
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🌐</span>
+                    <div>
+                        <strong>Ubicación:</strong> Microsoft Azure Cloud
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🔌</span>
+                    <div>
+                        <strong>Puerto:</strong> 1433 (Puerto estándar SQL Server)
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">⏱️</span>
+                    <div>
+                        <strong>Timeout:</strong> 30 segundos
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="info-icon">🔄</span>
+                    <div>
+                        <strong>Conexiones múltiples:</strong> Deshabilitadas (mejor rendimiento)
+                    </div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>📁 Archivos de Configuración</h3>
+                <p><strong>Archivo principal:</strong> <code>appsettings.json</code></p>
+                <p><strong>Ubicación:</strong> <code>backend/src/WebApi/appsettings.json</code></p>
+                <p><strong>Entorno actual:</strong> Development</p>
+            </div>
+
+            <div class="highlight">
+                <h4>💡 Información Importante</h4>
+                <ul>
+                    <li>✅ La base de datos está alojada en Azure (alta disponibilidad)</li>
+                    <li>🔒 Todas las conexiones están cifradas con SSL/TLS</li>
+                    <li>⚡ Configurada para máximo rendimiento con conexiones únicas</li>
+                    <li>🛡️ Usuario administrativo con permisos completos</li>
+                    <li>🌍 Accesible desde cualquier ubicación con internet</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

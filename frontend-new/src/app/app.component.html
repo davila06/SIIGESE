@@ -96,6 +96,17 @@
           <span [class.collapsed]="isCollapsed && !isMobile">Usuarios</span>
           <div class="nav-indicator"></div>
         </a>
+
+        <a mat-button 
+           class="nav-item" 
+           routerLink="/configuracion" 
+           routerLinkActive="active"
+           *ngIf="isAdmin()"
+           (click)="onNavItemClick()">
+          <mat-icon>settings</mat-icon>
+          <span [class.collapsed]="isCollapsed && !isMobile">Configuración</span>
+          <div class="nav-indicator"></div>
+        </a>
      
       <a mat-button 
            class="nav-item" 

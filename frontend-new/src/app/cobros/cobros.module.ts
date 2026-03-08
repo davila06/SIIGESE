@@ -25,6 +25,10 @@ const routes = [
   {
     path: '',
     loadComponent: () => import('./components').then(m => m.CobrosDashboardComponent)
+  },
+  {
+    path: 'detalle/:id',
+    loadComponent: () => import('./components').then(m => m.CobroDetalleComponent)
   }
 ];
 

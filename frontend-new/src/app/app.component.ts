@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material/sidenav';
-import { AuthService, User } from './services/auth.service';
+import { AuthService } from './services/auth.service';
+import { User } from './interfaces/user.interface';
 import { TitleService } from './services/title.service';
 
 @Component({
@@ -66,14 +67,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.isMobile) {
       this.isCollapsed = false; // En móvil no usar collapsed state
     }
-    console.log('Screen size check:', { isMobile: this.isMobile, isCollapsed: this.isCollapsed });
     this.updateContentMargin();
   }
 
   toggleSidebar(): void {
     if (!this.isMobile) {
       this.isCollapsed = !this.isCollapsed;
-      console.log('Sidebar toggled:', this.isCollapsed ? 'collapsed' : 'expanded');
       setTimeout(() => {
         this.updateContentMargin();
       }, 50);

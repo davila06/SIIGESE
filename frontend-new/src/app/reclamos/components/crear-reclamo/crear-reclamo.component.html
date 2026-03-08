@@ -12,53 +12,61 @@
       <form [formGroup]="reclamoForm" (ngSubmit)="onSubmit()">
         <div class="form-section">
           <h3>Información de la Póliza</h3>
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>ID de Póliza</mat-label>
-              <input matInput 
-                     type="number"
-                     formControlName="polizaId"
-                     placeholder="Ingrese el ID de la póliza">
-              <mat-error *ngIf="reclamoForm.get('polizaId')?.hasError('required')">
-                ID de Póliza es requerido
-              </mat-error>
+          
+          <!-- Buscador de Póliza con Autocomplete -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Buscar Póliza</mat-label>
+            <input 
+              type="text"
+              matInput
+              formControlName="polizaBusqueda"
+              [matAutocomplete]="autoPoliza"
+              placeholder="Buscar por número de póliza o nombre...">
+            <mat-icon matPrefix>search</mat-icon>
+            <mat-autocomplete 
+              #autoPoliza="matAutocomplete"
+              [displayWith]="displayPoliza.bind(this)"
+              (optionSelected)="onPolizaSeleccionada($event.option.value)">
+              <mat-option *ngFor="let poliza of polizasFiltradas$ | async" [value]="poliza">
+                <div class="poliza-option">
+                  <span class="poliza-numero">{{ poliza.numeroPoliza }}</span>
+                  <span class="poliza-nombre">{{ poliza.nombreAsegurado }}</span>
+                </div>
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="reclamoForm.get('polizaBusqueda')?.hasError('required')">
+              Debe seleccionar una póliza
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Información de póliza seleccionada (readonly) -->
+          <div class="poliza-info" *ngIf="polizaSeleccionada">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Número de Póliza</mat-label>
+              <input matInput formControlName="numeroPoliza" readonly title="Número de póliza seleccionada">
+              <mat-icon matPrefix>description</mat-icon>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Número de Póliza</mat-label>
-              <input matInput 
-                     formControlName="numeroPoliza"
-                     placeholder="Ingrese el número de póliza">
-              <mat-error *ngIf="reclamoForm.get('numeroPoliza')?.hasError('required')">
-                Número de Póliza es requerido
-              </mat-error>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Cliente</mat-label>
+              <input matInput formControlName="clienteNombreCompleto" readonly title="Nombre completo del cliente">
+              <mat-icon matPrefix>person</mat-icon>
             </mat-form-field>
           </div>
         </div>
 
         <div class="form-section">
           <h3>Información del Cliente</h3>
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Nombre del Cliente</mat-label>
-              <input matInput 
-                     formControlName="clienteNombre"
-                     placeholder="Ingrese el nombre">
-              <mat-error *ngIf="reclamoForm.get('clienteNombre')?.hasError('required')">
-                Nombre es requerido
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Apellido del Cliente</mat-label>
-              <input matInput 
-                     formControlName="clienteApellido"
-                     placeholder="Ingrese el apellido">
-              <mat-error *ngIf="reclamoForm.get('clienteApellido')?.hasError('required')">
-                Apellido es requerido
-              </mat-error>
-            </mat-form-field>
-          </div>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre Completo del Cliente</mat-label>
+            <input matInput 
+                   formControlName="clienteNombreCompleto"
+                   placeholder="Ingrese el nombre completo">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="reclamoForm.get('clienteNombreCompleto')?.hasError('required')">
+              Nombre completo es requerido
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <div class="form-section">
@@ -103,9 +111,9 @@
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Moneda</mat-label>
               <mat-select formControlName="moneda">
+                <mat-option value="CRC">CRC - Colón Costarricense</mat-option>
                 <mat-option value="USD">USD - Dólar Americano</mat-option>
                 <mat-option value="EUR">EUR - Euro</mat-option>
-                <mat-option value="GTQ">GTQ - Quetzal</mat-option>
               </mat-select>
               <mat-error *ngIf="reclamoForm.get('moneda')?.hasError('required')">
                 Moneda es requerida

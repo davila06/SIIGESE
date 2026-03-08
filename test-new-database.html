@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Nueva Base de Datos - SIINADSEG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .test-section h2 {
+            color: #e74c3c;
+            margin-top: 0;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .result.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .result.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .result.info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .credentials {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .credentials h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .status-badge.running {
+            background-color: #28a745;
+            color: white;
+        }
+        .status-badge.error {
+            background-color: #dc3545;
+            color: white;
+        }
+        .status-badge.pending {
+            background-color: #ffc107;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Nueva Base de Datos - SIINADSEG</h1>
+        
+        <div class="credentials">
+            <h3>📋 Información de la Nueva Configuración</h3>
+            <p><strong>Base de Datos:</strong> siinadseg-sql-prod-4451.database.windows.net / SiinadsegProdDB</p>
+            <p><strong>Backend URL:</strong> http://siinadseg-backend.westus.azurecontainer.io</p>
+            <p><strong>Usuario Admin:</strong> admin@siinadseg.com</p>
+            <p><strong>Password Admin:</strong> Admin123!</p>
+        </div>
+
+        <!-- Test 1: Health Check -->
+        <div class="test-section">
+            <h2>1️⃣ Health Check del Backend</h2>
+            <p>Verifica que el backend esté respondiendo</p>
+            <button onclick="testHealth()">🔍 Test Health</button>
+            <div id="health-result"></div>
+        </div>
+
+        <!-- Test 2: Login -->
+        <div class="test-section">
+            <h2>2️⃣ Login con Usuario Admin</h2>
+            <p>Prueba el login con las credenciales del administrador</p>
+            <button onclick="testLogin()">🔐 Test Login</button>
+            <div id="login-result"></div>
+        </div>
+
+        <!-- Test 3: Verify Token -->
+        <div class="test-section">
+            <h2>3️⃣ Verificar Token JWT</h2>
+            <p>Verifica que el token JWT sea válido (ejecuta primero el Login)</p>
+            <button onclick="testVerifyToken()" id="verify-token-btn" disabled>✅ Verify Token</button>
+            <div id="verify-result"></div>
+        </div>
+
+        <!-- Test 4: Get Users -->
+        <div class="test-section">
+            <h2>4️⃣ Obtener Lista de Usuarios</h2>
+            <p>Intenta obtener la lista de usuarios usando el token (ejecuta primero el Login)</p>
+            <button onclick="testGetUsers()" id="get-users-btn" disabled>👥 Get Users</button>
+            <div id="users-result"></div>
+        </div>
+
+        <!-- Test 5: Database Connection -->
+        <div class="test-section">
+            <h2>5️⃣ Test Conexión a Base de Datos</h2>
+            <p>Verifica que el backend pueda conectarse a la nueva base de datos</p>
+            <button onclick="testDatabaseConnection()">💾 Test Database</button>
+            <div id="database-result"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://siinadseg-backend.westus.azurecontainer.io/api';
+        let currentToken = null;
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Probando conexión al backend...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/health`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const data = await response.text();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success">
+✅ Backend respondiendo correctamente!
+Status: ${response.status}
+Response: ${data}
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">
+❌ Error en health check
+Status: ${response.status}
+Response: ${data}
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">
+❌ Error de conexión: ${error.message}
+Verifica que el backend esté desplegado y corriendo.
+                </div>`;
+            }
+        }
+
+        async function testLogin() {
+            const resultDiv = document.getElementById('login-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Intentando login...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'admin@siinadseg.com',
+                        password: 'Admin123!'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.token) {
+                    currentToken = data.token;
+                    document.getElementById('verify-token-btn').disabled = false;
+                    document.getElementById('get-users-btn').disabled = false;
+                    
+                    resultDiv.innerHTML = `<div class="result success">
+✅ Login exitoso!
+Token recibido: ${data.token.substring(0, 50)}...
+Usuario: ${data.user?.email || 'N/A'}
+Rol: ${data.user?.role || 'N/A'}
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">
+❌ Error en login
+Status: ${response.status}
+Message: ${data.message || JSON.stringify(data)}
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">
+❌ Error en login: ${error.message}
+                </div>`;
+            }
+        }
+
+        async function testVerifyToken() {
+            const resultDiv = document.getElementById('verify-result');
+            
+            if (!currentToken) {
+                resultDiv.innerHTML = '<div class="result error">❌ Primero debes hacer login para obtener un token</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Verificando token...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/verify`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    },
+                    body: JSON.stringify({
+                        token: currentToken
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success">
+✅ Token válido!
+Response: ${JSON.stringify(data, null, 2)}
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">
+❌ Token inválido
+Status: ${response.status}
+Response: ${JSON.stringify(data, null, 2)}
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">
+❌ Error verificando token: ${error.message}
+                </div>`;
+            }
+        }
+
+        async function testGetUsers() {
+            const resultDiv = document.getElementById('users-result');
+            
+            if (!currentToken) {
+                resultDiv.innerHTML = '<div class="result error">❌ Primero debes hacer login para obtener un token</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div class="result info">⏳ Obteniendo usuarios...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/users`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Authorization': `Bearer ${currentToken}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="result success">
+✅ Usuarios obtenidos exitosamente!
+Total: ${Array.isArray(data) ? data.length : 'N/A'}
+Datos: ${JSON.stringify(data, null, 2)}
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result error">
+❌ Error obteniendo usuarios
+Status: ${response.status}
+Response: ${JSON.stringify(data, null, 2)}
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">
+❌ Error: ${error.message}
+                </div>`;
+            }
+        }
+
+        async function testDatabaseConnection() {
+            const resultDiv = document.getElementById('database-result');
+            resultDiv.innerHTML = '<div class="result info">⏳ Probando conexión a base de datos...</div>';
+            
+            try {
+                // Intentamos cualquier endpoint que requiera DB
+                const response = await fetch(`${API_URL}/roles`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `<div class="result success">
+✅ Conexión a base de datos exitosa!
+Roles encontrados: ${Array.isArray(data) ? data.length : 'N/A'}
+Datos: ${JSON.stringify(data, null, 2)}
+                    </div>`;
+                } else if (response.status === 401) {
+                    resultDiv.innerHTML = `<div class="result info">
+ℹ️ Backend responde (requiere autenticación)
+La conexión a DB parece estar funcionando, pero este endpoint requiere autenticación.
+Status: ${response.status}
+                    </div>`;
+                } else {
+                    const data = await response.text();
+                    resultDiv.innerHTML = `<div class="result error">
+❌ Error en conexión a DB
+Status: ${response.status}
+Response: ${data}
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result error">
+❌ Error de conexión: ${error.message}
+                </div>`;
+            }
+        }
+
+        // Auto-test al cargar
+        window.addEventListener('load', () => {
+            console.log('Página de test cargada');
+            console.log('API URL:', API_URL);
+        });
+    </script>
+</body>
+</html>

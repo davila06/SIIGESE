@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var response = await _emailConfigService.GetAllAsync();
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var response = await _emailConfigService.GetByIdAsync(id);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetDefault()
         {
             var response = await _emailConfigService.GetDefaultAsync();
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace WebApi.Controllers
             var currentUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "Sistema";
             var response = await _emailConfigService.CreateAsync(dto, currentUser);
             
-            return response.IsSuccess ? CreatedAtAction(nameof(GetById), new { id = response.Data?.Id }, response) : BadRequest(response);
+            return response.Success ? CreatedAtAction(nameof(GetById), new { id = response.Data?.Id }, response) : BadRequest(response);
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace WebApi.Controllers
             var currentUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "Sistema";
             var response = await _emailConfigService.UpdateAsync(id, dto, currentUser);
             
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _emailConfigService.DeleteAsync(id);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace WebApi.Controllers
             var currentUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "Sistema";
             var response = await _emailConfigService.SetAsDefaultAsync(id, currentUser);
             
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace WebApi.Controllers
             var currentUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "Sistema";
             var response = await _emailConfigService.ToggleActiveStatusAsync(id, currentUser);
             
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace WebApi.Controllers
             }
 
             var response = await _emailConfigService.TestConfigurationAsync(dto);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
     }
 }

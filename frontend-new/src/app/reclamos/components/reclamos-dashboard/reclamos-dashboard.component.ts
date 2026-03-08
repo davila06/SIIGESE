@@ -17,15 +17,17 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { 
   Reclamo,
   ReclamosStats,
   TipoReclamo,
   EstadoReclamo,
-  PrioridadReclamo,
-  FiltroReclamos 
+  PrioridadReclamo
 } from '../../interfaces/reclamo.interface';
 import { ReclamosService } from '../../services/reclamos.service';
+import { ExportService, ExportColumn } from '../../../shared/services/export.service';
+import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 
 @Component({
   selector: 'app-reclamos-dashboard',
@@ -49,6 +51,7 @@ import { ReclamosService } from '../../services/reclamos.service';
     MatTooltipModule,
     MatMenuModule,
     MatBadgeModule,
+    MatDialogModule,
     DatePipe,
     DecimalPipe
   ],
@@ -87,9 +90,11 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   PrioridadReclamo = PrioridadReclamo;
 
   constructor(
-    private reclamosService: ReclamosService,
-    private snackBar: MatSnackBar,
-    private router: Router
+    private readonly reclamosService: ReclamosService,
+    private readonly snackBar: MatSnackBar,
+    private readonly router: Router,
+    private readonly dialog: MatDialog,
+    private readonly exportService: ExportService
   ) { }
 
   ngOnInit(): void {
@@ -100,6 +105,28 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    
+    // Configurar sortingDataAccessor personalizado para campos complejos
+    this.dataSource.sortingDataAccessor = (data: Reclamo, sortHeaderId: string) => {
+      switch (sortHeaderId) {
+        case 'cliente':
+          return `${data.clienteNombreCompleto}`.toLowerCase();
+        case 'asignadoA':
+          return data.usuarioAsignadoNombre?.toLowerCase() || 'zzz'; // 'zzz' para que aparezcan al final
+        case 'tipoReclamo':
+          return data.tipoReclamo; // Usar el valor del enum directamente
+        case 'estado':
+          return data.estado; // Usar el valor del enum directamente
+        case 'prioridad':
+          return data.prioridad; // Usar el valor del enum directamente
+        case 'fechaReclamo':
+          return new Date(data.fechaReclamo);
+        case 'montoReclamado':
+          return data.montoReclamado || 0;
+        default:
+          return (data as any)[sortHeaderId];
+      }
+    };
   }
 
   loadReclamos(): void {
@@ -180,19 +207,112 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
     this.dataSource.data = this.reclamos;
   }
 
-  verDetalle(reclamo: Reclamo): void {
-    console.log('Ver detalle:', reclamo);
-    this.showMessage('Funcionalidad de detalles en desarrollo');
-  }
-
   asignarReclamo(reclamo: Reclamo): void {
-    console.log('Asignar reclamo:', reclamo);
-    this.showMessage('Funcionalidad de asignación en desarrollo');
+    console.log('=== MÉTODO ASIGNAR RECLAMO ACTUALIZADO - TIMESTAMP: 2025-10-27 23:51 ===');
+    console.log('Iniciando proceso de asignación para reclamo:', reclamo);
+    
+    // Importación dinámica del componente del diálogo
+    import('../asignar-reclamo-dialog/asignar-reclamo-dialog.component').then(({ AsignarReclamoDialogComponent }) => {
+      console.log('Componente del diálogo cargado exitosamente');
+      
+      const dialogRef = this.dialog.open(AsignarReclamoDialogComponent, {
+        width: '500px',
+        data: { reclamo }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('Usuario seleccionado:', result);
+          this.loading = true;
+          this.reclamosService.asignarReclamo(reclamo.id, result.usuarioId).subscribe({
+            next: (response) => {
+              console.log('Asignación exitosa:', response);
+              this.showMessage(`Reclamo asignado exitosamente a ${result.usuarioNombre}`);
+              // Actualizar el reclamo en la lista local
+              const index = this.reclamos.findIndex(r => r.id === reclamo.id);
+              if (index !== -1) {
+                this.reclamos[index] = { 
+                  ...this.reclamos[index], 
+                  usuarioAsignadoId: result.usuarioId,
+                  usuarioAsignadoNombre: result.usuarioNombre 
+                };
+                this.dataSource.data = [...this.reclamos];
+              }
+              // Recargar estadísticas
+              this.loadStats();
+              this.loading = false;
+            },
+            error: (error) => {
+              console.error('Error asignando reclamo:', error);
+              this.showMessage('Error al asignar el reclamo');
+              this.loading = false;
+            }
+          });
+        } else {
+          console.log('Asignación cancelada por el usuario');
+        }
+      });
+    }).catch(error => {
+      console.error('Error cargando el diálogo:', error);
+      this.showMessage('Error al cargar el diálogo de asignación');
+    });
   }
 
   cambiarEstado(reclamo: Reclamo): void {
     console.log('Cambiar estado:', reclamo);
-    this.showMessage('Funcionalidad de cambio de estado en desarrollo');
+    
+    // Usar import dinámico para el diálogo
+    import('../cambiar-estado-dialog').then(module => {
+      const dialogRef = this.dialog.open(module.CambiarEstadoDialogComponent, {
+        width: '500px',
+        data: {
+          numeroReclamo: reclamo.numeroReclamo,
+          estadoActual: reclamo.estado
+        },
+        disableClose: false,
+        autoFocus: true
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('🔄 Cambiando estado del reclamo:', {
+            reclamoId: reclamo.id,
+            numeroReclamo: reclamo.numeroReclamo,
+            estadoActual: reclamo.estado,
+            nuevoEstado: result.nuevoEstado,
+            comentario: result.comentario
+          });
+
+          this.reclamosService.cambiarEstado(reclamo.id, result.nuevoEstado, result.comentario || `Estado cambiado a ${this.getEstadoLabel(result.nuevoEstado)}`).subscribe({
+            next: (response) => {
+              const estadoLabel = this.getEstadoLabel(result.nuevoEstado);
+              this.showMessage(`Estado del reclamo ${reclamo.numeroReclamo} cambiado a "${estadoLabel}" exitosamente`);
+              this.loadReclamos(); // Recargar la lista
+              this.loadStats(); // Recargar estadísticas
+            },
+            error: (error) => {
+              console.error('❌ Error cambiando estado:', error);
+              this.showMessage('Error al cambiar el estado del reclamo');
+            }
+          });
+        }
+      });
+    }).catch(error => {
+      console.error('❌ Error cargando diálogo de cambio de estado:', error);
+      this.showMessage('Error al cargar el diálogo de cambio de estado');
+    });
+  }
+
+  private getEstadoLabel(estado: EstadoReclamo): string {
+    const estadosLabels = {
+      [EstadoReclamo.Abierto]: 'Abierto',
+      [EstadoReclamo.EnProceso]: 'En Proceso',
+      [EstadoReclamo.Resuelto]: 'Resuelto',
+      [EstadoReclamo.Cerrado]: 'Cerrado',
+      [EstadoReclamo.Rechazado]: 'Rechazado',
+      [EstadoReclamo.Escalado]: 'Escalado'
+    };
+    return estadosLabels[estado] || 'Desconocido';
   }
 
   subirDocumento(reclamo: Reclamo): void {
@@ -272,12 +392,147 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
     }
   }
 
+  getTipoReclamoText(tipo: TipoReclamo): string {
+    switch (tipo) {
+      case TipoReclamo.Siniestro:
+        return 'Siniestro';
+      case TipoReclamo.Servicio:
+        return 'Servicio';
+      case TipoReclamo.Facturacion:
+        return 'Facturación';
+      case TipoReclamo.Cobertura:
+        return 'Cobertura';
+      case TipoReclamo.Proceso:
+        return 'Proceso';
+      case TipoReclamo.Otro:
+        return 'Otro';
+      default:
+        return 'Desconocido';
+    }
+  }
+
+  getEstadoText(estado: EstadoReclamo): string {
+    switch (estado) {
+      case EstadoReclamo.Abierto:
+        return 'Abierto';
+      case EstadoReclamo.EnProceso:
+        return 'En Proceso';
+      case EstadoReclamo.Resuelto:
+        return 'Resuelto';
+      case EstadoReclamo.Cerrado:
+        return 'Cerrado';
+      case EstadoReclamo.Rechazado:
+        return 'Rechazado';
+      case EstadoReclamo.Escalado:
+        return 'Escalado';
+      default:
+        return 'Desconocido';
+    }
+  }
+
+  getPrioridadText(prioridad: PrioridadReclamo): string {
+    switch (prioridad) {
+      case PrioridadReclamo.Baja:
+        return 'Baja';
+      case PrioridadReclamo.Media:
+        return 'Media';
+      case PrioridadReclamo.Alta:
+        return 'Alta';
+      case PrioridadReclamo.Critica:
+        return 'Crítica';
+      default:
+        return 'Desconocida';
+    }
+  }
+
   exportarReclamos(): void {
-    this.showMessage('Funcionalidad de exportación en desarrollo');
+    const dataToExport = this.dataSource.filteredData.length > 0
+      ? this.dataSource.filteredData
+      : this.reclamos;
+
+    const dialogData: ExportDialogData = {
+      title: 'Exportar Reclamos',
+      totalRecords: dataToExport.length,
+      defaultFilename: `reclamos_${this.getCurrentDateString()}`
+    };
+
+    const dialogRef = this.dialog.open(ExportDialogComponent, {
+      width: '600px',
+      data: dialogData,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result: ExportDialogResult) => {
+      if (result) {
+        this.performExport(dataToExport, result);
+      }
+    });
+  }
+
+  private performExport(data: Reclamo[], options: ExportDialogResult): void {
+    const columns: ExportColumn[] = [
+      { key: 'numeroReclamo', header: 'No. Reclamo', type: 'text' },
+      { key: 'numeroPoliza', header: 'No. Póliza', type: 'text' },
+      { key: 'clienteNombreCompleto', header: 'Cliente', type: 'text' },
+      { key: 'tipoReclamo', header: 'Tipo', type: 'text' },
+      { key: 'estado', header: 'Estado', type: 'text' },
+      { key: 'prioridad', header: 'Prioridad', type: 'text' },
+      { key: 'fechaReclamo', header: 'Fecha Reclamo', type: 'date', dateFormat: options.dateFormat },
+      { key: 'fechaResolucion', header: 'Fecha Resolución', type: 'date', dateFormat: options.dateFormat },
+      { key: 'montoReclamado', header: 'Monto Reclamado', type: 'currency', currencyCode: 'CRC' },
+      { key: 'montoAprobado', header: 'Monto Aprobado', type: 'currency', currencyCode: 'CRC' },
+      { key: 'usuarioAsignadoNombre', header: 'Asignado A', type: 'text' },
+      { key: 'observaciones', header: 'Observaciones', type: 'text' }
+    ];
+
+    const transformedData = data.map(r => ({
+      ...r,
+      tipoReclamo: this.getTipoReclamoText(r.tipoReclamo),
+      estado: this.getEstadoText(r.estado),
+      prioridad: this.getPrioridadText(r.prioridad),
+      fechaReclamo: r.fechaReclamo ? new Date(r.fechaReclamo) : null,
+      fechaResolucion: r.fechaResolucion ? new Date(r.fechaResolucion) : null
+    }));
+
+    const exportOptions = {
+      filename: options.filename,
+      format: options.format as 'csv' | 'excel' | 'pdf',
+      includeHeaders: options.includeHeaders,
+      dateFormat: options.dateFormat
+    };
+
+    try {
+      switch (options.format) {
+        case 'csv':
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+          break;
+        case 'excel':
+          this.exportService.exportToExcel(transformedData, columns, exportOptions);
+          break;
+        case 'pdf':
+          this.exportService.exportToPDF(transformedData, columns, exportOptions);
+          break;
+        default:
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+      }
+      this.showMessage(`Archivo exportado exitosamente como ${options.format.toUpperCase()}`);
+    } catch (error) {
+      console.error('Error al exportar:', error);
+      this.showMessage('Error al exportar el archivo');
+    }
+  }
+
+  private getCurrentDateString(): string {
+    const now = new Date();
+    return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
   }
 
   crearNuevoReclamo(): void {
     this.router.navigate(['/reclamos/crear']);
+  }
+
+  verDetalle(reclamo: Reclamo): void {
+    this.router.navigate(['/reclamos/detalle', reclamo.id]);
   }
 
   private showMessage(message: string): void {

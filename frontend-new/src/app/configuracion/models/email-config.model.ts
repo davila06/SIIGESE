@@ -78,6 +78,18 @@ export interface EmailTestRequest {
   body: string;
 }
 
+export interface EmailConfigTestRequest {
+  smtpServer: string;
+  smtpPort: number;
+  username: string;
+  password: string;
+  useSSL: boolean;
+  useTLS: boolean;
+  fromEmail: string;
+  fromName: string;
+  testEmail?: string;
+}
+
 export interface EmailTestResponse {
   success: boolean;
   message: string;

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Diagnóstico: Botón Guardar Póliza Deshabilitado</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            color: white;
+        }
+        .diagnostic-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #007bff;
+        }
+        .problem-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .solution-section {
+            background: #d1ecf1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #0dcaf0;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        .step-list li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .warning {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+            margin: 15px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+            margin: 15px 0;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #bee5eb;
+            margin: 15px 0;
+        }
+        .logs {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+        }
+        .field-check {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        .field-status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .valid { background: #d4edda; color: #155724; }
+        .invalid { background: #f8d7da; color: #721c24; }
+        .required { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Diagnóstico: Botón Guardar Póliza Deshabilitado</h1>
+            <p>Herramienta de diagnóstico para identificar por qué el botón "Guardar Póliza" está siempre deshabilitado</p>
+        </div>
+
+        <div class="diagnostic-section">
+            <h2>🔍 Problema Identificado</h2>
+            <div class="warning">
+                <strong>⚠️ Síntoma:</strong> El botón "Guardar Póliza" aparece siempre deshabilitado (gris) y no permite hacer click, 
+                independientemente de si los campos están llenos o no.
+            </div>
+            
+            <h3>📋 Código Actual del Botón</h3>
+            <div class="code-block">
+&lt;button mat-raised-button 
+        color="primary" 
+        type="submit" 
+        [disabled]="polizaForm.invalid || isLoading"&gt;
+  &lt;mat-icon&gt;{{isEditMode ? 'update' : 'save'}}&lt;/mat-icon&gt;
+  {{submitButtonText}}
+&lt;/button&gt;
+            </div>
+
+            <div class="info">
+                <strong>🎯 Análisis:</strong> El botón se deshabilita cuando <code>polizaForm.invalid</code> es <code>true</code> 
+                o cuando <code>isLoading</code> es <code>true</code>.
+            </div>
+        </div>
+
+        <div class="problem-section">
+            <h2>🚨 Posibles Causas del Problema</h2>
+            
+            <h3>1. 📝 Validaciones de Campos Requeridos</h3>
+            <div class="field-check">
+                <span><strong>numeroPoliza:</strong> required, maxLength(50)</span>
+                <span class="field-status required">REQUERIDO</span>
+            </div>
+            <div class="field-check">
+                <span><strong>modalidad:</strong> required, maxLength(100)</span>
+                <span class="field-status required">REQUERIDO</span>
+            </div>
+            <div class="field-check">
+                <span><strong>nombreAsegurado:</strong> required, maxLength(200)</span>
+                <span class="field-status required">REQUERIDO</span>
+            </div>
+            <div class="field-check">
+                <span><strong>prima:</strong> required, min(0)</span>
+                <span class="field-status required">REQUERIDO</span>
+            </div>
+            <div class="field-check">
+                <span><strong>fechaVigencia:</strong> required</span>
+                <span class="field-status required">REQUERIDO</span>
+            </div>
+            <div class="field-check">
+                <span><strong>frecuencia:</strong> required, maxLength(50)</span>
+                <span class="field-status required">REQUERIDO</span>
+            </div>
+            <div class="field-check">
+                <span><strong>aseguradora:</strong> required, maxLength(100)</span>
+                <span class="field-status required">REQUERIDO</span>
+            </div>
+
+            <h3>2. 🔄 Estado de Carga (isLoading)</h3>
+            <div class="info">
+                Si <code>isLoading</code> está en <code>true</code>, el botón se mantiene deshabilitado.
+            </div>
+
+            <h3>3. 📅 Problema con Campo de Fecha</h3>
+            <div class="warning">
+                <strong>Sospecha Principal:</strong> El campo <code>fechaVigencia</code> podría tener problemas de formato 
+                o inicialización que mantienen el formulario inválido.
+            </div>
+        </div>
+
+        <div class="solution-section">
+            <h2>🔧 Plan de Diagnóstico</h2>
+            
+            <ol class="step-list">
+                <li>
+                    <span class="step-number">1</span>
+                    <div>
+                        <strong>Abrir Aplicación y Consola de Desarrollador</strong>
+                        <br>
+                        <button class="test-button" onclick="openApp()">🌐 Abrir SIIGESE</button>
+                        <button class="test-button" onclick="openConsole()">🔧 Abrir DevTools (F12)</button>
+                    </div>
+                </li>
+                
+                <li>
+                    <span class="step-number">2</span>
+                    <div>
+                        <strong>Ir a Módulo de Pólizas</strong>
+                        <br>
+                        <button class="test-button" onclick="openPolizas()">📄 Ir a Pólizas</button>
+                    </div>
+                </li>
+                
+                <li>
+                    <span class="step-number">3</span>
+                    <div>
+                        <strong>Ejecutar Comandos de Diagnóstico en Consola</strong>
+                        <br>
+                        <button class="test-button" onclick="copyDiagnosticCode()">📋 Copiar Código Diagnóstico</button>
+                    </div>
+                </li>
+            </ol>
+        </div>
+
+        <div class="diagnostic-section">
+            <h2>🧪 Código de Diagnóstico para Consola</h2>
+            <p>Copia y pega este código en la consola del navegador (F12) cuando estés en la página de pólizas:</p>
+            
+            <div class="code-block" id="diagnosticCode">
+// 🔍 DIAGNÓSTICO COMPLETO DEL FORMULARIO DE PÓLIZAS
+console.log('🔧 === DIAGNÓSTICO DEL BOTÓN GUARDAR PÓLIZA ===');
+
+// Buscar el componente de pólizas
+const polizasComponent = ng.getOwningComponent(document.querySelector('app-polizas'));
+
+if (polizasComponent) {
+  console.log('✅ Componente encontrado:', polizasComponent);
+  
+  // Verificar estado del formulario
+  const form = polizasComponent.polizaForm;
+  console.log('📝 Estado del formulario:');
+  console.log('- Válido:', form.valid);
+  console.log('- Inválido:', form.invalid);
+  console.log('- Tocado:', form.touched);
+  console.log('- Sucio:', form.dirty);
+  
+  // Verificar cada campo individual
+  console.log('\n📋 Estado de cada campo:');
+  Object.keys(form.controls).forEach(key => {
+    const control = form.get(key);
+    console.log(`${key}:`, {
+      value: control.value,
+      valid: control.valid,
+      invalid: control.invalid,
+      errors: control.errors,
+      touched: control.touched,
+      dirty: control.dirty
+    });
+  });
+  
+  // Verificar estado de loading
+  console.log('\n🔄 Estado de carga:', polizasComponent.isLoading);
+  
+  // Verificar modo de edición
+  console.log('✏️ Modo edición:', polizasComponent.isEditMode);
+  
+  // Verificar botón específicamente
+  const submitButton = document.querySelector('button[type="submit"]');
+  if (submitButton) {
+    console.log('\n🔘 Estado del botón:');
+    console.log('- Deshabilitado:', submitButton.disabled);
+    console.log('- Clase disabled:', submitButton.classList.contains('mat-button-disabled'));
+  }
+  
+  // Mostrar valores del formulario
+  console.log('\n📊 Valores actuales del formulario:', form.value);
+  
+} else {
+  console.log('❌ No se encontró el componente de pólizas');
+}
+            </div>
+            
+            <button class="test-button" onclick="copyDiagnosticCode()">📋 Copiar Código Completo</button>
+        </div>
+
+        <div class="solution-section">
+            <h2>🛠️ Posibles Soluciones</h2>
+            
+            <h3>Solución 1: 📅 Arreglar Inicialización de Fecha</h3>
+            <div class="code-block">
+// En resetForm(), agregar inicialización de fecha
+this.polizaForm.patchValue({
+  perfilId: 1,
+  moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY,
+  prima: 0,
+  fechaVigencia: new Date().toISOString().split('T')[0] // Fecha actual
+});
+            </div>
+
+            <h3>Solución 2: 🔧 Validación Contextual Similar a Usuarios</h3>
+            <div class="code-block">
+// Crear método similar al isFormValidForMode() de usuarios
+isFormValidForSubmission(): boolean {
+  const requiredFields = ['numeroPoliza', 'modalidad', 'nombreAsegurado', 
+                         'prima', 'fechaVigencia', 'frecuencia', 'aseguradora'];
+  
+  return requiredFields.every(field => {
+    const control = this.polizaForm.get(field);
+    return control && control.valid && control.value;
+  });
+}
+
+// Y cambiar el botón a:
+[disabled]="!isFormValidForSubmission() || isLoading"
+            </div>
+
+            <h3>Solución 3: 🎯 Debug en Tiempo Real</h3>
+            <div class="code-block">
+// Agregar logging en tiempo real en el componente
+ngAfterViewInit(): void {
+  // ... código existente ...
+  
+  // Debug del formulario
+  this.polizaForm.valueChanges.subscribe(value => {
+    console.log('📝 Formulario cambió:', {
+      valid: this.polizaForm.valid,
+      invalid: this.polizaForm.invalid,
+      value: value
+    });
+  });
+}
+            </div>
+        </div>
+
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script>
+        const APP_URL = 'https://gentle-dune-0a2edab0f.3.azurestaticapps.net';
+        
+        function log(message) {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.innerHTML += `[${timestamp}] ${message}<br>`;
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function openApp() {
+            log('🌐 Abriendo SIIGESE...');
+            window.open(APP_URL, '_blank');
+        }
+
+        function openConsole() {
+            log('🔧 Presiona F12 para abrir DevTools');
+            alert('Presiona F12 para abrir las Herramientas de Desarrollador');
+        }
+
+        function openPolizas() {
+            log('📄 Abriendo módulo de pólizas...');
+            window.open(APP_URL + '/polizas', '_blank');
+        }
+
+        function copyDiagnosticCode() {
+            const code = document.getElementById('diagnosticCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                log('📋 Código de diagnóstico copiado al portapapeles');
+                alert('✅ Código copiado! Pégalo en la consola del navegador (F12) cuando estés en la página de pólizas');
+            }).catch(err => {
+                log('❌ Error al copiar: ' + err);
+                alert('❌ Error al copiar. Selecciona y copia manualmente el código.');
+            });
+        }
+
+        // Log inicial
+        log('🔧 Herramienta de diagnóstico cargada');
+        log('📋 Sigue los pasos para diagnosticar el problema del botón');
+    </script>
+</body>
+</html>

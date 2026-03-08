@@ -1,0 +1,332 @@
+.email-config-list-container {
+  padding: 24px;
+  min-height: calc(100vh - 200px);
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  
+  .header-content {
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      font-weight: 500;
+      color: #333;
+      
+      mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+        color: #1976d2;
+      }
+    }
+    
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 16px;
+    }
+  }
+  
+  .header-actions {
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-weight: 500;
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+    font-size: 16px;
+  }
+}
+
+.list-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  
+  .empty-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+  
+  h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 20px;
+    font-weight: 500;
+  }
+  
+  p {
+    margin: 0 0 24px 0;
+    color: #666;
+    font-size: 16px;
+  }
+  
+  button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.email-configs-table {
+  width: 100%;
+  
+  th {
+    font-weight: 600;
+    color: #333;
+    background-color: #fafafa;
+    border-bottom: 2px solid #e0e0e0;
+    padding: 16px;
+  }
+  
+  td {
+    padding: 16px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  tr:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+.config-name {
+  strong {
+    display: block;
+    color: #333;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+  
+  .config-badges {
+    display: flex;
+    gap: 8px;
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      
+      &.default {
+        background: #fff3e0;
+        color: #ef6c00;
+        border: 1px solid #ffcc02;
+        
+        mat-icon {
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+        }
+      }
+    }
+  }
+}
+
+.server-info {
+  font-weight: 500;
+  color: #333;
+  
+  .security-info {
+    display: flex;
+    gap: 4px;
+    margin-top: 4px;
+    
+    .security-badge {
+      padding: 2px 6px;
+      background: #e3f2fd;
+      color: #1976d2;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+  }
+}
+
+.email-info {
+  .from-name {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+  }
+}
+
+.status-text {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  
+  &.active {
+    color: #4caf50;
+  }
+  
+  &.inactive {
+    color: #f44336;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 4px;
+  
+  button {
+    width: 36px;
+    height: 36px;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// Material Menu Styling
+::ng-deep .mat-mdc-menu-panel {
+  min-width: 180px;
+  
+  .mat-mdc-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    
+    mat-icon {
+      color: #666;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+    
+    &.delete-action {
+      color: #f44336;
+      
+      mat-icon {
+        color: #f44336;
+      }
+    }
+  }
+}
+
+// Slide Toggle Styling
+::ng-deep .mat-mdc-slide-toggle {
+  .mdc-switch--selected .mdc-switch__track {
+    background-color: #1976d2 !important;
+  }
+  
+  .mdc-switch--selected .mdc-switch__handle::after {
+    background-color: #1976d2 !important;
+  }
+}
+
+// Snackbar Styling
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.info-snackbar {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .email-config-list-container {
+    padding: 16px;
+  }
+  
+  .list-header {
+    flex-direction: column;
+    gap: 16px;
+    
+    .header-actions {
+      width: 100%;
+      
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+  
+  .table-container {
+    .email-configs-table {
+      th, td {
+        padding: 12px 8px;
+        font-size: 14px;
+      }
+    }
+  }
+  
+  .config-name strong {
+    font-size: 13px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+// Loading Animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.list-card {
+  animation: fadeIn 0.3s ease-out;
+}

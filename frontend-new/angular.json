@@ -47,7 +47,33 @@
               "budgets": [],
               "outputHashing": "all"
             },
+            "production-final": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.production-final.ts"
+                }
+              ],
+              "budgets": [],
+              "outputHashing": "all",
+              "optimization": true,
+              "buildOptimizer": true
+            },
             "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            },
+            "local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.local.ts"
+                }
+              ],
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -69,6 +95,9 @@
             },
             "development": {
               "buildTarget": "frontend-new:build:development"
+            },
+            "local": {
+              "buildTarget": "frontend-new:build:local"
             }
           },
           "defaultConfiguration": "development"

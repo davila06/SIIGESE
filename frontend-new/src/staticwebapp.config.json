@@ -1,22 +1,27 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": [
-      "/images/*.{png,jpg,gif,ico,svg}",
-      "/css/*",
-      "/js/*",
-      "/assets/*",
-      "*.{css,scss,sass,js,ts,map,json,woff,woff2,ttf,eot,svg,png,jpg,jpeg,gif,ico,webp}"
-    ]
+    "exclude": ["/api/*", "/_framework/*", "/assets/*", "/*.js", "/*.css", "/*.ico", "/*.png", "/*.jpg", "/*.jpeg", "/*.gif", "/*.svg"]
   },
   "routes": [
     {
-      "route": "/*",
-      "allowedRoles": ["anonymous"]
+      "route": "/*.js",
+      "headers": {
+        "Content-Type": "application/javascript"
+      }
     },
     {
-      "route": "/api/*",
-      "allowedRoles": ["anonymous"]
+      "route": "/*.css",
+      "headers": {
+        "Content-Type": "text/css"
+      }
+    },
+    {
+      "route": "/assets/*"
+    },
+    {
+      "route": "/*",
+      "rewrite": "/index.html"
     }
   ],
   "responseOverrides": {
@@ -25,15 +30,16 @@
       "statusCode": 200
     }
   },
-  "globalHeaders": {
-    "Cache-Control": "no-cache"
-  },
   "mimeTypes": {
     ".json": "application/json",
     ".js": "application/javascript",
     ".css": "text/css",
     ".html": "text/html",
-    ".woff": "font/woff",
-    ".woff2": "font/woff2"
+    ".ico": "image/x-icon",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".svg": "image/svg+xml"
   }
 }

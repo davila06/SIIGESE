@@ -1,0 +1,330 @@
+.cobro-detalle-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    text-align: center;
+
+    mat-spinner {
+      margin-bottom: 16px;
+    }
+
+    p {
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0;
+    }
+  }
+
+  .error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    text-align: center;
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      margin: 0 0 8px 0;
+      color: rgba(0, 0, 0, 0.87);
+    }
+
+    p {
+      color: rgba(0, 0, 0, 0.6);
+      margin: 0 0 24px 0;
+    }
+  }
+
+  .detalle-content {
+    .header-card {
+      margin-bottom: 24px;
+
+      .avatar-icon {
+        background: transparent;
+        
+        mat-icon {
+          font-size: 32px;
+          width: 32px;
+          height: 32px;
+        }
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 16px;
+        margin-top: 16px;
+
+        .info-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .label {
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.6);
+            min-width: 120px;
+          }
+
+          .amount {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #2e7d32;
+          }
+
+          .vencido {
+            color: #d32f2f;
+            font-weight: 500;
+          }
+
+          &.total {
+            border-top: 1px solid rgba(0, 0, 0, 0.12);
+            padding-top: 8px;
+            font-size: 1.1em;
+
+            .label {
+              font-weight: 600;
+            }
+
+            .amount {
+              font-size: 1.2em;
+            }
+          }
+        }
+      }
+
+      mat-card-actions {
+        padding-top: 16px;
+        gap: 8px;
+
+        button {
+          mat-icon {
+            margin-right: 4px;
+          }
+        }
+      }
+    }
+
+    .tabs-card {
+      .tab-content {
+        padding: 24px;
+
+        .section {
+          margin-bottom: 32px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          h3 {
+            margin: 0 0 8px 0;
+            color: rgba(0, 0, 0, 0.87);
+            font-weight: 500;
+          }
+
+          mat-divider {
+            margin-bottom: 16px;
+          }
+
+          .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+
+            .info-item {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              padding: 8px 0;
+
+              .label {
+                font-weight: 500;
+                color: rgba(0, 0, 0, 0.6);
+                min-width: 120px;
+              }
+
+              .amount {
+                font-weight: 600;
+                color: #2e7d32;
+              }
+
+              &.total {
+                border-top: 1px solid rgba(0, 0, 0, 0.12);
+                padding-top: 16px;
+                font-size: 1.1em;
+
+                .label {
+                  font-weight: 600;
+                }
+
+                .amount {
+                  font-size: 1.2em;
+                }
+              }
+            }
+          }
+
+          .observaciones {
+            background-color: #f5f5f5;
+            padding: 16px;
+            border-radius: 4px;
+            margin: 0;
+            line-height: 1.5;
+            white-space: pre-wrap;
+          }
+        }
+
+        .movimientos-container,
+        .documentos-container {
+          .movimientos-table,
+          .documentos-table {
+            width: 100%;
+
+            .movimiento-descripcion,
+            .documento-nombre {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+
+              mat-icon {
+                color: rgba(0, 0, 0, 0.6);
+              }
+            }
+
+            .cambios {
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              flex-wrap: wrap;
+
+              mat-icon {
+                font-size: 16px;
+                width: 16px;
+                height: 16px;
+                color: rgba(0, 0, 0, 0.6);
+              }
+
+              .monto-anterior {
+                color: rgba(0, 0, 0, 0.6);
+                text-decoration: line-through;
+              }
+
+              .monto-nuevo {
+                color: #2e7d32;
+                font-weight: 500;
+              }
+            }
+          }
+        }
+
+        .no-data {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 48px;
+          text-align: center;
+          color: rgba(0, 0, 0, 0.6);
+
+          mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+            opacity: 0.6;
+          }
+
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .cobro-detalle-container {
+    padding: 16px;
+
+    .detalle-content {
+      .header-card {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        mat-card-actions {
+          flex-wrap: wrap;
+          gap: 8px;
+
+          button {
+            flex: 1;
+            min-width: calc(50% - 4px);
+          }
+        }
+      }
+
+      .tabs-card {
+        .tab-content {
+          padding: 16px;
+
+          .section {
+            .info-grid {
+              grid-template-columns: 1fr;
+            }
+          }
+
+          .movimientos-container,
+          .documentos-container {
+            overflow-x: auto;
+
+            .movimientos-table,
+            .documentos-table {
+              min-width: 600px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Tema específico para chips de estado
+.mat-mdc-chip {
+  &.mat-primary {
+    --mdc-chip-label-text-color: white;
+  }
+  
+  &.mat-accent {
+    --mdc-chip-label-text-color: white;
+  }
+  
+  &.mat-warn {
+    --mdc-chip-label-text-color: white;
+  }
+}
+
+// Estilos para mat-table
+.mat-mdc-table {
+  .mat-mdc-header-row {
+    background-color: #fafafa;
+  }
+
+  .mat-mdc-row:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+}

@@ -7,11 +7,10 @@ import {
   EmailConfigCreate, 
   EmailConfigUpdate, 
   EmailTestRequest, 
-  EmailTestResponse,
+  EmailConfigTestRequest,
+  EmailTestResponse, 
   ApiResponse 
-} from '../models/email-config.model';
-
-@Injectable({
+} from '../models/email-config.model';@Injectable({
   providedIn: 'root'
 })
 export class EmailConfigService {
@@ -62,5 +61,10 @@ export class EmailConfigService {
   // Probar configuración
   testConfiguration(testRequest: EmailTestRequest): Observable<ApiResponse<EmailTestResponse>> {
     return this.http.post<ApiResponse<EmailTestResponse>>(`${this.apiUrl}/test`, testRequest);
+  }
+
+  // Probar configuración directa (sin guardar)
+  testConfigurationDirect(testRequest: EmailConfigTestRequest): Observable<ApiResponse<EmailTestResponse>> {
+    return this.http.post<ApiResponse<EmailTestResponse>>(`${this.apiUrl}/test-direct`, testRequest);
   }
 }

@@ -3,8 +3,7 @@ using Application.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.Extensions.Logging;
-using System.Security.Cryptography;
-using System.Text;
+using BCrypt.Net;
 
 namespace Application.Services
 {
@@ -24,19 +23,22 @@ namespace Application.Services
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             var users = await _userRepository.GetAllAsync();
-            return users.Select(MapToDto);
+            // Filtrar usuarios eliminados
+            return users.Where(u => !u.IsDeleted).Select(MapToDto);
         }
 
         public async Task<UserDto?> GetUserByIdAsync(int id)
         {
             var user = await _userRepository.GetByIdAsync(id);
-            return user != null ? MapToDto(user) : null;
+            // No retornar usuarios eliminados
+            return user != null && !user.IsDeleted ? MapToDto(user) : null;
         }
 
         public async Task<UserDto?> GetByEmailAsync(string email)
         {
             var user = await _userRepository.GetByEmailAsync(email);
-            return user != null ? MapToDto(user) : null;
+            // No retornar usuarios eliminados
+            return user != null && !user.IsDeleted ? MapToDto(user) : null;
         }
 
         public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
@@ -177,11 +179,7 @@ namespace Application.Services
 
         private string HashPassword(string password)
         {
-            using (var sha256 = SHA256.Create())
-            {
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return Convert.ToBase64String(hashedBytes);
-            }
+            return BCrypt.Net.BCrypt.HashPassword(password, workFactor: 12);
         }
     }
 }

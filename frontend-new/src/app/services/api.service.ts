@@ -1,201 +1,238 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+﻿import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { 
-  User, 
+import {
+  DataUploadResult,
+  LoginRequest,
+  LoginResponse,
+  User,
   CreateUser,
   UpdateUser,
-  Role,
-  LoginRequest, 
-  LoginResponse, 
-  Cliente, 
-  CreateCliente, 
-  DataUploadResult,
   Poliza,
-  CreatePoliza
+  CreatePoliza,
+  Cobro,
+  CreateCobro,
+  RegistrarCobroRequest,
+  CancelarCobroRequest,
+  CobroStats,
+  Reclamo,
+  CreateReclamo,
+  ChangeEstadoReclamoRequest,
+  AsignarReclamoRequest,
+  ResolverReclamoRequest,
+  RechazarReclamoRequest,
+  ReclamoFilterParams,
+  ReclamoStats,
+  PagedResult,
+  Cotizacion,
+  CreateCotizacion,
+  EmailConfig,
+  CreateEmailConfig,
+  Role,
 } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly apiUrl = environment.apiUrl;
+  private apiUrl = environment.apiUrl || 'https://localhost:7294/api';
 
   constructor(private http: HttpClient) {}
 
-  // Métodos de autenticación
+  // Auth endpoints
   login(credentials: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials)
-      .pipe(catchError(this.handleError));
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/login`, credentials);
   }
 
-  refreshToken(refreshToken: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/refresh`, { refreshToken })
-      .pipe(catchError(this.handleError));
+  changePassword(request: { currentPassword: string; newPassword: string; confirmPassword: string }): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/auth/change-password`, request);
   }
 
-  // Métodos de usuarios
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/users`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
+  forgotPassword(email: string): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/auth/forgot-password`, { email });
   }
 
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/${id}`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  createUser(user: CreateUser): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/users`, user, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  updateUser(id: number, user: UpdateUser): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/users/${id}`, user, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/users/${id}`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  // Métodos de roles
-  getRoles(): Observable<Role[]> {
-    return this.http.get<Role[]>(`${this.apiUrl}/roles`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  assignRolesToUser(userId: number, roleIds: number[]): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/users/${userId}/roles`, { roleIds }, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  // Métodos de clientes
-  getClientes(): Observable<Cliente[]> {
-    return this.http.get<Cliente[]>(`${this.apiUrl}/clientes`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  createCliente(cliente: CreateCliente): Observable<Cliente> {
-    return this.http.post<Cliente>(`${this.apiUrl}/clientes`, cliente, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  uploadExcel(perfilId: number, file: File): Observable<DataUploadResult> {
-    const formData = new FormData();
-    formData.append('perfilId', perfilId.toString());
-    formData.append('file', file);
-
-    const token = localStorage.getItem('sinseg_token');
-    let headers = new HttpHeaders();
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-    }
-
-    return this.http.post<DataUploadResult>(
-      `${this.apiUrl}/clientes/upload`,
-      formData,
-      { headers }
-    ).pipe(catchError(this.handleError));
-  }
-
-  // Métodos de pólizas
+  // Polizas endpoints
   getPolizas(): Observable<Poliza[]> {
-    return this.http.get<Poliza[]>(`${this.apiUrl}/polizas`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  getPolizasByPerfil(perfilId: number): Observable<Poliza[]> {
-    return this.http.get<Poliza[]>(`${this.apiUrl}/polizas/perfil/${perfilId}`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  getPolizaById(id: number): Observable<Poliza> {
-    return this.http.get<Poliza>(`${this.apiUrl}/polizas/${id}`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  getPolizaByNumero(numeroPoliza: string): Observable<Poliza> {
-    return this.http.get<Poliza>(`${this.apiUrl}/polizas/numero/${numeroPoliza}`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
-  }
-
-  getPolizasByAseguradora(aseguradora: string): Observable<Poliza[]> {
-    return this.http.get<Poliza[]>(`${this.apiUrl}/polizas/aseguradora/${aseguradora}`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
+    return this.http.get<Poliza[]>(`${this.apiUrl}/polizas`);
   }
 
   createPoliza(poliza: CreatePoliza): Observable<Poliza> {
-    return this.http.post<Poliza>(`${this.apiUrl}/polizas`, poliza, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
+    return this.http.post<Poliza>(`${this.apiUrl}/polizas`, poliza);
   }
 
-  updatePoliza(id: number, poliza: CreatePoliza): Observable<Poliza> {
-    return this.http.put<Poliza>(`${this.apiUrl}/polizas/${id}`, poliza, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
+  updatePoliza(id: number, poliza: Partial<CreatePoliza>): Observable<Poliza> {
+    return this.http.put<Poliza>(`${this.apiUrl}/polizas/${id}`, poliza);
   }
 
   deletePoliza(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/polizas/${id}`, this.getHttpOptions())
-      .pipe(catchError(this.handleError));
+    return this.http.delete<void>(`${this.apiUrl}/polizas/${id}`);
   }
 
+  // Upload endpoints
   uploadExcelPolizas(perfilId: number, file: File): Observable<DataUploadResult> {
     const formData = new FormData();
-    formData.append('perfilId', perfilId.toString());
     formData.append('file', file);
-
-    const token = localStorage.getItem('sinseg_token');
-    let headers = new HttpHeaders();
-    if (token) {
-      headers = headers.set('Authorization', `Bearer ${token}`);
-    }
-
-    return this.http.post<DataUploadResult>(
-      `${this.apiUrl}/polizas/upload`,
-      formData,
-      { headers }
-    ).pipe(catchError(this.handleError));
+    formData.append('perfilId', perfilId.toString());
+    return this.http.post<DataUploadResult>(`${this.apiUrl}/polizas/upload`, formData);
   }
 
-  private getHttpOptions() {
-    const token = localStorage.getItem('sinseg_token');
-    return {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        ...(token && { 'Authorization': `Bearer ${token}` })
-      })
-    };
+  downloadPolizasTemplate(): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/polizas/template`, { responseType: 'blob' });
   }
 
-  private handleError(error: any): Observable<never> {
-    console.error('API Error:', error);
-    let errorMessage = 'Ha ocurrido un error inesperado';
-    
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else if (error.status) {
-      switch (error.status) {
-        case 401:
-          errorMessage = error.error?.message || 'No autorizado. Credenciales inválidas.';
-          break;
-        case 403:
-          errorMessage = 'No tiene permisos para realizar esta acción.';
-          break;
-        case 404:
-          errorMessage = 'Recurso no encontrado.';
-          break;
-        case 500:
-          errorMessage = 'Error interno del servidor.';
-          break;
-        default:
-          errorMessage = error.error?.message || `Error: ${error.status} - ${error.statusText}`;
-      }
-    }
+  // Users endpoints
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`);
+  }
 
-    return throwError(() => new Error(errorMessage));
+  createUser(user: CreateUser): Observable<User> {
+    return this.http.post<User>(`${this.apiUrl}/users`, user);
+  }
+
+  updateUser(id: number, user: UpdateUser): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/users/${id}`, user);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`);
+  }
+
+  // Cotizaciones endpoints
+  getCotizaciones(): Observable<Cotizacion[]> {
+    return this.http.get<Cotizacion[]>(`${this.apiUrl}/cotizaciones`);
+  }
+
+  createCotizacion(cotizacion: CreateCotizacion): Observable<Cotizacion> {
+    return this.http.post<Cotizacion>(`${this.apiUrl}/cotizaciones`, cotizacion);
+  }
+
+  updateCotizacion(id: number, cotizacion: Partial<CreateCotizacion>): Observable<Cotizacion> {
+    return this.http.put<Cotizacion>(`${this.apiUrl}/cotizaciones/${id}`, cotizacion);
+  }
+
+  deleteCotizacion(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/cotizaciones/${id}`);
+  }
+
+  // Cobros endpoints
+  getCobros(): Observable<Cobro[]> {
+    return this.http.get<Cobro[]>(`${this.apiUrl}/cobros`);
+  }
+
+  getCobroById(id: number): Observable<Cobro> {
+    return this.http.get<Cobro>(`${this.apiUrl}/cobros/${id}`);
+  }
+
+  createCobro(cobro: CreateCobro): Observable<Cobro> {
+    return this.http.post<Cobro>(`${this.apiUrl}/cobros`, cobro);
+  }
+
+  registrarCobro(id: number, data: RegistrarCobroRequest): Observable<Cobro> {
+    return this.http.put<Cobro>(`${this.apiUrl}/cobros/${id}/registrar`, data);
+  }
+
+  cancelarCobro(id: number, data: CancelarCobroRequest): Observable<Cobro> {
+    return this.http.put<Cobro>(`${this.apiUrl}/cobros/${id}/cancelar`, data);
+  }
+
+  getCobroStats(): Observable<CobroStats> {
+    return this.http.get<CobroStats>(`${this.apiUrl}/cobros/stats`);
+  }
+
+  // Reclamos endpoints
+  getReclamos(): Observable<Reclamo[]> {
+    return this.http.get<Reclamo[]>(`${this.apiUrl}/reclamos`);
+  }
+
+  getReclamoById(id: number): Observable<Reclamo> {
+    return this.http.get<Reclamo>(`${this.apiUrl}/reclamos/${id}`);
+  }
+
+  getReclamosByFiltro(params: ReclamoFilterParams): Observable<PagedResult<Reclamo>> {
+    return this.http.get<PagedResult<Reclamo>>(`${this.apiUrl}/reclamos/filtro`, { params: params as Record<string, string | number> });
+  }
+
+  createReclamo(reclamo: CreateReclamo): Observable<Reclamo> {
+    return this.http.post<Reclamo>(`${this.apiUrl}/reclamos`, reclamo);
+  }
+
+  updateReclamo(id: number, reclamo: Partial<CreateReclamo>): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}`, reclamo);
+  }
+
+  deleteReclamo(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/reclamos/${id}`);
+  }
+
+  changeEstadoReclamo(id: number, data: ChangeEstadoReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/estado`, data);
+  }
+
+  asignarReclamo(id: number, data: AsignarReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/asignar`, data);
+  }
+
+  resolverReclamo(id: number, data: ResolverReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/resolver`, data);
+  }
+
+  rechazarReclamo(id: number, data: RechazarReclamoRequest): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/reclamos/${id}/rechazar`, data);
+  }
+
+  getReclamoStats(): Observable<ReclamoStats> {
+    return this.http.get<ReclamoStats>(`${this.apiUrl}/reclamos/stats`);
+  }
+
+  // Email Config endpoints
+  getEmailConfigs(): Observable<EmailConfig[]> {
+    return this.http.get<EmailConfig[]>(`${this.apiUrl}/emailconfig`);
+  }
+
+  createEmailConfig(config: CreateEmailConfig): Observable<EmailConfig> {
+    return this.http.post<EmailConfig>(`${this.apiUrl}/emailconfig`, config);
+  }
+
+  updateEmailConfig(id: number, config: Partial<CreateEmailConfig>): Observable<EmailConfig> {
+    return this.http.put<EmailConfig>(`${this.apiUrl}/emailconfig/${id}`, config);
+  }
+
+  deleteEmailConfig(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/emailconfig/${id}`);
+  }
+
+  testEmailConfig(id: number): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/emailconfig/${id}/test`, {});
+  }
+
+  testEmailConfigDirect(config: CreateEmailConfig): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/emailconfig/test-direct`, config);
+  }
+
+  setDefaultEmailConfig(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/emailconfig/${id}/set-default`, {});
+  }
+
+  toggleEmailConfigStatus(id: number): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/emailconfig/${id}/toggle-status`, {});
+  }
+
+  // Roles endpoints
+  getRoles(): Observable<Role[]> {
+    return this.http.get<Role[]>(`${this.apiUrl}/roles`);
+  }
+
+  createRole(role: Partial<Role>): Observable<Role> {
+    return this.http.post<Role>(`${this.apiUrl}/roles`, role);
+  }
+
+  updateRole(id: number, role: Partial<Role>): Observable<Role> {
+    return this.http.put<Role>(`${this.apiUrl}/roles/${id}`, role);
+  }
+
+  deleteRole(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/roles/${id}`);
   }
 }

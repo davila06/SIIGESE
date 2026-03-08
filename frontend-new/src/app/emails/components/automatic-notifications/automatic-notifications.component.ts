@@ -65,7 +65,6 @@ export class AutomaticNotificationsComponent implements OnInit {
   loadData(): void {
     this.isLoading = true;
     
-    // Cargar estadísticas
     this.notificationService.getNotificationStatistics(this.daysBeforeExpiration).subscribe({
       next: (stats) => {
         this.statistics = stats;
@@ -76,7 +75,6 @@ export class AutomaticNotificationsComponent implements OnInit {
       }
     });
 
-    // Cargar cobros vencidos
     this.notificationService.getOverduePayments().subscribe({
       next: (cobros) => {
         this.overduePayments = cobros;
@@ -87,7 +85,6 @@ export class AutomaticNotificationsComponent implements OnInit {
       }
     });
 
-    // Cargar pólizas por vencer
     this.notificationService.getExpiringPolicies(this.daysBeforeExpiration).subscribe({
       next: (polizas) => {
         this.expiringPolicies = polizas;
@@ -106,9 +103,9 @@ export class AutomaticNotificationsComponent implements OnInit {
     this.notificationService.processOverduePayments().subscribe({
       next: (result: NotificationResult) => {
         this.handleNotificationResult(result, 'Cobros Vencidos');
-        this.loadData(); // Recargar datos
+        this.loadData();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error procesando cobros vencidos:', error);
         this.showMessage('Error procesando cobros vencidos');
         this.isLoading = false;
@@ -121,9 +118,9 @@ export class AutomaticNotificationsComponent implements OnInit {
     this.notificationService.processExpiringPolicies(this.daysBeforeExpiration).subscribe({
       next: (result: NotificationResult) => {
         this.handleNotificationResult(result, 'Pólizas por Vencer');
-        this.loadData(); // Recargar datos
+        this.loadData();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error procesando pólizas por vencer:', error);
         this.showMessage('Error procesando pólizas por vencer');
         this.isLoading = false;
@@ -136,9 +133,9 @@ export class AutomaticNotificationsComponent implements OnInit {
     this.notificationService.processAllNotifications(this.daysBeforeExpiration).subscribe({
       next: (result: NotificationResult) => {
         this.handleNotificationResult(result, 'Todas las Notificaciones');
-        this.loadData(); // Recargar datos
+        this.loadData();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error procesando todas las notificaciones:', error);
         this.showMessage('Error procesando todas las notificaciones');
         this.isLoading = false;

@@ -27,12 +27,12 @@ namespace Application.Services
                 var configs = await _repository.GetAllAsync();
                 var response = configs.Select(MapToResponseDto).ToList();
                 
-                return ApiResponse<List<EmailConfigResponseDto>>.Success(response);
+                return ApiResponse<List<EmailConfigResponseDto>>.CreateSuccess(response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo configuraciones de email");
-                return ApiResponse<List<EmailConfigResponseDto>>.Error("Error obteniendo configuraciones de email");
+                return ApiResponse<List<EmailConfigResponseDto>>.CreateError("Error obteniendo configuraciones de email");
             }
         }
 
@@ -43,16 +43,16 @@ namespace Application.Services
                 var config = await _repository.GetByIdAsync(id);
                 if (config == null)
                 {
-                    return ApiResponse<EmailConfigResponseDto>.Error("Configuración de email no encontrada");
+                    return ApiResponse<EmailConfigResponseDto>.CreateError("Configuración de email no encontrada");
                 }
 
                 var response = MapToResponseDto(config);
-                return ApiResponse<EmailConfigResponseDto>.Success(response);
+                return ApiResponse<EmailConfigResponseDto>.CreateSuccess(response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo configuración de email con ID {Id}", id);
-                return ApiResponse<EmailConfigResponseDto>.Error("Error obteniendo configuración de email");
+                return ApiResponse<EmailConfigResponseDto>.CreateError("Error obteniendo configuración de email");
             }
         }
 
@@ -63,16 +63,16 @@ namespace Application.Services
                 var config = await _repository.GetDefaultAsync();
                 if (config == null)
                 {
-                    return ApiResponse<EmailConfigResponseDto>.Error("No hay configuración de email por defecto");
+                    return ApiResponse<EmailConfigResponseDto>.CreateError("No hay configuración de email por defecto");
                 }
 
                 var response = MapToResponseDto(config);
-                return ApiResponse<EmailConfigResponseDto>.Success(response);
+                return ApiResponse<EmailConfigResponseDto>.CreateSuccess(response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo configuración de email por defecto");
-                return ApiResponse<EmailConfigResponseDto>.Error("Error obteniendo configuración de email por defecto");
+                return ApiResponse<EmailConfigResponseDto>.CreateError("Error obteniendo configuración de email por defecto");
             }
         }
 
@@ -83,7 +83,7 @@ namespace Application.Services
                 // Verificar si ya existe una configuración con el mismo nombre
                 if (await _repository.ExistsByNameAsync(dto.ConfigName))
                 {
-                    return ApiResponse<EmailConfigResponseDto>.Error("Ya existe una configuración con este nombre");
+                    return ApiResponse<EmailConfigResponseDto>.CreateError("Ya existe una configuración con este nombre");
                 }
 
                 var config = new EmailConfig
@@ -114,12 +114,12 @@ namespace Application.Services
                 var createdConfig = await _repository.CreateAsync(config);
                 var response = MapToResponseDto(createdConfig);
 
-                return ApiResponse<EmailConfigResponseDto>.Success(response, "Configuración de email creada exitosamente");
+                return ApiResponse<EmailConfigResponseDto>.CreateSuccess(response, "Configuración de email creada exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creando configuración de email");
-                return ApiResponse<EmailConfigResponseDto>.Error("Error creando configuración de email");
+                return ApiResponse<EmailConfigResponseDto>.CreateError("Error creando configuración de email");
             }
         }
 
@@ -130,7 +130,7 @@ namespace Application.Services
                 var config = await _repository.GetByIdAsync(id);
                 if (config == null)
                 {
-                    return ApiResponse<EmailConfigResponseDto>.Error("Configuración de email no encontrada");
+                    return ApiResponse<EmailConfigResponseDto>.CreateError("Configuración de email no encontrada");
                 }
 
                 config.ConfigName = dto.ConfigName;
@@ -160,12 +160,12 @@ namespace Application.Services
                 var updatedConfig = await _repository.UpdateAsync(config);
                 var response = MapToResponseDto(updatedConfig);
 
-                return ApiResponse<EmailConfigResponseDto>.Success(response, "Configuración de email actualizada exitosamente");
+                return ApiResponse<EmailConfigResponseDto>.CreateSuccess(response, "Configuración de email actualizada exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error actualizando configuración de email con ID {Id}", id);
-                return ApiResponse<EmailConfigResponseDto>.Error("Error actualizando configuración de email");
+                return ApiResponse<EmailConfigResponseDto>.CreateError("Error actualizando configuración de email");
             }
         }
 
@@ -176,21 +176,21 @@ namespace Application.Services
                 var config = await _repository.GetByIdAsync(id);
                 if (config == null)
                 {
-                    return ApiResponse<bool>.Error("Configuración de email no encontrada");
+                    return ApiResponse<bool>.CreateError("Configuración de email no encontrada");
                 }
 
                 if (config.IsDefault)
                 {
-                    return ApiResponse<bool>.Error("No se puede eliminar la configuración por defecto");
+                    return ApiResponse<bool>.CreateError("No se puede eliminar la configuración por defecto");
                 }
 
                 var deleted = await _repository.DeleteAsync(id);
-                return ApiResponse<bool>.Success(deleted, "Configuración de email eliminada exitosamente");
+                return ApiResponse<bool>.CreateSuccess(deleted, "Configuración de email eliminada exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error eliminando configuración de email con ID {Id}", id);
-                return ApiResponse<bool>.Error("Error eliminando configuración de email");
+                return ApiResponse<bool>.CreateError("Error eliminando configuración de email");
             }
         }
 
@@ -199,12 +199,12 @@ namespace Application.Services
             try
             {
                 var result = await _repository.SetAsDefaultAsync(id);
-                return ApiResponse<bool>.Success(result, "Configuración establecida como predeterminada");
+                return ApiResponse<bool>.CreateSuccess(result, "Configuración establecida como predeterminada");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error estableciendo configuración por defecto con ID {Id}", id);
-                return ApiResponse<bool>.Error("Error estableciendo configuración por defecto");
+                return ApiResponse<bool>.CreateError("Error estableciendo configuración por defecto");
             }
         }
 
@@ -215,16 +215,16 @@ namespace Application.Services
                 var config = await _repository.GetByIdAsync(dto.ConfigId);
                 if (config == null)
                 {
-                    return ApiResponse<EmailTestResponseDto>.Error("Configuración de email no encontrada");
+                    return ApiResponse<EmailTestResponseDto>.CreateError("Configuración de email no encontrada");
                 }
 
                 var testResult = await SendTestEmail(config, dto.ToEmail, dto.Subject, dto.Body);
-                return ApiResponse<EmailTestResponseDto>.Success(testResult);
+                return ApiResponse<EmailTestResponseDto>.CreateSuccess(testResult);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error probando configuración de email con ID {ConfigId}", dto.ConfigId);
-                return ApiResponse<EmailTestResponseDto>.Error("Error probando configuración de email");
+                return ApiResponse<EmailTestResponseDto>.CreateError("Error probando configuración de email");
             }
         }
 
@@ -233,12 +233,12 @@ namespace Application.Services
             try
             {
                 var result = await _repository.ToggleActiveStatusAsync(id);
-                return ApiResponse<bool>.Success(result, "Estado de configuración cambiado exitosamente");
+                return ApiResponse<bool>.CreateSuccess(result, "Estado de configuración cambiado exitosamente");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error cambiando estado de configuración de email con ID {Id}", id);
-                return ApiResponse<bool>.Error("Error cambiando estado de configuración de email");
+                return ApiResponse<bool>.CreateError("Error cambiando estado de configuración de email");
             }
         }
 

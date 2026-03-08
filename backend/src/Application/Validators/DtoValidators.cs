@@ -1,15 +1,15 @@
-using Application.DTOs;
 using FluentValidation;
+using Application.DTOs;
 
 namespace Application.Validators
 {
-    public class LoginRequestValidator : AbstractValidator<LoginRequestDto>
+    public class LoginRequestDtoValidator : AbstractValidator<LoginRequestDto>
     {
-        public LoginRequestValidator()
+        public LoginRequestDtoValidator()
         {
-            RuleFor(x => x.Email)
-                .NotEmpty().WithMessage("El email es requerido")
-                .EmailAddress().WithMessage("El formato del email no es válido");
+            RuleFor(x => x.UserName)
+                .NotEmpty().WithMessage("El nombre de usuario es requerido")
+                .MinimumLength(3).WithMessage("El nombre de usuario debe tener al menos 3 caracteres");
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("La contraseña es requerida")
@@ -17,65 +17,143 @@ namespace Application.Validators
         }
     }
 
-    public class CreateClienteValidator : AbstractValidator<CreateClienteDto>
+    public class CreateClienteDtoValidator : AbstractValidator<CreateClienteDto>
     {
-        public CreateClienteValidator()
+        public CreateClienteDtoValidator()
         {
-            RuleFor(x => x.Codigo)
-                .NotEmpty().WithMessage("El código es requerido")
-                .MaximumLength(20).WithMessage("El código no puede exceder 20 caracteres");
+            RuleFor(x => x.NumeroIdentificacion)
+                .NotEmpty().WithMessage("El número de identificación es requerido");
 
-            RuleFor(x => x.RazonSocial)
-                .NotEmpty().WithMessage("La razón social es requerida")
-                .MaximumLength(200).WithMessage("La razón social no puede exceder 200 caracteres");
+            RuleFor(x => x.TipoIdentificacion)
+                .NotEmpty().WithMessage("El tipo de identificación es requerido");
 
-            RuleFor(x => x.NIT)
-                .NotEmpty().WithMessage("El NIT es requerido")
-                .MaximumLength(20).WithMessage("El NIT no puede exceder 20 caracteres");
+            RuleFor(x => x.PrimerNombre)
+                .NotEmpty().WithMessage("El primer nombre es requerido");
+
+            RuleFor(x => x.PrimerApellido)
+                .NotEmpty().WithMessage("El primer apellido es requerido");
 
             RuleFor(x => x.Email)
-                .EmailAddress().WithMessage("El formato del email no es válido")
+                .EmailAddress().WithMessage("El email debe tener un formato válido")
                 .When(x => !string.IsNullOrEmpty(x.Email));
 
-            RuleFor(x => x.PerfilId)
-                .GreaterThan(0).WithMessage("Debe seleccionar un perfil válido");
+            RuleFor(x => x.FechaNacimiento)
+                .LessThan(DateTime.Now).WithMessage("La fecha de nacimiento debe ser anterior a hoy");
         }
     }
 
-    public class CreatePolizaValidator : AbstractValidator<CreatePolizaDto>
+    public class CreatePolizaDtoValidator : AbstractValidator<CreatePolizaDto>
     {
-        public CreatePolizaValidator()
+        public CreatePolizaDtoValidator()
         {
             RuleFor(x => x.NumeroPoliza)
-                .NotEmpty().WithMessage("El número de póliza es requerido")
-                .MaximumLength(50).WithMessage("El número de póliza no puede exceder 50 caracteres");
+                .NotEmpty().WithMessage("El número de póliza es requerido");
 
-            RuleFor(x => x.NombreAsegurado)
-                .NotEmpty().WithMessage("El nombre del asegurado es requerido")
-                .MaximumLength(200).WithMessage("El nombre del asegurado no puede exceder 200 caracteres");
+            RuleFor(x => x.ClienteId)
+                .GreaterThan(0).WithMessage("Debe seleccionar un cliente válido");
 
-            RuleFor(x => x.Prima)
-                .GreaterThan(0).WithMessage("La prima debe ser mayor a 0");
+            RuleFor(x => x.TipoSeguro)
+                .NotEmpty().WithMessage("El tipo de seguro es requerido");
 
-            RuleFor(x => x.Moneda)
-                .NotEmpty().WithMessage("La moneda es requerida")
-                .Must(x => x == "CRC" || x == "USD" || x == "EUR")
-                .WithMessage("La moneda debe ser CRC, USD o EUR");
+            RuleFor(x => x.FechaInicio)
+                .NotEmpty().WithMessage("La fecha de inicio es requerida");
 
-            RuleFor(x => x.FechaVigencia)
-                .GreaterThan(DateTime.Today.AddDays(-30))
-                .WithMessage("La fecha de vigencia no puede ser muy antigua");
+            RuleFor(x => x.FechaVencimiento)
+                .GreaterThan(x => x.FechaInicio).WithMessage("La fecha de vencimiento debe ser posterior a la fecha de inicio");
 
-            RuleFor(x => x.Aseguradora)
-                .NotEmpty().WithMessage("La aseguradora es requerida")
-                .MaximumLength(100).WithMessage("La aseguradora no puede exceder 100 caracteres");
+            RuleFor(x => x.MontoAsegurado)
+                .GreaterThan(0).WithMessage("El monto asegurado debe ser mayor a 0");
 
-            RuleFor(x => x.Placa)
-                .MaximumLength(10).WithMessage("La placa no puede exceder 10 caracteres")
-                .When(x => !string.IsNullOrEmpty(x.Placa));
+            RuleFor(x => x.PrimaNeta)
+                .GreaterThan(0).WithMessage("La prima neta debe ser mayor a 0");
+        }
+    }
 
-            RuleFor(x => x.PerfilId)
-                .GreaterThan(0).WithMessage("Debe seleccionar un perfil válido");
+    public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
+    {
+        public CreateUserDtoValidator()
+        {
+            RuleFor(x => x.UserName)
+                .NotEmpty().WithMessage("El nombre de usuario es requerido")
+                .MinimumLength(3).WithMessage("El nombre de usuario debe tener al menos 3 caracteres");
+
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("El email es requerido")
+                .EmailAddress().WithMessage("El email debe tener un formato válido");
+
+            RuleFor(x => x.FirstName)
+                .NotEmpty().WithMessage("El primer nombre es requerido");
+
+            RuleFor(x => x.LastName)
+                .NotEmpty().WithMessage("El apellido es requerido");
+
+            RuleFor(x => x.Password)
+                .NotEmpty().WithMessage("La contraseña es requerida")
+                .MinimumLength(6).WithMessage("La contraseña debe tener al menos 6 caracteres");
+        }
+    }
+
+    public class UpdateUserDtoValidator : AbstractValidator<UpdateUserDto>
+    {
+        public UpdateUserDtoValidator()
+        {
+            RuleFor(x => x.UserName)
+                .NotEmpty().WithMessage("El nombre de usuario es requerido")
+                .MinimumLength(3).WithMessage("El nombre de usuario debe tener al menos 3 caracteres");
+
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("El email es requerido")
+                .EmailAddress().WithMessage("El email debe tener un formato válido");
+
+            RuleFor(x => x.FirstName)
+                .NotEmpty().WithMessage("El primer nombre es requerido");
+
+            RuleFor(x => x.LastName)
+                .NotEmpty().WithMessage("El apellido es requerido");
+        }
+    }
+
+    public class ChangePasswordDtoValidator : AbstractValidator<ChangePasswordDto>
+    {
+        public ChangePasswordDtoValidator()
+        {
+            RuleFor(x => x.CurrentPassword)
+                .NotEmpty().WithMessage("La contraseña actual es requerida");
+
+            RuleFor(x => x.NewPassword)
+                .NotEmpty().WithMessage("La nueva contraseña es requerida")
+                .MinimumLength(6).WithMessage("La nueva contraseña debe tener al menos 6 caracteres");
+
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("La confirmación de contraseña es requerida")
+                .Equal(x => x.NewPassword).WithMessage("Las contraseñas no coinciden");
+        }
+    }
+
+    public class ForgotPasswordDtoValidator : AbstractValidator<ForgotPasswordDto>
+    {
+        public ForgotPasswordDtoValidator()
+        {
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("El email es requerido")
+                .EmailAddress().WithMessage("El email debe tener un formato válido");
+        }
+    }
+
+    public class ResetPasswordDtoValidator : AbstractValidator<ResetPasswordDto>
+    {
+        public ResetPasswordDtoValidator()
+        {
+            RuleFor(x => x.Token)
+                .NotEmpty().WithMessage("El token de reseteo es requerido");
+
+            RuleFor(x => x.NewPassword)
+                .NotEmpty().WithMessage("La nueva contraseña es requerida")
+                .MinimumLength(6).WithMessage("La nueva contraseña debe tener al menos 6 caracteres");
+
+            RuleFor(x => x.ConfirmPassword)
+                .NotEmpty().WithMessage("La confirmación de contraseña es requerida")
+                .Equal(x => x.NewPassword).WithMessage("Las contraseñas no coinciden");
         }
     }
 }

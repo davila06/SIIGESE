@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Application.DTOs;
 using Application.Interfaces;
+using Domain.Entities;
+using System.Linq;
 
 namespace WebApi.Controllers
 {
@@ -107,7 +109,12 @@ namespace WebApi.Controllers
         {
             try
             {
-                var cobros = await _cobrosService.GetCobrosByEstadoAsync(estado);
+                if (!Enum.TryParse<EstadoCobro>(estado, true, out var estadoEnum))
+                {
+                    return BadRequest($"Estado '{estado}' no válido. Estados válidos: {string.Join(", ", Enum.GetNames(typeof(EstadoCobro)))}");
+                }
+                
+                var cobros = await _cobrosService.GetCobrosByEstadoAsync(estadoEnum);
                 return Ok(cobros);
             }
             catch (ArgumentException ex)
@@ -153,6 +160,26 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error obteniendo cobros próximos a vencer en {Dias} días", dias);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Obtiene cobros próximos basados en periodicidad de la póliza:
+        /// - Periodicidad MENSUAL: se listan siempre (todos los cobros pendientes)
+        /// - Otras periodicidades: se listan con 1 mes de anticipación
+        /// </summary>
+        [HttpGet("proximos")]
+        public async Task<ActionResult<IEnumerable<CobroDto>>> GetProximosPorPeriodicidad()
+        {
+            try
+            {
+                var cobros = await _cobrosService.GetCobrosProximosPorPeriodicidadAsync();
+                return Ok(cobros);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo cobros próximos por periodicidad");
                 return StatusCode(500, "Error interno del servidor");
             }
         }
@@ -278,12 +305,7 @@ namespace WebApi.Controllers
         {
             try
             {
-                var result = await _cobrosService.DeleteCobroAsync(id);
-                if (!result)
-                {
-                    return NotFound($"Cobro con ID {id} no encontrado");
-                }
-
+                await _cobrosService.DeleteCobroAsync(id);
                 return NoContent();
             }
             catch (InvalidOperationException ex)
@@ -293,6 +315,74 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error eliminando cobro con ID {Id}", id);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Registra el pago de un cobro (endpoint REST por ID)
+        /// </summary>
+        [HttpPut("{id}/registrar")]
+        public async Task<ActionResult<CobroDto>> RegistrarPagoById(int id, [FromBody] RegistrarCobroRequestDto request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                request.CobroId = id;
+                var cobro = await _cobrosService.RegistrarCobroAsync(request);
+                if (cobro == null)
+                {
+                    return NotFound($"Cobro con ID {id} no encontrado");
+                }
+
+                return Ok(cobro);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error registrando pago del cobro con ID {Id}", id);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Cancela un cobro por ID
+        /// </summary>
+        [HttpPut("{id}/cancelar")]
+        public async Task<ActionResult<CobroDto>> CancelarById(int id, [FromBody] CancelarCobroDto? request = null)
+        {
+            try
+            {
+                var cobro = await _cobrosService.CancelarCobroAsync(id, request?.Motivo);
+                if (cobro == null)
+                {
+                    return NotFound($"Cobro con ID {id} no encontrado");
+                }
+
+                return Ok(cobro);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error cancelando cobro con ID {Id}", id);
                 return StatusCode(500, "Error interno del servidor");
             }
         }
@@ -311,6 +401,61 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generando número de recibo");
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Genera cobros automáticamente para todas las pólizas activas basándose en su frecuencia de pago
+        /// </summary>
+        /// <param name="mesesAdelante">Cantidad de meses hacia adelante para generar cobros (por defecto 3)</param>
+        [HttpPost("generar-automaticos")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<GenerarCobrosResultDto>> GenerarCobrosAutomaticos([FromQuery] int mesesAdelante = 3)
+        {
+            try
+            {
+                _logger.LogInformation("Iniciando generación automática de cobros para {Meses} meses adelante", mesesAdelante);
+                var resultado = await _cobrosService.GenerarCobrosAutomaticosAsync(mesesAdelante);
+                
+                _logger.LogInformation(
+                    "Generación completada: {CobrosGenerados} cobros generados, {PolizasProcesadas} pólizas procesadas, {PolizasSaltadas} pólizas saltadas",
+                    resultado.CobrosGenerados, resultado.PolizasProcesadas, resultado.PolizasSaltadas);
+
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generando cobros automáticos");
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Genera cobros automáticamente para una póliza específica basándose en su frecuencia de pago
+        /// </summary>
+        /// <param name="polizaId">ID de la póliza</param>
+        /// <param name="mesesAdelante">Cantidad de meses hacia adelante para generar cobros (por defecto 3)</param>
+        [HttpPost("generar-por-poliza/{polizaId}")]
+        [Authorize(Roles = "Admin,DataLoader")]
+        public async Task<ActionResult<GenerarCobrosResultDto>> GenerarCobrosPorPoliza(int polizaId, [FromQuery] int mesesAdelante = 3)
+        {
+            try
+            {
+                _logger.LogInformation("Generando cobros para póliza {PolizaId} con {Meses} meses adelante", polizaId, mesesAdelante);
+                var resultado = await _cobrosService.GenerarCobrosPorPolizaAsync(polizaId, mesesAdelante);
+                
+                if (resultado.Errores.Any())
+                {
+                    return BadRequest(resultado);
+                }
+
+                _logger.LogInformation("Generados {CobrosGenerados} cobros para póliza {PolizaId}", resultado.CobrosGenerados, polizaId);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generando cobros para póliza {PolizaId}", polizaId);
                 return StatusCode(500, "Error interno del servidor");
             }
         }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Application.DTOs;
 using Application.Interfaces;
+using Infrastructure.Services;
 using System.Security.Claims;
 
 namespace WebApi.Controllers
@@ -14,11 +15,13 @@ namespace WebApi.Controllers
     public class PolizasController : ControllerBase
     {
         private readonly IPolizaService _polizaService;
+        private readonly IExcelService _excelService;
         private readonly ILogger<PolizasController> _logger;
 
-        public PolizasController(IPolizaService polizaService, ILogger<PolizasController> logger)
+        public PolizasController(IPolizaService polizaService, IExcelService excelService, ILogger<PolizasController> logger)
         {
             _polizaService = polizaService;
+            _excelService = excelService;
             _logger = logger;
         }
 
@@ -103,6 +106,34 @@ namespace WebApi.Controllers
             {
                 _logger.LogError(ex, "Error obteniendo póliza por número {NumeroPoliza}", numeroPoliza);
                 return BadRequest(new { message = "Error obteniendo póliza" });
+            }
+        }
+
+        /// <summary>
+        /// Buscar pólizas por término (número o nombre)
+        /// </summary>
+        [HttpGet("buscar")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PolizaDto>))]
+        public async Task<IActionResult> Buscar([FromQuery] string termino)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(termino))
+                    return Ok(Array.Empty<PolizaDto>());
+
+                var polizas = await _polizaService.GetAllAsync();
+                var resultado = polizas.Where(p =>
+                    p.NumeroPoliza.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
+                    p.NombreAsegurado.Contains(termino, StringComparison.OrdinalIgnoreCase) ||
+                    p.NumeroCedula.Contains(termino, StringComparison.OrdinalIgnoreCase)
+                ).Take(10).ToList();
+
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error buscando pólizas con término {Termino}", termino);
+                return BadRequest(new { message = "Error buscando pólizas" });
             }
         }
 
@@ -243,6 +274,92 @@ namespace WebApi.Controllers
             {
                 _logger.LogError(ex, "Error procesando archivo Excel de pólizas");
                 return BadRequest(new { message = "Error procesando archivo Excel" });
+            }
+        }
+
+        /// <summary>
+        /// Descargar template Excel para cargar pólizas
+        /// </summary>
+        [HttpGet("template")]
+        [Authorize(Roles = "Admin,DataLoader")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DownloadTemplate()
+        {
+            try
+            {
+                // Datos de ejemplo para el template con el nuevo formato
+                var templateData = new[]
+                {
+                    new
+                    {
+                        Poliza = "POL-2024-001",
+                        Nombre = "Juan Pérez García",
+                        NumeroCedula = "1-2345-6789",
+                        Prima = "150000",
+                        Moneda = "CRC",
+                        Fecha = "2024-12-31",
+                        Frecuencia = "Mensual",
+                        Aseguradora = "Instituto Nacional de Seguros (INS)",
+                        Placa = "ABC123",
+                        Marca = "Toyota",
+                        Modelo = "Corolla",
+                        Año = "2023",
+                        Correo = "juan.perez@email.com",
+                        NumeroTelefono = "+506 8888-9999"
+                    }
+                };
+
+                var headers = new[]
+                {
+                    "POLIZA",
+                    "NOMBRE",
+                    "NUMEROCEDULA",
+                    "PRIMA",
+                    "MONEDA",
+                    "FECHA",
+                    "FRECUENCIA",
+                    "ASEGURADORA",
+                    "PLACA",
+                    "MARCA",
+                    "MODELO",
+                    "AÑO",
+                    "CORREO",
+                    "NUMEROTELEFONO"
+                };
+
+                var excelBytes = await _excelService.GenerateExcelAsync(
+                    templateData,
+                    headers,
+                    item => new object[]
+                    {
+                        item.Poliza,
+                        item.Nombre,
+                        item.NumeroCedula,
+                        item.Prima,
+                        item.Moneda,
+                        item.Fecha,
+                        item.Frecuencia,
+                        item.Aseguradora,
+                        item.Placa,
+                        item.Marca,
+                        item.Modelo,
+                        item.Año,
+                        item.Correo,
+                        item.NumeroTelefono
+                    }
+                );
+
+                var fileName = $"template_polizas_{DateTime.Now:yyyyMMdd}.xlsx";
+                
+                _logger.LogInformation("Template de pólizas descargado por usuario {UserId}", GetCurrentUserId());
+
+                return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generando template de pólizas");
+                return StatusCode(500, new { message = "Error generando template" });
             }
         }
 

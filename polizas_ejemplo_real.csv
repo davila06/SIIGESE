@@ -1,0 +1,21 @@
+POLIZA,NOMBRE,NUMEROCEDULA,PRIMA,MONEDA,FECHA,FRECUENCIA,ASEGURADORA,PLACA,MARCA,MODELO,AÑO,CORREO,NUMEROTELEFONO
+POL-2024-101,Juan Carlos Pérez García,1-1234-5678,150000,CRC,31/12/2024,MENSUAL,Instituto Nacional de Seguros (INS),ABC123,Toyota,Corolla,2020,juan.perez@email.com,+506 8888-1234
+POL-2024-102,María Elena García López,2-2345-6789,250000,CRC,15/01/2025,TRIMESTRAL,ASSA Compañía de Seguros S.A.,DEF456,Honda,Civic,2019,maria.garcia@email.com,+506 7777-5678
+POL-2024-103,Carlos Roberto Ramírez Solís,3-3456-7890,180000,USD,01/06/2024,ANUAL,Seguros Vida Plus,,,,,,carlos.ramirez@email.com,+506 6666-9999
+POL-2024-104,Ana Sofía Vargas Chacón,4-4567-8901,95000,CRC,10/03/2025,MENSUAL,MNK Seguros Compañía Aseguradora,GHI789,Nissan,Sentra,2021,,
+POL-2024-105,Luis Fernando Morales Quesada,5-5678-9012,320000,CRC,20/11/2024,SEMESTRAL,Seguros del Magisterio,JKL012,Mazda,CX-5,2022,luis.morales@email.com,+506 8888-7777
+POL-2024-106,Patricia Isabel Jiménez Mora,1-6789-0123,175000,CRC,05/02/2025,MENSUAL,SINSEG Seguros,MNO345,Hyundai,Tucson,2023,patricia.jimenez@email.com,+506 7777-3333
+POL-2024-107,Roberto Antonio Guzmán Rojas,2-7890-1234,420000,USD,15/04/2024,ANUAL,Seguros Futuro S.A.,PQR678,Chevrolet,Equinox,2021,roberto.guzman@email.com,+506 6666-5555
+POL-2024-108,Silvia Mariela Castro Vindas,3-8901-2345,85000,CRC,28/12/2024,MENSUAL,Instituto Nacional de Seguros (INS),STU901,Kia,Sportage,2020,silvia.castro@email.com,+506 8888-2222
+POL-2024-109,Jorge Luis Alvarado Méndez,4-9012-3456,195000,CRC,10/01/2025,BIMENSUAL,ASSA Compañía de Seguros S.A.,VWX234,Ford,Escape,2022,,+506 7777-8888
+POL-2024-110,Carolina Andrea Soto Fernández,5-0123-4567,280000,CRC,22/03/2025,TRIMESTRAL,Seguros del Magisterio,YZA567,Volkswagen,Tiguan,2023,carolina.soto@email.com,+506 6666-1111
+POL-2024-111,Mauricio Enrique López Herrera,1-1235-6789,135000,CRC,18/02/2025,MENSUAL,MNK Seguros Compañía Aseguradora,BCD890,Suzuki,Vitara,2019,mauricio.lopez@email.com,+506 8888-9999
+POL-2024-112,Gabriela Patricia Rojas Campos,2-2346-7890,550000,USD,30/06/2024,ANUAL,Seguros Vida Plus,,,,,,gabriela.rojas@email.com,+506 7777-4444
+POL-2024-113,Fernando José Hernández Arias,3-3457-8901,165000,CRC,12/01/2025,MENSUAL,SINSEG Seguros,EFG123,Mitsubishi,Outlander,2021,fernando.hernandez@email.com,+506 6666-7777
+POL-2024-114,Daniela Michelle Chacón Vega,4-4568-9012,225000,CRC,25/04/2025,TRIMESTRAL,Instituto Nacional de Seguros (INS),HIJ456,Subaru,Forester,2022,daniela.chacon@email.com,+506 8888-5555
+POL-2024-115,Ricardo Alejandro Sandoval Cruz,5-5679-0123,145000,CRC,08/03/2025,BIMENSUAL,ASSA Compañía de Seguros S.A.,KLM789,Peugeot,3008,2020,,+506 7777-6666
+POL-2024-116,Valeria Sofía Villalobos Quirós,1-6780-1234,380000,USD,15/07/2024,ANUAL,Seguros Futuro S.A.,,,,,,valeria.villalobos@email.com,+506 6666-2222
+POL-2024-117,Andrés Felipe Córdoba Núñez,2-7891-2345,190000,CRC,20/02/2025,MENSUAL,Seguros del Magisterio,NOP012,Renault,Koleos,2021,andres.cordoba@email.com,+506 8888-3333
+POL-2024-118,Isabel Cristina Montero Salazar,3-8902-3456,275000,CRC,05/05/2025,TRIMESTRAL,MNK Seguros Compañía Aseguradora,QRS345,Jeep,Compass,2023,isabel.montero@email.com,+506 7777-1111
+POL-2024-119,Pablo Esteban Navarro Ortiz,4-9013-4567,125000,CRC,15/01/2025,MENSUAL,SINSEG Seguros,TUV678,Seat,Ateca,2020,,+506 6666-8888
+POL-2024-120,Mariana Alejandra Brenes Solano,5-0124-5678,340000,CRC,28/03/2025,SEMESTRAL,Instituto Nacional de Seguros (INS),WXY901,BMW,X3,2022,mariana.brenes@email.com,+506 8888-4444

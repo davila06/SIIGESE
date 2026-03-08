@@ -6,6 +6,7 @@ namespace Application.Interfaces
     public interface IAuthService
     {
         Task<LoginResponseDto> LoginAsync(LoginRequestDto request);
+        Task<LoginResponseDto> RefreshTokenAsync(string token);
         Task<bool> ValidateTokenAsync(string token);
         Task LogoutAsync(string token);
         Task ChangePasswordAsync(int userId, string currentPassword, string newPassword);

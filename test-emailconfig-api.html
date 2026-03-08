@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Test API EmailConfig - Configuración</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .header {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 10px;
+            color: white;
+        }
+        .test-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #007bff;
+        }
+        .error-section {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .success-section {
+            background: #d1ecf1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #0dcaf0;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .logs {
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            margin-top: 20px;
+        }
+        .api-result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+        }
+        .status-success { border-color: #28a745; background-color: #d4edda; }
+        .status-error { border-color: #dc3545; background-color: #f8d7da; }
+        .status-warning { border-color: #ffc107; background-color: #fff3cd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Test API EmailConfig</h1>
+            <p>Diagnóstico del error "Error al cargar las configuraciones"</p>
+        </div>
+
+        <div class="test-section">
+            <h2>🎯 Problema Identificado</h2>
+            <p>El módulo de configuración muestra el error "Error al cargar las configuraciones" al intentar cargar la lista de configuraciones de email.</p>
+            
+            <h3>📋 APIs a Probar</h3>
+            <ul>
+                <li><strong>GET /api/emailconfig</strong> - Obtener todas las configuraciones</li>
+                <li><strong>GET /api/emailconfig/default</strong> - Obtener configuración predeterminada</li>
+                <li><strong>GET /api/configuracion</strong> - API general de configuración</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Tests de API</h2>
+            
+            <h3>Test 1: EmailConfig - Todas las configuraciones</h3>
+            <button class="test-button" onclick="testEmailConfigGetAll()">
+                🔍 Test GET /api/emailconfig
+            </button>
+            <div id="result-emailconfig-all" class="api-result" style="display: none;"></div>
+
+            <h3>Test 2: EmailConfig - Configuración por defecto</h3>
+            <button class="test-button" onclick="testEmailConfigDefault()">
+                🔍 Test GET /api/emailconfig/default
+            </button>
+            <div id="result-emailconfig-default" class="api-result" style="display: none;"></div>
+
+            <h3>Test 3: Configuración general</h3>
+            <button class="test-button" onclick="testConfiguracionGeneral()">
+                🔍 Test GET /api/configuracion
+            </button>
+            <div id="result-configuracion" class="api-result" style="display: none;"></div>
+
+            <h3>Test 4: Abrir módulo de configuración</h3>
+            <button class="test-button" onclick="openConfiguracion()">
+                🌐 Abrir Configuración
+            </button>
+            <p><em>Observa la consola del navegador (F12) para ver errores específicos</em></p>
+        </div>
+
+        <div class="success-section">
+            <h2>✅ Si las APIs funcionan correctamente</h2>
+            <p>Si las APIs responden correctamente, el problema podría ser:</p>
+            <ul>
+                <li><strong>Headers de CORS</strong> - Verificar configuración de CORS</li>
+                <li><strong>Autenticación</strong> - Verificar si se requiere token</li>
+                <li><strong>Formato de respuesta</strong> - Verificar estructura de datos</li>
+                <li><strong>Error de parsing</strong> - El frontend no puede procesar la respuesta</li>
+            </ul>
+        </div>
+
+        <div class="error-section">
+            <h2>❌ Si las APIs fallan</h2>
+            <p>Si las APIs no responden o devuelven errores:</p>
+            <ul>
+                <li><strong>Verificar deployment</strong> - Las funciones pueden no estar deployadas</li>
+                <li><strong>Revisar logs de Azure</strong> - Buscar errores en Azure Functions</li>
+                <li><strong>Verificar configuración</strong> - staticwebapp.config.json</li>
+                <li><strong>Mock fallback</strong> - Activar interceptor mock para desarrollo</li>
+            </ul>
+        </div>
+
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://gentle-dune-0a2edab0f.3.azurestaticapps.net/api';
+        
+        function log(message) {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.innerHTML += `[${timestamp}] ${message}<br>`;
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function showResult(elementId, data, status) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `api-result status-${status}`;
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+
+        async function testEmailConfigGetAll() {
+            log('🔍 Testing GET /api/emailconfig...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/emailconfig`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                log(`Response status: ${response.status} ${response.statusText}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ API emailconfig/getall responded successfully');
+                    showResult('result-emailconfig-all', data, 'success');
+                } else {
+                    const errorText = await response.text();
+                    log(`❌ API emailconfig/getall failed: ${response.status}`);
+                    showResult('result-emailconfig-all', { 
+                        error: `HTTP ${response.status}`, 
+                        message: errorText 
+                    }, 'error');
+                }
+            } catch (error) {
+                log(`❌ Network error testing emailconfig/getall: ${error.message}`);
+                showResult('result-emailconfig-all', { 
+                    error: 'Network Error', 
+                    message: error.message 
+                }, 'error');
+            }
+        }
+
+        async function testEmailConfigDefault() {
+            log('🔍 Testing GET /api/emailconfig/default...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/emailconfig/default`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                log(`Response status: ${response.status} ${response.statusText}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ API emailconfig/default responded successfully');
+                    showResult('result-emailconfig-default', data, 'success');
+                } else {
+                    const errorText = await response.text();
+                    log(`❌ API emailconfig/default failed: ${response.status}`);
+                    showResult('result-emailconfig-default', { 
+                        error: `HTTP ${response.status}`, 
+                        message: errorText 
+                    }, 'error');
+                }
+            } catch (error) {
+                log(`❌ Network error testing emailconfig/default: ${error.message}`);
+                showResult('result-emailconfig-default', { 
+                    error: 'Network Error', 
+                    message: error.message 
+                }, 'error');
+            }
+        }
+
+        async function testConfiguracionGeneral() {
+            log('🔍 Testing GET /api/configuracion...');
+            
+            try {
+                const response = await fetch(`${API_BASE}/configuracion`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                log(`Response status: ${response.status} ${response.statusText}`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log('✅ API configuracion responded successfully');
+                    showResult('result-configuracion', data, 'success');
+                } else {
+                    const errorText = await response.text();
+                    log(`❌ API configuracion failed: ${response.status}`);
+                    showResult('result-configuracion', { 
+                        error: `HTTP ${response.status}`, 
+                        message: errorText 
+                    }, 'error');
+                }
+            } catch (error) {
+                log(`❌ Network error testing configuracion: ${error.message}`);
+                showResult('result-configuracion', { 
+                    error: 'Network Error', 
+                    message: error.message 
+                }, 'error');
+            }
+        }
+
+        function openConfiguracion() {
+            log('🌐 Abriendo módulo de configuración...');
+            log('📝 Abre la consola del navegador (F12) para ver errores');
+            window.open('https://gentle-dune-0a2edab0f.3.azurestaticapps.net/configuracion', '_blank');
+        }
+
+        // Log inicial
+        log('🔧 Test de API EmailConfig iniciado');
+        log('🎯 Objetivo: Diagnosticar "Error al cargar las configuraciones"');
+        log('📍 API Base URL: ' + API_BASE);
+    </script>
+</body>
+</html>

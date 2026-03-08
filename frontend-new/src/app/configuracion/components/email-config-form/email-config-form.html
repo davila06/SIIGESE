@@ -1,1 +1,220 @@
-<p>email-config-form works!</p>
+<div class="email-config-form-container">
+  <mat-card class="email-config-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>email</mat-icon>
+        {{ isEditMode ? 'Editar' : 'Nueva' }} Configuración SMTP
+      </mat-card-title>
+      <mat-card-subtitle>
+        Configure los parámetros de conexión SMTP para el envío de emails
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="emailConfigForm" (ngSubmit)="onSubmit()" class="email-config-form">
+        
+        <!-- Configuraciones Predefinidas -->
+        <div class="preset-section" *ngIf="!isEditMode">
+          <h3>Configuraciones Predefinidas</h3>
+          <div class="preset-buttons">
+            <button type="button" 
+                    mat-stroked-button 
+                    *ngFor="let config of commonConfigs" 
+                    (click)="applyPresetConfig(config)">
+              <mat-icon>settings</mat-icon>
+              {{ config.name }}
+            </button>
+          </div>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Información General -->
+        <div class="form-section">
+          <h3>Información General</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nombre de Configuración</mat-label>
+              <input matInput 
+                     formControlName="configName" 
+                     placeholder="Ej: Gmail SINSEG">
+              <mat-error *ngIf="emailConfigForm.get('configName')?.invalid && emailConfigForm.get('configName')?.touched">
+                {{ getErrorMessage('configName') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Configuración del Servidor -->
+        <div class="form-section">
+          <h3>Configuración del Servidor SMTP</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Servidor SMTP</mat-label>
+              <input matInput 
+                     formControlName="smtpServer" 
+                     placeholder="smtp.gmail.com">
+              <mat-error *ngIf="emailConfigForm.get('smtpServer')?.invalid && emailConfigForm.get('smtpServer')?.touched">
+                {{ getErrorMessage('smtpServer') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Puerto SMTP</mat-label>
+              <input matInput 
+                     type="number" 
+                     formControlName="smtpPort" 
+                     placeholder="587">
+              <mat-error *ngIf="emailConfigForm.get('smtpPort')?.invalid && emailConfigForm.get('smtpPort')?.touched">
+                {{ getErrorMessage('smtpPort') }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Timeout (segundos)</mat-label>
+              <input matInput 
+                     type="number" 
+                     formControlName="timeoutSeconds" 
+                     placeholder="30">
+              <mat-error *ngIf="emailConfigForm.get('timeoutSeconds')?.invalid && emailConfigForm.get('timeoutSeconds')?.touched">
+                {{ getErrorMessage('timeoutSeconds') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Autenticación -->
+        <div class="form-section">
+          <h3>Autenticación</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Usuario / Email</mat-label>
+              <input matInput 
+                     formControlName="username" 
+                     placeholder="usuario@dominio.com">
+              <mat-error *ngIf="emailConfigForm.get('username')?.invalid && emailConfigForm.get('username')?.touched">
+                {{ getErrorMessage('username') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Contraseña</mat-label>
+              <input matInput 
+                     [type]="hidePassword ? 'password' : 'text'" 
+                     formControlName="password" 
+                     placeholder="••••••••">
+              <button mat-icon-button 
+                      matSuffix 
+                      type="button"
+                      (click)="hidePassword = !hidePassword" 
+                      [attr.aria-label]="'Hide password'" 
+                      [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="emailConfigForm.get('password')?.invalid && emailConfigForm.get('password')?.touched">
+                {{ getErrorMessage('password') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Configuración de Seguridad -->
+        <div class="form-section">
+          <h3>Configuración de Seguridad</h3>
+          <div class="security-options">
+            <mat-checkbox formControlName="useSSL">
+              <mat-icon>security</mat-icon>
+              Usar SSL
+            </mat-checkbox>
+            <mat-checkbox formControlName="useTLS">
+              <mat-icon>verified_user</mat-icon>
+              Usar TLS
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <!-- Configuración del Remitente -->
+        <div class="form-section">
+          <h3>Configuración del Remitente</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email Remitente</mat-label>
+              <input matInput 
+                     formControlName="fromEmail" 
+                     placeholder="noreply@sinseg.com">
+              <mat-error *ngIf="emailConfigForm.get('fromEmail')?.invalid && emailConfigForm.get('fromEmail')?.touched">
+                {{ getErrorMessage('fromEmail') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nombre del Remitente</mat-label>
+              <input matInput 
+                     formControlName="fromName" 
+                     placeholder="SINSEG Notifications">
+              <mat-error *ngIf="emailConfigForm.get('fromName')?.invalid && emailConfigForm.get('fromName')?.touched">
+                {{ getErrorMessage('fromName') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Configuración Avanzada -->
+        <div class="form-section">
+          <h3>Configuración Avanzada</h3>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Máximo Reintentos</mat-label>
+              <input matInput 
+                     type="number" 
+                     formControlName="maxRetries" 
+                     placeholder="3">
+              <mat-error *ngIf="emailConfigForm.get('maxRetries')?.invalid && emailConfigForm.get('maxRetries')?.touched">
+                {{ getErrorMessage('maxRetries') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Botones de Acción -->
+        <div class="action-buttons">
+          <button type="button" 
+                  mat-stroked-button 
+                  color="primary"
+                  [disabled]="emailConfigForm.invalid || testing"
+                  (click)="onTestConnection()">
+            <mat-icon>wifi_tethering</mat-icon>
+            <span *ngIf="!testing">Probar Conexión</span>
+            <span *ngIf="testing">Probando...</span>
+            <mat-spinner *ngIf="testing" diameter="20" style="margin-left: 8px;"></mat-spinner>
+          </button>
+
+          <div class="form-actions">
+            <button type="button" 
+                    mat-button 
+                    (click)="onCancel()">
+              Cancelar
+            </button>
+            <button type="submit" 
+                    mat-raised-button 
+                    color="primary"
+                    [disabled]="emailConfigForm.invalid || loading">
+              <mat-icon>save</mat-icon>
+              <span *ngIf="!loading">{{ isEditMode ? 'Actualizar' : 'Guardar' }}</span>
+              <span *ngIf="loading">Guardando...</span>
+              <mat-spinner *ngIf="loading" diameter="20" style="margin-left: 8px;"></mat-spinner>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

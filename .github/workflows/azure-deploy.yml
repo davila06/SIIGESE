@@ -1,0 +1,160 @@
+# GitHub Actions Workflow for SIINADSEG
+# Automatic CI/CD for both Frontend and Backend
+
+name: 🚀 SIINADSEG CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, V1 ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  AZURE_WEBAPP_NAME: 'app-siinadseg-backend'    # Cambiar por tu app name
+  AZURE_WEBAPP_PACKAGE_PATH: './backend/src/WebApi'
+  DOTNET_VERSION: '8.0'
+  NODE_VERSION: '18.x'
+
+jobs:
+  # Job 1: Build y Test Backend
+  backend-build:
+    name: 🔧 Backend Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔧 Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: 📦 Restore dependencies
+      run: dotnet restore
+      working-directory: ./backend/src/WebApi
+
+    - name: 🔨 Build backend
+      run: dotnet build --no-restore --configuration Release
+      working-directory: ./backend/src/WebApi
+
+    - name: 🧪 Run tests
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      working-directory: ./backend
+
+    - name: 📤 Publish backend
+      run: dotnet publish --no-build --configuration Release --output ./publish
+      working-directory: ./backend/src/WebApi
+
+    - name: 📦 Upload backend artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend-app
+        path: ./backend/src/WebApi/publish
+
+  # Job 2: Build Frontend
+  frontend-build:
+    name: 🌐 Frontend Build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔧 Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: './frontend-new/package-lock.json'
+
+    - name: 📦 Install dependencies
+      run: npm ci --legacy-peer-deps
+      working-directory: ./frontend-new
+
+    - name: 🔍 Lint code
+      run: npm run lint --if-present
+      working-directory: ./frontend-new
+      continue-on-error: true
+
+    - name: 🏗️ Build frontend
+      run: npm run build -- --configuration=production
+      working-directory: ./frontend-new
+
+    - name: 📦 Upload frontend artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: frontend-app
+        path: ./frontend-new/dist/frontend-new
+
+  # Job 3: Deploy Backend to Azure
+  backend-deploy:
+    name: 🚀 Deploy Backend
+    needs: backend-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/V1'
+    environment: production
+    
+    steps:
+    - name: 📥 Download backend artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: backend-app
+        path: ./backend-app
+
+    - name: 🔐 Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: 🚀 Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        slot-name: 'production'
+        package: ./backend-app
+
+    - name: 🏥 Health check
+      run: |
+        echo "Waiting for app to start..."
+        sleep 30
+        curl -f https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/health || echo "Health check failed"
+
+  # Job 4: Deploy Frontend (This will be handled by Static Web Apps)
+  frontend-deploy-info:
+    name: 📋 Frontend Deploy Info
+    needs: frontend-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/V1'
+    
+    steps:
+    - name: ℹ️ Frontend deployment info
+      run: |
+        echo "🌐 Frontend build completed successfully!"
+        echo "📦 Artifacts ready for Static Web App deployment"
+        echo "🔧 Static Web App will automatically deploy from this repo"
+        echo "📍 Make sure to configure Static Web App with:"
+        echo "   - App location: /frontend-new"
+        echo "   - Output location: dist/frontend-new"
+        echo "   - Build preset: Angular"
+
+  # Job 5: Notify deployment status
+  notify:
+    name: 📢 Deployment Notification
+    needs: [backend-deploy, frontend-deploy-info]
+    runs-on: ubuntu-latest
+    if: always() && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/V1')
+    
+    steps:
+    - name: 📢 Success notification
+      if: needs.backend-deploy.result == 'success'
+      run: |
+        echo "✅ SIINADSEG deployment completed successfully!"
+        echo "🖥️ Backend: https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net"
+        echo "🌐 Frontend: Deployed via Static Web Apps"
+        
+    - name: 📢 Failure notification  
+      if: needs.backend-deploy.result == 'failure'
+      run: |
+        echo "❌ SIINADSEG deployment failed!"
+        echo "🔍 Check the logs above for details"

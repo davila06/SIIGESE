@@ -41,6 +41,19 @@
           height: 20px;
         }
       }
+      
+      .add-button {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          background: linear-gradient(135deg, #0f8077 0%, #2dd368 100%);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+        }
+      }
     }
   }
 
@@ -149,6 +162,36 @@
     margin-bottom: 24px;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    .vista-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+    }
+
+    .vista-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background-color: rgba(33, 150, 243, 0.08);
+      color: #1565c0;
+      font-size: 13px;
+      margin-bottom: 16px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
 
     .filters-container {
       display: flex;
@@ -264,6 +307,26 @@
             width: 16px;
             height: 16px;
           }
+        }
+
+        .email-cell {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13px;
+          color: #555;
+
+          .email-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+            color: #2196F3;
+          }
+        }
+
+        .no-email {
+          color: #999;
+          font-style: italic;
         }
       }
 

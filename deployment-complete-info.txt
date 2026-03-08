@@ -1,0 +1,16 @@
+﻿# DEPLOYMENT COMPLETO - 2025-12-17 00:28:26
+
+## Frontend
+URL: https://agreeable-smoke-0b5eb210f.3.azurestaticapps.net
+
+## Backend  
+URL: http://siinadseg-api-7464.eastus2.azurecontainer.io:8080
+API: http://siinadseg-api-7464.eastus2.azurecontainer.io:8080/api
+
+## ConfiguraciÃ³n pendiente
+Agregar al appsettings.json del backend en Cors.AllowedOrigins:
+  "https://agreeable-smoke-0b5eb210f.3.azurestaticapps.net"
+
+## Usuario Administrador
+Email: admin@sinseg.com
+Password: admin123

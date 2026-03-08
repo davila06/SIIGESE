@@ -1,0 +1,6 @@
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckAzureUser.csproj.AssemblyReference.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckAzureUser.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckAzureUser.AssemblyInfoInputs.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckAzureUser.AssemblyInfo.cs
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckAzureUser.csproj.CoreCompileInputs.cache
+C:\Users\davil\SINSEG\enterprise-web-app\obj\Debug\net8.0\CheckAzureUser.sourcelink.json

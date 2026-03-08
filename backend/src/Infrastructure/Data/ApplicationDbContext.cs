@@ -15,11 +15,11 @@ namespace Infrastructure.Data
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<DataRecord> DataRecords { get; set; }
         public DbSet<Poliza> Polizas { get; set; }
-        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<Cobro> Cobros { get; set; }
-        public DbSet<Cotizacion> Cotizaciones { get; set; }
         public DbSet<Reclamo> Reclamos { get; set; }
+        public DbSet<Cotizacion> Cotizaciones { get; set; }
         public DbSet<EmailConfig> EmailConfigs { get; set; }
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -97,7 +97,7 @@ namespace Infrastructure.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.FileName).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.FileType).HasMaxLength(100); // Aumentado para soportar tipos MIME largos
+                entity.Property(e => e.FileType).HasMaxLength(100);
                 entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
 
                 entity.HasOne(e => e.UploadedBy)
@@ -112,151 +112,25 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Poliza>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.NumeroPoliza).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.NumeroPoliza).HasMaxLength(50);
                 entity.Property(e => e.Modalidad).HasMaxLength(50);
-                entity.Property(e => e.NombreAsegurado).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.NombreAsegurado).HasMaxLength(200);
+                entity.Property(e => e.NumeroCedula).HasMaxLength(50);
                 entity.Property(e => e.Prima).HasColumnType("decimal(18,2)");
-                entity.Property(e => e.Moneda).IsRequired().HasMaxLength(3);
+                entity.Property(e => e.Moneda).HasMaxLength(3);
                 entity.Property(e => e.Frecuencia).HasMaxLength(50);
-                entity.Property(e => e.Aseguradora).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Aseguradora).HasMaxLength(100);
                 entity.Property(e => e.Placa).HasMaxLength(10);
                 entity.Property(e => e.Marca).HasMaxLength(50);
                 entity.Property(e => e.Modelo).HasMaxLength(50);
+                entity.Property(e => e.Año).HasMaxLength(4);
+                entity.Property(e => e.Correo).HasMaxLength(100);
+                entity.Property(e => e.NumeroTelefono).HasMaxLength(20);
 
-                entity.HasIndex(e => e.NumeroPoliza).IsUnique();
+                entity.HasIndex(e => e.NumeroPoliza);
                 entity.HasIndex(e => e.Placa);
                 entity.HasIndex(e => e.PerfilId);
                 entity.HasIndex(e => e.Aseguradora);
-
-                entity.HasQueryFilter(e => !e.IsDeleted);
-            });
-
-            // PasswordResetToken configuration
-            modelBuilder.Entity<PasswordResetToken>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Token).IsRequired().HasMaxLength(255);
-                entity.Property(e => e.IpAddress).HasMaxLength(45); // IPv6 support
-                entity.Property(e => e.UserAgent).HasMaxLength(500);
-                
-                entity.HasIndex(e => e.Token).IsUnique();
-                entity.HasIndex(e => e.UserId);
-                entity.HasIndex(e => e.ExpiresAt);
-                
-                entity.HasOne(e => e.User)
-                      .WithMany()
-                      .HasForeignKey(e => e.UserId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasQueryFilter(e => !e.IsDeleted);
-            });
-
-            // Cobro configuration
-            modelBuilder.Entity<Cobro>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.NumeroRecibo).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.NumeroPoliza).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.ClienteNombre).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.ClienteApellido).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.FechaVencimiento).IsRequired();
-                entity.Property(e => e.MontoTotal).IsRequired().HasColumnType("decimal(18,2)");
-                entity.Property(e => e.MontoCobrado).HasColumnType("decimal(18,2)");
-                entity.Property(e => e.Estado).IsRequired();
-                entity.Property(e => e.Observaciones).HasMaxLength(500);
-                entity.Property(e => e.UsuarioCobroNombre).HasMaxLength(100);
-
-                entity.HasIndex(e => e.NumeroRecibo).IsUnique();
-                entity.HasIndex(e => e.PolizaId);
-                entity.HasIndex(e => e.Estado);
-                entity.HasIndex(e => e.FechaVencimiento);
-
-                entity.HasOne(e => e.Poliza)
-                      .WithMany()
-                      .HasForeignKey(e => e.PolizaId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(e => e.UsuarioCobro)
-                      .WithMany()
-                      .HasForeignKey(e => e.UsuarioCobroId)
-                      .OnDelete(DeleteBehavior.SetNull);
-
-                entity.HasQueryFilter(e => !e.IsDeleted);
-            });
-
-            // Cotizacion configuration
-            modelBuilder.Entity<Cotizacion>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.NumeroCotizacion).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.NombreSolicitante).IsRequired().HasMaxLength(200);
-                entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.Telefono).HasMaxLength(20);
-                entity.Property(e => e.TipoSeguro).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.Aseguradora).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.MontoAsegurado).IsRequired().HasColumnType("decimal(18,2)");
-                entity.Property(e => e.PrimaCotizada).HasColumnType("decimal(18,2)");
-                entity.Property(e => e.Moneda).IsRequired().HasMaxLength(10);
-                entity.Property(e => e.Estado).IsRequired().HasMaxLength(20);
-                entity.Property(e => e.Observaciones).HasMaxLength(500);
-
-                // Campos específicos para auto
-                entity.Property(e => e.Placa).HasMaxLength(20);
-                entity.Property(e => e.Marca).HasMaxLength(50);
-                entity.Property(e => e.Modelo).HasMaxLength(50);
-                entity.Property(e => e.Cilindraje).HasMaxLength(50);
-
-                // Campos específicos para vida
-                entity.Property(e => e.Genero).HasMaxLength(20);
-                entity.Property(e => e.Ocupacion).HasMaxLength(100);
-
-                // Campos específicos para hogar
-                entity.Property(e => e.DireccionInmueble).HasMaxLength(200);
-                entity.Property(e => e.TipoInmueble).HasMaxLength(50);
-                entity.Property(e => e.ValorInmueble).HasColumnType("decimal(18,2)");
-
-                entity.HasIndex(e => e.NumeroCotizacion).IsUnique();
-                entity.HasIndex(e => e.Email);
-                entity.HasIndex(e => e.TipoSeguro);
-                entity.HasIndex(e => e.Estado);
-                entity.HasIndex(e => e.FechaCotizacion);
-
-                entity.HasOne(e => e.Usuario)
-                      .WithMany()
-                      .HasForeignKey(e => e.UsuarioId)
-                      .OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // EmailConfig configuration
-            modelBuilder.Entity<EmailConfig>(entity =>
-            {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ConfigName).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.SmtpServer).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.SmtpPort).IsRequired();
-                entity.Property(e => e.FromEmail).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.FromName).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.Username).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.Password).IsRequired().HasMaxLength(200);
-                entity.Property(e => e.UseSSL).IsRequired();
-                entity.Property(e => e.UseTLS).IsRequired();
-                entity.Property(e => e.IsDefault).IsRequired();
-                entity.Property(e => e.IsActive).IsRequired();
-                entity.Property(e => e.Description).HasMaxLength(500);
-                entity.Property(e => e.CompanyName).HasMaxLength(200);
-                entity.Property(e => e.CompanyAddress).HasMaxLength(500);
-                entity.Property(e => e.CompanyPhone).HasMaxLength(20);
-                entity.Property(e => e.CompanyWebsite).HasMaxLength(100);
-                entity.Property(e => e.CompanyLogo).HasMaxLength(500);
-                entity.Property(e => e.TimeoutSeconds).IsRequired();
-                entity.Property(e => e.MaxRetries).IsRequired();
-                entity.Property(e => e.LastTested).IsRequired();
-                entity.Property(e => e.LastTestSuccessful).IsRequired();
-                entity.Property(e => e.LastTestError).HasMaxLength(500);
-
-                entity.HasIndex(e => e.ConfigName).IsUnique();
-                entity.HasIndex(e => e.IsDefault);
-                entity.HasIndex(e => e.IsActive);
 
                 entity.HasQueryFilter(e => !e.IsDeleted);
             });
@@ -274,18 +148,16 @@ namespace Infrastructure.Data
                 new Role { Id = 3, Name = "User", Description = "Usuario estándar", CreatedBy = "System" }
             );
 
-            // Seed Admin User
+            // Seed Admin User  
             modelBuilder.Entity<User>().HasData(
-                new User 
-                { 
-                    Id = 1, 
-                    UserName = "admin", 
+                new User
+                {
+                    Id = 1,
+                    UserName = "admin",
                     Email = "admin@sinseg.com",
                     FirstName = "Administrador",
                     LastName = "Sistema",
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
-                    RequiresPasswordChange = false, // Admin no requiere cambio inicial
-                    LastPasswordChangeAt = DateTime.UtcNow,
                     CreatedBy = "System"
                 }
             );

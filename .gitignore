@@ -29,6 +29,14 @@
 *.env.test.local
 *.env.production.local
 
+# ASP.NET Core secrets / production configs – NEVER commit real credentials
+/backend/src/WebApi/appsettings.ProductionFinal.json
+/backend/src/WebApi/secrets.json
+**/user-secrets*.json
+# local developer overrides
+appsettings.Local.json
+appsettings.Development.Local.json
+
 # Logs
 *.log
 npm-debug.log*

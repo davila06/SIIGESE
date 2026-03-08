@@ -23,10 +23,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatTabsModule } from '@angular/material/tabs';
 
 // Components
 import { ReclamosDashboardComponent } from './components/reclamos-dashboard/reclamos-dashboard.component';
 import { CrearReclamoComponent } from './components/crear-reclamo/crear-reclamo.component';
+import { ReclamoDetalleComponent } from './components/reclamo-detalle/reclamo-detalle.component';
 
 const routes = [
   {
@@ -36,6 +38,10 @@ const routes = [
   {
     path: 'crear',
     component: CrearReclamoComponent
+  },
+  {
+    path: 'detalle/:id',
+    component: ReclamoDetalleComponent
   }
 ];
 
@@ -66,10 +72,12 @@ const routes = [
     MatMenuModule,
     MatBadgeModule,
     MatStepperModule,
+    MatTabsModule,
     
     // Components as imports for standalone
     ReclamosDashboardComponent,
-    CrearReclamoComponent
+    CrearReclamoComponent,
+    ReclamoDetalleComponent
   ]
 })
 export class ReclamosModule { }

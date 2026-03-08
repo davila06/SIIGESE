@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Sistema de Descarga de Errores - SIIGESE</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2E8B57 0%, #228B22 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .feature-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #28a745;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .success { color: #28a745; }
+        .warning { color: #ffc107; }
+        .info { color: #17a2b8; }
+
+        .test-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .steps {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            counter-increment: step-counter;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+
+        .step::before {
+            content: "Paso " counter(step-counter) ": ";
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Sistema de Descarga de Errores</h1>
+            <p>Registros fallidos automáticamente disponibles para descarga</p>
+        </div>
+
+        <div class="content">
+            <div class="feature-section">
+                <h2>🎯 ¿Qué hace el sistema?</h2>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Captura automática:</strong> Todos los registros que fallan durante el upload de pólizas se almacenan</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Datos originales:</strong> Se preservan todos los datos originales de cada registro fallido</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Descarga Excel:</strong> Se genera automáticamente un archivo CSV descargable con los errores</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Información detallada:</strong> Incluye número de fila, error específico y todos los datos originales</span>
+                </div>
+            </div>
+
+            <div class="feature-section">
+                <h3>📋 Contenido del archivo de errores</h3>
+                <p>Cuando hay registros fallidos, el sistema genera un archivo CSV con las siguientes columnas:</p>
+                <div class="code">
+Fila | Error | POLIZA | NOMBRE | NUMEROCEDULA | PRIMA | MONEDA | 
+FECHA | FRECUENCIA | ASEGURADORA | PLACA | MARCA | MODELO | 
+AÑO | CORREO | NUMEROTELEFONO
+                </div>
+            </div>
+
+            <div class="feature-section">
+                <h3>🔧 Cómo funciona</h3>
+                <div class="steps">
+                    <div class="step">
+                        Usuario sube un archivo Excel con pólizas
+                    </div>
+                    <div class="step">
+                        Sistema procesa cada registro y valida los datos
+                    </div>
+                    <div class="step">
+                        Registros válidos se guardan en la base de datos
+                    </div>
+                    <div class="step">
+                        Registros con errores se almacenan en una lista especial
+                    </div>
+                    <div class="step">
+                        Si hay errores, aparece automáticamente el botón "Descargar Archivo de Errores"
+                    </div>
+                    <div class="step">
+                        Al hacer clic, se genera y descarga un CSV con todos los datos fallidos
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-section">
+                <h3>💡 Ejemplo práctico</h3>
+                <div class="highlight-box">
+                    <strong>Escenario:</strong> Subes un archivo con 100 pólizas, pero 5 tienen errores (fecha inválida, prima vacía, etc.)
+                    <br><br>
+                    <strong>Resultado:</strong>
+                    <ul>
+                        <li>✅ 95 pólizas se guardan correctamente en el sistema</li>
+                        <li>❌ 5 registros fallidos se almacenan para descarga</li>
+                        <li>📥 Aparece botón "Descargar Archivo de Errores"</li>
+                        <li>📋 Al descargar obtienes un CSV con las 5 filas problemáticas + detalles del error</li>
+                        <li>🔧 Puedes corregir los errores en el archivo y volver a subirlo</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="feature-section">
+                <h3>🧪 Probar el sistema</h3>
+                <div style="text-align: center;">
+                    <button class="test-button" onclick="openApp()">
+                        🚀 PROBAR DESCARGA DE ERRORES
+                    </button>
+                </div>
+                
+                <div class="steps">
+                    <div class="step">
+                        Hacer login con admin@siigese.com / password123
+                    </div>
+                    <div class="step">
+                        Ir al módulo "Pólizas" → "Cargar Pólizas"
+                    </div>
+                    <div class="step">
+                        Seleccionar cualquier archivo Excel (.xlsx o .xls)
+                    </div>
+                    <div class="step">
+                        Hacer upload - el sistema simulará 2 errores automáticamente
+                    </div>
+                    <div class="step">
+                        Observar que aparece el botón "Descargar Archivo de Errores"
+                    </div>
+                    <div class="step">
+                        Hacer clic en el botón para descargar el archivo CSV con los errores
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-section">
+                <h3>📁 Información técnica</h3>
+                <div class="feature-item">
+                    <span class="feature-icon info">ℹ️</span>
+                    <span><strong>Formato del archivo:</strong> CSV con codificación UTF-8</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon info">ℹ️</span>
+                    <span><strong>Nombre del archivo:</strong> Errores_Polizas_YYYY-MM-DD_HH-mm-ss.csv</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon info">ℹ️</span>
+                    <span><strong>Ubicación:</strong> Se descarga automáticamente en la carpeta de descargas</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon info">ℹ️</span>
+                    <span><strong>Compatibilidad:</strong> Se puede abrir con Excel, Google Sheets o cualquier editor CSV</span>
+                </div>
+            </div>
+
+            <div class="feature-section">
+                <h3>✨ Beneficios</h3>
+                <div class="feature-item">
+                    <span class="feature-icon success">🎯</span>
+                    <span><strong>Eficiencia:</strong> No pierdes tiempo identificando manualmente qué registros fallaron</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">🔍</span>
+                    <span><strong>Transparencia:</strong> Ves exactamente qué causó cada error</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">💾</span>
+                    <span><strong>Recuperación:</strong> Todos los datos originales se preservan</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">🔄</span>
+                    <span><strong>Iteración:</strong> Corriges errores y resubes fácilmente</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openApp() {
+            window.open('http://localhost:4200', '_blank');
+        }
+    </script>
+</body>
+</html>

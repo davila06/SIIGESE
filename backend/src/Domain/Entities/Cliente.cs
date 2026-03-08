@@ -2,7 +2,7 @@ using System;
 
 namespace Domain.Entities
 {
-    public class Cliente : BaseEntity
+    public class Cliente : Entity
     {
         public string Codigo { get; set; } = string.Empty;
         public string RazonSocial { get; set; } = string.Empty;

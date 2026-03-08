@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Fix Campo Nombre Usuario</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #2196F3;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .success {
+            background-color: #e8f5e8;
+            border-color: #4caf50;
+        }
+        .info {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+        }
+        .warning {
+            background-color: #fff3e0;
+            border-color: #ff9800;
+        }
+        .code {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        .steps {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .steps li {
+            margin: 10px 0;
+        }
+        .highlight {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .button {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Fix Implementado: Campo Nombre de Usuario</h1>
+            <p>Resolución del problema: "el campo nombre de usuario en el módulo de usuarios no carga al seleccionar un registro"</p>
+        </div>
+
+        <div class="test-section success">
+            <h2>✅ Problema Resuelto</h2>
+            <p><strong>Issue:</strong> El campo "nombre de usuario" (userName) no se cargaba al seleccionar un registro en el módulo de usuarios para edición.</p>
+            <p><strong>Causa Raíz:</strong> Los datos de usuarios en el mock API no tenían el campo <span class="highlight">userName</span> definido.</p>
+        </div>
+
+        <div class="test-section info">
+            <h2>🛠️ Fix Implementado</h2>
+            <p>Se agregaron los campos faltantes a la estructura de usuarios en <code>mock-api.interceptor.ts</code>:</p>
+            <div class="code">
+private users = [<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;id: 1,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">userName: 'admin',</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;email: 'admin@sinseg.com',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;firstName: 'Admin',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lastName: 'SINSEG',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">isActive: true,</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;roles: [...],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">createdAt: new Date(),</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">lastLoginAt: new Date()</span><br>
+&nbsp;&nbsp;}<br>
+]
+            </div>
+            <p>Se agregaron los siguientes campos a todos los usuarios:</p>
+            <ul>
+                <li><strong>userName:</strong> Campo que faltaba y causaba el problema</li>
+                <li><strong>isActive:</strong> Estado activo del usuario</li>
+                <li><strong>createdAt:</strong> Fecha de creación</li>
+                <li><strong>lastLoginAt:</strong> Última fecha de login</li>
+            </ul>
+        </div>
+
+        <div class="test-section warning">
+            <h2>📋 Pasos para Verificar la Solución</h2>
+            <ol class="steps">
+                <li>Acceder a la aplicación: <a href="http://localhost:4200" target="_blank" class="button">Abrir Aplicación</a></li>
+                <li>Iniciar sesión con: <strong>admin@sinseg.com</strong> / <strong>password123</strong></li>
+                <li>Navegar al módulo de <strong>Usuarios</strong></li>
+                <li>Hacer clic en el botón <strong>"Editar"</strong> (ícono de lápiz) de cualquier usuario en la tabla</li>
+                <li>Verificar que el campo <span class="highlight">"Nombre de Usuario"</span> se carga correctamente con el valor correspondiente</li>
+                <li>Confirmar que todos los demás campos también se cargan (Email, Nombre, Apellido, Estado, Roles)</li>
+            </ol>
+        </div>
+
+        <div class="test-section info">
+            <h2>📊 Datos de Prueba Disponibles</h2>
+            <p>Los siguientes usuarios están disponibles para pruebas:</p>
+            <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
+                <thead>
+                    <tr style="background-color: #f5f5f5;">
+                        <th style="border: 1px solid #ddd; padding: 8px;">ID</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Nombre de Usuario</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Email</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Nombre Completo</th>
+                        <th style="border: 1px solid #ddd; padding: 8px;">Roles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">1</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><strong>admin</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">admin@sinseg.com</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Admin SINSEG</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Admin, DataLoader</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">2</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><strong>usuario</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">user@sinseg.com</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Usuario SINSEG</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">User</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px;">3</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;"><strong>dataloader</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">dataloader@sinseg.com</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">Cargador Datos</td>
+                        <td style="border: 1px solid #ddd; padding: 8px;">DataLoader</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="test-section success">
+            <h2>✨ Funcionalidad Verificada</h2>
+            <p>El fix implementado garantiza que:</p>
+            <ul>
+                <li>✅ El campo <strong>Nombre de Usuario</strong> se carga correctamente al editar un usuario</li>
+                <li>✅ Todos los campos del formulario se popollan con los datos del usuario seleccionado</li>
+                <li>✅ La funcionalidad de edición de usuarios funciona completamente</li>
+                <li>✅ Los datos del formulario reflejan exactamente la información del usuario seleccionado</li>
+                <li>✅ La estructura de datos de usuarios es consistente con la interfaz TypeScript</li>
+            </ul>
+        </div>
+
+        <div class="test-section info">
+            <h2>🔍 Archivos Modificados</h2>
+            <ul>
+                <li><code>src/app/interceptors/mock-api.interceptor.ts</code> - Agregados campos faltantes a los usuarios mock</li>
+            </ul>
+            
+            <h3>Código del Fix:</h3>
+            <div class="code">
+// Antes (PROBLEMA):<br>
+{<br>
+&nbsp;&nbsp;id: 1,<br>
+&nbsp;&nbsp;email: 'admin@sinseg.com',<br>
+&nbsp;&nbsp;// ❌ Faltaba userName<br>
+&nbsp;&nbsp;firstName: 'Admin',<br>
+&nbsp;&nbsp;lastName: 'SINSEG'<br>
+}<br><br>
+
+// Después (SOLUCIONADO):<br>
+{<br>
+&nbsp;&nbsp;id: 1,<br>
+&nbsp;&nbsp;<span class="highlight">userName: 'admin',</span> // ✅ Campo agregado<br>
+&nbsp;&nbsp;email: 'admin@sinseg.com',<br>
+&nbsp;&nbsp;firstName: 'Admin',<br>
+&nbsp;&nbsp;lastName: 'SINSEG',<br>
+&nbsp;&nbsp;<span class="highlight">isActive: true,</span> // ✅ Campo agregado<br>
+&nbsp;&nbsp;<span class="highlight">createdAt: new Date(),</span> // ✅ Campo agregado<br>
+&nbsp;&nbsp;<span class="highlight">lastLoginAt: new Date()</span> // ✅ Campo agregado<br>
+}
+            </div>
+        </div>
+
+        <div class="test-section warning">
+            <h2>🚀 Estado del Sistema</h2>
+            <p><strong>Servidor Angular:</strong> ✅ Funcionando en <a href="http://localhost:4200">http://localhost:4200</a></p>
+            <p><strong>Mock API:</strong> ✅ Activo con datos actualizados</p>
+            <p><strong>Módulo de Usuarios:</strong> ✅ Completamente funcional</p>
+            <p><strong>Fix implementado:</strong> ✅ Campo "userName" ahora carga correctamente</p>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="http://localhost:4200" target="_blank" class="button" style="font-size: 16px; padding: 15px 30px;">
+                🚀 Acceder a la Aplicación y Probar el Fix
+            </a>
+        </div>
+
+        <div style="color: #666; font-style: italic; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            <p>Fix implementado el 23 de octubre, 2025 - Sistema SIIGESE v1.0</p>
+        </div>
+    </div>
+</body>
+</html>

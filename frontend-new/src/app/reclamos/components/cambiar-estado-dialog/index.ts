@@ -1,0 +1,1 @@
+export { CambiarEstadoDialogComponent } from './cambiar-estado-dialog.component';

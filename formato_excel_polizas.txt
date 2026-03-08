@@ -1,19 +1,37 @@
-FORMATO EXCEL PARA CARGA DE PÓLIZAS
-=====================================
+FORMATO EXCEL PARA CARGA DE PÓLIZAS - VERSIÓN ACTUALIZADA
+==========================================================
 
 El archivo Excel debe tener las siguientes columnas en el orden especificado:
 
-COLUMNAS REQUERIDAS (Posiciones 1-8):
+COLUMNAS REQUERIDAS (Posiciones 1-14):
 1. POLIZA - Número de póliza (texto único, no puede estar vacío)
-2. MOD - Modalidad (texto, no puede estar vacío)
-3. NOMBRE - Nombre del asegurado (texto, no puede estar vacío)
+2. NOMBRE - Nombre completo del asegurado (texto, no puede estar vacío)
+3. NUMEROCEDULA - Número de cédula del asegurado (texto, no puede estar vacío)
 4. PRIMA - Prima de la póliza (número decimal, ej: 1500.50)
 5. MONEDA - Moneda (CRC, USD, EUR solamente)
 6. FECHA - Fecha de vigencia (formato: dd/MM/yyyy, dd-MM-yyyy, etc.)
 7. FRECUENCIA - Frecuencia de pago (texto, no puede estar vacío)
 8. ASEGURADORA - Nombre de la aseguradora (texto, no puede estar vacío)
+9. PLACA - Placa del vehículo (texto, opcional)
+10. MARCA - Marca del vehículo (texto, opcional)
+11. MODELO - Modelo del vehículo (texto, opcional)
+12. AÑO - Año del vehículo (texto, opcional)
+13. CORREO - Email del asegurado (texto, opcional)
+14. NUMEROTELEFONO - Número de teléfono del asegurado (texto, opcional)
 
-COLUMNAS OPCIONALES (Posiciones 9-11):
+EJEMPLO DE DATOS:
+POLIZA,NOMBRE,NUMEROCEDULA,PRIMA,MONEDA,FECHA,FRECUENCIA,ASEGURADORA,PLACA,MARCA,MODELO,AÑO,CORREO,NUMEROTELEFONO
+POL-2024-001,Juan Carlos Pérez García,1-1234-5678,150000,CRC,31/12/2024,MENSUAL,SINSEG Seguros,ABC123,Toyota,Corolla,2020,juan.perez@email.com,+506 8888-1234
+POL-2024-002,María Elena García López,2-2345-6789,250000,CRC,15/01/2025,TRIMESTRAL,SINSEG Seguros,DEF456,Honda,Civic,2019,maria.garcia@email.com,+506 7777-5678
+
+NOTAS IMPORTANTES:
+- Las columnas 1-8 son OBLIGATORIAS
+- Las columnas 9-14 son OPCIONALES
+- El orden de las columnas es CRÍTICO y debe respetarse exactamente
+- Los nombres de las columnas deben ser exactamente como se especifica (mayúsculas)
+- No agregar columnas adicionales
+- No cambiar el orden de las columnas
+- La primera fila debe contener los encabezados
 9. PLACA - Placa del vehículo (opcional)
 10. MARCA - Marca del vehículo (opcional)
 11. MODELO - Modelo del vehículo (opcional)

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Interceptor Upload Corregido - SIIGESE</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #4CAF50;
+        }
+        .error-section {
+            border-left-color: #f44336;
+        }
+        .warning-section {
+            border-left-color: #ff9800;
+        }
+        .test-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+        .feature-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .feature-icon {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .warning { color: #ff9800; }
+        .info { color: #2196F3; }
+        .logs {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        .code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            border-left: 3px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test: Mock Interceptor Corregido</h1>
+        
+        <div class="test-section error-section">
+            <h3>❌ Problema Detectado en Logs</h3>
+            <p>En los logs anteriores se observó:</p>
+            <div class="code">
+🔄 Mock API Interceptor: POST http://siinadseg-backend-1019.eastus.azurecontainer.io/api/polizas/upload<br>
+✅ Mock Poliza created: POL-1761155588179
+            </div>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon error">❌</span>
+                    <span><strong>Interceptor no detectaba /upload:</strong> Ejecutaba CREATE en lugar de UPLOAD</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon error">❌</span>
+                    <span><strong>Lógica de condiciones incorrecta:</strong> /polizas/upload dentro de /polizas genérico</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon error">❌</span>
+                    <span><strong>Resultado:</strong> Backend real ejecutándose → PascalCase → undefined</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🛠️ Correcciones Aplicadas</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Orden de condiciones corregido:</strong> Upload PRIMERO, luego /polizas genérico</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Detección mejorada:</strong> Busca tanto /polizas/upload como /api/polizas/upload</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Logging detallado:</strong> Debug específico para condiciones</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Response Mapper:</strong> Backup para manejo de ambos formatos</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section warning-section">
+            <h3>🎯 Nueva Secuencia Esperada</h3>
+            <p>Con las correcciones, los logs deben mostrar:</p>
+            <div class="code">
+🔍 Mock Interceptor - URL: http://...polizas/upload Method: POST<br>
+🔍 URL includes /polizas/upload: true<br>
+🔍 URL includes /api/polizas/upload: true<br>
+🔍 Method is POST: true<br>
+📤 Mock handling upload - URL: http://...polizas/upload<br>
+📤 Upload condition matched!<br>
+📤 Mock Excel Upload iniciado<br>
+✅ Mock Excel Upload completado: {errorRecords: 2, ...}
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🚀 Probar la Corrección</h3>
+            <div style="text-align: center; margin: 20px 0;">
+                <button class="test-button" onclick="openApp()" style="font-size: 18px; padding: 15px 30px;">
+                    🧪 PROBAR UPLOAD CORREGIDO
+                </button>
+            </div>
+            <p><strong>Pasos:</strong></p>
+            <ol>
+                <li>Hacer login con admin@siigese.com / password123</li>
+                <li>Ir al módulo de carga de pólizas</li>
+                <li>Abrir consola (F12)</li>
+                <li>Seleccionar y subir cualquier archivo Excel</li>
+                <li>Observar los nuevos logs detallados</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ Indicadores de Éxito</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Log de intercepción:</strong> "📤 Upload condition matched!"</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Log de procesamiento:</strong> "📤 Mock Excel Upload iniciado"</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>Mensaje correcto:</strong> "Error en el procesamiento. 2 errores encontrados"</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon success">✅</span>
+                    <span><strong>NO debe aparecer:</strong> "✅ Mock Poliza created" (ese es CREATE, no UPLOAD)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section error-section">
+            <h3>❌ Si Sigue Fallando</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon warning">⚠️</span>
+                    <span><strong>Logs que NO queremos ver:</strong> "✅ Mock Poliza created" durante upload</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon error">❌</span>
+                    <span><strong>Error persistente:</strong> "undefined errores encontrados"</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon info">🔧</span>
+                    <span><strong>Solución alternativa:</strong> Response Mapper activado como backup</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🛠️ Debug Tools</h3>
+            <button class="test-button" onclick="openConsole()">
+                📊 Abrir Consola (F12)
+            </button>
+            <button class="test-button" onclick="clearLogs()">
+                🧹 Limpiar Logs
+            </button>
+        </div>
+
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script>
+        const APP_URL = 'https://polite-flower-0f3168a1e.3.azurestaticapps.net';
+        
+        function log(message) {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.innerHTML += `[${timestamp}] ${message}<br>`;
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function openApp() {
+            log('🧪 Abriendo SIIGESE para probar upload corregido...');
+            log('🎯 Esperando logs: "📤 Upload condition matched!"');
+            window.open(APP_URL, '_blank');
+        }
+
+        function openConsole() {
+            log('📊 Instrucciones para debugging...');
+            alert('Presiona F12 → Console. Busca logs que empiecen con 📤 y verifica que NO aparezca "Mock Poliza created" durante upload');
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+            log('🧹 Logs limpiados - listo para nueva prueba');
+        }
+
+        // Log inicial
+        log('🔧 Sistema de verificación de interceptor iniciado');
+        log('🎯 Objetivo: Verificar que interceptor capture /upload correctamente');
+        log('📱 App URL: ' + APP_URL);
+        log('⚡ Correcciones: Orden de condiciones + detección mejorada');
+    </script>
+</body>
+</html>

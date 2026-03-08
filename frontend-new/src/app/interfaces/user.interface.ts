@@ -1,46 +1,307 @@
 export interface User {
   id: number;
-  userName: string;
   email: string;
   firstName: string;
   lastName: string;
-  isActive: boolean;
+  userName?: string;
   roles: Role[];
-  createdAt?: Date;
-  lastLoginAt?: Date;
+  isActive: boolean;
+  lastLoginAt?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateUser {
-  userName: string;
   email: string;
   firstName: string;
   lastName: string;
+  userName?: string;
   password: string;
-  isActive: boolean;
   roleIds: number[];
+  isActive?: boolean;
 }
 
 export interface UpdateUser {
-  userName: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  isActive: boolean;
-  roleIds: number[];
-}
-
-export interface UserRole {
-  id: number;
-  userId: number;
-  roleId: number;
-  user?: User;
-  role?: Role;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  userName?: string;
+  roleIds?: number[];
+  isActive?: boolean;
 }
 
 export interface Role {
   id: number;
   name: string;
   description: string;
+  permissions: string[];
+  isActive: boolean;
+}
+
+export interface Poliza {
+  id: number;
+  numeroPoliza: string;
+  modalidad: string;
+  nombreAsegurado: string;
+  numeroCedula: string;
+  prima: number;
+  moneda: string;
+  fechaVigencia: string;
+  frecuencia: string;
+  aseguradora: string;
+  placa: string;
+  marca: string;
+  modelo: string;
+  año: string;
+  correo: string;
+  numeroTelefono: string;
+  perfilId: number;
+  esActivo: boolean;
+  observaciones?: string;
+  fechaCreacion: string;
+  usuarioCreacion: string;
+}
+
+export interface CreatePoliza {
+  numeroPoliza: string;
+  modalidad: string;
+  nombreAsegurado: string;
+  numeroCedula: string;
+  prima: number;
+  moneda: string;
+  fechaVigencia: string;
+  frecuencia: string;
+  aseguradora: string;
+  placa: string;
+  marca: string;
+  modelo: string;
+  año: string;
+  correo: string;
+  numeroTelefono: string;
+  perfilId: number;
+  observaciones?: string;
+}
+
+export interface Cobro {
+  id: number;
+  numeroRecibo: string;
+  polizaId: number;
+  numeroPoliza: string;
+  clienteNombreCompleto: string;
+  correoElectronico: string;
+  montoTotal: number;
+  montoCobrado: number;
+  fechaVencimiento: string;
+  fechaCobro: string | null;
+  estado: string;
+  metodoPago: string;
+  moneda: string;
+  observaciones: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCobro {
+  polizaId: number;
+  correoElectronico?: string;
+  montoTotal: number;
+  fechaVencimiento: string;
+  metodoPago: string;
+  moneda: string;
+  observaciones?: string;
+}
+
+export interface RegistrarCobroRequest {
+  metodoPago: string;
+  montoCobrado: number;
+  fechaCobro?: string;
+  observaciones?: string;
+}
+
+export interface CancelarCobroRequest {
+  observaciones?: string;
+}
+
+export interface CobroStats {
+  totalCobros: number;
+  cobrosPendientes: number;
+  cobrosPagados: number;
+  cobrosVencidos: number;
+  montoTotalPendiente: number;
+  montoTotalCobrado: number;
+  porcentajeCobrado: number;
+  cobrosProximosVencer: number;
+}
+
+export interface Reclamo {
+  id: number;
+  numeroReclamo: string;
+  numeroPoliza: string;
+  tipoReclamo: string;
+  descripcion: string;
+  fechaReclamo: string;
+  fechaLimiteRespuesta: string | null;
+  fechaResolucion: string | null;
+  estado: string;
+  prioridad: string;
+  montoReclamado: number;
+  montoAprobado: number | null;
+  nombreAsegurado: string;
+  clienteNombreCompleto: string;
+  observaciones: string;
+  documentosAdjuntos: string;
+  usuarioAsignadoId: number | null;
+  moneda: string;
+  createdBy: string;
+  updatedBy: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateReclamo {
+  numeroPoliza: string;
+  tipoReclamo: string;
+  descripcion: string;
+  fechaLimiteRespuesta?: string;
+  prioridad: string;
+  montoReclamado: number;
+  nombreAsegurado: string;
+  clienteNombreCompleto?: string;
+  observaciones?: string;
+  usuarioAsignadoId?: number;
+  moneda?: string;
+}
+
+export interface ChangeEstadoReclamoRequest {
+  estado: string;
+  observaciones?: string;
+}
+
+export interface AsignarReclamoRequest {
+  usuarioId: number;
+}
+
+export interface ResolverReclamoRequest {
+  montoAprobado: number;
+  observaciones?: string;
+}
+
+export interface RechazarReclamoRequest {
+  motivo: string;
+  observaciones?: string;
+}
+
+export interface ReclamoFilterParams {
+  estado?: string;
+  prioridad?: string;
+  tipoReclamo?: string;
+  numeroPoliza?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
+  pageNumber?: number;
+  pageSize?: number;
+}
+
+export interface ReclamoStats {
+  totalReclamos: number;
+  reclamosPendientes: number;
+  reclamosEnProceso: number;
+  reclamosResueltos: number;
+  reclamosRechazados: number;
+  montoTotalReclamado: number;
+  montoTotalAprobado: number;
+  tasaAprobacion: number;
+}
+
+export interface PagedResult<T> {
+  items: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface Cotizacion {
+  id: number;
+  numeroCotizacion: string;
+  nombreCliente: string;
+  correoCliente: string;
+  telefonoCliente: string;
+  tipoSeguro: string;
+  descripcion: string;
+  montoEstimado: number;
+  moneda: string;
+  estado: string;
+  vigencia: string;
+  observaciones: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCotizacion {
+  nombreCliente: string;
+  correoCliente: string;
+  telefonoCliente?: string;
+  tipoSeguro: string;
+  descripcion: string;
+  montoEstimado: number;
+  moneda: string;
+  vigencia?: string;
+  observaciones?: string;
+}
+
+export interface EmailConfig {
+  id: number;
+  nombre: string;
+  servidor: string;
+  puerto: number;
+  usarSsl: boolean;
+  correoRemitente: string;
+  nombreRemitente: string;
+  usuario: string;
+  esDefault: boolean;
+  esActivo: boolean;
+  createdAt: string;
+}
+
+export interface CreateEmailConfig {
+  nombre: string;
+  servidor: string;
+  puerto: number;
+  usarSsl: boolean;
+  correoRemitente: string;
+  nombreRemitente: string;
+  usuario: string;
+  password: string;
+}
+
+export interface DataUploadResult {
+  success: boolean;
+  totalRecords: number;
+  processedRecords: number;
+  errorRecords: number;
+  errors: string[];
+  failedRecords: FailedRecord[];
+  message?: string;
+  status?: string;
+}
+
+export interface FailedRecord {
+  rowNumber: number;
+  error: string;
+  originalData: Record<string, unknown>;
+}
+
+export interface TokenInfo {
+  usuario: string;
+  nombre: string;
+  roles: string[];
+  expira: Date;
+  expirado: boolean;
+  necesitaRenovacion: boolean;
+  minutosRestantes: number;
 }
 
 export interface LoginRequest {
@@ -51,105 +312,12 @@ export interface LoginRequest {
 export interface LoginResponse {
   token: string;
   refreshToken: string;
-  expiresAt: Date;
   user: User;
+  expiresAt?: string;
 }
 
-export interface Cliente {
-  id: number;
-  codigo: string;
-  razonSocial: string;
-  nombreComercial: string;
-  nit: string;
-  telefono: string;
-  email: string;
-  direccion: string;
-  ciudad: string;
-  departamento: string;
-  pais: string;
-  esActivo: boolean;
-  fechaRegistro?: Date;
-  perfilId: number;
-}
-
-export interface CreateCliente {
-  codigo: string;
-  razonSocial: string;
-  nombreComercial: string;
-  nit: string;
-  telefono: string;
-  email: string;
-  direccion: string;
-  ciudad: string;
-  departamento: string;
-  pais: string;
-  perfilId: number;
-}
-
-export interface CreateDataRecord {
-  perfilId: number;
-  nombre: string;
-  documento: string;
-  telefono?: string;
-  email?: string;
-  direccion?: string;
-}
-
-export interface Poliza {
-  id: number;
-  perfilId: number;
-  numeroPoliza: string;
-  modalidad: string;
-  nombreAsegurado: string;
-  prima: number;
-  moneda: string;
-  fechaVigencia: Date;
-  frecuencia: string;
-  aseguradora: string;
-  placa?: string;
-  marca?: string;
-  modelo?: string;
-  fechaCreacion: Date;
-  fechaModificacion?: Date;
-  usuarioCreacion: string;
-  usuarioModificacion?: string;
-  esActivo: boolean;
-}
-
-export interface CreatePoliza {
-  perfilId: number;
-  numeroPoliza: string;
-  modalidad: string;
-  nombreAsegurado: string;
-  prima: number;
-  moneda: string;
-  fechaVigencia: Date;
-  frecuencia: string;
-  aseguradora: string;
-  placa?: string;
-  marca?: string;
-  modelo?: string;
-}
-
-export interface DataUploadResult {
-  success: boolean;
+export interface ApiResponse<T = unknown> {
+  data: T;
   message: string;
-  totalRecords: number;
-  processedRecords: number;
-  errorRecords: number;
-  errors: string[];
-  failedRecords: FailedRecord[];
-  status: string;
-}
-
-export interface FailedRecord {
-  rowNumber: number;
-  error: string;
-  originalData: { [key: string]: string };
-}
-
-export interface ApiResponse<T> {
-  data?: T;
-  message?: string;
-  errors?: string[];
+  success: boolean;
 }

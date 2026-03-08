@@ -1,0 +1,278 @@
+.email-config-form-container {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.email-config-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.email-config-card mat-card-header {
+  padding-bottom: 16px;
+  
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1976d2;
+    
+    mat-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+  
+  mat-card-subtitle {
+    color: #666;
+    margin-top: 8px;
+  }
+}
+
+.email-config-form {
+  .preset-section {
+    margin-bottom: 24px;
+    
+    h3 {
+      color: #333;
+      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 500;
+    }
+    
+    .preset-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      
+      button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 4px;
+        
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
+  
+  .section-divider {
+    margin: 24px 0;
+    background-color: #e0e0e0;
+  }
+  
+  .form-section {
+    margin-bottom: 24px;
+    
+    h3 {
+      color: #333;
+      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      &:before {
+        content: '';
+        width: 4px;
+        height: 20px;
+        background: linear-gradient(45deg, #1976d2, #42a5f5);
+        border-radius: 2px;
+      }
+    }
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    
+    .full-width {
+      width: 100%;
+    }
+    
+    .half-width {
+      flex: 1;
+    }
+  }
+  
+  .security-options {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    
+    mat-checkbox {
+      display: flex;
+      align-items: center;
+      
+      ::ng-deep .mat-checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        color: #1976d2;
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 32px;
+    
+    .form-actions {
+      display: flex;
+      gap: 12px;
+    }
+    
+    button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      min-width: 120px;
+      
+      mat-spinner {
+        margin-left: 8px;
+      }
+    }
+  }
+}
+
+// Material Form Field Customizations
+::ng-deep .mat-form-field {
+  &.mat-form-field-appearance-outline {
+    .mat-form-field-outline {
+      color: #ddd;
+    }
+    
+    &.mat-focused .mat-form-field-outline-thick {
+      color: #1976d2;
+    }
+    
+    .mat-form-field-label {
+      color: #666;
+      
+      &.mat-focused {
+        color: #1976d2;
+      }
+    }
+  }
+}
+
+// Error Styling
+::ng-deep .mat-error {
+  font-size: 12px;
+  color: #f44336;
+}
+
+// Checkbox Styling
+::ng-deep .mat-checkbox {
+  .mat-checkbox-checkmark-path {
+    stroke: white;
+  }
+  
+  &.mat-checkbox-checked .mat-checkbox-background {
+    background-color: #1976d2;
+  }
+}
+
+// Success Messages
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.info-snackbar {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .email-config-form-container {
+    padding: 16px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    
+    .half-width {
+      width: 100%;
+    }
+  }
+  
+  .preset-buttons {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+  
+  .security-options {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 16px;
+    
+    .form-actions {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+}
+
+// Loading States
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+// Animation for form sections
+.form-section {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

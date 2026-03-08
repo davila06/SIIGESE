@@ -1,0 +1,9 @@
+POLIZA,NOMBRE,NUMEROCEDULA,PRIMA,MONEDA,FECHA,FRECUENCIA,ASEGURADORA,PLACA,MARCA,MODELO,AÑO,CORREO,NUMEROTELEFONO
+POL-2024-001,Juan Carlos Pérez García,1-1234-5678,150000,CRC,31/12/2024,MENSUAL,Instituto Nacional de Seguros (INS),ABC123,Toyota,Corolla,2020,juan.perez@email.com,+506 8888-1234
+POL-2024-002,María Elena García López,2-2345-6789,250000,CRC,15/01/2025,TRIMESTRAL,ASSA Compañía de Seguros S.A.,DEF456,Honda,Civic,2019,maria.garcia@email.com,+506 7777-5678
+POL-2024-003,Carlos Alberto González Mora,3-3456-7890,80000,USD,20/02/2025,SEMESTRAL,Pan-American Life Insurance de Costa Rica, S.A. (PALIG),GHI789,Nissan,Sentra,2021,carlos.gonzalez@email.com,+506 6666-9012
+POL-2024-004,Ana Lucía Vargas Solano,4-4567-8901,320000,CRC,10/03/2025,ANUAL,Davivienda Seguros (Costa Rica),JKL012,Hyundai,Elantra,2022,ana.vargas@email.com,+506 5555-3456
+POL-2024-005,Roberto Jiménez Castro,5-5678-9012,185000,CRC,25/04/2025,MENSUAL,Seguros Universales,MNO345,Mazda,3,2020,roberto.jimenez@email.com,+506 4444-7890
+POL-2024-006,Patricia Isabel Morales Vega,6-6789-0123,275000,EUR,15/05/2025,TRIMESTRAL,SINSEG Seguros,PQR678,Volkswagen,Jetta,2023,patricia.morales@email.com,+506 3333-2345
+POL-2024-007,Luis Fernando Herrera Castillo,7-7890-1234,95000,CRC,30/06/2025,SEMESTRAL,Seguros Universales,STU901,Suzuki,Swift,2018,luis.herrera@email.com,+506 2222-6789
+POL-2024-008,Diana Carolina Jiménez Gómez,8-8901-2345,425000,CRC,20/07/2025,ANUAL,SINSEG Seguros,VWX234,Ford,Fiesta,2021,diana.jimenez@email.com,+506 1111-0123

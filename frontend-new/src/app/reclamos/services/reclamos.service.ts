@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 import { 
   Reclamo,
   CreateReclamoDto,
@@ -29,6 +29,11 @@ export class ReclamosService {
   // Obtener reclamo por ID
   getReclamo(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
+  }
+
+  // Obtener reclamo por ID (alias más descriptivo)
+  getReclamoById(id: number): Observable<any> {
+    return this.getReclamo(id);
   }
 
   // Crear nuevo reclamo

@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,6 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { 
   Cobro, 
   CobroStats, 
+  CobroRequest,
   EstadoCobro, 
   MetodoPago,
   getEstadoCobroLabel,
@@ -22,6 +25,8 @@ import {
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
+import { ExportService, ExportColumn } from '../../../shared/services/export.service';
+import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 
 @Component({
   selector: 'app-cobros-dashboard',
@@ -52,6 +57,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     'numeroRecibo',
     'numeroPoliza',
     'cliente',
+    'correoElectronico',
     'fechaVencimiento',
     'montoTotal',
     'estado',
@@ -62,9 +68,11 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource<Cobro>();
   cobros: Cobro[] = [];
+  cobrosProximos: Cobro[] = [];
   stats: CobroStats | null = null;
   loading = true;
   filtroEstado: number | null = null;
+  vistaProximos = true;
 
   // Enums para el template
   EstadoCobro = EstadoCobro;
@@ -75,12 +83,18 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
 
   constructor(
-    private cobrosService: CobrosService,
-    private snackBar: MatSnackBar
-  ) { }
+    private readonly cobrosService: CobrosService,
+    private readonly snackBar: MatSnackBar,
+    private readonly router: Router,
+    private readonly dialog: MatDialog,
+    private readonly exportService: ExportService
+  ) { 
+    console.log('🔧 CobrosDashboardComponent inicializado con CobrosService');
+  }
 
   ngOnInit(): void {
-    this.loadCobros();
+    console.log('🚀 CobrosDashboardComponent.ngOnInit()');
+    this.loadCobrosProximos();
     this.loadStats();
   }
 
@@ -90,29 +104,56 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   loadCobros(): void {
+    console.log('📥 Cargando todos los cobros...');
     this.loading = true;
+    this.vistaProximos = false;
     
     this.cobrosService.getCobros().subscribe({
       next: (cobros) => {
+        console.log('✅ Cobros cargados:', cobros.length);
         this.cobros = cobros;
+        this.filtroEstado = null;
         this.dataSource.data = cobros;
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar cobros:', error);
+        console.error('❌ Error al cargar cobros:', error);
         this.showMessage('Error al cargar los cobros');
         this.loading = false;
       }
     });
   }
 
+  loadCobrosProximos(): void {
+    console.log('📥 Cargando cobros próximos por periodicidad...');
+    this.loading = true;
+    this.vistaProximos = true;
+
+    this.cobrosService.getCobrosProximos().subscribe({
+      next: (cobros) => {
+        console.log('✅ Cobros próximos cargados:', cobros.length);
+        this.cobrosProximos = cobros;
+        this.filtroEstado = null;
+        this.dataSource.data = cobros;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar cobros próximos:', error);
+        this.showMessage('Error al cargar los cobros próximos');
+        this.loading = false;
+      }
+    });
+  }
+
   loadStats(): void {
+    console.log('📊 Cargando estadísticas...');
     this.cobrosService.getCobroStats().subscribe({
       next: (stats) => {
+        console.log('✅ Estadísticas cargadas:', stats);
         this.stats = stats;
       },
       error: (error) => {
-        console.error('Error al cargar estadísticas:', error);
+        console.error('❌ Error al cargar estadísticas:', error);
       }
     });
   }
@@ -127,30 +168,108 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   filtrarPorEstado(estado: number | null): void {
+    const listaBase = this.vistaProximos ? this.cobrosProximos : this.cobros;
     if (estado === null) {
-      this.dataSource.data = this.cobros;
+      this.dataSource.data = listaBase;
     } else {
-      this.dataSource.data = this.cobros.filter(cobro => cobro.estado === estado);
+      this.dataSource.data = listaBase.filter(cobro => cobro.estado === estado);
     }
     this.filtroEstado = estado;
   }
 
+  agregarCobro(): void {
+    // Importar el componente del diálogo dinámicamente
+    import('../agregar-cobro-dialog/agregar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.AgregarCobroDialogComponent, {
+        width: '600px',
+        disableClose: true,
+        panelClass: 'agregar-cobro-dialog'
+      });
+
+      dialogRef.afterClosed().subscribe((result: CobroRequest | undefined) => {
+        if (result) {
+          console.log('✅ Guardando nuevo cobro:', result);
+          this.cobrosService.createCobro(result).subscribe({
+            next: (cobro) => {
+              console.log('✅ Cobro creado exitosamente:', cobro);
+              this.showMessage('Cobro creado exitosamente');
+              if (this.vistaProximos) {
+                this.loadCobrosProximos();
+              } else {
+                this.loadCobros();
+              }
+              this.loadStats(); // Recargar estadísticas
+            },
+            error: (error) => {
+              console.error('❌ Error al crear cobro:', error);
+              this.showMessage('Error al crear el cobro: ' + (error.error?.message || error.message));
+            }
+          });
+        }
+      });
+    });
+  }
+
   registrarCobro(cobro: Cobro): void {
-    // Aquí se abriría un diálogo para registrar el cobro
-    console.log('Registrar cobro:', cobro);
-    this.showMessage('Funcionalidad de registro de cobro en desarrollo');
+    import('../registrar-cobro-dialog/registrar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.RegistrarCobroDialogComponent, {
+        width: '500px',
+        disableClose: true,
+        data: { cobro }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          this.cobrosService.registrarCobro(result).subscribe({
+            next: () => {
+              this.showMessage('Cobro registrado exitosamente');
+              if (this.vistaProximos) {
+                this.loadCobrosProximos();
+              } else {
+                this.loadCobros();
+              }
+              this.loadStats();
+            },
+            error: (err) => {
+              this.showMessage('Error al registrar cobro: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+            }
+          });
+        }
+      });
+    });
   }
 
   verDetalle(cobro: Cobro): void {
-    // Aquí se abriría un diálogo con los detalles del cobro
-    console.log('Ver detalle:', cobro);
-    this.showMessage('Funcionalidad de detalles en desarrollo');
+    this.router.navigate(['/cobros/detalle', cobro.id]);
   }
 
   cancelarCobro(cobro: Cobro): void {
-    // Aquí se confirmaría y cancelaría el cobro
-    console.log('Cancelar cobro:', cobro);
-    this.showMessage('Funcionalidad de cancelación en desarrollo');
+    import('../cancelar-cobro-dialog/cancelar-cobro-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.CancelarCobroDialogComponent, {
+        width: '450px',
+        disableClose: true,
+        data: { cobro }
+      });
+
+      dialogRef.afterClosed().subscribe((motivo: string | undefined) => {
+        if (motivo !== undefined) {
+          this.cobrosService.cancelarCobro(cobro.id, motivo).subscribe({
+            next: () => {
+              this.showMessage('Cobro cancelado exitosamente');
+              if (this.vistaProximos) {
+                this.loadCobrosProximos();
+              } else {
+                this.loadCobros();
+              }
+              this.loadStats();
+            },
+            error: (err) => {
+              this.showMessage('Error al cancelar cobro: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+            }
+          });
+        }
+      });
+    });
   }
 
   getEstadoColor(estado: EstadoCobro): string {
@@ -184,7 +303,92 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   exportarCobros(): void {
-    this.showMessage('Funcionalidad de exportación en desarrollo');
+    const dataToExport = this.dataSource.filteredData.length > 0 
+      ? this.dataSource.filteredData 
+      : this.cobros;
+
+    const dialogData: ExportDialogData = {
+      title: 'Exportar Cobros',
+      totalRecords: dataToExport.length,
+      defaultFilename: `cobros_${this.getCurrentDateString()}`
+    };
+
+    const dialogRef = this.dialog.open(ExportDialogComponent, {
+      width: '600px',
+      data: dialogData,
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result: ExportDialogResult) => {
+      if (result) {
+        this.performExport(dataToExport, result);
+      }
+    });
+  }
+
+  private performExport(data: Cobro[], options: ExportDialogResult): void {
+    const columns: ExportColumn[] = [
+      { key: 'numeroRecibo', header: 'No. Recibo', type: 'text' },
+      { key: 'numeroPoliza', header: 'No. Póliza', type: 'text' },
+      { key: 'clienteNombreCompleto', header: 'Cliente', type: 'text' },
+      { key: 'correoElectronico', header: 'Correo', type: 'text' },
+      { key: 'fechaVencimiento', header: 'Fecha Vencimiento', type: 'date', dateFormat: options.dateFormat },
+      { key: 'montoTotal', header: 'Monto Total', type: 'currency', currencyCode: 'CRC' },
+      { key: 'estado', header: 'Estado', type: 'text' },
+      { key: 'fechaCobro', header: 'Fecha Cobro', type: 'date', dateFormat: options.dateFormat },
+      { key: 'metodoPago', header: 'Método Pago', type: 'text' },
+      { key: 'montoCobrado', header: 'Monto Cobrado', type: 'currency', currencyCode: 'CRC' },
+      { key: 'usuarioCobroNombre', header: 'Usuario Cobro', type: 'text' },
+      { key: 'observaciones', header: 'Observaciones', type: 'text' },
+      { key: 'fechaCreacion', header: 'Fecha Creación', type: 'date', dateFormat: options.dateFormat }
+    ];
+
+    // Transformar datos para incluir labels legibles
+    const transformedData = data.map(cobro => ({
+      ...cobro,
+      estado: getEstadoCobroLabel(cobro.estado),
+      metodoPago: cobro.metodoPago ? getMetodoPagoLabel(cobro.metodoPago) : '',
+      fechaVencimiento: new Date(cobro.fechaVencimiento),
+      fechaCobro: cobro.fechaCobro ? new Date(cobro.fechaCobro) : null,
+      fechaCreacion: new Date(cobro.fechaCreacion),
+      fechaActualizacion: cobro.fechaActualizacion ? new Date(cobro.fechaActualizacion) : null
+    }));
+
+    const exportOptions = {
+      filename: options.filename,
+      format: options.format as 'csv' | 'excel' | 'pdf',
+      includeHeaders: options.includeHeaders,
+      dateFormat: options.dateFormat
+    };
+
+    try {
+      switch (options.format) {
+        case 'csv':
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+          break;
+        case 'excel':
+          this.exportService.exportToExcel(transformedData, columns, exportOptions);
+          break;
+        case 'pdf':
+          this.exportService.exportToPDF(transformedData, columns, exportOptions);
+          break;
+        default:
+          this.exportService.exportToCSV(transformedData, columns, exportOptions);
+      }
+
+      this.showMessage(`Archivo exportado exitosamente como ${options.format.toUpperCase()}`);
+    } catch (error) {
+      console.error('Error al exportar:', error);
+      this.showMessage('Error al exportar el archivo');
+    }
+  }
+
+  private getCurrentDateString(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    return `${year}${month}${day}`;
   }
 
   formatCurrency(amount: number, currencyCode: string = CURRENCY_CONSTANTS.DEFAULT_CURRENCY): string {

@@ -9,11 +9,13 @@ import { UsuariosComponent } from './usuarios/usuarios.component';
 import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
 import { DataLoaderGuard } from './auth/data-loader.guard';
+import { LoginGuard } from './auth/login.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
   { path: 'change-password', component: ChangePasswordComponent },
+  { path: 'dashboard', redirectTo: '/polizas', pathMatch: 'full' }, // Redirect dashboard to polizas
   { path: 'polizas', component: PolizasComponent, canActivate: [AuthGuard] },
   { path: 'polizas/upload', component: UploadPolizasComponent, canActivate: [AuthGuard, DataLoaderGuard] },
   { path: 'cotizaciones', component: CotizacionesComponent, canActivate: [AuthGuard] },
@@ -42,7 +44,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { 
+    enableTracing: false, // Cambiar a true para debugging
+    useHash: false // Usar HTML5 routing
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

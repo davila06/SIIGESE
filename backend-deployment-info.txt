@@ -1,0 +1,33 @@
+﻿# BACKEND DEPLOYMENT INFO
+Fecha: 2025-12-17 00:26:35
+
+## Backend
+URL Base: http://siinadseg-api-7464.eastus2.azurecontainer.io:8080
+API: http://siinadseg-api-7464.eastus2.azurecontainer.io:8080/api
+Health Check: http://siinadseg-api-7464.eastus2.azurecontainer.io:8080/health
+Swagger: http://siinadseg-api-7464.eastus2.azurecontainer.io:8080/swagger
+Estado: Running
+
+## Base de Datos
+Server: siinadseg-sql-3376.database.windows.net
+Database: SiinadsegDB
+User: siinadsegadmin
+Password: n-IC*6GNdiKvuk#P
+
+## Usuario Administrador
+Email: admin@sinseg.com
+Password: admin123
+
+## Recursos Azure
+Resource Group: rg-siinadseg-prod-2025
+Container Instance: siinadseg-backend
+ACR: acrsiinadseg7512.azurecr.io
+DNS Label: siinadseg-api-7464
+
+## Para actualizar el backend
+1. Hacer cambios en el cÃ³digo
+2. Ejecutar: az acr build --registry acrsiinadseg7512 --image siinadseg-backend:latest --file Dockerfile .
+3. Reiniciar container: az container restart --resource-group rg-siinadseg-prod-2025 --name siinadseg-backend
+
+## Logs del contenedor
+az container logs --resource-group rg-siinadseg-prod-2025 --name siinadseg-backend --follow

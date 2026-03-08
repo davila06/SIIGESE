@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Editar Póliza - SIIGESE</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 5px solid #4CAF50;
+        }
+        .test-button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .step-number {
+            background: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .logs {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        .feature-list {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .feature-icon {
+            color: #4CAF50;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Test: Funcionalidad Editar Póliza</h1>
+        
+        <div class="test-section">
+            <h3>🎯 Objetivo del Test</h3>
+            <p>Verificar que la funcionalidad de editar póliza funciona correctamente:</p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Click en botón "Editar" debe cargar datos en formulario</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Scroll automático al formulario de edición</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Efecto visual de confirmación</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Mensaje de confirmación visible</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span>Formulario debe mostrar "Editar Póliza" en lugar de "Agregar"</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🚀 Pasos del Test</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <button class="test-button" onclick="openApp()">
+                        🌐 Abrir SIIGESE
+                    </button>
+                    <span>Abre la aplicación principal</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <button class="test-button" onclick="openLogin()">
+                        🔑 Ir al Login
+                    </button>
+                    <span>Usa: admin@siigese.com / password123</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <button class="test-button" onclick="openPolizas()">
+                        📋 Ir a Pólizas
+                    </button>
+                    <span>Navega al módulo de pólizas</span>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <span><strong>Busca una póliza existente y haz click en el botón "✏️ Editar"</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 Qué observar en la prueba:</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <span><strong>Scroll automático:</strong> La página debe scrollear al top automáticamente</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✨</span>
+                    <span><strong>Efecto visual:</strong> El formulario debe brillar en verde por 2 segundos</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📝</span>
+                    <span><strong>Cambio de título:</strong> "Agregar Nueva Póliza" → "Editar Póliza"</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📋</span>
+                    <span><strong>Datos cargados:</strong> Todos los campos deben llenarse con los datos de la póliza</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💾</span>
+                    <span><strong>Botón actualizado:</strong> "Guardar Póliza" → "Actualizar Póliza"</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💬</span>
+                    <span><strong>Mensaje:</strong> "📝 Editando póliza: [NUMERO]" debe aparecer</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🛠️ Herramientas de Diagnóstico</h3>
+            <button class="test-button" onclick="openConsole()">
+                📊 Abrir Consola (F12)
+            </button>
+            <button class="test-button" onclick="clearLogs()">
+                🧹 Limpiar Logs
+            </button>
+            <p><strong>Logs a buscar en consola:</strong></p>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">🔄</span>
+                    <span><code>🔄 Iniciando edición de póliza: [NUMERO]</code></span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📝</span>
+                    <span><code>📝 Datos cargados en formulario: {...}</code></span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📋</span>
+                    <span><code>📋 Cargando datos de póliza al formulario: {...}</code></span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <span><code>🎯 Ejecutando scroll al formulario...</code></span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✅</span>
+                    <span><code>✅ Verificación del formulario cargado: {...}</code></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>❌ Problemas Posibles</h3>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">❌</span>
+                    <span><strong>No carga datos:</strong> Revisar logs de loadPolizaToForm</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">❌</span>
+                    <span><strong>No hace scroll:</strong> Verificar selectPolizaAndScroll</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">❌</span>
+                    <span><strong>No cambia título:</strong> Verificar isEditMode y formTitle</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">❌</span>
+                    <span><strong>Error en consola:</strong> Problema técnico que necesita ser resuelto</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="logs" id="logs"></div>
+    </div>
+
+    <script>
+        const APP_URL = 'https://polite-flower-0f3168a1e.3.azurestaticapps.net';
+        
+        function log(message) {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            logs.innerHTML += `[${timestamp}] ${message}<br>`;
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        function openApp() {
+            log('🌐 Abriendo SIIGESE...');
+            window.open(APP_URL, '_blank');
+        }
+
+        function openLogin() {
+            log('🔑 Navegando al login...');
+            window.open(`${APP_URL}/auth/login`, '_blank');
+        }
+
+        function openPolizas() {
+            log('📋 Navegando al módulo de pólizas...');
+            window.open(`${APP_URL}/polizas`, '_blank');
+        }
+
+        function openConsole() {
+            log('📊 Instrucciones para abrir consola...');
+            alert('Presiona F12 para abrir las herramientas de desarrollador y ve a la pestaña "Console" para ver los logs detallados');
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+            log('🧹 Logs limpiados - listo para nueva prueba');
+        }
+
+        // Log inicial
+        log('📝 Sistema de pruebas para Editar Póliza iniciado');
+        log('🎯 Objetivo: Verificar funcionamiento completo de edición');
+        log('📱 App URL: ' + APP_URL);
+    </script>
+</body>
+</html>

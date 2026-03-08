@@ -42,6 +42,28 @@
   width: 100%;
 }
 
+// Mensaje cuando no hay datos
+.no-data {
+  text-align: center;
+  padding: 40px;
+
+  .no-data-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    color: #999;
+  }
+
+  .no-data-title {
+    color: #666;
+    margin-top: 16px;
+  }
+
+  .no-data-text {
+    color: #999;
+  }
+}
+
 // Filtros
 .filters-card {
   margin-bottom: 20px;
@@ -345,7 +367,7 @@
 .mat-mdc-tab-group {
   .mat-mdc-tab-label {
     font-weight: 500;
-    
+
     &.mat-mdc-tab-label-active {
       font-weight: 600;
     }

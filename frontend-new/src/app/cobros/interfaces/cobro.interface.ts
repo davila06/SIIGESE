@@ -3,8 +3,8 @@ export interface Cobro {
   numeroRecibo: string;
   polizaId: number;
   numeroPoliza: string;
-  clienteNombre: string;
-  clienteApellido: string;
+  clienteNombreCompleto: string;
+  correoElectronico?: string;
   fechaVencimiento: Date;
   fechaCobro?: Date;
   montoTotal: number;
@@ -17,6 +17,22 @@ export interface Cobro {
   usuarioCobroNombre?: string;
   fechaCreacion: Date;
   fechaActualizacion?: Date;
+}
+
+export interface GenerarCobrosResult {
+  cobrosGenerados: number;
+  polizasProcesadas: number;
+  polizasSaltadas: number;
+  errores: string[];
+  cobrosCreados: CobroGenerado[];
+}
+
+export interface CobroGenerado {
+  numeroRecibo: string;
+  numeroPoliza: string;
+  fechaVencimiento: Date;
+  montoTotal: number;
+  moneda: string;
 }
 
 export enum EstadoCobro {
@@ -39,6 +55,7 @@ export interface CobroRequest {
   fechaVencimiento: Date;
   montoTotal: number;
   moneda?: string; // Código de moneda (CRC por defecto)
+  correoElectronico?: string;
   observaciones?: string;
 }
 

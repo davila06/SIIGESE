@@ -1,13 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Moq;
-using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using FluentAssertions;
 using Application.Services;
 using Application.DTOs;
+using Application.Interfaces;
 using Domain.Interfaces;
 using Domain.Entities;
 
@@ -15,23 +15,38 @@ namespace UnitTests.Services
 {
     public class AuthServiceTests
     {
-        private readonly Mock<IUnitOfWork> _mockUnitOfWork;
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly Mock<IConfiguration> _mockConfiguration;
         private readonly Mock<IUserRepository> _mockUserRepository;
+        private readonly Mock<IRoleRepository> _mockRoleRepository;
+        private readonly Mock<IPasswordResetTokenRepository> _mockTokenRepository;
+        private readonly Mock<IEmailService> _mockEmailService;
+        private readonly Mock<IConfiguration> _mockConfiguration;
+        private readonly Mock<ILogger<AuthService>> _mockLogger;
+        private readonly Mock<ITokenBlacklistService> _mockTokenBlacklist;
         private readonly AuthService _authService;
 
         public AuthServiceTests()
         {
-            _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _mockMapper = new Mock<IMapper>();
-            _mockConfiguration = new Mock<IConfiguration>();
             _mockUserRepository = new Mock<IUserRepository>();
+            _mockRoleRepository = new Mock<IRoleRepository>();
+            _mockTokenRepository = new Mock<IPasswordResetTokenRepository>();
+            _mockEmailService = new Mock<IEmailService>();
+            _mockConfiguration = new Mock<IConfiguration>();
+            _mockLogger = new Mock<ILogger<AuthService>>();
+            _mockTokenBlacklist = new Mock<ITokenBlacklistService>();
 
-            _mockUnitOfWork.Setup(x => x.Users).Returns(_mockUserRepository.Object);
-            _mockConfiguration.Setup(x => x["Jwt:Secret"]).Returns("test-secret-key-12345678901234567890");
+            _mockConfiguration.Setup(x => x["Jwt:Secret"]).Returns("test-secret-key-for-unit-testing-min32chars!!");
+            _mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("TestIssuer");
+            _mockConfiguration.Setup(x => x["Jwt:Audience"]).Returns("TestAudience");
+            _mockConfiguration.Setup(x => x["Jwt:ExpirationHours"]).Returns("8");
 
-            _authService = new AuthService(_mockUnitOfWork.Object, _mockMapper.Object, _mockConfiguration.Object);
+            _authService = new AuthService(
+                _mockUserRepository.Object,
+                _mockRoleRepository.Object,
+                _mockTokenRepository.Object,
+                _mockEmailService.Object,
+                _mockConfiguration.Object,
+                _mockLogger.Object,
+                _mockTokenBlacklist.Object);
         }
 
         [Fact]
@@ -47,14 +62,10 @@ namespace UnitTests.Services
                 IsActive = true
             };
 
-            var userDto = new UserDto { Id = 1, Email = "test@test.com" };
-
             _mockUserRepository.Setup(x => x.GetByEmailAsync(request.Email))
                 .ReturnsAsync(user);
             _mockUserRepository.Setup(x => x.GetUserWithRolesAsync(user.Id))
                 .ReturnsAsync(user);
-            _mockMapper.Setup(x => x.Map<UserDto>(user))
-                .Returns(userDto);
 
             // Act
             var result = await _authService.LoginAsync(request);
