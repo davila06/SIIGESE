@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CheckAzureUser")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+547527f442396e076dda1429bb1d158b3e967bbf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35bce5df548003e83df17a7047535efd43f61b3e")]
 [assembly: System.Reflection.AssemblyProductAttribute("CheckAzureUser")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CheckAzureUser")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
