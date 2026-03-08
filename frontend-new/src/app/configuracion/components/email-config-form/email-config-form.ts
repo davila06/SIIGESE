@@ -3,7 +3,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailConfigService } from '../../services/email-config.service';
-import { EmailConfig, EmailConfigCreate, EmailConfigTestRequest } from '../../models/email-config.model';
+import { EmailConfig, EmailConfigCreate, EmailConfigTestRequest, ApiResponse, EmailTestResponse } from '../../models/email-config.model';
+
+interface SmtpPreset {
+  name: string;
+  smtpServer: string;
+  smtpPort: number;
+  useSSL: boolean;
+  useTLS: boolean;
+}
 
 @Component({
   selector: 'app-email-config-form',
@@ -138,7 +146,7 @@ export class EmailConfigForm implements OnInit {
     });
   }
 
-  applyPresetConfig(config: any): void {
+  applyPresetConfig(config: SmtpPreset): void {
     this.emailConfigForm.patchValue({
       smtpServer: config.smtpServer,
       smtpPort: config.smtpPort,
@@ -155,8 +163,9 @@ export class EmailConfigForm implements OnInit {
 
     this.loading = true;
     this.emailConfigService.getById(this.configId).subscribe({
-      next: (response: any) => {
-        const config = response.data || response;
+      next: (response: ApiResponse<EmailConfig>) => {
+        const config = response.data;
+        if (!config) return;
         this.emailConfigForm.patchValue({
           configName: config.configName,
           description: config.description,
@@ -187,7 +196,7 @@ export class EmailConfigForm implements OnInit {
     });
   }
 
-  onProviderChange(provider: any): void {
+  onProviderChange(provider: SmtpPreset): void {
     if (provider.name !== 'Custom SMTP') {
       this.emailConfigForm.patchValue({
         smtpServer: provider.smtpServer,
@@ -221,12 +230,13 @@ export class EmailConfigForm implements OnInit {
     };
 
     this.emailConfigService.testConfigurationDirect(testRequest).subscribe({
-      next: (result: any) => {
-        const response = result.data || result;
+      next: (result: ApiResponse<EmailTestResponse>) => {
+        const response = result.data;
+        if (!response) return;
         if (response.success) {
           this.showMessage('✅ Conexión SMTP exitosa', 'success');
         } else {
-          this.showMessage(`❌ Error en la conexión: ${response.errorMessage}`, 'error');
+          this.showMessage(`❌ Error en la conexión: ${response.errorDetails ?? response.message}`, 'error');
         }
         this.testing = false;
       },

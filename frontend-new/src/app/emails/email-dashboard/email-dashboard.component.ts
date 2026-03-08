@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { EmailService, EmailResponse } from '../../services/email.service';
+import { EmailService, EmailResponse, EmailStats } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -22,7 +22,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./email-dashboard.component.scss']
 })
 export class EmailDashboardComponent implements OnInit {
-  stats: any = {};
+  stats: EmailStats = { totalSent: 0, totalFailed: 0, pendingCobros: 0, polizasPorVencer: 0 };
   loading = false;
 
   constructor(

@@ -61,6 +61,13 @@ export interface EmailHistoryResponse {
   senderName: string;
 }
 
+export interface EmailStats {
+  totalSent: number;
+  totalFailed: number;
+  pendingCobros: number;
+  polizasPorVencer: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -70,7 +77,7 @@ export class EmailService {
   constructor(private http: HttpClient) { }
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -124,8 +131,8 @@ export class EmailService {
   }
 
   // Obtener estadísticas de emails
-  getEmailStats(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/stats`, {
+  getEmailStats(): Observable<EmailStats> {
+    return this.http.get<EmailStats>(`${this.apiUrl}/stats`, {
       headers: this.getHeaders()
     });
   }

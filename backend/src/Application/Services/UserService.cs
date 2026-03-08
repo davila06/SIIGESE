@@ -79,7 +79,9 @@ namespace Application.Services
 
             // Recargar usuario con roles
             var userWithRoles = await _userRepository.GetByIdAsync(createdUser.Id);
-            return MapToDto(userWithRoles!);
+            if (userWithRoles == null)
+                throw new InvalidOperationException($"Usuario con Id {createdUser.Id} no encontrado después de crear.");
+            return MapToDto(userWithRoles);
         }
 
         public async Task<UserDto?> UpdateUserAsync(int id, UpdateUserDto dto)
@@ -124,7 +126,9 @@ namespace Application.Services
 
             // Recargar usuario con roles
             var userWithRoles = await _userRepository.GetByIdAsync(id);
-            return MapToDto(userWithRoles!);
+            if (userWithRoles == null)
+                throw new InvalidOperationException($"Usuario con Id {id} no encontrado después de actualizar.");
+            return MapToDto(userWithRoles);
         }
 
         public async Task<bool> DeleteUserAsync(int id)

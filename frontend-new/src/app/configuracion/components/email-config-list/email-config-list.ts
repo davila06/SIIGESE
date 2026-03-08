@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailConfigService } from '../../services/email-config.service';
-import { EmailConfig } from '../../models/email-config.model';
+import { EmailConfig, ApiResponse } from '../../models/email-config.model';
 
 @Component({
   selector: 'app-email-config-list',
@@ -28,8 +28,8 @@ export class EmailConfigList implements OnInit {
   loadEmailConfigs(): void {
     this.loading = true;
     this.emailConfigService.getAll().subscribe({
-      next: (response: any) => {
-        const data = response.data || response;
+      next: (response: ApiResponse<EmailConfig[]>) => {
+        const data = response.data || [];
         this.emailConfigs = Array.isArray(data) ? data : [];
         this.loading = false;
       },

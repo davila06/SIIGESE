@@ -1,88 +1,182 @@
-# Enterprise Web Application
+# SINSEG — Sistema de Gestión de Seguros
 
-## Overview
-This project is a full-stack enterprise web application built using ASP.NET Core for the backend and Angular for the frontend. It follows the Clean Architecture principles, ensuring a clear separation of concerns and maintainability.
+Aplicación web empresarial de gestión de seguros que cubre el ciclo completo: pólizas, cotizaciones, reclamos, cobros, usuarios y configuración de correo electrónico.
 
-## Project Structure
-The project is organized into two main parts: the backend and the frontend.
+## Stack tecnológico
+
+| Capa | Tecnología |
+|------|-----------|
+| Backend | ASP.NET Core 8 — Clean Architecture |
+| Frontend | Angular 20 / TypeScript 5.8.3 |
+| Base de datos | SQL Server / Azure SQL |
+| Cache | Redis (StackExchange.Redis) |
+| ORM | Entity Framework Core 8 |
+| Autenticación | JWT Bearer (tokens en `sessionStorage`) |
+| Validación | FluentValidation 11 |
+| Mapeo | AutoMapper 12 |
+| Logging | Serilog (archivo) |
+| Documentación API | Swagger / Swashbuckle |
+| Despliegue | Azure App Service (backend) + Azure Static Web Apps (frontend) |
+
+---
+
+## Estructura del proyecto
+
+```
+enterprise-web-app/
+├── backend/
+│   ├── src/
+│   │   ├── Domain/          # Entidades, enums, interfaces de dominio
+│   │   ├── Application/     # Servicios de negocio, DTOs, interfaces de repositorios
+│   │   ├── Infrastructure/  # EF Core, repositorios, servicios externos
+│   │   └── WebApi/          # Controladores REST, Program.cs, configuración
+│   ├── tests/
+│   │   ├── UnitTests/       # Pruebas unitarias de servicios
+│   │   └── IntegrationTests/# Pruebas de integración de controladores
+│   └── enterprise-web-app.sln
+└── frontend-new/
+    └── src/app/
+        ├── auth/            # Login, guards de autenticación
+        ├── polizas/         # Gestión de pólizas
+        ├── reclamos/        # Gestión de reclamos
+        ├── cobros/          # Gestión de cobros
+        ├── cotizaciones/    # Cotizaciones
+        ├── emails/          # Dashboard y plantillas de correo
+        ├── configuracion/   # Configuración SMTP
+        ├── usuarios/        # Administración de usuarios
+        ├── services/        # Servicios compartidos
+        └── interfaces/      # Tipos e interfaces TypeScript
+```
+
+### Módulos funcionales (frontend)
+
+- **Pólizas** — Alta, edición, consulta y seguimiento de pólizas de seguro
+- **Reclamos** — Ciclo de vida completo: apertura, asignación, resolución y rechazo
+- **Cobros** — Registro y seguimiento de cobros asociados a pólizas
+- **Cotizaciones** — Generación y gestión de cotizaciones
+- **Emails** — Dashboard de estadísticas y gestión de plantillas de correo
+- **Configuración SMTP** — Configuración de servidores de correo con prueba de conexión
+- **Usuarios** — CRUD de usuarios con roles y permisos
+
+### API REST (backend)
+
+| Controlador | Ruta base |
+|-------------|-----------|
+| `UsersController` | `/api/users` |
+| `PolizasController` | `/api/polizas` |
+| `ReclamosController` | `/api/reclamos` |
+| `CobrosController` | `/api/cobros` |
+| `CotizacionesController` | `/api/cotizaciones` |
+| `EmailConfigController` | `/api/emailconfig` |
+| `NotificationsController` | `/api/notifications` |
+
+---
+
+## Requisitos previos
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8)
+- [Node.js 20+](https://nodejs.org/) y npm
+- SQL Server (local) o cadena de conexión a Azure SQL
+- Redis (opcional, para caché)
+
+---
+
+## Desarrollo local
 
 ### Backend
-- **src**
-  - **WebApi**
-    - **Controllers**: Contains API controllers for handling HTTP requests.
-    - **Program.cs**: Entry point of the ASP.NET Core application.
-    - **appsettings.json**: Configuration settings for the application.
-  - **Application**
-    - **Interfaces**: Defines interfaces for repositories.
-    - **Services**: Contains business logic services.
-    - **DTOs**: Data Transfer Objects for communication between layers.
-  - **Domain**
-    - **Entities**: Contains domain entities.
-    - **Interfaces**: Defines domain-specific operations.
-  - **Infrastructure**
-    - **Data**: Contains the database context and repositories.
-    - **Services**: Handles external operations.
 
-- **tests**
-  - **UnitTests**: Contains unit tests for application services.
-  - **IntegrationTests**: Contains integration tests for API controllers.
+```powershell
+cd backend
 
-- **enterprise-web-app.sln**: Solution file for the backend project.
+# Restaurar dependencias
+dotnet restore
+
+# Aplicar migraciones y crear la base de datos
+dotnet ef database update --project src/Infrastructure --startup-project src/WebApi
+
+# Ejecutar en modo desarrollo
+dotnet run --project src/WebApi
+```
+
+La API queda disponible en `https://localhost:7001` (o el puerto configurado).  
+Swagger UI: `https://localhost:7001/swagger`
 
 ### Frontend
-- **src**
-  - **app**
-    - **core**: Core services and interfaces.
-    - **features**: Feature-specific components and services.
-    - **shared**: Shared components and guards.
-    - **app.component.ts**: Root component of the Angular application.
-    - **app.module.ts**: Root module of the Angular application.
-  - **assets**: Static assets like images and styles.
-  - **environments**: Environment-specific settings.
-  - **main.ts**: Main entry point for the Angular application.
 
-- **angular.json**: Configuration settings for the Angular project.
-- **package.json**: Lists dependencies and scripts for the Angular project.
-- **tsconfig.json**: TypeScript configuration file.
+```powershell
+cd frontend-new
 
-## Getting Started
-To get started with the application, follow these steps:
+# Instalar dependencias
+npm install
 
-### Prerequisites
-- .NET SDK
-- Node.js and npm
+# Servidor de desarrollo (http://localhost:4200)
+ng serve
 
-### Backend Setup
-1. Navigate to the `backend` directory.
-2. Restore the NuGet packages:
-   ```
-   dotnet restore
-   ```
-3. Run the application:
-   ```
-   dotnet run
-   ```
+# Build de producción
+ng build --configuration production
+```
 
-### Frontend Setup
-1. Navigate to the `frontend` directory.
-2. Install the dependencies:
-   ```
-   npm install
-   ```
-3. Run the Angular application:
-   ```
-   ng serve
-   ```
+---
 
-## Testing
-- Unit tests can be run from the `backend` directory using:
-  ```
-  dotnet test
-  ```
-- Integration tests can also be executed similarly.
+## Variables de entorno / configuración
 
-## Contributing
-Contributions are welcome! Please submit a pull request or open an issue for any suggestions or improvements.
+Crear `backend/src/WebApi/appsettings.Development.json` con:
 
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=SinsegDb;Trusted_Connection=True;"
+  },
+  "JwtSettings": {
+    "SecretKey": "<clave-secreta>",
+    "Issuer": "SinsegApi",
+    "Audience": "SinsegApp",
+    "ExpirationMinutes": 60
+  },
+  "Redis": {
+    "ConnectionString": "localhost:6379"
+  }
+}
+```
+
+---
+
+## Pruebas
+
+```powershell
+# Desde la raíz del backend
+cd backend
+dotnet test
+```
+
+Incluye pruebas unitarias (`UnitTests`) e integración (`IntegrationTests`).
+
+---
+
+## Despliegue en Azure
+
+El proyecto cuenta con scripts de despliegue automatizado en la raíz:
+
+| Script | Propósito |
+|--------|-----------|
+| `deploy-backend.ps1` | Despliega el backend en Azure App Service |
+| `deploy-frontend-swa.ps1` | Despliega el frontend en Azure Static Web Apps |
+| `apply-migrations-azure.ps1` | Aplica migraciones EF Core sobre Azure SQL |
+| `actualizar-backend-container.ps1` | Actualiza el contenedor del backend |
+
+Ver [AZURE_DEPLOYMENT_COMPLETE_GUIDE.md](AZURE_DEPLOYMENT_COMPLETE_GUIDE.md) para instrucciones detalladas.
+
+---
+
+## Calidad de código
+
+- TypeScript estricto: `strict: true`, `strictTemplates: true`, `strictInjectionParameters: true`
+- `<Nullable>enable</Nullable>` habilitado en todos los proyectos .NET
+- Sin supresiones de errores (`@ts-ignore`, `#pragma warning disable`, `NoWarn`) en código de producción
+- JWT almacenado en `sessionStorage` (no `localStorage`)
+
+---
+
+## Licencia
+
+MIT License — ver [LICENSE](LICENSE) para más detalles.

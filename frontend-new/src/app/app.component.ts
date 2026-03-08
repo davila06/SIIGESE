@@ -58,7 +58,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: any): void {
+  onResize(_event: Event): void {
     this.checkScreenSize();
   }
 

@@ -12,6 +12,7 @@ import {
   EstadoReclamo,
   PrioridadReclamo
 } from '../interfaces/reclamo.interface';
+import { PagedResult } from '../../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,38 +23,38 @@ export class ReclamosService {
   constructor(private http: HttpClient) { }
 
   // Obtener todos los reclamos
-  getReclamos(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
+  getReclamos(): Observable<Reclamo[]> {
+    return this.http.get<Reclamo[]>(this.apiUrl);
   }
 
   // Obtener reclamo por ID
-  getReclamo(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getReclamo(id: number): Observable<Reclamo> {
+    return this.http.get<Reclamo>(`${this.apiUrl}/${id}`);
   }
 
   // Obtener reclamo por ID (alias más descriptivo)
-  getReclamoById(id: number): Observable<any> {
+  getReclamoById(id: number): Observable<Reclamo> {
     return this.getReclamo(id);
   }
 
   // Crear nuevo reclamo
-  createReclamo(reclamo: CreateReclamoDto): Observable<any> {
-    return this.http.post<any>(this.apiUrl, reclamo);
+  createReclamo(reclamo: CreateReclamoDto): Observable<Reclamo> {
+    return this.http.post<Reclamo>(this.apiUrl, reclamo);
   }
 
   // Actualizar reclamo
-  updateReclamo(id: number, reclamo: UpdateReclamoDto): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}`, reclamo);
+  updateReclamo(id: number, reclamo: UpdateReclamoDto): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/${id}`, reclamo);
   }
 
   // Eliminar reclamo
-  deleteReclamo(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  deleteReclamo(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   // Filtrar reclamos
-  filtrarReclamos(filtros: FiltroReclamos): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/filtrar`, filtros);
+  filtrarReclamos(filtros: FiltroReclamos): Observable<PagedResult<Reclamo>> {
+    return this.http.post<PagedResult<Reclamo>>(`${this.apiUrl}/filtrar`, filtros);
   }
 
   // Obtener estadísticas de reclamos
@@ -62,36 +63,36 @@ export class ReclamosService {
   }
 
   // Asignar reclamo a usuario
-  asignarReclamo(id: number, usuarioId: number): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}/asignar`, { usuarioId });
+  asignarReclamo(id: number, usuarioId: number): Observable<Reclamo> {
+    return this.http.put<Reclamo>(`${this.apiUrl}/${id}/asignar`, { usuarioId });
   }
 
   // Cambiar estado del reclamo
-  cambiarEstado(id: number, estado: number, observaciones?: string): Observable<any> {
+  cambiarEstado(id: number, estado: number, observaciones?: string): Observable<Reclamo> {
     const body = { estado, observaciones };
-    return this.http.put<any>(`${this.apiUrl}/${id}/estado`, body);
+    return this.http.put<Reclamo>(`${this.apiUrl}/${id}/estado`, body);
   }
 
   // Resolver reclamo
-  resolverReclamo(id: number, montoAprobado?: number, observaciones?: string): Observable<any> {
+  resolverReclamo(id: number, montoAprobado?: number, observaciones?: string): Observable<Reclamo> {
     const body = { montoAprobado, observaciones };
-    return this.http.put<any>(`${this.apiUrl}/${id}/resolver`, body);
+    return this.http.put<Reclamo>(`${this.apiUrl}/${id}/resolver`, body);
   }
 
   // Rechazar reclamo
-  rechazarReclamo(id: number, observaciones: string): Observable<any> {
+  rechazarReclamo(id: number, observaciones: string): Observable<Reclamo> {
     const body = { observaciones };
-    return this.http.put<any>(`${this.apiUrl}/${id}/rechazar`, body);
+    return this.http.put<Reclamo>(`${this.apiUrl}/${id}/rechazar`, body);
   }
 
   // Obtener reclamos por póliza
-  getReclamosByPoliza(polizaId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/poliza/${polizaId}`);
+  getReclamosByPoliza(polizaId: number): Observable<Reclamo[]> {
+    return this.http.get<Reclamo[]>(`${this.apiUrl}/poliza/${polizaId}`);
   }
 
   // Obtener reclamos por usuario
-  getReclamosByUsuario(usuarioId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/usuario/${usuarioId}`);
+  getReclamosByUsuario(usuarioId: number): Observable<Reclamo[]> {
+    return this.http.get<Reclamo[]>(`${this.apiUrl}/usuario/${usuarioId}`);
   }
 
   // Helper methods para obtener labels

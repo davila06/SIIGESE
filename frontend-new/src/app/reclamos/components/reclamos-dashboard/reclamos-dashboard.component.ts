@@ -120,11 +120,11 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
         case 'prioridad':
           return data.prioridad; // Usar el valor del enum directamente
         case 'fechaReclamo':
-          return new Date(data.fechaReclamo);
+          return new Date(data.fechaReclamo).getTime();
         case 'montoReclamado':
           return data.montoReclamado || 0;
         default:
-          return (data as any)[sortHeaderId];
+          return (data as unknown as Record<string, string | number>)[sortHeaderId] ?? '';
       }
     };
   }
@@ -133,8 +133,8 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
     this.loading = true;
     
     this.reclamosService.getReclamos().subscribe({
-      next: (response) => {
-        this.reclamos = response.data || response;
+      next: (reclamos: Reclamo[]) => {
+        this.reclamos = reclamos;
         this.dataSource.data = this.reclamos;
         this.loading = false;
       },

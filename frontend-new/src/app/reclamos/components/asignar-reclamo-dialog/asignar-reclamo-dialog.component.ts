@@ -24,7 +24,7 @@ interface Usuario {
   firstName: string;
   lastName: string;
   email: string;
-  roles: any[];
+  roles: { id: number; name: string; }[];
   isActive: boolean;
 }
 

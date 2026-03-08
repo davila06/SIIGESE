@@ -13,7 +13,7 @@ export class CotizacionService {
   constructor(private http: HttpClient) { }
 
   private getHttpOptions() {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     return {
       headers: {
         'Content-Type': 'application/json',

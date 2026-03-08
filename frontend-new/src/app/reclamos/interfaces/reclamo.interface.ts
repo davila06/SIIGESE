@@ -23,8 +23,21 @@ export interface Reclamo {
   createdBy: string;
   updatedBy?: string;
   isDeleted: boolean;
-  poliza?: any;
-  usuarioAsignado?: any;
+  poliza?: ReclamoPolizaRef;
+  usuarioAsignado?: ReclamoUsuarioRef;
+}
+
+export interface ReclamoPolizaRef {
+  id: number;
+  numeroPoliza?: string;
+  nombreAsegurado?: string;
+}
+
+export interface ReclamoUsuarioRef {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 
 export interface CreateReclamoDto {

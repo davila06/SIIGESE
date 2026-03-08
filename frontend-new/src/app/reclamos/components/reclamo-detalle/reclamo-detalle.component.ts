@@ -70,9 +70,8 @@ export class ReclamoDetalleComponent implements OnInit {
   cargarReclamo(): void {
     this.loading = true;
     this.reclamosService.getReclamoById(this.reclamoId).subscribe({
-      next: (response: any) => {
-        const data = response.data || response;
-        this.reclamo = data;
+      next: (reclamo: Reclamo) => {
+        this.reclamo = reclamo;
         this.loading = false;
       },
       error: (error) => {

@@ -93,7 +93,7 @@ export class EmailTemplateService {
     return this.http.get<string[]>(`${this.apiUrl}/variables/${templateType}`);
   }
 
-  sendCustomEmail(request: CustomEmailRequest): Observable<any> {
-    return this.http.post(`${environment.apiUrl}/api/email/custom`, request);
+  sendCustomEmail(request: CustomEmailRequest): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}/api/email/custom`, request);
   }
 }
