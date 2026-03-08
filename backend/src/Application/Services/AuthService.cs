@@ -5,6 +5,7 @@ using Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -20,7 +21,8 @@ namespace Application.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthService> _logger;
-        private static readonly HashSet<string> _invalidatedTokens = new HashSet<string>();
+        // Stores invalidated tokens mapped to their expiry time so expired entries can be purged
+        private static readonly ConcurrentDictionary<string, DateTime> _invalidatedTokens = new ConcurrentDictionary<string, DateTime>();
 
         public AuthService(
             IUserRepository userRepository,
@@ -111,8 +113,16 @@ namespace Application.Services
         {
             try
             {
+                // Purge expired entries to prevent unbounded growth
+                var now = DateTime.UtcNow;
+                foreach (var tokenKey in _invalidatedTokens.Keys)
+                {
+                    if (_invalidatedTokens.TryGetValue(tokenKey, out var exp) && exp <= now)
+                        _invalidatedTokens.TryRemove(tokenKey, out _);
+                }
+
                 // Verificar si el token ha sido invalidado
-                if (_invalidatedTokens.Contains(token))
+                if (_invalidatedTokens.TryGetValue(token, out _))
                 {
                     return false;
                 }
@@ -144,8 +154,9 @@ namespace Application.Services
 
         public async Task LogoutAsync(string token)
         {
-            // Agregar token a la lista de tokens invalidados
-            _invalidatedTokens.Add(token);
+            // Store token with its expiry so it can be purged later
+            var expirationHours = int.Parse(_configuration["Jwt:ExpirationHours"] ?? "8");
+            _invalidatedTokens[token] = DateTime.UtcNow.AddHours(expirationHours);
             await Task.CompletedTask;
         }
 
@@ -261,6 +272,80 @@ namespace Application.Services
             {
                 _logger.LogError(ex, "Error al restablecer contraseña");
                 throw;
+            }
+        }
+
+        public async Task<LoginResponseDto> RefreshTokenAsync(string token)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"] ?? throw new InvalidOperationException("JWT Secret no configurado"));
+
+                // Validar el token actual
+                var validationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = _configuration["Jwt:Audience"],
+                    ValidateLifetime = false, // No validamos expiración aquí porque queremos renovar tokens expirados
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                var principal = tokenHandler.ValidateToken(token, validationParameters, out var validatedToken);
+                
+                // Obtener el ID del usuario del token
+                var userIdClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    throw new UnauthorizedAccessException("Token inválido");
+                }
+
+                // Obtener el usuario actual
+                var user = await _userRepository.GetByIdAsync(userId);
+                if (user == null || !user.IsActive || user.IsDeleted)
+                {
+                    throw new UnauthorizedAccessException("Usuario no encontrado o inactivo");
+                }
+
+                // Obtener roles actuales del usuario
+                var userWithRoles = await _userRepository.GetUserWithRolesAsync(user.Id);
+                var roleNames = userWithRoles?.UserRoles.Select(ur => ur.Role.Name).ToList() ?? new List<string>();
+                var roleDtos = userWithRoles?.UserRoles.Select(ur => new RoleDto 
+                { 
+                    Id = ur.Role.Id, 
+                    Name = ur.Role.Name,
+                    Description = ur.Role.Description 
+                }).ToList() ?? new List<RoleDto>();
+
+                // Generar nuevo token
+                var newToken = GenerateJwtToken(user, roleNames);
+
+                _logger.LogInformation("Token renovado exitosamente para usuario: {Email}", user.Email);
+
+                return new LoginResponseDto
+                {
+                    Token = newToken,
+                    User = new UserDto
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        IsActive = user.IsActive,
+                        Roles = roleDtos
+                    },
+                    ExpiresAt = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:ExpirationHours"] ?? "8"))
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al renovar token");
+                throw new UnauthorizedAccessException("No se pudo renovar el token");
             }
         }
 

@@ -46,11 +46,11 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   aseguradorasSistema = ASEGURADORAS_SISTEMA;
 
   constructor(
-    private fb: FormBuilder,
-    private apiService: ApiService,
-    public authService: AuthService,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef
+    private readonly fb: FormBuilder,
+    private readonly apiService: ApiService,
+    public readonly authService: AuthService,
+    private readonly snackBar: MatSnackBar,
+    private readonly cdr: ChangeDetectorRef
   ) {
     this.polizaForm = this.createForm();
   }

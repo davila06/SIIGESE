@@ -49,6 +49,39 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// Renovar token de autenticación
+        /// </summary>
+        [HttpPost("refresh-token")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoginResponseDto))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> RefreshToken()
+        {
+            try
+            {
+                var authHeader = Request.Headers["Authorization"].ToString();
+                if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer "))
+                {
+                    return Unauthorized(new { message = "Token no proporcionado" });
+                }
+
+                var token = authHeader.Substring("Bearer ".Length).Trim();
+                var response = await _authService.RefreshTokenAsync(token);
+                _logger.LogInformation("Token renovado exitosamente para usuario");
+                return Ok(response);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                _logger.LogWarning("Error al renovar token: {Message}", ex.Message);
+                return Unauthorized(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error durante la renovación del token");
+                return BadRequest(new { message = "Error interno del servidor" });
+            }
+        }
+
+        /// <summary>
         /// Cerrar sesión de usuario
         /// </summary>
         [HttpPost("logout")]

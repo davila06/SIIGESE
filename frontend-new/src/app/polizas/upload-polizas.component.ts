@@ -30,10 +30,10 @@ export class UploadPolizasComponent implements OnInit {
   };
 
   constructor(
-    private apiService: ApiService,
-    private authService: AuthService,
-    private snackBar: MatSnackBar,
-    private router: Router
+    private readonly apiService: ApiService,
+    private readonly authService: AuthService,
+    private readonly snackBar: MatSnackBar,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {

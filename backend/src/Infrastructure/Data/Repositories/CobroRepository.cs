@@ -50,6 +50,28 @@ namespace Infrastructure.Data.Repositories
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<Cobro>> GetCobrosProximosPorPeriodicidadAsync()
+        {
+            var fechaLimite = DateTime.UtcNow.AddDays(30);
+
+            return await (
+                from c in _context.Cobros
+                join p in _context.Polizas on c.PolizaId equals p.Id
+                where !c.IsDeleted
+                      && !p.IsDeleted
+                      && c.Estado == EstadoCobro.Pendiente
+                      && (
+                          // Periodicidad mensual: listar siempre
+                          p.Frecuencia.ToUpper() == "MENSUAL"
+                          ||
+                          // Otras periodicidades: solo dentro del próximo mes
+                          (p.Frecuencia.ToUpper() != "MENSUAL" && c.FechaVencimiento <= fechaLimite)
+                      )
+                orderby c.FechaVencimiento
+                select c
+            ).ToListAsync();
+        }
+
         public async Task<Cobro?> GetByNumeroReciboAsync(string numeroRecibo)
         {
             return await _context.Cobros

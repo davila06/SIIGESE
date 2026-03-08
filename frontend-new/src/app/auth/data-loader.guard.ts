@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataLoaderGuard implements CanActivate {
   
-  constructor(private router: Router) {}
+  constructor(
+    private readonly router: Router,
+    private readonly authService: AuthService
+  ) {}
 
   canActivate(): boolean {
-    // Mock data loader permission check
-    // In a real app, you would check if user has data loading permissions
-    const canLoadData = true; // Mock: always allow access for now
+    const canLoadData = this.authService.hasAnyRole(['Admin', 'DataLoader']);
     
     if (!canLoadData) {
-      this.router.navigate(['/polizas']); // Redirect to polizas list
+      this.router.navigate(['/polizas']);
       return false;
     }
     

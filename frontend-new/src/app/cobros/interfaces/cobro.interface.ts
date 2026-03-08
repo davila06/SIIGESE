@@ -19,6 +19,22 @@ export interface Cobro {
   fechaActualizacion?: Date;
 }
 
+export interface GenerarCobrosResult {
+  cobrosGenerados: number;
+  polizasProcesadas: number;
+  polizasSaltadas: number;
+  errores: string[];
+  cobrosCreados: CobroGenerado[];
+}
+
+export interface CobroGenerado {
+  numeroRecibo: string;
+  numeroPoliza: string;
+  fechaVencimiento: Date;
+  montoTotal: number;
+  moneda: string;
+}
+
 export enum EstadoCobro {
   Pendiente = 0,
   Cobrado = 1,

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SeedData")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d43f9efc8ff69bddbf3ad07f6271d176b2103df8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+547527f442396e076dda1429bb1d158b3e967bbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("SeedData")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SeedData")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

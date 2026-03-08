@@ -87,6 +87,31 @@
   <!-- Filtros y controles -->
   <mat-card class="filters-card">
     <mat-card-content>
+      <!-- Toggle vista Próximos / Todos -->
+      <div class="vista-toggle">
+        <button
+          mat-raised-button
+          [color]="vistaProximos ? 'primary' : ''"
+          (click)="loadCobrosProximos()"
+          matTooltip="Mensual: siempre listados. Otras periodicidades: próximos 30 días">
+          <mat-icon>upcoming</mat-icon>
+          Próximos Cobros
+        </button>
+        <button
+          mat-button
+          [color]="!vistaProximos ? 'primary' : ''"
+          (click)="loadCobros()">
+          <mat-icon>list</mat-icon>
+          Todos los Cobros
+        </button>
+      </div>
+
+      <!-- Indicador de vista activa -->
+      <div class="vista-info" *ngIf="vistaProximos">
+        <mat-icon>info</mat-icon>
+        <span>Mostrando cobros pendientes: periodicidad mensual (siempre) y otras periodicidades con vencimiento en los próximos 30 días.</span>
+      </div>
+
       <div class="filters-container">
         <mat-form-field class="search-field" appearance="outline">
           <mat-label>Buscar cobros</mat-label>

@@ -40,6 +40,7 @@ namespace Domain.Entities
 
     public enum MetodoPago
     {
+        NoDefinido,
         Efectivo,
         Tarjeta,
         Transferencia,

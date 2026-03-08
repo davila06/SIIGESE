@@ -48,4 +48,9 @@ namespace Application.DTOs
         public MetodoPago MetodoPago { get; set; }
         public string Observaciones { get; set; } = string.Empty;
     }
+
+    public class CancelarCobroDto
+    {
+        public string? Motivo { get; set; }
+    }
 }

@@ -89,10 +89,10 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   PrioridadReclamo = PrioridadReclamo;
 
   constructor(
-    private reclamosService: ReclamosService,
-    private snackBar: MatSnackBar,
-    private router: Router,
-    private dialog: MatDialog
+    private readonly reclamosService: ReclamosService,
+    private readonly snackBar: MatSnackBar,
+    private readonly router: Router,
+    private readonly dialog: MatDialog
   ) { }
 
   ngOnInit(): void {

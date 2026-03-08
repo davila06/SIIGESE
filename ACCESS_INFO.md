@@ -3,8 +3,8 @@
 ## 🌐 URLs de Acceso
 
 ### 🌍 Producción (Azure)
-- **URL Principal**: https://polite-flower-0f3168a1e.3.azurestaticapps.net
-- **URL Preview**: https://polite-flower-0f3168a1e-preview.westus2.3.azurestaticapps.net
+- **URL Principal**: https://agreeable-smoke-0b5eb210f.3.azurestaticapps.net
+- **URL Preview**: https://agreeable-smoke-0b5eb210f-preview.westus2.3.azurestaticapps.net
 
 ### 🏠 Desarrollo Local
 - **URL Local**: http://localhost:4200
@@ -65,7 +65,7 @@
 ## 🚀 Cómo Acceder
 
 ### 🌍 Producción (Azure)
-1. **Navegar a**: https://polite-flower-0f3168a1e.3.azurestaticapps.net
+1. **Navegar a**: https://agreeable-smoke-0b5eb210f.3.azurestaticapps.net/login
 2. **Abrir la consola del navegador (F12)** para ver logs de debugging
 3. **Iniciar sesión con**:
    - Email: admin@sinseg.com

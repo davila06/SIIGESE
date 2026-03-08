@@ -50,7 +50,7 @@ export class MockApiInterceptor implements HttpInterceptor {
     }
   ];
 
-  private cobros = [
+  private readonly cobros = [
     {
       id: 1,
       numeroRecibo: 'REC-2024-001',
@@ -129,7 +129,7 @@ export class MockApiInterceptor implements HttpInterceptor {
     }
   ];
 
-  private reclamos = [
+  private readonly reclamos = [
     {
       id: 1,
       numeroReclamo: 'REC-2024-001',
@@ -250,7 +250,7 @@ export class MockApiInterceptor implements HttpInterceptor {
   ];
 
   // Mock Email Configurations
-  private emailConfigs = [
+  private readonly emailConfigs = [
     {
       id: 1,
       configName: 'Gmail SINSEG',

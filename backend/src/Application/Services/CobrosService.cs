@@ -65,6 +65,12 @@ namespace Application.Services
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
 
+        public async Task<IEnumerable<CobroDto>> GetCobrosProximosPorPeriodicidadAsync()
+        {
+            var cobros = await _cobroRepository.GetCobrosProximosPorPeriodicidadAsync();
+            return _mapper.Map<IEnumerable<CobroDto>>(cobros);
+        }
+
         public async Task<CobroStatsDto> GetCobrosStatsAsync()
         {
             var totalCobros = (await _cobroRepository.GetAllAsync()).Count();
@@ -182,6 +188,194 @@ namespace Application.Services
         public async Task DeleteCobroAsync(int id)
         {
             await _cobroRepository.DeleteAsync(id);
+        }
+
+        public async Task<CobroDto> CancelarCobroAsync(int id, string? motivo = null)
+        {
+            var cobro = await _cobroRepository.GetByIdAsync(id);
+            if (cobro == null)
+                throw new ArgumentException($"Cobro con ID {id} no encontrado");
+
+            if (cobro.Estado == EstadoCobro.Pagado)
+                throw new InvalidOperationException("No se puede cancelar un cobro ya pagado");
+
+            cobro.Estado = EstadoCobro.Cancelado;
+            if (!string.IsNullOrWhiteSpace(motivo))
+                cobro.Observaciones = motivo;
+            cobro.UpdatedAt = DateTime.UtcNow;
+            cobro.UpdatedBy = "Sistema";
+
+            await _cobroRepository.UpdateAsync(cobro);
+            return _mapper.Map<CobroDto>(cobro);
+        }
+
+        public async Task<GenerarCobrosResultDto> GenerarCobrosAutomaticosAsync(int mesesAdelante = 3)
+        {
+            var resultado = new GenerarCobrosResultDto();
+            var polizas = await _unitOfWork.Polizas.GetActivasAsync();
+
+            foreach (var poliza in polizas)
+            {
+                try
+                {
+                    var cobrosGenerados = await GenerarCobrosPorPolizaInternoAsync(poliza, mesesAdelante);
+                    resultado.PolizasProcesadas++;
+                    resultado.CobrosGenerados += cobrosGenerados.Count;
+                    resultado.CobrosCreados.AddRange(cobrosGenerados);
+                }
+                catch (Exception ex)
+                {
+                    resultado.Errores.Add($"Error en póliza {poliza.NumeroPoliza}: {ex.Message}");
+                    resultado.PolizasSaltadas++;
+                }
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+            return resultado;
+        }
+
+        public async Task<GenerarCobrosResultDto> GenerarCobrosPorPolizaAsync(int polizaId, int mesesAdelante = 3)
+        {
+            var resultado = new GenerarCobrosResultDto();
+            var poliza = await _unitOfWork.Polizas.GetByIdAsync(polizaId);
+
+            if (poliza == null)
+            {
+                resultado.Errores.Add($"Póliza con ID {polizaId} no encontrada");
+                return resultado;
+            }
+
+            try
+            {
+                var cobrosGenerados = await GenerarCobrosPorPolizaInternoAsync(poliza, mesesAdelante);
+                resultado.PolizasProcesadas = 1;
+                resultado.CobrosGenerados = cobrosGenerados.Count;
+                resultado.CobrosCreados.AddRange(cobrosGenerados);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                resultado.Errores.Add($"Error: {ex.Message}");
+                resultado.PolizasSaltadas = 1;
+            }
+
+            return resultado;
+        }
+
+        private async Task<List<CobroGeneradoDto>> GenerarCobrosPorPolizaInternoAsync(Domain.Entities.Poliza poliza, int mesesAdelante)
+        {
+            var cobrosGenerados = new List<CobroGeneradoDto>();
+
+            // Validar que la póliza tenga los datos necesarios
+            if (string.IsNullOrEmpty(poliza.Frecuencia))
+            {
+                throw new InvalidOperationException("La póliza no tiene frecuencia de pago definida");
+            }
+
+            if (poliza.Prima <= 0)
+            {
+                throw new InvalidOperationException("La póliza no tiene prima definida");
+            }
+
+            // Obtener cobros existentes para esta póliza
+            var cobrosExistentes = await _cobroRepository.GetCobrosByPolizaIdAsync(poliza.Id);
+            var fechasExistentes = cobrosExistentes
+                .Select(c => c.FechaVencimiento.Date)
+                .ToHashSet();
+
+            // Calcular fechas de vencimiento según la frecuencia
+            var fechasVencimiento = CalcularFechasVencimiento(poliza.FechaVigencia, poliza.Frecuencia, mesesAdelante);
+
+            foreach (var fechaVencimiento in fechasVencimiento)
+            {
+                // Saltar si ya existe un cobro para esta fecha
+                if (fechasExistentes.Contains(fechaVencimiento.Date))
+                {
+                    continue;
+                }
+
+                // Generar número de recibo
+                var numeroRecibo = await GenerateNumeroReciboAsync();
+
+                // Crear el cobro
+                var cobro = new Cobro
+                {
+                    NumeroRecibo = numeroRecibo,
+                    PolizaId = poliza.Id,
+                    NumeroPoliza = poliza.NumeroPoliza,
+                    ClienteNombreCompleto = poliza.NombreAsegurado,
+                    CorreoElectronico = poliza.Correo,
+                    MontoTotal = poliza.Prima,
+                    MontoCobrado = 0,
+                    FechaVencimiento = fechaVencimiento,
+                    FechaCobro = DateTime.MinValue,
+                    Estado = EstadoCobro.Pendiente,
+                    MetodoPago = MetodoPago.NoDefinido,
+                    Moneda = poliza.Moneda ?? "CRC",
+                    Observaciones = $"Cobro generado automáticamente - Frecuencia: {poliza.Frecuencia}",
+                    UsuarioCobroId = 0,
+                    UsuarioCobroNombre = string.Empty,
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedBy = "Sistema - Auto Generación",
+                    IsDeleted = false
+                };
+
+                await _cobroRepository.AddAsync(cobro);
+
+                cobrosGenerados.Add(new CobroGeneradoDto
+                {
+                    NumeroRecibo = numeroRecibo,
+                    NumeroPoliza = poliza.NumeroPoliza,
+                    FechaVencimiento = fechaVencimiento,
+                    MontoTotal = poliza.Prima,
+                    Moneda = poliza.Moneda ?? "CRC"
+                });
+            }
+
+            return cobrosGenerados;
+        }
+
+        private List<DateTime> CalcularFechasVencimiento(DateTime fechaInicio, string frecuencia, int mesesAdelante)
+        {
+            var fechas = new List<DateTime>();
+            var fechaActual = DateTime.UtcNow.Date;
+            var fechaBase = fechaInicio.Date;
+
+            // Ajustar fecha base si es anterior a hoy
+            while (fechaBase < fechaActual)
+            {
+                fechaBase = AgregarPeriodo(fechaBase, frecuencia);
+            }
+
+            // Generar fechas hacia adelante
+            var fechaLimite = fechaActual.AddMonths(mesesAdelante);
+            var fechaGeneracion = fechaBase;
+
+            while (fechaGeneracion <= fechaLimite)
+            {
+                fechas.Add(fechaGeneracion);
+                fechaGeneracion = AgregarPeriodo(fechaGeneracion, frecuencia);
+            }
+
+            return fechas;
+        }
+
+        private DateTime AgregarPeriodo(DateTime fecha, string frecuencia)
+        {
+            var frecuenciaNormalizada = frecuencia.ToUpperInvariant().Trim();
+
+            return frecuenciaNormalizada switch
+            {
+                "MENSUAL" or "MONTHLY" or "MES" or "MONTH" => fecha.AddMonths(1),
+                "BIMESTRAL" or "BIMONTHLY" or "2 MESES" => fecha.AddMonths(2),
+                "TRIMESTRAL" or "QUARTERLY" or "3 MESES" or "QUARTER" => fecha.AddMonths(3),
+                "CUATRIMESTRAL" or "4 MESES" => fecha.AddMonths(4),
+                "SEMESTRAL" or "SEMIANNUAL" or "6 MESES" or "SEMESTER" => fecha.AddMonths(6),
+                "ANUAL" or "ANNUAL" or "YEARLY" or "AÑO" or "YEAR" or "ANO" => fecha.AddYears(1),
+                "QUINCENAL" or "BIWEEKLY" or "15 DIAS" => fecha.AddDays(15),
+                "SEMANAL" or "WEEKLY" or "WEEK" or "SEMANA" => fecha.AddDays(7),
+                _ => fecha.AddMonths(1) // Por defecto mensual
+            };
         }
     }
 }

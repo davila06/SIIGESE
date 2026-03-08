@@ -13,6 +13,7 @@ namespace Domain.Interfaces
         Task<IEnumerable<Cobro>> GetCobrosByEstadoAsync(EstadoCobro estado);
         Task<IEnumerable<Cobro>> GetCobrosVencidosAsync();
         Task<IEnumerable<Cobro>> GetCobrosProximosVencerAsync(int dias);
+        Task<IEnumerable<Cobro>> GetCobrosProximosPorPeriodicidadAsync();
         Task<int> GetTotalCobrosPendientesAsync();
         Task<decimal> GetMontoTotalPendienteAsync();
         Task<decimal> GetTotalCobradoAsync();

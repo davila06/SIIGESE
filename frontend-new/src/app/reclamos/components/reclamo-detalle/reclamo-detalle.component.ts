@@ -51,10 +51,10 @@ export class ReclamoDetalleComponent implements OnInit {
   PrioridadReclamo = PrioridadReclamo;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private reclamosService: ReclamosService,
-    private snackBar: MatSnackBar
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly reclamosService: ReclamosService,
+    private readonly snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {

@@ -81,11 +81,11 @@ export class CrearReclamoComponent implements OnInit {
   ];
 
   constructor(
-    private fb: FormBuilder,
-    private reclamosService: ReclamosService,
-    private polizasService: PolizasService,
-    private router: Router,
-    private snackBar: MatSnackBar
+    private readonly fb: FormBuilder,
+    private readonly reclamosService: ReclamosService,
+    private readonly polizasService: PolizasService,
+    private readonly router: Router,
+    private readonly snackBar: MatSnackBar
   ) {
     this.reclamoForm = this.fb.group({
       polizaBusqueda: [''],

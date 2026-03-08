@@ -8,7 +8,8 @@ import {
   RegistrarCobroRequest, 
   CobroStats,
   EstadoCobro,
-  MetodoPago 
+  MetodoPago,
+  GenerarCobrosResult
 } from '../interfaces/cobro.interface';
 
 @Injectable({
@@ -22,6 +23,13 @@ export class CobrosService {
   // Obtener todos los cobros
   getCobros(): Observable<Cobro[]> {
     return this.http.get<Cobro[]>(this.apiUrl);
+  }
+
+  // Obtener cobros próximos basados en periodicidad:
+  // - Mensual: siempre listados
+  // - Otras periodicidades: dentro del próximo mes
+  getCobrosProximos(): Observable<Cobro[]> {
+    return this.http.get<Cobro[]>(`${this.apiUrl}/proximos`);
   }
 
   // Obtener cobro por ID
@@ -71,6 +79,22 @@ export class CobrosService {
       fechaFin: fechaFin.toISOString().split('T')[0]
     };
     return this.http.get<Cobro[]>(`${this.apiUrl}/rango-fechas`, { params });
+  }
+
+  // Generar cobros automáticamente para todas las pólizas activas
+  generarCobrosAutomaticos(mesesAdelante: number = 3): Observable<GenerarCobrosResult> {
+    return this.http.post<GenerarCobrosResult>(
+      `${this.apiUrl}/generar-automaticos?mesesAdelante=${mesesAdelante}`, 
+      {}
+    );
+  }
+
+  // Generar cobros automáticamente para una póliza específica
+  generarCobrosPorPoliza(polizaId: number, mesesAdelante: number = 3): Observable<GenerarCobrosResult> {
+    return this.http.post<GenerarCobrosResult>(
+      `${this.apiUrl}/generar-por-poliza/${polizaId}?mesesAdelante=${mesesAdelante}`, 
+      {}
+    );
   }
 
   /*

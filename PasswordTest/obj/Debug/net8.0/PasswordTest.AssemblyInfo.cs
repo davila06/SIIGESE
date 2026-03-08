@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PasswordTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+547527f442396e076dda1429bb1d158b3e967bbf")]
 [assembly: System.Reflection.AssemblyProductAttribute("PasswordTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PasswordTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

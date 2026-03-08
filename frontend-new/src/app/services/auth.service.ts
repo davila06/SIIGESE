@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
+import { TokenService } from './token.service';
 import { User, LoginResponse, Role } from '../interfaces/user.interface';
 
 export interface ResetPasswordResponse {
@@ -16,16 +17,31 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private apiService: ApiService) {
+  constructor(
+    private apiService: ApiService,
+    private tokenService: TokenService
+  ) {
     // Verificar si hay usuario guardado en localStorage
     const savedUser = localStorage.getItem('currentUser');
     const authToken = localStorage.getItem('authToken');
     
     if (savedUser && authToken) {
       try {
-        const user = JSON.parse(savedUser);
-        this.currentUserSubject.next(user);
-        console.log('✅ Usuario cargado desde localStorage:', user);
+        // Verificar si el token no está expirado
+        if (this.tokenService.isTokenExpired(authToken)) {
+          console.warn('⚠️ Token expirado detectado al iniciar. Limpiando sesión...');
+          this.logout();
+        } else {
+          const user = JSON.parse(savedUser);
+          this.currentUserSubject.next(user);
+          console.log('✅ Usuario cargado desde localStorage:', user);
+          
+          // Mostrar información del token
+          const tokenInfo = this.tokenService.getTokenInfo();
+          if (tokenInfo) {
+            console.log('📋 Token info:', tokenInfo);
+          }
+        }
       } catch (error) {
         // Si hay error al parsear, limpiar localStorage
         console.error('❌ Error parseando usuario desde localStorage:', error);

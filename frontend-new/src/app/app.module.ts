@@ -112,6 +112,11 @@ export const CUSTOM_DATE_FORMATS = {
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
+      useClass: MockApiInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
     },

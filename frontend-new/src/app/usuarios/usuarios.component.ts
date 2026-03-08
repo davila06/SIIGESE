@@ -65,9 +65,9 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   pageSize = 10;
 
   constructor(
-    private fb: FormBuilder,
-    private apiService: ApiService,
-    private authService: AuthService
+    private readonly fb: FormBuilder,
+    private readonly apiService: ApiService,
+    private readonly authService: AuthService
   ) {
     this.initForm();
   }

@@ -68,9 +68,11 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource<Cobro>();
   cobros: Cobro[] = [];
+  cobrosProximos: Cobro[] = [];
   stats: CobroStats | null = null;
   loading = true;
   filtroEstado: number | null = null;
+  vistaProximos = true;
 
   // Enums para el template
   EstadoCobro = EstadoCobro;
@@ -81,18 +83,18 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
 
   constructor(
-    private cobrosService: CobrosService,
-    private snackBar: MatSnackBar,
-    private router: Router,
-    private dialog: MatDialog,
-    private exportService: ExportService
+    private readonly cobrosService: CobrosService,
+    private readonly snackBar: MatSnackBar,
+    private readonly router: Router,
+    private readonly dialog: MatDialog,
+    private readonly exportService: ExportService
   ) { 
     console.log('🔧 CobrosDashboardComponent inicializado con CobrosService');
   }
 
   ngOnInit(): void {
     console.log('🚀 CobrosDashboardComponent.ngOnInit()');
-    this.loadCobros();
+    this.loadCobrosProximos();
     this.loadStats();
   }
 
@@ -102,19 +104,42 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   loadCobros(): void {
-    console.log('📥 Cargando cobros...');
+    console.log('📥 Cargando todos los cobros...');
     this.loading = true;
+    this.vistaProximos = false;
     
     this.cobrosService.getCobros().subscribe({
       next: (cobros) => {
         console.log('✅ Cobros cargados:', cobros.length);
         this.cobros = cobros;
+        this.filtroEstado = null;
         this.dataSource.data = cobros;
         this.loading = false;
       },
       error: (error) => {
         console.error('❌ Error al cargar cobros:', error);
         this.showMessage('Error al cargar los cobros');
+        this.loading = false;
+      }
+    });
+  }
+
+  loadCobrosProximos(): void {
+    console.log('📥 Cargando cobros próximos por periodicidad...');
+    this.loading = true;
+    this.vistaProximos = true;
+
+    this.cobrosService.getCobrosProximos().subscribe({
+      next: (cobros) => {
+        console.log('✅ Cobros próximos cargados:', cobros.length);
+        this.cobrosProximos = cobros;
+        this.filtroEstado = null;
+        this.dataSource.data = cobros;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar cobros próximos:', error);
+        this.showMessage('Error al cargar los cobros próximos');
         this.loading = false;
       }
     });
@@ -143,10 +168,11 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   filtrarPorEstado(estado: number | null): void {
+    const listaBase = this.vistaProximos ? this.cobrosProximos : this.cobros;
     if (estado === null) {
-      this.dataSource.data = this.cobros;
+      this.dataSource.data = listaBase;
     } else {
-      this.dataSource.data = this.cobros.filter(cobro => cobro.estado === estado);
+      this.dataSource.data = listaBase.filter(cobro => cobro.estado === estado);
     }
     this.filtroEstado = estado;
   }
@@ -167,7 +193,11 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
             next: (cobro) => {
               console.log('✅ Cobro creado exitosamente:', cobro);
               this.showMessage('Cobro creado exitosamente');
-              this.loadCobros(); // Recargar lista
+              if (this.vistaProximos) {
+                this.loadCobrosProximos();
+              } else {
+                this.loadCobros();
+              }
               this.loadStats(); // Recargar estadísticas
             },
             error: (error) => {
@@ -254,8 +284,8 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     const columns: ExportColumn[] = [
       { key: 'numeroRecibo', header: 'No. Recibo', type: 'text' },
       { key: 'numeroPoliza', header: 'No. Póliza', type: 'text' },
-      { key: 'clienteNombre', header: 'Nombre Cliente', type: 'text' },
-      { key: 'clienteApellido', header: 'Apellido Cliente', type: 'text' },
+      { key: 'clienteNombreCompleto', header: 'Cliente', type: 'text' },
+      { key: 'correoElectronico', header: 'Correo', type: 'text' },
       { key: 'fechaVencimiento', header: 'Fecha Vencimiento', type: 'date', dateFormat: options.dateFormat },
       { key: 'montoTotal', header: 'Monto Total', type: 'currency', currencyCode: 'CRC' },
       { key: 'estado', header: 'Estado', type: 'text' },

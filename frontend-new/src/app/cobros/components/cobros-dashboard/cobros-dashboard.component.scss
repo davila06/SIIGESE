@@ -163,6 +163,36 @@
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
+    .vista-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+
+      button {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+    }
+
+    .vista-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background-color: rgba(33, 150, 243, 0.08);
+      color: #1565c0;
+      font-size: 13px;
+      margin-bottom: 16px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
     .filters-container {
       display: flex;
       flex-direction: column;
