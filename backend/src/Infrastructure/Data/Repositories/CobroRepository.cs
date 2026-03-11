@@ -72,6 +72,20 @@ namespace Infrastructure.Data.Repositories
             ).ToListAsync();
         }
 
+        public async Task<IEnumerable<Cobro>> GetCobrosByFrecuenciaAsync(string frecuencia)
+        {
+            var frecuenciaUpper = frecuencia.ToUpper().Trim();
+            return await (
+                from c in _context.Cobros
+                join p in _context.Polizas on c.PolizaId equals p.Id
+                where !c.IsDeleted
+                      && !p.IsDeleted
+                      && (p.Frecuencia ?? string.Empty).ToUpper() == frecuenciaUpper
+                orderby c.FechaVencimiento
+                select c
+            ).ToListAsync();
+        }
+
         public async Task<Cobro?> GetByNumeroReciboAsync(string numeroRecibo)
         {
             return await _context.Cobros

@@ -1,63 +1,62 @@
-<div class="cobros-dashboard">
-  <!-- Header con título y acciones -->
+﻿<div class="cobros-dashboard">
+
+  <!-- -----------------------------------------------------------------------
+       HEADER
+  -------------------------------------------------------------------------- -->
   <div class="dashboard-header">
     <h1 class="page-title">
-      <mat-icon>payment</mat-icon>
+      <mat-icon>payments</mat-icon>
       Gestión de Cobros
     </h1>
     <div class="header-actions">
-      <button mat-raised-button color="accent" (click)="agregarCobro()" class="add-button">
+      <button mat-raised-button color="primary" (click)="agregarCobro()">
         <mat-icon>add</mat-icon>
         Nuevo Cobro
       </button>
-      <button mat-raised-button color="primary" (click)="exportarCobros()">
+      <button mat-stroked-button (click)="exportarCobros()">
         <mat-icon>download</mat-icon>
         Exportar
       </button>
     </div>
   </div>
 
-  <!-- Cards de estadísticas -->
+  <!-- -----------------------------------------------------------------------
+       STATS
+  -------------------------------------------------------------------------- -->
   <div class="stats-container" *ngIf="stats">
-    <mat-card class="stat-card pending">
+    <mat-card class="stat-card stat-pending">
       <mat-card-content>
         <div class="stat-content">
-          <div class="stat-icon">
-            <mat-icon>schedule</mat-icon>
-          </div>
+          <div class="stat-icon"><mat-icon>schedule</mat-icon></div>
           <div class="stat-info">
             <h3>{{ stats.totalPendientes }}</h3>
-            <p>Cobros Pendientes</p>
+            <p>Pendientes</p>
             <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoTotalPendiente | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card collected">
+    <mat-card class="stat-card stat-collected">
       <mat-card-content>
         <div class="stat-content">
-          <div class="stat-icon">
-            <mat-icon>check_circle</mat-icon>
-          </div>
+          <div class="stat-icon"><mat-icon>check_circle</mat-icon></div>
           <div class="stat-info">
             <h3>{{ stats.totalCobrados }}</h3>
-            <p>Cobros Realizados</p>
+            <p>Cobrados</p>
             <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoTotalCobrado | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
     </mat-card>
 
-    <mat-card class="stat-card overdue">
+    <mat-card class="stat-card stat-overdue">
       <mat-card-content>
         <div class="stat-content">
-          <div class="stat-icon">
-            <mat-icon>warning</mat-icon>
-          </div>
+          <div class="stat-icon"><mat-icon>warning</mat-icon></div>
           <div class="stat-info">
             <h3>{{ stats.totalVencidos }}</h3>
-            <p>Cobros Vencidos</p>
+            <p>Vencidos</p>
             <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoPorVencer | number:'1.2-2' }}</span>
           </div>
         </div>
@@ -65,227 +64,212 @@
     </mat-card>
   </div>
 
-  <!-- Loading para estadísticas -->
-  <div class="stats-loading" *ngIf="!stats">
-    <mat-card class="stat-card">
+  <div class="stats-container" *ngIf="!stats">
+    <mat-card class="stat-card" *ngFor="let i of [1,2,3]">
       <mat-card-content>
-        <mat-spinner diameter="40"></mat-spinner>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <mat-spinner diameter="40"></mat-spinner>
-      </mat-card-content>
-    </mat-card>
-    <mat-card class="stat-card">
-      <mat-card-content>
-        <mat-spinner diameter="40"></mat-spinner>
+        <div class="stat-content">
+          <mat-spinner diameter="36"></mat-spinner>
+        </div>
       </mat-card-content>
     </mat-card>
   </div>
 
-  <!-- Filtros y controles -->
-  <mat-card class="filters-card">
-    <mat-card-content>
-      <!-- Toggle vista Próximos / Todos -->
-      <div class="vista-toggle">
-        <button
-          mat-raised-button
-          [color]="vistaProximos ? 'primary' : ''"
-          (click)="loadCobrosProximos()"
-          matTooltip="Mensual: siempre listados. Otras periodicidades: próximos 30 días">
-          <mat-icon>upcoming</mat-icon>
-          Próximos Cobros
-        </button>
-        <button
-          mat-button
-          [color]="!vistaProximos ? 'primary' : ''"
-          (click)="loadCobros()">
-          <mat-icon>list</mat-icon>
-          Todos los Cobros
-        </button>
-      </div>
-
-      <!-- Indicador de vista activa -->
-      <div class="vista-info" *ngIf="vistaProximos">
-        <mat-icon>info</mat-icon>
-        <span>Mostrando cobros pendientes: periodicidad mensual (siempre) y otras periodicidades con vencimiento en los próximos 30 días.</span>
-      </div>
-
-      <div class="filters-container">
-        <mat-form-field class="search-field" appearance="outline">
-          <mat-label>Buscar cobros</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Buscar por recibo, póliza o cliente...">
-          <mat-icon matSuffix>search</mat-icon>
-        </mat-form-field>
-
-        <div class="filter-chips">
-          <mat-chip-set>
-            <mat-chip 
-              [class.selected]="filtroEstado === null"
-              (click)="filtrarPorEstado(null)">
-              Todos
-            </mat-chip>
-            <mat-chip 
-              [class.selected]="filtroEstado === EstadoCobro.Pendiente"
-              (click)="filtrarPorEstado(EstadoCobro.Pendiente)">
-              Pendientes
-            </mat-chip>
-            <mat-chip 
-              [class.selected]="filtroEstado === EstadoCobro.Cobrado"
-              (click)="filtrarPorEstado(EstadoCobro.Cobrado)">
-              Cobrados
-            </mat-chip>
-            <mat-chip 
-              [class.selected]="filtroEstado === EstadoCobro.Vencido"
-              (click)="filtrarPorEstado(EstadoCobro.Vencido)">
-              Vencidos
-            </mat-chip>
-          </mat-chip-set>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-
-  <!-- Tabla de cobros -->
+  <!-- -----------------------------------------------------------------------
+       PERIOCIDAD TABS + FILTROS + TABLA
+  -------------------------------------------------------------------------- -->
   <mat-card class="table-card">
-    <mat-card-content>
-      <div class="table-container">
-        <!-- Loading spinner -->
-        <div class="loading-container" *ngIf="loading">
+    <mat-tab-group
+      [selectedIndex]="selectedTabIndex"
+      (selectedTabChange)="onTabChange($event)"
+      animationDuration="150ms"
+      class="cobros-tabs">
+
+      <mat-tab *ngFor="let tab of periodicidadTabs; let i = index">
+
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">{{ tab.icon }}</mat-icon>
+          <span class="tab-text">{{ tab.label }}</span>
+          <span class="tab-badge" *ngIf="tab.loaded && tab.dataSource.data.length > 0">
+            {{ tab.dataSource.data.length }}
+          </span>
+        </ng-template>
+
+        <!-- Filters bar -->
+        <div class="filters-bar">
+          <mat-form-field class="search-field" appearance="outline">
+            <mat-label>Buscar cobros</mat-label>
+            <input matInput
+              [value]="getSearchValue(i)"
+              (input)="applyFilter($event, i)"
+              placeholder="Recibo, póliza, cliente, correo...">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <div class="estado-chips">
+            <span class="filter-label">Estado:</span>
+            <mat-chip-set>
+              <mat-chip [class.selected]="getFiltroEstado(i) === null"
+                (click)="filtrarPorEstado(null, i)">Todos</mat-chip>
+              <mat-chip [class.selected]="getFiltroEstado(i) === EstadoCobro.Pendiente"
+                (click)="filtrarPorEstado(EstadoCobro.Pendiente, i)">Pendientes</mat-chip>
+              <mat-chip [class.selected]="getFiltroEstado(i) === EstadoCobro.Cobrado"
+                (click)="filtrarPorEstado(EstadoCobro.Cobrado, i)">Cobrados</mat-chip>
+              <mat-chip [class.selected]="getFiltroEstado(i) === EstadoCobro.Vencido"
+                (click)="filtrarPorEstado(EstadoCobro.Vencido, i)">Vencidos</mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-container" *ngIf="tab.loading">
           <mat-spinner></mat-spinner>
-          <p>Cargando cobros...</p>
+          <p>Cargando cobros {{ tab.label | lowercase }}…</p>
         </div>
 
-        <!-- Tabla -->
-        <table mat-table [dataSource]="dataSource" matSort *ngIf="!loading" class="cobros-table">
-          <!-- Columna Número de Recibo -->
-          <ng-container matColumnDef="numeroRecibo">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Recibo</th>
-            <td mat-cell *matCellDef="let cobro">{{ cobro.numeroRecibo }}</td>
-          </ng-container>
+        <!-- Table -->
+        <div class="table-container" *ngIf="!tab.loading">
+          <table mat-table [dataSource]="tab.dataSource" matSort class="cobros-table">
 
-          <!-- Columna Número de Póliza -->
-          <ng-container matColumnDef="numeroPoliza">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Póliza</th>
-            <td mat-cell *matCellDef="let cobro">{{ cobro.numeroPoliza }}</td>
-          </ng-container>
+            <!-- Número Recibo -->
+            <ng-container matColumnDef="numeroRecibo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Recibo</th>
+              <td mat-cell *matCellDef="let cobro"><strong>{{ cobro.numeroRecibo }}</strong></td>
+            </ng-container>
 
-          <!-- Columna Cliente -->
-          <ng-container matColumnDef="cliente">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
-            <td mat-cell *matCellDef="let cobro">
-              {{ cobro.clienteNombreCompleto }}
-            </td>
-          </ng-container>
+            <!-- Número Póliza -->
+            <ng-container matColumnDef="numeroPoliza">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Póliza</th>
+              <td mat-cell *matCellDef="let cobro">{{ cobro.numeroPoliza }}</td>
+            </ng-container>
 
-          <!-- Columna Correo Electrónico -->
-          <ng-container matColumnDef="correoElectronico">
-            <th mat-header-cell *matHeaderCellDef>Email</th>
-            <td mat-cell *matCellDef="let cobro">
-              <span *ngIf="cobro.correoElectronico" class="email-cell">
-                <mat-icon class="email-icon">email</mat-icon>
-                {{ cobro.correoElectronico }}
-              </span>
-              <span *ngIf="!cobro.correoElectronico" class="no-email">-</span>
-            </td>
-          </ng-container>
+            <!-- Cliente -->
+            <ng-container matColumnDef="cliente">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+              <td mat-cell *matCellDef="let cobro">{{ cobro.clienteNombreCompleto }}</td>
+            </ng-container>
 
-          <!-- Columna Fecha de Vencimiento -->
-          <ng-container matColumnDef="fechaVencimiento">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimiento</th>
-            <td mat-cell *matCellDef="let cobro">
-              {{ cobro.fechaVencimiento | date:'dd-MM-yyyy' }}
-            </td>
-          </ng-container>
+            <!-- Correo Electrónico -->
+            <ng-container matColumnDef="correoElectronico">
+              <th mat-header-cell *matHeaderCellDef>Correo</th>
+              <td mat-cell *matCellDef="let cobro">
+                <span class="email-cell" *ngIf="cobro.correoElectronico">
+                  <mat-icon class="email-icon">email</mat-icon>
+                  {{ cobro.correoElectronico }}
+                </span>
+                <span class="no-email" *ngIf="!cobro.correoElectronico">—</span>
+              </td>
+            </ng-container>
 
-          <!-- Columna Monto Total -->
-          <ng-container matColumnDef="montoTotal">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
-            <td mat-cell *matCellDef="let cobro">
-              {{ getCurrencySymbol(cobro.moneda) }}{{ cobro.montoTotal | number:'1.2-2' }}
-            </td>
-          </ng-container>
+            <!-- Fecha Vencimiento -->
+            <ng-container matColumnDef="fechaVencimiento">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimiento</th>
+              <td mat-cell *matCellDef="let cobro">{{ cobro.fechaVencimiento | date:'dd/MM/yyyy' }}</td>
+            </ng-container>
 
-          <!-- Columna Estado -->
-          <ng-container matColumnDef="estado">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-            <td mat-cell *matCellDef="let cobro">
-              <mat-chip [color]="getEstadoColor(cobro.estado)" selected>
-                <mat-icon matChipAvatar>{{ getEstadoIcon(cobro.estado) }}</mat-icon>
-                {{ getEstadoLabel(cobro.estado) }}
-              </mat-chip>
-            </td>
-          </ng-container>
+            <!-- Monto Total -->
+            <ng-container matColumnDef="montoTotal">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
+              <td mat-cell *matCellDef="let cobro">
+                <strong>{{ getCurrencySymbol(cobro.moneda) }}{{ cobro.montoTotal | number:'1.2-2' }}</strong>
+              </td>
+            </ng-container>
 
-          <!-- Columna Fecha de Cobro -->
-          <ng-container matColumnDef="fechaCobro">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha Cobro</th>
-            <td mat-cell *matCellDef="let cobro">
-              {{ cobro.fechaCobro ? (cobro.fechaCobro | date:'dd-MM-yyyy') : '-' }}
-            </td>
-          </ng-container>
+            <!-- Estado -->
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+              <td mat-cell *matCellDef="let cobro">
+                <span class="estado-badge" [ngClass]="getEstadoBadgeClass(cobro.estado)">
+                  <mat-icon>{{ getEstadoIcon(cobro.estado) }}</mat-icon>
+                  {{ getEstadoLabel(cobro.estado) }}
+                </span>
+              </td>
+            </ng-container>
 
-          <!-- Columna Método de Pago -->
-          <ng-container matColumnDef="metodoPago">
-            <th mat-header-cell *matHeaderCellDef>Método Pago</th>
-            <td mat-cell *matCellDef="let cobro">
-              {{ cobro.metodoPago !== null ? getMetodoPagoLabel(cobro.metodoPago) : '-' }}
-            </td>
-          </ng-container>
+            <!-- Fecha Cobro -->
+            <ng-container matColumnDef="fechaCobro">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Cobro</th>
+              <td mat-cell *matCellDef="let cobro">
+                {{ cobro.fechaCobro ? (cobro.fechaCobro | date:'dd/MM/yyyy') : '—' }}
+              </td>
+            </ng-container>
 
-          <!-- Columna Acciones -->
-          <ng-container matColumnDef="acciones">
-            <th mat-header-cell *matHeaderCellDef>Acciones</th>
-            <td mat-cell *matCellDef="let cobro">
-              <div class="action-buttons">
-                <button 
-                  mat-icon-button 
-                  color="primary"
-                  (click)="verDetalle(cobro)"
-                  matTooltip="Ver detalle">
-                  <mat-icon>visibility</mat-icon>
-                </button>
-                
-                <button 
-                  mat-icon-button 
-                  color="accent"
-                  *ngIf="cobro.estado === EstadoCobro.Pendiente"
-                  (click)="registrarCobro(cobro)"
-                  matTooltip="Registrar cobro">
-                  <mat-icon>payment</mat-icon>
-                </button>
-                
-                <button 
-                  mat-icon-button 
-                  color="warn"
-                  *ngIf="cobro.estado === EstadoCobro.Pendiente"
-                  (click)="cancelarCobro(cobro)"
-                  matTooltip="Cancelar cobro">
-                  <mat-icon>cancel</mat-icon>
-                </button>
-              </div>
-            </td>
-          </ng-container>
+            <!-- Método Pago -->
+            <ng-container matColumnDef="metodoPago">
+              <th mat-header-cell *matHeaderCellDef>Método</th>
+              <td mat-cell *matCellDef="let cobro">
+                {{ cobro.metodoPago !== null && cobro.metodoPago !== undefined ? getMetodoPagoLabel(cobro.metodoPago) : '—' }}
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+            <!-- Acciones -->
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let cobro">
+                <div class="row-actions">
+                  <button mat-icon-button color="primary"
+                    (click)="verDetalle(cobro)"
+                    matTooltip="Ver detalle">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
 
-        <!-- Mensaje cuando no hay datos -->
-        <div class="no-data" *ngIf="!loading && dataSource.data.length === 0">
-          <mat-icon>payment_off</mat-icon>
-          <h3>No hay cobros disponibles</h3>
-          <p>No se encontraron cobros que coincidan con los filtros aplicados.</p>
+                  <!-- Enviar Email -->
+                  <button mat-icon-button
+                    class="btn-email"
+                    *ngIf="cobro.correoElectronico"
+                    [disabled]="isEmailSending(cobro.id)"
+                    (click)="enviarEmail(cobro)"
+                    [matTooltip]="'Enviar email a ' + cobro.correoElectronico">
+                    <mat-spinner *ngIf="isEmailSending(cobro.id)" diameter="20"></mat-spinner>
+                    <mat-icon *ngIf="!isEmailSending(cobro.id)">send</mat-icon>
+                  </button>
+
+                  <button mat-icon-button color="accent"
+                    *ngIf="cobro.estado === EstadoCobro.Pendiente"
+                    (click)="registrarCobro(cobro)"
+                    matTooltip="Registrar pago">
+                    <mat-icon>payment</mat-icon>
+                  </button>
+
+                  <button mat-icon-button color="warn"
+                    *ngIf="cobro.estado === EstadoCobro.Pendiente"
+                    (click)="cancelarCobro(cobro)"
+                    matTooltip="Cancelar cobro">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                <div class="no-data-row">
+                  <mat-icon>search_off</mat-icon>
+                  <span>No hay resultados para el filtro aplicado</span>
+                </div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Empty state -->
+          <div class="empty-state" *ngIf="tab.loaded && tab.cobros.length === 0">
+            <mat-icon>payments</mat-icon>
+            <h3>No hay cobros disponibles</h3>
+            <p>No se encontraron cobros con periodicidad {{ tab.label | lowercase }}</p>
+          </div>
+
+          <mat-paginator
+            *ngIf="tab.loaded && tab.cobros.length > 0"
+            [pageSizeOptions]="[10, 25, 50, 100]"
+            [pageSize]="25"
+            showFirstLastButtons>
+          </mat-paginator>
         </div>
 
-        <!-- Paginador -->
-        <mat-paginator 
-          *ngIf="!loading && dataSource.data.length > 0"
-          [pageSizeOptions]="[10, 25, 50, 100]"
-          showFirstLastButtons>
-        </mat-paginator>
-      </div>
-    </mat-card-content>
+      </mat-tab>
+    </mat-tab-group>
   </mat-card>
+
 </div>

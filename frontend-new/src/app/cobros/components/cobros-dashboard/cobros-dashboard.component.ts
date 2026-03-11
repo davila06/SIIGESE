@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -14,6 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
+import { MatBadgeModule } from '@angular/material/badge';
 import { 
   Cobro, 
   CobroStats, 
@@ -27,6 +29,16 @@ import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
+
+export interface PeriodicidadTab {
+  label: string;
+  frecuencia: string | null;  // null = "Todos"
+  icon: string;
+  cobros: Cobro[];
+  dataSource: MatTableDataSource<Cobro>;
+  loading: boolean;
+  loaded: boolean;
+}
 
 @Component({
   selector: 'app-cobros-dashboard',
@@ -44,14 +56,16 @@ import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../
     MatFormFieldModule,
     MatChipsModule,
     MatProgressSpinnerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTabsModule,
+    MatBadgeModule
   ],
   templateUrl: './cobros-dashboard.component.html',
   styleUrls: ['./cobros-dashboard.component.scss']
 })
 export class CobrosDashboardComponent implements OnInit, AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
+  @ViewChildren(MatSort) sorts!: QueryList<MatSort>;
 
   displayedColumns: string[] = [
     'numeroRecibo',
@@ -66,13 +80,23 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     'acciones'
   ];
 
-  dataSource = new MatTableDataSource<Cobro>();
-  cobros: Cobro[] = [];
-  cobrosProximos: Cobro[] = [];
+  // ─── Tabs de periodicidad ───────────────────────────────────────────────────
+  periodicidadTabs: PeriodicidadTab[] = [
+    { label: 'Próximos', frecuencia: 'PROXIMOS', icon: 'upcoming', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+    { label: 'Mensual',  frecuencia: 'MENSUAL',  icon: 'calendar_month', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+    { label: 'Bimestral', frecuencia: 'BIMESTRAL', icon: 'event_repeat', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+    { label: 'Trimestral', frecuencia: 'TRIMESTRAL', icon: 'date_range', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+    { label: 'Cuatrimestral', frecuencia: 'CUATRIMESTRAL', icon: 'event_note', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+    { label: 'Semestral', frecuencia: 'SEMESTRAL', icon: 'calendar_today', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+    { label: 'Anual',    frecuencia: 'ANUAL',    icon: 'calendar_view_year', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+    { label: 'Todos',    frecuencia: null,       icon: 'list_alt', cobros: [], dataSource: new MatTableDataSource<Cobro>(), loading: false, loaded: false },
+  ];
+
+  selectedTabIndex = 0;
   stats: CobroStats | null = null;
-  loading = true;
-  filtroEstado: number | null = null;
-  vistaProximos = true;
+  filtroEstadoMap: Map<number, number | null> = new Map(); // tabIndex → estado filter
+  searchValueMap: Map<number, string> = new Map();         // tabIndex → search string
+  emailSendingMap: Map<number, boolean> = new Map();       // cobro.id → sending state
 
   // Enums para el template
   EstadoCobro = EstadoCobro;
@@ -93,88 +117,99 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    console.log('🚀 CobrosDashboardComponent.ngOnInit()');
-    this.loadCobrosProximos();
     this.loadStats();
+    this.loadTab(0); // Cargar el primer tab (Próximos) al inicio
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // Paginators/sorts se asignan dinámicamente en loadTab
   }
 
-  loadCobros(): void {
-    console.log('📥 Cargando todos los cobros...');
-    this.loading = true;
-    this.vistaProximos = false;
-    
-    this.cobrosService.getCobros().subscribe({
+  // ─── Carga de tabs ──────────────────────────────────────────────────────────
+  onTabChange(event: MatTabChangeEvent): void {
+    this.selectedTabIndex = event.index;
+    const tab = this.periodicidadTabs[event.index];
+    if (!tab.loaded) {
+      this.loadTab(event.index);
+    } else {
+      // Re-assign paginator/sort; lazy tabs destroy/recreate DOM on switch
+      this.assignPaginatorSort(event.index);
+    }
+  }
+
+  loadTab(index: number): void {
+    const tab = this.periodicidadTabs[index];
+    if (tab.loading) return;
+
+    tab.loading = true;
+
+    const obs = tab.frecuencia === null
+      ? this.cobrosService.getCobros()
+      : tab.frecuencia === 'PROXIMOS'
+        ? this.cobrosService.getCobrosProximos()
+        : this.cobrosService.getCobrosByFrecuencia(tab.frecuencia);
+
+    obs.subscribe({
       next: (cobros) => {
-        console.log('✅ Cobros cargados:', cobros.length);
-        this.cobros = cobros;
-        this.filtroEstado = null;
-        this.dataSource.data = cobros;
-        this.loading = false;
+        tab.cobros = cobros;
+        tab.dataSource.data = cobros;
+        tab.loading = false;
+        tab.loaded = true;
+        this.assignPaginatorSort(index);
       },
-      error: (error) => {
-        console.error('❌ Error al cargar cobros:', error);
-        this.showMessage('Error al cargar los cobros');
-        this.loading = false;
+      error: () => {
+        this.showMessage(`Error al cargar cobros ${tab.label}`);
+        tab.loading = false;
       }
     });
   }
 
-  loadCobrosProximos(): void {
-    console.log('📥 Cargando cobros próximos por periodicidad...');
-    this.loading = true;
-    this.vistaProximos = true;
+  reloadCurrentTab(): void {
+    const tab = this.periodicidadTabs[this.selectedTabIndex];
+    tab.loaded = false;
+    this.loadTab(this.selectedTabIndex);
+  }
 
-    this.cobrosService.getCobrosProximos().subscribe({
-      next: (cobros) => {
-        console.log('✅ Cobros próximos cargados:', cobros.length);
-        this.cobrosProximos = cobros;
-        this.filtroEstado = null;
-        this.dataSource.data = cobros;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('❌ Error al cargar cobros próximos:', error);
-        this.showMessage('Error al cargar los cobros próximos');
-        this.loading = false;
-      }
+  private assignPaginatorSort(index: number): void {
+    setTimeout(() => {
+      const tab = this.periodicidadTabs[index];
+      // With lazy tab rendering only the active tab's DOM exists,
+      // so .first always references the current tab's paginator/sort
+      if (this.paginators.first) tab.dataSource.paginator = this.paginators.first;
+      if (this.sorts.first)     tab.dataSource.sort     = this.sorts.first;
     });
   }
 
   loadStats(): void {
-    console.log('📊 Cargando estadísticas...');
     this.cobrosService.getCobroStats().subscribe({
-      next: (stats) => {
-        console.log('✅ Estadísticas cargadas:', stats);
-        this.stats = stats;
-      },
-      error: (error) => {
-        console.error('❌ Error al cargar estadísticas:', error);
-      }
+      next: (stats) => { this.stats = stats; },
+      error: () => {}
     });
   }
 
-  applyFilter(event: Event): void {
+  // ─── Filtros de búsqueda/estado ─────────────────────────────────────────────
+  applyFilter(event: Event, tabIndex: number): void {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.searchValueMap.set(tabIndex, filterValue);
+    const tab = this.periodicidadTabs[tabIndex];
+    tab.dataSource.filter = filterValue.trim().toLowerCase();
+    if (tab.dataSource.paginator) tab.dataSource.paginator.firstPage();
   }
 
-  filtrarPorEstado(estado: number | null): void {
-    const listaBase = this.vistaProximos ? this.cobrosProximos : this.cobros;
-    if (estado === null) {
-      this.dataSource.data = listaBase;
-    } else {
-      this.dataSource.data = listaBase.filter(cobro => cobro.estado === estado);
-    }
-    this.filtroEstado = estado;
+  getSearchValue(tabIndex: number): string {
+    return this.searchValueMap.get(tabIndex) ?? '';
+  }
+
+  filtrarPorEstado(estado: number | null, tabIndex: number): void {
+    this.filtroEstadoMap.set(tabIndex, estado);
+    const tab = this.periodicidadTabs[tabIndex];
+    const base = tab.cobros;
+    tab.dataSource.data = estado === null ? base : base.filter(c => c.estado === estado);
+    if (tab.dataSource.paginator) tab.dataSource.paginator.firstPage();
+  }
+
+  getFiltroEstado(tabIndex: number): number | null {
+    return this.filtroEstadoMap.get(tabIndex) ?? null;
   }
 
   agregarCobro(): void {
@@ -188,20 +223,13 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
       dialogRef.afterClosed().subscribe((result: CobroRequest | undefined) => {
         if (result) {
-          console.log('✅ Guardando nuevo cobro:', result);
           this.cobrosService.createCobro(result).subscribe({
-            next: (cobro) => {
-              console.log('✅ Cobro creado exitosamente:', cobro);
+            next: () => {
               this.showMessage('Cobro creado exitosamente');
-              if (this.vistaProximos) {
-                this.loadCobrosProximos();
-              } else {
-                this.loadCobros();
-              }
-              this.loadStats(); // Recargar estadísticas
+              this.reloadCurrentTab();
+              this.loadStats();
             },
             error: (error) => {
-              console.error('❌ Error al crear cobro:', error);
               this.showMessage('Error al crear el cobro: ' + (error.error?.message || error.message));
             }
           });
@@ -223,11 +251,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
           this.cobrosService.registrarCobro(result).subscribe({
             next: () => {
               this.showMessage('Cobro registrado exitosamente');
-              if (this.vistaProximos) {
-                this.loadCobrosProximos();
-              } else {
-                this.loadCobros();
-              }
+              this.reloadCurrentTab();
               this.loadStats();
             },
             error: (err) => {
@@ -243,6 +267,29 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/cobros/detalle', cobro.id]);
   }
 
+  enviarEmail(cobro: Cobro): void {
+    if (!cobro.correoElectronico) {
+      this.showMessage('Este cobro no tiene correo electrónico asociado');
+      return;
+    }
+    this.emailSendingMap.set(cobro.id, true);
+    this.cobrosService.enviarEmailCobro(cobro.id).subscribe({
+      next: (res) => {
+        this.emailSendingMap.delete(cobro.id);
+        this.showMessage(res.message || `Email enviado a ${cobro.correoElectronico}`);
+      },
+      error: (err) => {
+        this.emailSendingMap.delete(cobro.id);
+        const msg = err?.error?.message || err?.message || 'Error desconocido';
+        this.showMessage('Error al enviar email: ' + msg);
+      }
+    });
+  }
+
+  isEmailSending(cobroId: number): boolean {
+    return this.emailSendingMap.get(cobroId) ?? false;
+  }
+
   cancelarCobro(cobro: Cobro): void {
     import('../cancelar-cobro-dialog/cancelar-cobro-dialog.component').then(m => {
       const dialogRef = this.dialog.open(m.CancelarCobroDialogComponent, {
@@ -256,11 +303,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
           this.cobrosService.cancelarCobro(cobro.id, motivo).subscribe({
             next: () => {
               this.showMessage('Cobro cancelado exitosamente');
-              if (this.vistaProximos) {
-                this.loadCobrosProximos();
-              } else {
-                this.loadCobros();
-              }
+              this.reloadCurrentTab();
               this.loadStats();
             },
             error: (err) => {
@@ -274,38 +317,38 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   getEstadoColor(estado: EstadoCobro): string {
     switch (estado) {
-      case EstadoCobro.Pendiente:
-        return 'primary';
-      case EstadoCobro.Cobrado:
-        return 'accent';
-      case EstadoCobro.Vencido:
-        return 'warn';
-      case EstadoCobro.Cancelado:
-        return '';
-      default:
-        return '';
+      case EstadoCobro.Pendiente: return 'primary';
+      case EstadoCobro.Cobrado:   return 'accent';
+      case EstadoCobro.Vencido:   return 'warn';
+      default:                    return '';
     }
   }
 
   getEstadoIcon(estado: EstadoCobro): string {
     switch (estado) {
-      case EstadoCobro.Pendiente:
-        return 'schedule';
-      case EstadoCobro.Cobrado:
-        return 'check_circle';
-      case EstadoCobro.Vencido:
-        return 'warning';
-      case EstadoCobro.Cancelado:
-        return 'cancel';
-      default:
-        return 'help';
+      case EstadoCobro.Pendiente:  return 'schedule';
+      case EstadoCobro.Cobrado:    return 'check_circle';
+      case EstadoCobro.Vencido:    return 'warning';
+      case EstadoCobro.Cancelado:  return 'cancel';
+      default:                     return 'help';
+    }
+  }
+
+  getEstadoBadgeClass(estado: EstadoCobro): string {
+    switch (estado) {
+      case EstadoCobro.Pendiente:  return 'badge-pendiente';
+      case EstadoCobro.Cobrado:    return 'badge-cobrado';
+      case EstadoCobro.Vencido:    return 'badge-vencido';
+      case EstadoCobro.Cancelado:  return 'badge-cancelado';
+      default:                     return '';
     }
   }
 
   exportarCobros(): void {
-    const dataToExport = this.dataSource.filteredData.length > 0 
-      ? this.dataSource.filteredData 
-      : this.cobros;
+    const tab = this.periodicidadTabs[this.selectedTabIndex];
+    const dataToExport = tab.dataSource.filteredData.length > 0
+      ? tab.dataSource.filteredData
+      : tab.cobros;
 
     const dialogData: ExportDialogData = {
       title: 'Exportar Cobros',

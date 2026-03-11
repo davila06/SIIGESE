@@ -5,6 +5,7 @@ export interface Cobro {
   numeroPoliza: string;
   clienteNombreCompleto: string;
   correoElectronico?: string;
+  frecuencia?: string;
   fechaVencimiento: Date;
   fechaCobro?: Date;
   montoTotal: number;

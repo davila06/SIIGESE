@@ -71,6 +71,13 @@ export class CobrosService {
     return this.http.get<CobroStats>(`${this.apiUrl}/stats`);
   }
 
+  // Obtener cobros por frecuencia de póliza (MENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL, etc.)
+  getCobrosByFrecuencia(frecuencia: string): Observable<Cobro[]> {
+    return this.http.get<Cobro[]>(`${this.apiUrl}/frecuencia/${frecuencia}`).pipe(
+      map(cobros => cobros.map(c => this.normalizeCobro(c)))
+    );
+  }
+
   // Obtener cobros por estado
   getCobrosByEstado(estado: EstadoCobro): Observable<Cobro[]> {
     return this.http.get<Cobro[]>(`${this.apiUrl}/estado/${estado}`);
@@ -109,6 +116,11 @@ export class CobrosService {
       `${this.apiUrl}/generar-por-poliza/${polizaId}?mesesAdelante=${mesesAdelante}`, 
       {}
     );
+  }
+
+  // Enviar correo electrónico de notificación de cobro
+  enviarEmailCobro(id: number): Observable<{ message: string }> {
+    return this.http.post<{ message: string }>(`${this.apiUrl}/${id}/enviar-email`, {});
   }
 
   /*

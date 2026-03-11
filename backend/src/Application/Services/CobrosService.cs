@@ -15,12 +15,14 @@ namespace Application.Services
         private readonly ICobroRepository _cobroRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IEmailService _emailService;
 
-        public CobrosService(ICobroRepository cobroRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        public CobrosService(ICobroRepository cobroRepository, IUnitOfWork unitOfWork, IMapper mapper, IEmailService emailService)
         {
             _cobroRepository = cobroRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         public async Task<IEnumerable<CobroDto>> GetAllCobrosAsync()
@@ -68,6 +70,12 @@ namespace Application.Services
         public async Task<IEnumerable<CobroDto>> GetCobrosProximosPorPeriodicidadAsync()
         {
             var cobros = await _cobroRepository.GetCobrosProximosPorPeriodicidadAsync();
+            return _mapper.Map<IEnumerable<CobroDto>>(cobros);
+        }
+
+        public async Task<IEnumerable<CobroDto>> GetCobrosByFrecuenciaAsync(string frecuencia)
+        {
+            var cobros = await _cobroRepository.GetCobrosByFrecuenciaAsync(frecuencia);
             return _mapper.Map<IEnumerable<CobroDto>>(cobros);
         }
 
@@ -191,6 +199,39 @@ namespace Application.Services
         public async Task DeleteCobroAsync(int id)
         {
             await _cobroRepository.DeleteAsync(id);
+        }
+
+        public async Task<(bool Success, string Message)> EnviarEmailCobroAsync(int id)
+        {
+            var cobro = await _cobroRepository.GetByIdAsync(id);
+            if (cobro == null)
+                throw new KeyNotFoundException($"Cobro con ID {id} no encontrado");
+
+            if (string.IsNullOrWhiteSpace(cobro.CorreoElectronico))
+                return (false, "El cobro no tiene correo electrónico asociado. Edite el cobro para agregar un correo.");
+
+            var isConfigured = await _emailService.IsConfiguredAsync();
+            if (!isConfigured)
+                return (false, "El servicio de email no está configurado. Configure el SMTP en Configuración.");
+
+            var diasMora = cobro.Estado == EstadoCobro.Vencido
+                ? Math.Max(0, (int)(DateTime.UtcNow.Date - cobro.FechaVencimiento.Date).TotalDays)
+                : 0;
+
+            var dto = new CobroVencidoDto
+            {
+                CobroId    = cobro.Id,
+                NumeroPoliza  = cobro.NumeroPoliza,
+                ClienteEmail  = cobro.CorreoElectronico,
+                ClienteNombre = cobro.ClienteNombreCompleto,
+                MontoVencido  = cobro.MontoTotal,
+                FechaVencimiento = cobro.FechaVencimiento,
+                DiasMora = diasMora,
+                Concepto = $"Recibo #{cobro.NumeroRecibo}"
+            };
+
+            await _emailService.SendCobroVencidoNotificationAsync(dto);
+            return (true, $"Correo enviado exitosamente a {cobro.CorreoElectronico}");
         }
 
         public async Task<CobroDto> CancelarCobroAsync(int id, string? motivo = null)

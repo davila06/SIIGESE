@@ -165,6 +165,25 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// Obtiene cobros filtrados por frecuencia de la póliza asociada
+        /// (MENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL, BIMESTRAL, CUATRIMESTRAL)
+        /// </summary>
+        [HttpGet("frecuencia/{frecuencia}")]
+        public async Task<ActionResult<IEnumerable<CobroDto>>> GetByFrecuencia(string frecuencia)
+        {
+            try
+            {
+                var cobros = await _cobrosService.GetCobrosByFrecuenciaAsync(frecuencia);
+                return Ok(cobros);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo cobros con frecuencia {Frecuencia}", frecuencia);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
         /// Obtiene cobros próximos basados en periodicidad de la póliza:
         /// - Periodicidad MENSUAL: se listan siempre (todos los cobros pendientes)
         /// - Otras periodicidades: se listan con 1 mes de anticipación
@@ -456,6 +475,30 @@ namespace WebApi.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generando cobros para póliza {PolizaId}", polizaId);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Envía un correo electrónico de notificación al destinatario del cobro
+        /// </summary>
+        [HttpPost("{id}/enviar-email")]
+        public async Task<ActionResult> EnviarEmail(int id)
+        {
+            try
+            {
+                var (success, message) = await _cobrosService.EnviarEmailCobroAsync(id);
+                if (!success)
+                    return BadRequest(new { message });
+                return Ok(new { message });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error enviando email para cobro con ID {Id}", id);
                 return StatusCode(500, "Error interno del servidor");
             }
         }

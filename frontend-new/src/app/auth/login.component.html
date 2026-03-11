@@ -1,133 +1,131 @@
-<div class="login-container">
-  <!-- Decorative elements -->
-  <div class="floating-shapes">
-    <div class="shape shape-1"></div>
-    <div class="shape shape-2"></div>
-    <div class="shape shape-3"></div>
-  </div>
+<div class="login-page">
 
-  <mat-card class="login-card">
-    <!-- Logo/Icono -->
-    <div class="login-logo">
-      <div class="logo-icon">
-        <mat-icon class="security-icon">shield</mat-icon>
+  <!-- Panel izquierdo: marca -->
+  <div class="brand-panel">
+    <div class="brand-content">
+      <div class="brand-logo">
+        <mat-icon>shield</mat-icon>
       </div>
       <h1 class="brand-name">SINSEG</h1>
-      <p class="brand-subtitle">Sistema Integral de Seguros</p>
+      <p class="brand-tagline">Sistema Integral de Seguros</p>
+
+      <div class="brand-features">
+        <div class="feature-item">
+          <mat-icon>verified_user</mat-icon>
+          <span>Gestión de pólizas centralizada</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>payments</mat-icon>
+          <span>Control de cobros en tiempo real</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>analytics</mat-icon>
+          <span>Reportes y estadísticas</span>
+        </div>
+      </div>
     </div>
+    <p class="brand-copyright">© 2025 SINSEG · Todos los derechos reservados</p>
+  </div>
 
-    <mat-card-header>
-      <mat-card-title class="login-title">
-        {{ showResetForm ? 'Recuperar Contraseña' : 'Bienvenido' }}
-      </mat-card-title>
-      <mat-card-subtitle class="login-subtitle">
-        {{ showResetForm ? 'Ingresa tu email para recibir instrucciones' : 'Ingresa tus credenciales para continuar' }}
-      </mat-card-subtitle>
-    </mat-card-header>
+  <!-- Panel derecho: formulario -->
+  <div class="form-panel">
+    <div class="form-wrapper">
 
-    <mat-card-content>
+      <!-- Encabezado del formulario -->
+      <div class="form-header">
+        <h2 class="form-title">{{ showResetForm ? 'Recuperar acceso' : 'Iniciar sesión' }}</h2>
+        <p class="form-subtitle">
+          {{ showResetForm
+            ? 'Ingresa tu correo y te enviaremos las instrucciones'
+            : 'Ingresa tus credenciales para continuar' }}
+        </p>
+      </div>
+
       <!-- Formulario de Login -->
-      <form *ngIf="!showResetForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput
-                 type="email"
-                 formControlName="email"
-                 placeholder="tu@email.com"
-                 autocomplete="email">
-          <mat-icon matSuffix>email</mat-icon>
-          <mat-error *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+      <form *ngIf="!showResetForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+
+        <div class="field-group">
+          <label class="field-label">Correo electrónico</label>
+          <div class="field-input-wrap" [class.has-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            <mat-icon class="field-icon-left">mail_outline</mat-icon>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="usuario@empresa.com"
+              autocomplete="email"
+              class="field-input">
+          </div>
+          <span class="field-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
             {{ getErrorMessage('email') }}
-          </mat-error>
-        </mat-form-field>
+          </span>
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Contraseña</mat-label>
-          <input matInput
-                 [type]="hidePassword ? 'password' : 'text'"
-                 formControlName="password"
-                 placeholder="Tu contraseña"
-                 autocomplete="current-password">
-          <button mat-icon-button
-                  matSuffix
-                  (click)="hidePassword = !hidePassword"
-                  [attr.aria-label]="'Hide password'"
-                  [attr.aria-pressed]="hidePassword"
-                  type="button">
-            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
-          <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <div class="field-group">
+          <label class="field-label">Contraseña</label>
+          <div class="field-input-wrap" [class.has-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            <mat-icon class="field-icon-left">lock_outline</mat-icon>
+            <input
+              [type]="hidePassword ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              class="field-input">
+            <button type="button" class="toggle-password" (click)="hidePassword = !hidePassword" tabindex="-1">
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          <span class="field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             {{ getErrorMessage('password') }}
-          </mat-error>
-        </mat-form-field>
+          </span>
+        </div>
 
-        <button mat-raised-button
-                color="primary"
-                type="submit"
-                [disabled]="loginForm.invalid || isLoading"
-                class="login-button full-width">
-          <mat-spinner *ngIf="isLoading" diameter="20" class="spinner"></mat-spinner>
-          <span *ngIf="!isLoading">Iniciar Sesión</span>
-          <span *ngIf="isLoading">Iniciando...</span>
+        <button type="submit" class="submit-btn" [disabled]="loginForm.invalid || isLoading">
+          <mat-spinner *ngIf="isLoading" diameter="18" class="btn-spinner"></mat-spinner>
+          <span>{{ isLoading ? 'Verificando...' : 'Ingresar' }}</span>
+          <mat-icon *ngIf="!isLoading">arrow_forward</mat-icon>
         </button>
 
-        <!-- Enlace para resetear contraseña -->
-        <div class="reset-link-container">
-          <button mat-button
-                  type="button"
-                  color="primary"
-                  (click)="toggleResetForm()"
-                  class="reset-link">
+        <div class="form-footer">
+          <button type="button" class="link-btn" (click)="toggleResetForm()">
             ¿Olvidaste tu contraseña?
           </button>
         </div>
       </form>
 
-      <!-- Formulario de Reset Password -->
-      <form *ngIf="showResetForm" [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="reset-form">    
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput
-                 type="email"
-                 formControlName="email"
-                 placeholder="tu@email.com"
-                 autocomplete="email">
-          <mat-icon matSuffix>email</mat-icon>
-          <mat-error *ngIf="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">        
-            {{ getErrorMessage('email') }}
-          </mat-error>
-        </mat-form-field>
+      <!-- Formulario de Recuperación -->
+      <form *ngIf="showResetForm" [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="auth-form" novalidate>
 
-        <button mat-raised-button
-                color="primary"
-                type="submit"
-                [disabled]="resetPasswordForm.invalid || isResettingPassword"
-                class="reset-button full-width">
-          <mat-spinner *ngIf="isResettingPassword" diameter="20" class="spinner"></mat-spinner>
-          <span *ngIf="!isResettingPassword">Enviar Enlace de Reseteo</span>
-          <span *ngIf="isResettingPassword">Enviando...</span>
+        <div class="field-group">
+          <label class="field-label">Correo electrónico</label>
+          <div class="field-input-wrap" [class.has-error]="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
+            <mat-icon class="field-icon-left">mail_outline</mat-icon>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="usuario@empresa.com"
+              autocomplete="email"
+              class="field-input">
+          </div>
+          <span class="field-error" *ngIf="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
+            {{ getErrorMessage('email') }}
+          </span>
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="resetPasswordForm.invalid || isResettingPassword">
+          <mat-spinner *ngIf="isResettingPassword" diameter="18" class="btn-spinner"></mat-spinner>
+          <span>{{ isResettingPassword ? 'Enviando...' : 'Enviar instrucciones' }}</span>
+          <mat-icon *ngIf="!isResettingPassword">send</mat-icon>
         </button>
 
-        <!-- Enlace para volver al login -->
-        <div class="back-link-container">
-          <button mat-button
-                  type="button"
-                  color="primary"
-                  (click)="toggleResetForm()"
-                  class="back-link">
+        <div class="form-footer">
+          <button type="button" class="link-btn back-link" (click)="toggleResetForm()">
             <mat-icon>arrow_back</mat-icon>
-            Volver al login
+            Volver al inicio de sesión
           </button>
         </div>
       </form>
-    </mat-card-content>
 
-    <!-- Footer -->
-    <mat-card-footer class="login-footer" *ngIf="!showResetForm">
-      <div class="footer-content">
-        <p class="copyright">© 2025 SINSEG. Todos los derechos reservados.</p>
-        <p class="version">v1.0.0</p>
-      </div>
-    </mat-card-footer>
-  </mat-card>
+    </div>
+  </div>
+
 </div>
