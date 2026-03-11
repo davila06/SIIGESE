@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { 
   Cobro, 
@@ -20,16 +21,29 @@ export class CobrosService {
 
   constructor(private http: HttpClient) { }
 
+  /** Normaliza un cobro recibido del API: convierte DateTime.MinValue ("0001-...") en undefined */
+  private normalizeCobro(cobro: Cobro): Cobro {
+    const fechaCobro = cobro.fechaCobro ? new Date(cobro.fechaCobro) : undefined;
+    return {
+      ...cobro,
+      fechaCobro: (fechaCobro && fechaCobro.getFullYear() > 1) ? fechaCobro : undefined
+    };
+  }
+
   // Obtener todos los cobros
   getCobros(): Observable<Cobro[]> {
-    return this.http.get<Cobro[]>(this.apiUrl);
+    return this.http.get<Cobro[]>(this.apiUrl).pipe(
+      map(cobros => cobros.map(c => this.normalizeCobro(c)))
+    );
   }
 
   // Obtener cobros próximos basados en periodicidad:
   // - Mensual: siempre listados
   // - Otras periodicidades: dentro del próximo mes
   getCobrosProximos(): Observable<Cobro[]> {
-    return this.http.get<Cobro[]>(`${this.apiUrl}/proximos`);
+    return this.http.get<Cobro[]>(`${this.apiUrl}/proximos`).pipe(
+      map(cobros => cobros.map(c => this.normalizeCobro(c)))
+    );
   }
 
   // Obtener cobro por ID
