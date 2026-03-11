@@ -31,7 +31,7 @@
           <div class="stat-info">
             <h3>{{ stats.totalPendientes }}</h3>
             <p>Pendientes</p>
-            <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoTotalPendiente | number:'1.2-2' }}</span>
+            <span class="stat-amount">{{ getCurrencySymbol() }}{{ (stats.montoTotalPendiente ?? 0) | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -44,7 +44,7 @@
           <div class="stat-info">
             <h3>{{ stats.totalCobrados }}</h3>
             <p>Cobrados</p>
-            <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoTotalCobrado | number:'1.2-2' }}</span>
+            <span class="stat-amount">{{ getCurrencySymbol() }}{{ (stats.montoTotalCobrado ?? 0) | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -57,7 +57,7 @@
           <div class="stat-info">
             <h3>{{ stats.totalVencidos }}</h3>
             <p>Vencidos</p>
-            <span class="stat-amount">{{ getCurrencySymbol() }}{{ stats.montoPorVencer | number:'1.2-2' }}</span>
+            <span class="stat-amount">{{ getCurrencySymbol() }}{{ (stats.montoPorVencer ?? 0) | number:'1.2-2' }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -163,14 +163,14 @@
             <!-- Fecha Vencimiento -->
             <ng-container matColumnDef="fechaVencimiento">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Vencimiento</th>
-              <td mat-cell *matCellDef="let cobro">{{ cobro.fechaVencimiento | date:'dd/MM/yyyy' }}</td>
+              <td mat-cell *matCellDef="let cobro">{{ cobro.fechaVencimiento ? (cobro.fechaVencimiento | date:'dd/MM/yyyy') : '—' }}</td>
             </ng-container>
 
             <!-- Monto Total -->
             <ng-container matColumnDef="montoTotal">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto</th>
               <td mat-cell *matCellDef="let cobro">
-                <strong>{{ getCurrencySymbol(cobro.moneda) }}{{ cobro.montoTotal | number:'1.2-2' }}</strong>
+                <strong>{{ getCurrencySymbol(cobro.moneda) }}{{ (cobro.montoTotal ?? 0) | number:'1.2-2' }}</strong>
               </td>
             </ng-container>
 
