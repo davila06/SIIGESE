@@ -242,6 +242,72 @@ namespace Application.Services
             }
         }
 
+        private const string DefaultCobroSubject = "SINSEG - Cobro Vencido: Póliza {NumeroPoliza}";
+        private const string DefaultCobroBody = @"<!DOCTYPE html>
+<html>
+<head><meta charset='utf-8'><title>Cobro Vencido - SINSEG</title>
+<style>body{{font-family:Arial,sans-serif;color:#333;}}.container{{max-width:600px;margin:0 auto;padding:20px;}}.header{{background:#c0392b;color:white;padding:20px;text-align:center;}}.content{{padding:20px;background:#f9f9f9;}}.footer{{text-align:center;padding:20px;font-size:12px;color:#666;}}</style></head>
+<body><div class='container'>
+  <div class='header'><h2>Aviso de Cobro Vencido</h2></div>
+  <div class='content'>
+    <p>Estimado/a <strong>{ClienteNombre}</strong>,</p>
+    <p>Le informamos que tiene un cobro vencido con los siguientes detalles:</p>
+    <ul>
+      <li><strong>Póliza:</strong> {NumeroPoliza}</li>
+      <li><strong>Monto vencido:</strong> {MontoVencido}</li>
+      <li><strong>Fecha de vencimiento:</strong> {FechaVencimiento}</li>
+      <li><strong>Días en mora:</strong> {DiasMora}</li>
+    </ul>
+    <p>Por favor, regularice su situación a la brevedad posible para evitar inconvenientes con su cobertura.</p>
+  </div>
+  <div class='footer'><p>© 2025 SINSEG - Sistema Integral de Administración de Seguros</p></div>
+</div></body></html>";
+
+        public async Task<ApiResponse<CobroEmailTemplateDto>> GetCobroTemplateAsync()
+        {
+            try
+            {
+                var config = await _repository.GetDefaultAsync();
+                var dto = new CobroEmailTemplateDto
+                {
+                    Subject = config?.CobroEmailSubject,
+                    Body = config?.CobroEmailBody,
+                    DefaultSubject = DefaultCobroSubject,
+                    DefaultBody = DefaultCobroBody
+                };
+                return ApiResponse<CobroEmailTemplateDto>.CreateSuccess(dto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo plantilla de email de cobros");
+                return ApiResponse<CobroEmailTemplateDto>.CreateError("Error obteniendo plantilla de email de cobros");
+            }
+        }
+
+        public async Task<ApiResponse<bool>> UpdateCobroTemplateAsync(CobroEmailTemplateUpdateDto dto, string updatedBy)
+        {
+            try
+            {
+                var config = await _repository.GetDefaultAsync();
+                if (config == null)
+                {
+                    return ApiResponse<bool>.CreateError("No hay configuración de email por defecto");
+                }
+
+                config.CobroEmailSubject = string.IsNullOrWhiteSpace(dto.Subject) ? null : dto.Subject.Trim();
+                config.CobroEmailBody = string.IsNullOrWhiteSpace(dto.Body) ? null : dto.Body.Trim();
+                config.UpdatedBy = updatedBy;
+
+                await _repository.UpdateAsync(config);
+                return ApiResponse<bool>.CreateSuccess(true, "Plantilla de email de cobros actualizada exitosamente");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error actualizando plantilla de email de cobros");
+                return ApiResponse<bool>.CreateError("Error actualizando plantilla de email de cobros");
+            }
+        }
+
         private EmailConfigResponseDto MapToResponseDto(EmailConfig config)
         {
             return new EmailConfigResponseDto

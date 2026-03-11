@@ -138,4 +138,18 @@ namespace Application.DTOs.EmailConfig
         public string FromName { get; set; } = string.Empty;
         public bool IsActive { get; set; }
     }
+
+    public class CobroEmailTemplateDto
+    {
+        public string? Subject { get; set; }
+        public string? Body { get; set; }
+        public string DefaultSubject { get; set; } = string.Empty;
+        public string DefaultBody { get; set; } = string.Empty;
+    }
+
+    public class CobroEmailTemplateUpdateDto
+    {
+        public string? Subject { get; set; }
+        public string? Body { get; set; }
+    }
 }

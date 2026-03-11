@@ -1,0 +1,75 @@
+<h2 mat-dialog-title class="dialog-title">
+  <mat-icon>edit_note</mat-icon>
+  Editar Mensaje de Cobro
+</h2>
+
+<mat-dialog-content class="dialog-content">
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Cargando plantilla...</p>
+  </div>
+
+  <div *ngIf="!loading" [formGroup]="form">
+
+    <!-- Info box -->
+    <div class="info-box">
+      <mat-icon class="info-icon">info</mat-icon>
+      <span>
+        Personaliza el asunto y cuerpo del email que reciben los clientes cuando un cobro está vencido.
+        Deja los campos vacíos para usar la plantilla predeterminada del sistema.
+      </span>
+    </div>
+
+    <!-- Asunto -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Asunto del email</mat-label>
+      <input matInput formControlName="subject"
+             placeholder="Dejar vacío para usar el asunto predeterminado">
+      <mat-hint>Predeterminado: {{ defaultSubject }}</mat-hint>
+    </mat-form-field>
+
+    <!-- Variables de ayuda -->
+    <div class="variables-section">
+      <p class="variables-label">Variables disponibles (clic para insertar en el cuerpo):</p>
+      <div class="variables-chips">
+        <span *ngFor="let v of variables"
+              class="variable-chip"
+              [matTooltip]="v.label"
+              (click)="insertVariable(v.name)">
+          {{ v.name }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Cuerpo -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cuerpo del email (HTML permitido)</mat-label>
+      <textarea matInput formControlName="body"
+                rows="12"
+                placeholder="Dejar vacío para usar la plantilla HTML predeterminada"></textarea>
+      <mat-hint>Puedes usar HTML y las variables de arriba. Ejemplo: Estimado &#123;ClienteNombre&#125;</mat-hint>
+    </mat-form-field>
+
+    <!-- Preview default -->
+    <div class="reset-section">
+      <button mat-stroked-button color="warn" type="button" (click)="resetToDefault()">
+        <mat-icon>restore</mat-icon>
+        Restaurar plantilla predeterminada
+      </button>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">
+    Cancelar
+  </button>
+  <button mat-raised-button color="primary" type="button"
+          (click)="save()" [disabled]="loading || saving">
+    <mat-spinner *ngIf="saving" diameter="16" class="btn-spinner"></mat-spinner>
+    <mat-icon *ngIf="!saving">save</mat-icon>
+    {{ saving ? 'Guardando...' : 'Guardar' }}
+  </button>
+</mat-dialog-actions>

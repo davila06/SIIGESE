@@ -27,5 +27,9 @@ namespace Domain.Entities
         public DateTime? LastTested { get; set; }
         public bool LastTestSuccessful { get; set; } = false;
         public string? LastTestError { get; set; }
+
+        // Plantilla de email para cobros
+        public string? CobroEmailSubject { get; set; }
+        public string? CobroEmailBody { get; set; }
     }
 }

@@ -130,5 +130,26 @@ namespace WebApi.Controllers
             var response = await _emailConfigService.TestConfigurationAsync(dto);
             return response.Success ? Ok(response) : BadRequest(response);
         }
+
+        /// <summary>
+        /// Obtiene la plantilla de email para cobros vencidos
+        /// </summary>
+        [HttpGet("cobro-template")]
+        public async Task<IActionResult> GetCobroTemplate()
+        {
+            var response = await _emailConfigService.GetCobroTemplateAsync();
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        /// <summary>
+        /// Actualiza la plantilla de email para cobros vencidos
+        /// </summary>
+        [HttpPut("cobro-template")]
+        public async Task<IActionResult> UpdateCobroTemplate([FromBody] CobroEmailTemplateUpdateDto dto)
+        {
+            var currentUser = User.FindFirst(ClaimTypes.Email)?.Value ?? "Sistema";
+            var response = await _emailConfigService.UpdateCobroTemplateAsync(dto, currentUser);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
     }
 }

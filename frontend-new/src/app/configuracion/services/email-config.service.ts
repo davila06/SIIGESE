@@ -67,4 +67,14 @@ export class EmailConfigService {
   testConfigurationDirect(testRequest: EmailConfigTestRequest): Observable<ApiResponse<EmailTestResponse>> {
     return this.http.post<ApiResponse<EmailTestResponse>>(`${this.apiUrl}/test-direct`, testRequest);
   }
+
+  // Obtener plantilla de email de cobros
+  getCobroTemplate(): Observable<ApiResponse<{ subject: string | null; body: string | null; defaultSubject: string; defaultBody: string }>> {
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/cobro-template`);
+  }
+
+  // Actualizar plantilla de email de cobros
+  updateCobroTemplate(subject: string | null, body: string | null): Observable<ApiResponse<boolean>> {
+    return this.http.put<ApiResponse<boolean>>(`${this.apiUrl}/cobro-template`, { subject, body });
+  }
 }

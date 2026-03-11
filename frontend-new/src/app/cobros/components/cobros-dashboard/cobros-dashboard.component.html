@@ -13,6 +13,10 @@
         <mat-icon>add</mat-icon>
         Nuevo Cobro
       </button>
+      <button mat-stroked-button color="accent" (click)="editarMensajeCobro()" matTooltip="Editar el email que se envía a los clientes con cobros vencidos">
+        <mat-icon>edit_note</mat-icon>
+        Mensaje de cobro
+      </button>
       <button mat-stroked-button (click)="exportarCobros()">
         <mat-icon>download</mat-icon>
         Exportar

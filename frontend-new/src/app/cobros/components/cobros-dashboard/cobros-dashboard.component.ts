@@ -271,6 +271,15 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  editarMensajeCobro(): void {
+    import('../editor-mensaje-cobro-dialog/editor-mensaje-cobro-dialog.component').then(m => {
+      this.dialog.open(m.EditorMensajeCobroDialogComponent, {
+        width: '740px',
+        disableClose: false
+      });
+    });
+  }
+
   registrarCobro(cobro: Cobro): void {
     import('../registrar-cobro-dialog/registrar-cobro-dialog.component').then(m => {
       const dialogRef = this.dialog.open(m.RegistrarCobroDialogComponent, {

@@ -14,5 +14,7 @@ namespace Application.Interfaces
         Task<ApiResponse<bool>> SetAsDefaultAsync(int id, string updatedBy);
         Task<ApiResponse<EmailTestResponseDto>> TestConfigurationAsync(EmailTestRequestDto dto);
         Task<ApiResponse<bool>> ToggleActiveStatusAsync(int id, string updatedBy);
+        Task<ApiResponse<CobroEmailTemplateDto>> GetCobroTemplateAsync();
+        Task<ApiResponse<bool>> UpdateCobroTemplateAsync(CobroEmailTemplateUpdateDto dto, string updatedBy);
     }
 }

@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Mail;
 using Application.DTOs;
 using Application.Interfaces;
+using Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -11,11 +12,13 @@ namespace Infrastructure.Services
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<EmailService> _logger;
+        private readonly IEmailConfigRepository _emailConfigRepository;
 
-        public EmailService(IConfiguration configuration, ILogger<EmailService> logger)
+        public EmailService(IConfiguration configuration, ILogger<EmailService> logger, IEmailConfigRepository emailConfigRepository)
         {
             _configuration = configuration;
             _logger = logger;
+            _emailConfigRepository = emailConfigRepository;
         }
 
         public async Task SendPasswordResetEmailAsync(string email, string resetToken, string resetUrl)
@@ -47,9 +50,38 @@ namespace Infrastructure.Services
             if (string.IsNullOrWhiteSpace(cobro.ClienteEmail))
                 return;
 
-            var subject = $"SINSEG - Cobro Vencido: Póliza {cobro.NumeroPoliza}";
-            var body = GenerateCobroVencidoEmailBody(cobro);
+            string subject;
+            string body;
+
+            try
+            {
+                var config = await _emailConfigRepository.GetDefaultAsync();
+                subject = !string.IsNullOrWhiteSpace(config?.CobroEmailSubject)
+                    ? config.CobroEmailSubject.Replace("{NumeroPoliza}", cobro.NumeroPoliza)
+                    : $"SINSEG - Cobro Vencido: Póliza {cobro.NumeroPoliza}";
+
+                body = !string.IsNullOrWhiteSpace(config?.CobroEmailBody)
+                    ? ApplyCobroTemplateVariables(config.CobroEmailBody, cobro)
+                    : GenerateCobroVencidoEmailBody(cobro);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "No se pudo obtener plantilla de cobro, usando plantilla por defecto");
+                subject = $"SINSEG - Cobro Vencido: Póliza {cobro.NumeroPoliza}";
+                body = GenerateCobroVencidoEmailBody(cobro);
+            }
+
             await SendEmailAsync(cobro.ClienteEmail, subject, body);
+        }
+
+        private string ApplyCobroTemplateVariables(string template, CobroVencidoDto cobro)
+        {
+            return template
+                .Replace("{ClienteNombre}", cobro.ClienteNombre)
+                .Replace("{NumeroPoliza}", cobro.NumeroPoliza)
+                .Replace("{MontoVencido}", cobro.MontoVencido.ToString("C"))
+                .Replace("{FechaVencimiento}", cobro.FechaVencimiento.ToString("dd/MM/yyyy"))
+                .Replace("{DiasMora}", cobro.DiasMora.ToString());
         }
 
         public async Task SendPolizaVencimientoNotificationAsync(PolizaVencimientoDto poliza)
