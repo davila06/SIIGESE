@@ -305,6 +305,7 @@ export interface TokenInfo {
 }
 
 export interface LoginRequest {
+  userName: string;
   email: string;
   password: string;
 }

@@ -44,7 +44,8 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.apiService.login({ email, password }).pipe(
+    const userName = email.split('@')[0];
+    return this.apiService.login({ userName, email, password }).pipe(
       tap(response => {
         this.currentUserSubject.next(response.user);
         sessionStorage.setItem('currentUser', JSON.stringify(response.user));
