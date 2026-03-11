@@ -151,6 +151,20 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
     obs.subscribe({
       next: (cobros) => {
+        console.log(`📋 [DEBUG] Tab "${tab.label}": ${cobros.length} cobros recibidos`);
+        cobros.forEach((c, i) => {
+          if (c.montoTotal === null || c.montoTotal === undefined || (typeof c.montoTotal !== 'number' && isNaN(Number(c.montoTotal)))) {
+            console.warn(`⚠️ [DEBUG] cobro[${i}] id=${c.id} montoTotal INVÁLIDO:`, c.montoTotal, '| tipo:', typeof c.montoTotal);
+          }
+          if (c.fechaVencimiento) {
+            const dv = new Date(c.fechaVencimiento);
+            if (isNaN(dv.getTime())) console.warn(`⚠️ [DEBUG] cobro[${i}] id=${c.id} fechaVencimiento INVÁLIDA:`, c.fechaVencimiento);
+          }
+          if (c.fechaCobro) {
+            const dc = new Date(c.fechaCobro);
+            if (isNaN(dc.getTime())) console.warn(`⚠️ [DEBUG] cobro[${i}] id=${c.id} fechaCobro INVÁLIDA:`, c.fechaCobro);
+          }
+        });
         tab.cobros = cobros;
         tab.dataSource.data = cobros;
         tab.loading = false;
@@ -180,9 +194,28 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // ─── Helpers para pipes seguros ─────────────────────────────────────────────
+  safeNumber(value: any): number {
+    if (value === null || value === undefined) return 0;
+    const n = Number(value);
+    return isNaN(n) ? 0 : n;
+  }
+
+  safeDate(value: any): Date | null {
+    if (!value) return null;
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
   loadStats(): void {
     this.cobrosService.getCobroStats().subscribe({
-      next: (stats) => { this.stats = stats; },
+      next: (stats) => {
+        console.log('📊 [DEBUG] Stats raw:', JSON.stringify(stats));
+        console.log('📊 [DEBUG] montoTotalPendiente ->', typeof stats.montoTotalPendiente, '=', stats.montoTotalPendiente);
+        console.log('📊 [DEBUG] montoTotalCobrado  ->', typeof stats.montoTotalCobrado,  '=', stats.montoTotalCobrado);
+        console.log('📊 [DEBUG] montoPorVencer     ->', typeof stats.montoPorVencer,     '=', stats.montoPorVencer);
+        this.stats = stats;
+      },
       error: () => {}
     });
   }
