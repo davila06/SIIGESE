@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailConfigService } from '../../services/email-config.service';
 import { EmailConfig, EmailConfigCreate, EmailConfigTestRequest, ApiResponse, EmailTestResponse } from '../../models/email-config.model';
+import { LoggingService } from '../../../services/logging.service';
 
 interface SmtpPreset {
   name: string;
@@ -58,6 +59,8 @@ export class EmailConfigForm implements OnInit {
       useTLS: true
     }
   ];
+
+  private readonly logger = inject(LoggingService);
 
   constructor(
     private fb: FormBuilder,
@@ -189,7 +192,7 @@ export class EmailConfigForm implements OnInit {
         this.loading = false;
       },
       error: (error: any) => {
-        console.error('Error loading email config:', error);
+        this.logger.error('Error loading email config:', error);
         this.showMessage('Error al cargar la configuración', 'error');
         this.loading = false;
       }
@@ -241,7 +244,7 @@ export class EmailConfigForm implements OnInit {
         this.testing = false;
       },
       error: (error: any) => {
-        console.error('Error testing email config:', error);
+        this.logger.error('Error testing email config:', error);
         this.showMessage('Error al probar la conexión', 'error');
         this.testing = false;
       }
@@ -271,7 +274,7 @@ export class EmailConfigForm implements OnInit {
         this.router.navigate(['/configuracion/email']);
       },
       error: (error) => {
-        console.error('Error saving email config:', error);
+        this.logger.error('Error saving email config:', error);
         this.showMessage('Error al guardar la configuración', 'error');
         this.loading = false;
       }

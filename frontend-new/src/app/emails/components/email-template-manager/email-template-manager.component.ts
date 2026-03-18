@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { EmailTemplateService, EmailTemplate, EmailTemplateRequest } from '../../services/email-template.service';
+import { LoggingService } from '../../../services/logging.service';
 
 @Component({
   selector: 'app-email-template-manager',
@@ -98,6 +99,8 @@ export class EmailTemplateManagerComponent implements OnInit {
     }
   };
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private fb: FormBuilder,
     private templateService: EmailTemplateService,
@@ -128,7 +131,7 @@ export class EmailTemplateManagerComponent implements OnInit {
         this.templates.paginator = this.paginator;
       },
       error: (error) => {
-        console.error('Error cargando templates:', error);
+        this.logger.error('Error cargando templates:', error);
         this.snackBar.open('Error cargando templates', 'Cerrar', { duration: 3000 });
       }
     });
@@ -140,7 +143,7 @@ export class EmailTemplateManagerComponent implements OnInit {
         this.availableVariables = variables;
       },
       error: (error) => {
-        console.error('Error cargando variables:', error);
+        this.logger.error('Error cargando variables:', error);
       }
     });
   }
@@ -195,7 +198,7 @@ export class EmailTemplateManagerComponent implements OnInit {
           this.resetForm();
         },
         error: (error) => {
-          console.error('Error guardando template:', error);
+          this.logger.error('Error guardando template:', error);
           this.snackBar.open('Error guardando template', 'Cerrar', { duration: 3000 });
         }
       });
@@ -210,7 +213,7 @@ export class EmailTemplateManagerComponent implements OnInit {
           this.loadTemplates();
         },
         error: (error) => {
-          console.error('Error eliminando template:', error);
+          this.logger.error('Error eliminando template:', error);
           this.snackBar.open('Error eliminando template', 'Cerrar', { duration: 3000 });
         }
       });
@@ -224,7 +227,7 @@ export class EmailTemplateManagerComponent implements OnInit {
         this.loadTemplates();
       },
       error: (error) => {
-        console.error('Error estableciendo por defecto:', error);
+        this.logger.error('Error estableciendo por defecto:', error);
         this.snackBar.open('Error estableciendo por defecto', 'Cerrar', { duration: 3000 });
       }
     });
@@ -245,7 +248,7 @@ export class EmailTemplateManagerComponent implements OnInit {
           this.previewHtml = preview.htmlContent;
         },
         error: (error) => {
-          console.error('Error generando preview:', error);
+          this.logger.error('Error generando preview:', error);
         }
       });
     }
@@ -292,7 +295,7 @@ export class EmailTemplateManagerComponent implements OnInit {
         });
       },
       error: (error) => {
-        console.error('Error cargando template por defecto:', error);
+        this.logger.error('Error cargando template por defecto:', error);
       }
     });
   }

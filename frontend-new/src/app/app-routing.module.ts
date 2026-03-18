@@ -6,39 +6,44 @@ import { PolizasComponent } from './polizas/polizas.component';
 import { UploadPolizasComponent } from './polizas/upload-polizas.component';
 import { CotizacionesComponent } from './cotizaciones/cotizaciones.component';
 import { UsuariosComponent } from './usuarios/usuarios.component';
-import { AuthGuard } from './auth/auth.guard';
-import { AdminGuard } from './auth/admin.guard';
-import { DataLoaderGuard } from './auth/data-loader.guard';
-import { LoginGuard } from './auth/login.guard';
+import { authGuard } from './auth/auth.guard';
+import { adminGuard } from './auth/admin.guard';
+import { dataLoaderGuard } from './auth/data-loader.guard';
+import { loginGuard } from './auth/login.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent, canActivate: [LoginGuard] },
+  { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
   { path: 'change-password', component: ChangePasswordComponent },
   { path: 'dashboard', redirectTo: '/polizas', pathMatch: 'full' }, // Redirect dashboard to polizas
-  { path: 'polizas', component: PolizasComponent, canActivate: [AuthGuard] },
-  { path: 'polizas/upload', component: UploadPolizasComponent, canActivate: [AuthGuard, DataLoaderGuard] },
-  { path: 'cotizaciones', component: CotizacionesComponent, canActivate: [AuthGuard] },
-  { path: 'usuarios', component: UsuariosComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'polizas', component: PolizasComponent, canActivate: [authGuard] },
+  { path: 'polizas/upload', component: UploadPolizasComponent, canActivate: [authGuard, dataLoaderGuard] },
+  { path: 'cotizaciones', component: CotizacionesComponent, canActivate: [authGuard] },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuard, adminGuard] },
   { 
     path: 'cobros', 
     loadChildren: () => import('./cobros/cobros.module').then(m => m.CobrosModule),
-    canActivate: [AuthGuard]
+    canActivate: [authGuard]
   },
   { 
     path: 'reclamos', 
     loadChildren: () => import('./reclamos/reclamos.module').then(m => m.ReclamosModule),
-    canActivate: [AuthGuard]
+    canActivate: [authGuard]
   },
   { 
     path: 'emails', 
     loadChildren: () => import('./emails/emails.module').then(m => m.EmailsModule),
-    canActivate: [AuthGuard]
+    canActivate: [authGuard]
   },
   { 
     path: 'configuracion', 
     loadChildren: () => import('./configuracion/configuracion.module').then(m => m.ConfiguracionModule),
-    canActivate: [AuthGuard, AdminGuard]
+    canActivate: [authGuard, adminGuard]
+  },
+  {
+    path: 'chat',
+    loadChildren: () => import('./chat/chat.module').then(m => m.ChatModule),
+    canActivate: [authGuard]
   },
   { path: '**', redirectTo: '/login' }
 ];

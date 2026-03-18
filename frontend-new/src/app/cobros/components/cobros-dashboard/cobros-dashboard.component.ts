@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, QueryList, ViewChildren } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, AfterViewInit, QueryList, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -29,6 +29,7 @@ import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode, parseBackendDate } from '../../../shared/constants/currency.constants';
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
+import { LoggingService } from '../../../services/logging.service';
 
 export interface PeriodicidadTab {
   label: string;
@@ -106,6 +107,8 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   CURRENCY_CONSTANTS = CURRENCY_CONSTANTS;
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private readonly cobrosService: CobrosService,
     private readonly snackBar: MatSnackBar,
@@ -113,7 +116,6 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     private readonly dialog: MatDialog,
     private readonly exportService: ExportService
   ) { 
-    console.log('🔧 CobrosDashboardComponent inicializado con CobrosService');
   }
 
   ngOnInit(): void {
@@ -441,7 +443,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
       this.showMessage(`Archivo exportado exitosamente como ${options.format.toUpperCase()}`);
     } catch (error) {
-      console.error('Error al exportar:', error);
+      this.logger.error('Error al exportar:', error);
       this.showMessage('Error al exportar el archivo');
     }
   }

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -22,6 +22,7 @@ import { MatTabsModule, MatTabGroup } from '@angular/material/tabs';
 import { CotizacionService } from '../services/cotizacion.service';
 import { Cotizacion, CreateCotizacion, UpdateCotizacion, TIPOS_SEGURO, ESTADOS_COTIZACION, MONEDAS, GENEROS, TIPOS_INMUEBLE, MODALIDADES, FRECUENCIAS } from '../models/cotizacion.model';
 import { formatCurrencyByCode, formatDateCR, parseBackendDate, formatToBackendDate, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
+import { LoggingService } from '../services/logging.service';
 
 @Component({
   selector: 'app-cotizaciones',
@@ -91,6 +92,8 @@ export class CotizacionesComponent implements OnInit {
   selectedTipoSeguro = '';
   selectedEstado = '';
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private cotizacionService: CotizacionService,
     private fb: FormBuilder,
@@ -156,7 +159,7 @@ export class CotizacionesComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error: any) => {
-        console.error('Error loading cotizaciones:', error);
+        this.logger.error('Error loading cotizaciones:', error);
         this.showMessage('Error al cargar las cotizaciones', 'error');
         this.isLoading = false;
       }
@@ -188,7 +191,7 @@ export class CotizacionesComponent implements OnInit {
             this.isLoading = false;
           },
           error: (error: any) => {
-            console.error('Error updating cotizacion:', error);
+            this.logger.error('Error updating cotizacion:', error);
             this.showMessage('Error al actualizar la cotizaci├│n', 'error');
             this.isLoading = false;
           }
@@ -204,7 +207,7 @@ export class CotizacionesComponent implements OnInit {
             this.isLoading = false;
           },
           error: (error: any) => {
-            console.error('Error creating cotizacion:', error);
+            this.logger.error('Error creating cotizacion:', error);
             this.showMessage('Error al crear la cotizaci├│n', 'error');
             this.isLoading = false;
           }
@@ -214,7 +217,6 @@ export class CotizacionesComponent implements OnInit {
   }
 
   editCotizacion(cotizacion: Cotizacion): void {
-    console.log('🔄 Iniciando edición de cotización:', cotizacion.numeroCotizacion);
     
     this.selectedCotizacion = cotizacion;
     this.isEditMode = true;
@@ -256,18 +258,10 @@ export class CotizacionesComponent implements OnInit {
     this.cotizacionForm.markAsPristine();
     this.cotizacionForm.markAsUntouched();
     
-    console.log('📝 Datos cargados en formulario:', {
-      numeroCotizacion: cotizacion.numeroCotizacion,
-      nombreSolicitante: cotizacion.nombreSolicitante,
-      tipoSeguro: cotizacion.tipoSeguro,
-      isEditMode: this.isEditMode
-    });
-    
     // Cambiar automáticamente al tab del formulario
     setTimeout(() => {
       if (this.tabGroup) {
         this.tabGroup.selectedIndex = 1; // Índice 1 = tab del formulario
-        console.log('✅ Cambiado al tab del formulario para edición');
       }
     }, 100);
   }
@@ -285,7 +279,7 @@ export class CotizacionesComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          console.error('Error deleting cotizacion:', error);
+          this.logger.error('Error deleting cotizacion:', error);
           this.showMessage('Error al eliminar la cotizaci├│n', 'error');
         }
       });
@@ -303,7 +297,7 @@ export class CotizacionesComponent implements OnInit {
         this.showMessage(`Estado actualizado a ${nuevoEstado}`);
       },
       error: (error: any) => {
-        console.error('Error updating estado:', error);
+        this.logger.error('Error updating estado:', error);
         this.showMessage('Error al actualizar el estado', 'error');
       }
     });
@@ -337,7 +331,6 @@ export class CotizacionesComponent implements OnInit {
     setTimeout(() => {
       if (this.tabGroup) {
         this.tabGroup.selectedIndex = 0; // Índice 0 = tab de lista
-        console.log('↩️ Regresado al tab de lista');
       }
     }, 100);
   }

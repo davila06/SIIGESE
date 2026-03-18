@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginator } from '@angular/material/paginator';
@@ -8,6 +8,7 @@ import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { Poliza, CreatePoliza } from '../interfaces/user.interface';
 import { formatCurrencyByCode, formatDateCR, parseBackendDate, MONEDAS_SISTEMA, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
+import { LoggingService } from '../services/logging.service';
 
 @Component({
   selector: 'app-polizas',
@@ -26,6 +27,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   isLoading = false;
   selectedPoliza: Poliza | null = null;
   isEditMode = false;
+  formLoadingState: 'idle' | 'loading' | 'loaded' = 'idle';
   
   // Variables de paginación
   pageSize = 10;
@@ -44,6 +46,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   // Datos para selectores
   monedasSistema = MONEDAS_SISTEMA;
   aseguradorasSistema = ASEGURADORAS_SISTEMA;
+
+  private readonly logger = inject(LoggingService);
 
   constructor(
     private readonly fb: FormBuilder,
@@ -174,7 +178,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.apiService.getPolizas().subscribe({
       next: (polizas: Poliza[]) => {
-        console.log(`📋 Pólizas cargadas: ${polizas.length}`);
         if (polizas.length > 0) {
           console.table(polizas.map(p => ({
             id: p.id,
@@ -209,7 +212,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         this.isLoading = false;
       },
       error: (error: any) => {
-        console.error('Error loading polizas:', error);
+        this.logger.error('Error loading polizas:', error);
         this.showMessage('Error al cargar las pólizas', 'error');
         this.isLoading = false;
       }
@@ -238,7 +241,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
             this.isLoading = false;
           },
           error: (error: any) => {
-            console.error('Error updating poliza:', error);
+            this.logger.error('Error updating poliza:', error);
             this.showMessage('Error al actualizar la póliza', 'error');
             this.isLoading = false;
           }
@@ -257,7 +260,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
             this.isLoading = false;
           },
           error: (error: any) => {
-            console.error('Error creating poliza:', error);
+            this.logger.error('Error creating poliza:', error);
             this.showMessage('Error al crear la póliza', 'error');
             this.isLoading = false;
           }
@@ -284,7 +287,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
           this.showMessage('Póliza eliminada exitosamente');
         },
         error: (error: any) => {
-          console.error('Error deleting poliza:', error);
+          this.logger.error('Error deleting poliza:', error);
           this.showMessage('Error al eliminar la póliza', 'error');
         }
       });
@@ -321,7 +324,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       
       return formatDateCR(dateObj);
     } catch (error) {
-      console.error('Error formateando fecha:', error, date);
+      this.logger.error('Error formateando fecha:', error, date);
       return '-';
     }
   }
@@ -441,27 +444,36 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   selectPolizaAndScroll(poliza: Poliza): void {
+    // Phase 1: scroll + skeleton
+    this.formLoadingState = 'loading';
     this.selectedPoliza = poliza;
     this.isEditMode = true;
-    this.loadPolizaToForm(poliza);
     this.cdr.detectChanges();
 
-    // mat-sidenav-content is the real scroll container; window.scrollTo has no effect inside it
     const scrollHost =
       document.querySelector('mat-sidenav-content') as HTMLElement | null
       ?? document.documentElement;
     scrollHost.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
-    // Apply slide-in animation right away so the user sees the form slide in as they scroll up
-    if (this.formSection?.nativeElement) {
-      const el = this.formSection.nativeElement;
-      el.classList.remove('editing-highlight');
-      // Force reflow so re-adding the class restarts the animation
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      el.offsetWidth;
-      el.classList.add('editing-highlight');
-      setTimeout(() => el.classList.remove('editing-highlight'), 500);
-    }
+    // Phase 2: fill form after shimmer window (200ms)
+    setTimeout(() => {
+      this.loadPolizaToForm(poliza);
+      this.formLoadingState = 'loaded';
+      this.cdr.detectChanges();
+
+      // Phase 3: entrance animation on the card
+      if (this.formSection?.nativeElement) {
+        const el = this.formSection.nativeElement;
+        el.classList.remove('editing-highlight');
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        el.offsetWidth;
+        el.classList.add('editing-highlight');
+        setTimeout(() => el.classList.remove('editing-highlight'), 600);
+      }
+
+      // Phase 4: reset loaded state so next selection triggers skeleton again
+      setTimeout(() => { this.formLoadingState = 'idle'; }, 700);
+    }, 200);
   }
 
   // Método de prueba para forzar scroll
@@ -471,29 +483,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   loadPolizaToForm(poliza: Poliza): void {
-    // --- Enterprise diagnostic log ---
-    console.group(`[PolizasComponent] loadPolizaToForm → id=${poliza.id} | ${poliza.numeroPoliza}`);
-    console.log('Raw poliza from API:', {
-      id:              poliza.id,
-      numeroPoliza:    poliza.numeroPoliza,
-      modalidad:       poliza.modalidad,
-      nombreAsegurado: poliza.nombreAsegurado,
-      numeroCedula:    poliza.numeroCedula,
-      prima:           poliza.prima,
-      moneda:          poliza.moneda,
-      fechaVigencia:   poliza.fechaVigencia,
-      frecuencia:      poliza.frecuencia,
-      aseguradora:     poliza.aseguradora,
-      placa:           poliza.placa,
-      observaciones:   poliza.observaciones,
-    });
-
-    // Formatear la fecha para el input tipo date (soporta DD-MM-YYYY del backend)
     const parsed = parseBackendDate(poliza.fechaVigencia);
     const fechaVigencia = parsed ? parsed.toISOString().split('T')[0] : '';
-    console.log('Parsed fechaVigencia →', fechaVigencia, '(from raw:', poliza.fechaVigencia, ')');
 
-    // Preparar los valores para el formulario
     const formValues = {
       perfilId: poliza.perfilId || 1,
       numeroPoliza: poliza.numeroPoliza,
@@ -514,17 +506,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       observaciones: poliza.observaciones || ''
     };
     
-    // Cargar los valores al formulario
     this.polizaForm.patchValue(formValues);
     this.polizaForm.markAsPristine();
     this.polizaForm.markAsUntouched();
-
-    console.log('Form values after patchValue:', this.polizaForm.value);
-    const missing = Object.entries(this.polizaForm.value)
-      .filter(([k, v]) => v === null || v === undefined || v === '')
-      .map(([k]) => k);
-    if (missing.length) console.warn('Fields still empty after patch:', missing);
-    console.groupEnd();
   }
 
   resetForm(): void {

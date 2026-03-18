@@ -1,0 +1,394 @@
+<div class="chat-shell">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       SIDEBAR — Session list
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <aside class="chat-sidebar" [class.sidebar-hidden]="!isSidebarOpen">
+
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <div class="brand-icon">
+          <mat-icon>smart_toy</mat-icon>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">SIIGESE Chat</span>
+          <span class="brand-sub">Asistente Inteligente</span>
+        </div>
+      </div>
+      <button mat-icon-button class="new-chat-btn"
+              (click)="createNewSession()"
+              matTooltip="Nueva conversación">
+        <mat-icon>edit_square</mat-icon>
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="session-search">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input type="text"
+             class="search-input"
+             placeholder="Buscar conversaciones..."
+             [(ngModel)]="searchSessionTerm" />
+    </div>
+
+    <!-- Sessions list -->
+    <div class="sessions-list">
+      <div class="sessions-label">Conversaciones recientes</div>
+
+      <div *ngIf="isLoadingSessions" class="sessions-loading">
+        <mat-spinner diameter="24"></mat-spinner>
+        <span>Cargando...</span>
+      </div>
+
+      <div *ngIf="!isLoadingSessions && filteredSessions.length === 0" class="sessions-empty">
+        <mat-icon>chat_bubble_outline</mat-icon>
+        <span>No hay conversaciones</span>
+        <button mat-stroked-button color="primary" (click)="createNewSession()">
+          Nueva conversación
+        </button>
+      </div>
+
+      <div class="session-item"
+           *ngFor="let session of filteredSessions; trackBy: trackBySessionId"
+           [class.active]="isActiveSession(session)"
+           (click)="openSession(session)"
+           role="button"
+           tabindex="0"
+           (keydown.enter)="openSession(session)">
+
+        <div class="session-avatar" [class.has-unread]="session.unreadCount > 0">
+          {{ getSessionInitial(session) }}
+        </div>
+
+        <div class="session-info">
+          <div class="session-title">{{ session.title }}</div>
+          <div class="session-preview" *ngIf="session.lastMessage">
+            {{ session.lastMessage }}
+          </div>
+        </div>
+
+        <div class="session-meta">
+          <span class="session-time">{{ getSessionRelativeTime(session) }}</span>
+          <span class="unread-badge" *ngIf="session.unreadCount > 0">
+            {{ session.unreadCount }}
+          </span>
+          <button mat-icon-button class="session-delete-btn"
+                  (click)="deleteSession(session, $event)"
+                  matTooltip="Eliminar"
+                  [attr.aria-label]="'Eliminar ' + session.title">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar footer -->
+    <div class="sidebar-footer">
+      <div class="connection-status" [class.connected]="isSignalRConnected">
+        <mat-icon>{{ isSignalRConnected ? 'wifi' : 'wifi_off' }}</mat-icon>
+        <span>{{ isSignalRConnected ? 'Tiempo real activo' : 'Modo estándar' }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       MAIN CHAT AREA
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <main class="chat-main">
+
+    <!-- ── Top bar ──────────────────────────────────────────────────────── -->
+    <header class="chat-topbar">
+      <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle"
+              [matTooltip]="isSidebarOpen ? 'Ocultar panel' : 'Mostrar panel'">
+        <mat-icon>{{ isSidebarOpen ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+
+      <div class="topbar-title" *ngIf="activeSession">
+        <mat-icon class="topbar-icon">smart_toy</mat-icon>
+        <div>
+          <span class="topbar-name">{{ activeSession.title }}</span>
+          <span class="topbar-sub">{{ activeSession.messageCount }} mensajes</span>
+        </div>
+      </div>
+
+      <div class="topbar-title topbar-empty" *ngIf="!activeSession">
+        <mat-icon>chat</mat-icon>
+        <span>SIIGESE Assistant</span>
+      </div>
+
+      <div class="topbar-actions">
+        <button mat-icon-button matTooltip="Nueva conversación" (click)="createNewSession()">
+          <mat-icon>add_comment</mat-icon>
+        </button>
+      </div>
+    </header>
+
+    <!-- ── Messages area ────────────────────────────────────────────────── -->
+    <section class="messages-area" #messagesContainer>
+
+      <!-- Empty state (no session) -->
+      <div class="chat-welcome" *ngIf="!activeSession && !isLoadingSessions">
+        <div class="welcome-icon">
+          <mat-icon>smart_toy</mat-icon>
+        </div>
+        <h2 class="welcome-title">¡Hola! Soy SIIGESE Assistant</h2>
+        <p class="welcome-sub">
+          Tu asistente inteligente para gestión de seguros. Pregúntame sobre pólizas,
+          cobros, reclamos o estadísticas del sistema.
+        </p>
+        <div class="welcome-chips">
+          <button mat-stroked-button class="welcome-chip" (click)="createNewSession()">
+            <mat-icon>add</mat-icon> Nueva conversación
+          </button>
+          <button mat-stroked-button class="welcome-chip" (click)="createNewSession()">
+            <mat-icon>business</mat-icon> Consultar pólizas
+          </button>
+          <button mat-stroked-button class="welcome-chip" (click)="createNewSession()">
+            <mat-icon>bar_chart</mat-icon> Ver estadísticas
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading messages -->
+      <div class="messages-loading" *ngIf="isLoadingMessages">
+        <mat-spinner diameter="32"></mat-spinner>
+        <span>Cargando conversación...</span>
+      </div>
+
+      <!-- Messages list -->
+      <div class="messages-list" *ngIf="activeSession && !isLoadingMessages">
+
+        <!-- Empty session -->
+        <div class="session-welcome" *ngIf="messages.length === 0">
+          <div class="session-welcome-icon">
+            <mat-icon>auto_awesome</mat-icon>
+          </div>
+          <p>¿En qué puedo ayudarte hoy?</p>
+          <div class="quick-start-chips">
+            <button mat-stroked-button class="quick-chip" (click)="sendQuickReply('Ver mis pólizas')">
+              <mat-icon>business</mat-icon> Ver mis pólizas
+            </button>
+            <button mat-stroked-button class="quick-chip" (click)="sendQuickReply('Consultar cobros')">
+              <mat-icon>payment</mat-icon> Consultar cobros
+            </button>
+            <button mat-stroked-button class="quick-chip" (click)="sendQuickReply('Ver reclamos')">
+              <mat-icon>gavel</mat-icon> Ver reclamos
+            </button>
+            <button mat-stroked-button class="quick-chip" (click)="sendQuickReply('Estadísticas generales')">
+              <mat-icon>bar_chart</mat-icon> Estadísticas
+            </button>
+          </div>
+        </div>
+
+        <!-- Individual messages -->
+        <ng-container *ngFor="let message of messages; let i = index; trackBy: trackByMessageId">
+
+          <!-- Date separator -->
+          <div class="date-separator" *ngIf="showDateSeparator(i)">
+            <span>{{ getDateSeparatorText(message) }}</span>
+          </div>
+
+          <!-- User message -->
+          <div class="message-row user-row" *ngIf="message.messageType === 'User'">
+            <div class="message-bubble user-bubble">
+              <div class="message-content">{{ message.content }}</div>
+              <div class="message-meta">
+                <span class="message-time">{{ getMessageDate(message) }}</span>
+                <mat-icon class="message-tick" *ngIf="message.isRead">done_all</mat-icon>
+              </div>
+            </div>
+            <div class="message-avatar user-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
+          </div>
+
+          <!-- Bot message -->
+          <div class="message-row bot-row" *ngIf="message.messageType === 'Bot'">
+            <div class="message-avatar bot-avatar">
+              <mat-icon>smart_toy</mat-icon>
+            </div>
+            <div class="bot-content-wrapper">
+              <div class="message-bubble bot-bubble">
+
+                <!-- Text content -->
+                <div class="message-content bot-text"
+                     [innerHTML]="message.content | chatMarkdown">
+                </div>
+
+                <!-- Rich content: Polizas table -->
+                <div class="rich-card" *ngIf="message.richContent && richContentIsTable(message.richContent)">
+                  <div class="rich-card-header">
+                    <mat-icon>business</mat-icon>
+                    <span>{{ message.richContent.title }}</span>
+                  </div>
+                  <div class="rich-table-wrapper">
+                    <table class="rich-table">
+                      <thead>
+                        <tr>
+                          <th>N° Póliza</th>
+                          <th>Asegurado</th>
+                          <th>Aseguradora</th>
+                          <th>Vigencia</th>
+                          <th>Frecuencia</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of message.richContent.rows">
+                          <td class="poliza-num">{{ row.numeroPoliza }}</td>
+                          <td>{{ row.nombreAsegurado }}</td>
+                          <td>{{ row.aseguradora }}</td>
+                          <td>{{ row.vigencia }}</td>
+                          <td>{{ row.frecuencia }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Rich content: Stats (cobros/reclamos) -->
+                <div class="rich-card" *ngIf="message.richContent && richContentIsStats(message.richContent)">
+                  <div class="rich-card-header">
+                    <mat-icon>{{ message.richContent.type === 'cobros_summary' ? 'payment' : 'gavel' }}</mat-icon>
+                    <span>{{ message.richContent.title }}</span>
+                  </div>
+                  <div class="stats-row">
+                    <div class="stat-pill"
+                         *ngFor="let stat of message.richContent.stats"
+                         [ngClass]="getStatColorClass(stat.color)">
+                      <span class="stat-value">{{ stat.value }}</span>
+                      <span class="stat-label">{{ stat.label }}</span>
+                    </div>
+                  </div>
+                  <!-- Recent pending cobros -->
+                  <div *ngIf="message.richContent.recentPendientes?.length" class="cobros-mini-list">
+                    <div class="mini-list-title">Próximos vencimientos:</div>
+                    <div class="cobro-mini-row"
+                         *ngFor="let cobro of message.richContent.recentPendientes">
+                      <span class="cobro-poliza">{{ cobro.numeroPoliza }}</span>
+                      <span class="cobro-cliente">{{ cobro.clienteNombreCompleto }}</span>
+                      <span class="cobro-monto">{{ cobro.moneda }} {{ cobro.montoTotal | number:'1.0-0' }}</span>
+                      <span class="cobro-fecha">{{ cobro.fechaVencimiento }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Rich content: Dashboard stats -->
+                <div class="rich-card" *ngIf="message.richContent && richContentIsDashboard(message.richContent)">
+                  <div class="rich-card-header">
+                    <mat-icon>dashboard</mat-icon>
+                    <span>{{ message.richContent.title }}</span>
+                  </div>
+                  <div class="dashboard-cards-grid">
+                    <div class="dashboard-card"
+                         *ngFor="let card of message.richContent.cards"
+                         [ngClass]="getDashboardCardColorClass(card.color)">
+                      <mat-icon>{{ card.icon }}</mat-icon>
+                      <div class="dashboard-card-body">
+                        <div class="dashboard-card-value">{{ card.value }}</div>
+                        <div class="dashboard-card-label">{{ card.label }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Quick replies -->
+                <div class="quick-replies" *ngIf="message.quickReplies?.length && !isSendingMessage">
+                  <button mat-stroked-button class="quick-reply-btn"
+                          *ngFor="let reply of message.quickReplies"
+                          (click)="sendQuickReply(reply)">
+                    {{ reply }}
+                  </button>
+                </div>
+
+                <div class="message-meta">
+                  <span class="message-time">{{ getMessageDate(message) }}</span>
+                  <span class="processing-time" *ngIf="message.processingTimeMs">
+                    {{ message.processingTimeMs }}ms
+                  </span>
+                </div>
+              </div>
+
+              <!-- Reactions -->
+              <div class="message-reactions" *ngIf="message.messageType === 'Bot' && message.id > 0">
+                <button mat-icon-button class="reaction-btn"
+                        [class.active-like]="message.reactionScore === 1"
+                        (click)="reactToMessage(message, 1)"
+                        matTooltip="Útil">
+                  <mat-icon>thumb_up</mat-icon>
+                </button>
+                <button mat-icon-button class="reaction-btn"
+                        [class.active-dislike]="message.reactionScore === -1"
+                        (click)="reactToMessage(message, -1)"
+                        matTooltip="No útil">
+                  <mat-icon>thumb_down</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- System message -->
+          <div class="system-message" *ngIf="message.messageType === 'System'">
+            <span>{{ message.content }}</span>
+          </div>
+
+        </ng-container>
+
+        <!-- Typing indicator -->
+        <div class="message-row bot-row typing-row" *ngIf="isTyping || isSendingMessage">
+          <div class="message-avatar bot-avatar">
+            <mat-icon>smart_toy</mat-icon>
+          </div>
+          <div class="message-bubble bot-bubble typing-bubble">
+            <div class="typing-dots">
+              <span class="dot" *ngFor="let d of typingDots"></span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── Input area ────────────────────────────────────────────────────── -->
+    <footer class="chat-input-area" *ngIf="activeSession">
+      <div class="input-wrapper">
+        <textarea
+          #messageInput
+          class="message-textarea"
+          [formControl]="messageControl"
+          placeholder="Escribe tu mensaje... (Enter para enviar, Shift+Enter para nueva línea)"
+          (keydown)="onEnterKey($event)"
+          rows="1"
+          maxlength="1000"
+          [attr.aria-label]="'Escribe un mensaje para ' + activeSession.title">
+        </textarea>
+
+        <div class="input-actions">
+          <span class="char-count" [class.char-near-limit]="(messageControl.value?.length ?? 0) > 900">
+            {{ messageControl.value?.length ?? 0 }}/1000
+          </span>
+          <button mat-icon-button
+                  class="send-btn"
+                  [disabled]="!messageControl.value?.trim() || isSendingMessage"
+                  (click)="sendMessage()"
+                  [matTooltip]="isSendingMessage ? 'Enviando...' : 'Enviar mensaje (Enter)'">
+            <mat-spinner *ngIf="isSendingMessage" diameter="20"></mat-spinner>
+            <mat-icon *ngIf="!isSendingMessage">send</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="input-hint">
+        Pregunta sobre pólizas, cobros, reclamos o estadísticas — SIIGESE Assistant está listo para ayudarte.
+      </div>
+    </footer>
+
+    <!-- Placeholder when no session selected -->
+    <div class="no-session-placeholder" *ngIf="!activeSession && !isLoadingSessions">
+      <button mat-raised-button color="primary" class="start-btn" (click)="createNewSession()">
+        <mat-icon>add_comment</mat-icon>
+        Iniciar nueva conversación
+      </button>
+    </div>
+
+  </main>
+</div>

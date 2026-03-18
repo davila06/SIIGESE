@@ -32,9 +32,6 @@ export class AuthService {
         } else {
           const user = JSON.parse(savedUser) as User;
           this.currentUserSubject.next(user);
-          if (!environment.production) {
-            console.log('AuthService: session restored for', user.email);
-          }
         }
       } catch {
         sessionStorage.removeItem('currentUser');

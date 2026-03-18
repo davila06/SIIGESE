@@ -18,6 +18,7 @@ using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using Infrastructure.Services;
 using WebApi.Converters;
+using WebApi.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -124,9 +125,19 @@ builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEmailConfigService, EmailConfigService>();
 builder.Services.AddScoped<INotificationService, Infrastructure.Services.NotificationService>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddSingleton<IChatHubNotifier, ChatHubNotifier>();
+
+// SignalR (real-time chat)
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = builder.Environment.IsDevelopment();
+});
 
 // Token blacklist using distributed cache
-// In production configure Redis via ConnectionStrings:Redis; falls back to in-memory for development.
+// Production: set ConnectionStrings:Redis (App Service Configuration or env var) to enable Redis.
+// Development / single-instance: falls back to in-process IDistributedMemoryCache.
 var redisConnection = builder.Configuration.GetConnectionString("Redis");
 if (!string.IsNullOrWhiteSpace(redisConnection))
 {
@@ -135,10 +146,13 @@ if (!string.IsNullOrWhiteSpace(redisConnection))
         options.Configuration = redisConnection;
         options.InstanceName = "SinsegApp_";
     });
+    Log.Information("Distributed cache: Redis ({Host})", redisConnection.Split(',')[0]);
 }
 else
 {
     builder.Services.AddDistributedMemoryCache();
+    Log.Warning("Distributed cache: In-Memory — token blacklist NOT shared across instances. " +
+                "Set ConnectionStrings:Redis for multi-instance deployments.");
 }
 builder.Services.AddScoped<ITokenBlacklistService, TokenBlacklistService>();
 
@@ -236,6 +250,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/hubs/chat");
 app.MapHealthChecks("/health");
 
 // Global Exception Handler

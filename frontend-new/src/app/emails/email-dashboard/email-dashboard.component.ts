@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EmailService, EmailResponse, EmailStats } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoggingService } from '../../services/logging.service';
 
 @Component({
   selector: 'app-email-dashboard',
@@ -24,6 +25,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class EmailDashboardComponent implements OnInit {
   stats: EmailStats = { totalSent: 0, totalFailed: 0, pendingCobros: 0, polizasPorVencer: 0 };
   loading = false;
+
+  private readonly logger = inject(LoggingService);
 
   constructor(
     private emailService: EmailService,
@@ -43,7 +46,7 @@ export class EmailDashboardComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading email stats:', error);
+        this.logger.error('Error loading email stats:', error);
         this.loading = false;
       }
     });
@@ -65,7 +68,7 @@ export class EmailDashboardComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.open('Error enviando notificaciones', 'Cerrar', { duration: 3000 });
-        console.error('Error:', error);
+        this.logger.error('Error:', error);
         this.loading = false;
       }
     });
@@ -87,7 +90,7 @@ export class EmailDashboardComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.open('Error enviando notificaciones', 'Cerrar', { duration: 3000 });
-        console.error('Error:', error);
+        this.logger.error('Error:', error);
         this.loading = false;
       }
     });

@@ -5,151 +5,190 @@
       <h2 style="color: white; text-align: center; margin-bottom: 30px; font-size: 28px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Gestión de Pólizas de Seguros</h2>
     </div>
 
-    <!-- Formulario para nueva póliza -->
-    <mat-card class="form-section" #formSection>
-      <mat-card-header>
+    <!-- Formulario para nueva/editar póliza -->
+    <mat-card class="form-section" #formSection [class.is-edit-mode]="isEditMode">
+
+      <!-- Header: modo nuevo -->
+      <mat-card-header *ngIf="!isEditMode" class="form-header-new">
         <mat-card-title>
-          <mat-icon>{{isEditMode ? 'edit' : 'add_circle'}}</mat-icon>
-          {{formTitle}}
+          <mat-icon>add_circle</mat-icon>
+          Agregar Nueva Póliza
         </mat-card-title>
       </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="polizaForm" (ngSubmit)="onSubmit()">
-        <div class="form-row">
-          <mat-form-field>
-            <mat-label>Número de Póliza</mat-label>
-            <input matInput formControlName="numeroPoliza" required placeholder="Ingrese el número de póliza" title="Número de Póliza">
-            <mat-error *ngIf="polizaForm.get('numeroPoliza')?.hasError('required')">
-              Número de póliza es requerido
-            </mat-error>
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Modalidad (Opcional)</mat-label>
-            <input matInput formControlName="modalidad" placeholder="Ingrese la modalidad" title="Modalidad">
-          </mat-form-field>
-        </div>
 
-        <div class="form-row">
-          <mat-form-field>
-            <mat-label>Nombre Asegurado</mat-label>
-            <input matInput formControlName="nombreAsegurado" required placeholder="Ingrese el nombre del asegurado" title="Nombre Asegurado">
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Número de Cédula (Opcional)</mat-label>
-            <input matInput formControlName="numeroCedula" placeholder="Ingrese el número de cédula" title="Número de Cédula">
-          </mat-form-field>
+      <!-- Header: context ribbon modo edición -->
+      <div *ngIf="isEditMode && selectedPoliza" class="form-header-edit"
+           [class.form-header-skeleton]="formLoadingState === 'loading'">
+        <div class="edit-avatar">
+          {{selectedPoliza.nombreAsegurado.charAt(0).toUpperCase() || '?'}}
         </div>
-
-        <div class="form-row">
-          <mat-form-field>
-            <mat-label>Prima</mat-label>
-            <input matInput type="number" formControlName="prima" required placeholder="Ingrese la prima" title="Prima">
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Moneda</mat-label>
-            <mat-select formControlName="moneda" required>
-              <mat-option value="CRC">CRC</mat-option>
-              <mat-option value="USD">USD</mat-option>
-              <mat-option value="EUR">EUR</mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Fecha de Vigencia</mat-label>
-            <input matInput type="date" formControlName="fechaVigencia" required placeholder="Seleccione la fecha de vigencia" title="Fecha de Vigencia">
-          </mat-form-field>
-        </div>
-
-        <div class="form-row">
-          <mat-form-field>
-            <mat-label>Frecuencia</mat-label>
-            <mat-select formControlName="frecuencia" required>
-              <mat-option value="Mensual">Mensual</mat-option>
-              <mat-option value="Trimestral">Trimestral</mat-option>
-              <mat-option value="Semestral">Semestral</mat-option>
-              <mat-option value="Anual">Anual</mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Aseguradora</mat-label>
-            <mat-select formControlName="aseguradora" required>
-              <mat-option *ngFor="let aseguradora of aseguradorasSistema" [value]="aseguradora.value">
-                {{aseguradora.label}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Placa (Opcional)</mat-label>
-            <input matInput formControlName="placa" placeholder="Ingrese la placa" title="Placa">
-          </mat-form-field>
-        </div>
-
-        <div class="form-row">
-          <mat-form-field>
-            <mat-label>Marca (Opcional)</mat-label>
-            <input matInput formControlName="marca" placeholder="Ingrese la marca" title="Marca">
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Modelo (Opcional)</mat-label>
-            <input matInput formControlName="modelo" placeholder="Ingrese el modelo" title="Modelo">
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Año (Opcional)</mat-label>
-            <input matInput formControlName="año" maxlength="4" placeholder="Ingrese el año" title="Año">
-          </mat-form-field>
-        </div>
-
-        <div class="form-row">
-          <mat-form-field>
-            <mat-label>Correo Electrónico (Opcional)</mat-label>
-            <input matInput type="email" formControlName="correo" placeholder="Ingrese el correo electrónico" title="Correo Electrónico">
-          </mat-form-field>
-          
-          <mat-form-field>
-            <mat-label>Número de Teléfono (Opcional)</mat-label>
-            <input matInput formControlName="numeroTelefono" placeholder="Ingrese el número de teléfono" title="Número de Teléfono">
-          </mat-form-field>
-        </div>
-
-        <div class="form-row">
-          <mat-form-field class="full-width">
-            <mat-label>Observaciones (Opcional)</mat-label>
-            <textarea matInput formControlName="observaciones" rows="3" 
-                      placeholder="Notas, comentarios o información adicional sobre la póliza"></textarea>
-          </mat-form-field>
-        </div>
-
-        <div class="form-actions">
-          <button mat-raised-button 
-                  color="primary" 
-                  type="submit" 
-                  [disabled]="!isFormValidForSubmission() || isLoading">
-            <mat-icon>{{isEditMode ? 'update' : 'save'}}</mat-icon>
-            {{submitButtonText}}
-          </button>
-          
-          <button mat-button 
-                  type="button" 
-                  (click)="resetForm()">
-            <mat-icon>clear</mat-icon>
-            {{isEditMode ? 'Cancelar Edición' : 'Limpiar Formulario'}}
-          </button>
-          
-          <div class="edit-indicator" *ngIf="isEditMode && selectedPoliza">
-            <mat-icon color="primary">info</mat-icon>
-            <span>Editando: {{selectedPoliza.numeroPoliza}}</span>
+        <div class="edit-meta">
+          <div class="edit-poliza-number">
+            <mat-icon class="meta-icon">policy</mat-icon>
+            <span class="poliza-num-label">{{selectedPoliza.numeroPoliza}}</span>
+          </div>
+          <div class="edit-asegurado">{{selectedPoliza.nombreAsegurado}}</div>
+          <div class="edit-chips">
+            <span class="edit-chip chip-aseg">
+              <mat-icon>shield</mat-icon>{{selectedPoliza.aseguradora}}
+            </span>
+            <span class="edit-chip chip-freq">
+              <mat-icon>repeat</mat-icon>{{selectedPoliza.frecuencia}}
+            </span>
+            <span class="edit-chip chip-moneda" [class.chip-usd]="selectedPoliza.moneda==='USD'" [class.chip-eur]="selectedPoliza.moneda==='EUR'">
+              <mat-icon>payments</mat-icon>{{selectedPoliza.moneda}}
+            </span>
           </div>
         </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+        <button mat-icon-button class="edit-close-btn" type="button" (click)="resetForm()" matTooltip="Cancelar edición">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <mat-card-content>
+        <!-- Skeleton overlay while loading -->
+        <div class="form-skeleton-rows" *ngIf="formLoadingState === 'loading'">
+          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div></div>
+          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div></div>
+          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div><div class="skel-field"></div></div>
+          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div><div class="skel-field"></div></div>
+          <div class="skel-row"><div class="skel-field skel-wide"></div></div>
+        </div>
+
+        <form [formGroup]="polizaForm" (ngSubmit)="onSubmit()"
+              [class.form-fields-hidden]="formLoadingState === 'loading'"
+              [class.form-fields-reveal]="formLoadingState === 'loaded'">
+
+          <div class="form-row form-row-1">
+            <mat-form-field>
+              <mat-label>Número de Póliza</mat-label>
+              <input matInput formControlName="numeroPoliza" required placeholder="Ingrese el número de póliza" title="Número de Póliza">
+              <mat-error *ngIf="polizaForm.get('numeroPoliza')?.hasError('required')">
+                Número de póliza es requerido
+              </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Modalidad (Opcional)</mat-label>
+              <input matInput formControlName="modalidad" placeholder="Ingrese la modalidad" title="Modalidad">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-2">
+            <mat-form-field>
+              <mat-label>Nombre Asegurado</mat-label>
+              <input matInput formControlName="nombreAsegurado" required placeholder="Ingrese el nombre del asegurado" title="Nombre Asegurado">
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Número de Cédula (Opcional)</mat-label>
+              <input matInput formControlName="numeroCedula" placeholder="Ingrese el número de cédula" title="Número de Cédula">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-3">
+            <mat-form-field>
+              <mat-label>Prima</mat-label>
+              <input matInput type="number" formControlName="prima" required placeholder="Ingrese la prima" title="Prima">
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Moneda</mat-label>
+              <mat-select formControlName="moneda" required>
+                <mat-option value="CRC">CRC</mat-option>
+                <mat-option value="USD">USD</mat-option>
+                <mat-option value="EUR">EUR</mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Fecha de Vigencia</mat-label>
+              <input matInput type="date" formControlName="fechaVigencia" required placeholder="Seleccione la fecha de vigencia" title="Fecha de Vigencia">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-4">
+            <mat-form-field>
+              <mat-label>Frecuencia</mat-label>
+              <mat-select formControlName="frecuencia" required>
+                <mat-option value="Mensual">Mensual</mat-option>
+                <mat-option value="Trimestral">Trimestral</mat-option>
+                <mat-option value="Semestral">Semestral</mat-option>
+                <mat-option value="Anual">Anual</mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Aseguradora</mat-label>
+              <mat-select formControlName="aseguradora" required>
+                <mat-option *ngFor="let aseguradora of aseguradorasSistema" [value]="aseguradora.value">
+                  {{aseguradora.label}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Placa (Opcional)</mat-label>
+              <input matInput formControlName="placa" placeholder="Ingrese la placa" title="Placa">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-5">
+            <mat-form-field>
+              <mat-label>Marca (Opcional)</mat-label>
+              <input matInput formControlName="marca" placeholder="Ingrese la marca" title="Marca">
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Modelo (Opcional)</mat-label>
+              <input matInput formControlName="modelo" placeholder="Ingrese el modelo" title="Modelo">
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Año (Opcional)</mat-label>
+              <input matInput formControlName="año" maxlength="4" placeholder="Ingrese el año" title="Año">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-6">
+            <mat-form-field>
+              <mat-label>Correo Electrónico (Opcional)</mat-label>
+              <input matInput type="email" formControlName="correo" placeholder="Ingrese el correo electrónico" title="Correo Electrónico">
+            </mat-form-field>
+            
+            <mat-form-field>
+              <mat-label>Número de Teléfono (Opcional)</mat-label>
+              <input matInput formControlName="numeroTelefono" placeholder="Ingrese el número de teléfono" title="Número de Teléfono">
+            </mat-form-field>
+          </div>
+
+          <div class="form-row form-row-7">
+            <mat-form-field class="full-width">
+              <mat-label>Observaciones (Opcional)</mat-label>
+              <textarea matInput formControlName="observaciones" rows="3" 
+                        placeholder="Notas, comentarios o información adicional sobre la póliza"></textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions form-row-8">
+            <button mat-raised-button 
+                    color="primary" 
+                    type="submit" 
+                    [disabled]="!isFormValidForSubmission() || isLoading">
+              <mat-icon>{{isEditMode ? 'update' : 'save'}}</mat-icon>
+              {{submitButtonText}}
+            </button>
+            
+            <button mat-stroked-button 
+                    type="button" 
+                    (click)="resetForm()">
+              <mat-icon>{{isEditMode ? 'cancel' : 'clear'}}</mat-icon>
+              {{isEditMode ? 'Cancelar Edición' : 'Limpiar Formulario'}}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
 
   <mat-divider></mat-divider>
 

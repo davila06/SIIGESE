@@ -57,16 +57,198 @@
 .form-section {
   margin-bottom: 24px;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
   border: 1px solid #e8e8e8;
+  overflow: hidden;
+  transition: box-shadow 0.35s ease, border-color 0.35s ease;
+
+  &.is-edit-mode {
+    border-color: #d0d7ff;
+    box-shadow: 0 4px 24px rgba(102, 126, 234, 0.13);
+  }
 }
 
-.mat-card-header {
+/* ─── Form header: modo nuevo ─────────────────────────────────────── */
+.form-header-new {
   background: #667eea;
   color: white;
   padding: 16px;
-  border-radius: 8px 8px 0 0;
+  border-radius: 0;
+
+  .mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-size: 18px;
+  }
+}
+
+/* ─── Form header: context ribbon modo edición ─────────────────────── */
+.form-header-edit {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  position: relative;
+  animation: ribbonSlide 0.38s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+
+  .edit-avatar {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0;
+    animation: avatarPop 0.4s cubic-bezier(0.34, 1.5, 0.64, 1) 0.1s both;
+  }
+
+  .edit-meta {
+    flex: 1;
+    min-width: 0;
+
+    .edit-poliza-number {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      opacity: 0.85;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+
+      .meta-icon { font-size: 14px; width: 14px; height: 14px; opacity: 0.8; }
+      .poliza-num-label { font-family: 'Courier New', monospace; }
+    }
+
+    .edit-asegurado {
+      font-size: 17px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 8px;
+    }
+
+    .edit-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+  }
+
+  .edit-close-btn {
+    flex-shrink: 0;
+    color: rgba(255,255,255,0.8);
+    &:hover { color: white; background: rgba(255,255,255,0.15) !important; }
+  }
+
+  &.form-header-skeleton {
+    .edit-asegurado, .edit-poliza-number, .edit-chips {
+      opacity: 0.4;
+    }
+  }
+}
+
+.edit-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px 2px 5px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: chipFadeIn 0.3s ease both;
+
+  mat-icon { font-size: 12px; width: 12px; height: 12px; }
+
+  &.chip-usd { background: rgba(21, 101, 192, 0.5); border-color: rgba(144, 202, 249, 0.5); }
+  &.chip-eur { background: rgba(239, 108, 0, 0.4); border-color: rgba(255, 204, 128, 0.5); }
+}
+
+.edit-chip:nth-child(1) { animation-delay: 0.15s; }
+.edit-chip:nth-child(2) { animation-delay: 0.22s; }
+.edit-chip:nth-child(3) { animation-delay: 0.29s; }
+
+/* ─── Skeleton shimmer ──────────────────────────────────────────────── */
+.form-skeleton-rows {
+  padding: 16px 16px 0;
+}
+
+.skel-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.skel-field {
+  flex: 1;
+  height: 54px;
+  border-radius: 6px;
+  background: linear-gradient(90deg,
+    #f0f0f0 25%, #e0e4ff 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.1s ease infinite;
+
+  &.skel-wide { flex: 1 1 100%; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── Form fields: visibility + stagger reveal ─────────────────────── */
+.form-fields-hidden { visibility: hidden; height: 0; overflow: hidden; padding: 0; margin: 0; }
+
+.form-fields-reveal {
+  visibility: visible;
+
+  .form-row { opacity: 0; animation: rowReveal 0.35s ease forwards; }
+
+  .form-row-1 { animation-delay: 0.00s; }
+  .form-row-2 { animation-delay: 0.06s; }
+  .form-row-3 { animation-delay: 0.12s; }
+  .form-row-4 { animation-delay: 0.18s; }
+  .form-row-5 { animation-delay: 0.24s; }
+  .form-row-6 { animation-delay: 0.30s; }
+  .form-row-7 { animation-delay: 0.36s; }
+  .form-row-8 { animation-delay: 0.42s; }
+}
+
+@keyframes rowReveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Ribbon & chip keyframes ───────────────────────────────────────── */
+@keyframes ribbonSlide {
+  from { transform: translateY(-12px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes avatarPop {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes chipFadeIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 .polizas-grid {
@@ -691,21 +873,21 @@ th.mat-header-cell.mat-sort-header.mat-sort-header-sorted::after {
 
 /* Efecto slide-in al seleccionar una póliza */
 .editing-highlight {
-  animation: slideInDown 0.45s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
-  border: 2px solid #667eea !important;
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.35) !important;
+  animation: slideInDown 0.5s cubic-bezier(0.34, 1.2, 0.64, 1) forwards;
+  border-color: #667eea !important;
+  box-shadow: 0 8px 40px rgba(102, 126, 234, 0.28) !important;
 }
 
 @keyframes slideInDown {
   from {
-    transform: translateY(-18px);
-    opacity: 0.75;
+    transform: translateY(-16px) scale(0.992);
+    opacity: 0.7;
     box-shadow: 0 0 0 rgba(102, 126, 234, 0);
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.35);
+    box-shadow: 0 8px 40px rgba(102, 126, 234, 0.28);
   }
 }
 

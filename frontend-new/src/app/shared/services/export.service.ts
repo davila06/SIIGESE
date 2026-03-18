@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { formatCurrencyByCode } from '../constants/currency.constants';
+import { LoggingService } from '../../services/logging.service';
 
 export interface ExportOptions {
   filename?: string;
@@ -21,6 +22,8 @@ export interface ExportColumn {
 })
 export class ExportService {
 
+  private readonly logger = inject(LoggingService);
+
   constructor() { }
 
   /**
@@ -31,7 +34,7 @@ export class ExportService {
    */
   exportToCSV<T>(data: T[], columns: ExportColumn[], options: ExportOptions = { format: 'csv' }): void {
     if (!data || data.length === 0) {
-      console.warn('No hay datos para exportar');
+      this.logger.warn('No hay datos para exportar');
       return;
     }
 
@@ -49,7 +52,7 @@ export class ExportService {
    */
   exportToExcel<T>(data: T[], columns: ExportColumn[], options: ExportOptions = { format: 'excel' }): void {
     if (!data || data.length === 0) {
-      console.warn('No hay datos para exportar');
+      this.logger.warn('No hay datos para exportar');
       return;
     }
 

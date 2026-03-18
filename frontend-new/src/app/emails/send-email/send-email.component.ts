@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { EmailService, EmailRequest } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoggingService } from '../../services/logging.service';
 
 @Component({
   selector: 'app-send-email',
@@ -82,6 +83,8 @@ export class SendEmailComponent implements OnInit {
     }
   };
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private fb: FormBuilder,
     private emailService: EmailService,
@@ -136,7 +139,7 @@ export class SendEmailComponent implements OnInit {
         },
         error: (error) => {
           this.snackBar.open('Error enviando email', 'Cerrar', { duration: 3000 });
-          console.error('Error:', error);
+          this.logger.error('Error:', error);
           this.loading = false;
         }
       });
@@ -149,6 +152,5 @@ export class SendEmailComponent implements OnInit {
 
   previewEmail(): void {
     // Implementar preview del email
-    console.log('Preview:', this.emailForm.value);
   }
 }

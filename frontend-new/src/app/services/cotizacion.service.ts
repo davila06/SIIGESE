@@ -1,14 +1,17 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError } from 'rxjs';
 import { CreateCotizacion, UpdateCotizacion, Cotizacion, CotizacionSearch } from '../models/cotizacion.model';
 import { environment } from '../../environments/environment';
+import { LoggingService } from './logging.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CotizacionService {
   private apiUrl = `${environment.apiUrl}/cotizaciones`;
+
+  private readonly logger = inject(LoggingService);
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +26,7 @@ export class CotizacionService {
   }
 
   private handleError = (error: any): Observable<never> => {
-    console.error('Error en CotizacionService:', error);
+    this.logger.error('Error en CotizacionService:', error);
     throw error;
   };
 

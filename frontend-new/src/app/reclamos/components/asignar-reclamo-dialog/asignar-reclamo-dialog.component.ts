@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+﻿import { Component, OnInit, Inject, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 
 import { ApiService } from '../../../services/api.service';
 import { Reclamo } from '../../interfaces/reclamo.interface';
+import { LoggingService } from '../../../services/logging.service';
 
 export interface AsignarReclamoDialogData {
   reclamo: Reclamo;
@@ -179,6 +180,8 @@ export class AsignarReclamoDialogComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     public dialogRef: MatDialogRef<AsignarReclamoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: AsignarReclamoDialogData,
@@ -200,7 +203,7 @@ export class AsignarReclamoDialogComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error cargando usuarios:', error);
+        this.logger.error('Error cargando usuarios:', error);
         this.error = 'Error al cargar los usuarios disponibles';
         this.loading = false;
       }

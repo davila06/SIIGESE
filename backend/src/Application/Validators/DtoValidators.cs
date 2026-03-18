@@ -7,9 +7,11 @@ namespace Application.Validators
     {
         public LoginRequestDtoValidator()
         {
-            RuleFor(x => x.UserName)
-                .NotEmpty().WithMessage("El nombre de usuario es requerido")
-                .MinimumLength(3).WithMessage("El nombre de usuario debe tener al menos 3 caracteres");
+            // AuthService.LoginAsync uses Email for user lookup — Email is required.
+            // UserName is optional (kept for backwards compatibility with clients that send it).
+            RuleFor(x => x.Email)
+                .NotEmpty().WithMessage("El email es requerido")
+                .EmailAddress().WithMessage("El email debe tener un formato válido");
 
             RuleFor(x => x.Password)
                 .NotEmpty().WithMessage("La contraseña es requerida")

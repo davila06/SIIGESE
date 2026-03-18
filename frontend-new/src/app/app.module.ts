@@ -44,7 +44,6 @@ import { LoginComponent } from './auth/login.component';
 import { CotizacionesComponent } from './cotizaciones/cotizaciones.component';
 import { ChangePasswordComponent } from './auth/change-password/change-password.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
-import { MockApiInterceptor } from './interceptors/mock-api.interceptor';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 
 // Configurar locale español Costa Rica
@@ -110,11 +109,6 @@ export const CUSTOM_DATE_FORMATS = {
     UsuariosComponent
   ],
   providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MockApiInterceptor,
-      multi: true
-    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

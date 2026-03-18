@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -23,6 +23,7 @@ import {
   TipoReclamo, 
   PrioridadReclamo 
 } from '../../interfaces/reclamo.interface';
+import { LoggingService } from '../../../services/logging.service';
 
 interface PolizaOption {
   id: number;
@@ -80,6 +81,8 @@ export class CrearReclamoComponent implements OnInit {
     { value: PrioridadReclamo.Critica, label: 'Crítica' }
   ];
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private readonly fb: FormBuilder,
     private readonly reclamosService: ReclamosService,
@@ -128,7 +131,7 @@ export class CrearReclamoComponent implements OnInit {
         moneda: p.moneda
       }))),
       catchError(error => {
-        console.error('Error buscando pólizas:', error);
+        this.logger.error('Error buscando pólizas:', error);
         return of([]);
       })
     );
@@ -186,7 +189,7 @@ export class CrearReclamoComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          console.error('Error al crear reclamo:', error);
+          this.logger.error('Error al crear reclamo:', error);
           this.showMessage('Error al crear el reclamo. Por favor, intente nuevamente.');
         }
       });

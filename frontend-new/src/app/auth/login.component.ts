@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { LoggingService } from '../services/logging.service';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,8 @@ export class LoginComponent implements OnInit {
   isResettingPassword = false;
   hidePassword = true;
   showResetForm = false;
+
+  private readonly logger = inject(LoggingService);
 
   constructor(
     private readonly fb: FormBuilder,
@@ -33,7 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Si el usuario ya está autenticado, redirigir al dashboard
+    // Si el usuario ya estÃ¡ autenticado, redirigir al dashboard
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
     }
@@ -50,7 +53,7 @@ export class LoginComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('❌ Error en login:', error);
+          this.logger.error('âŒ Error en login:', error);
           this.isLoading = false;
         }
       });
@@ -69,7 +72,7 @@ export class LoginComponent implements OnInit {
           this.isResettingPassword = false;
         },
         error: (err) => {
-          console.error('❌ Error en recuperación de contraseña:', err);
+          this.logger.error('âŒ Error en recuperaciÃ³n de contraseÃ±a:', err);
           this.isResettingPassword = false;
         }
       });
@@ -87,13 +90,13 @@ export class LoginComponent implements OnInit {
     const form = this.showResetForm ? this.resetPasswordForm : this.loginForm;
     const control = form.get(field);
     if (control?.hasError('required')) {
-      return `${field === 'email' ? 'Email' : 'Contraseña'} es requerido`;
+      return `${field === 'email' ? 'Email' : 'ContraseÃ±a'} es requerido`;
     }
     if (control?.hasError('email')) {
-      return 'Email no válido';
+      return 'Email no vÃ¡lido';
     }
     if (control?.hasError('minlength')) {
-      return 'La contraseña debe tener al menos 6 caracteres';
+      return 'La contraseÃ±a debe tener al menos 6 caracteres';
     }
     return '';
   }

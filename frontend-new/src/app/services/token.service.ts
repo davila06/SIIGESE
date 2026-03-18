@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, Observable, interval } from 'rxjs';
-import { switchMap, filter, take } from 'rxjs/operators';
+
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { LoginResponse, TokenInfo } from '../interfaces/user.interface';
@@ -26,6 +27,7 @@ export class TokenService {
   private tokenRefreshedSubject = new BehaviorSubject<boolean>(false);
 
   private readonly REFRESH_THRESHOLD_MINUTES = 15;
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(private http: HttpClient) {
     this.startTokenRefreshMonitor();
@@ -89,22 +91,20 @@ export class TokenService {
       if (response.user) {
         sessionStorage.setItem('currentUser', JSON.stringify(response.user));
       }
-      if (!environment.production) {
-        console.log('TokenService: token refreshed, expires', response.expiresAt);
-      }
+
       this.tokenRefreshInProgress = false;
       this.tokenRefreshedSubject.next(true);
     }
   }
 
   private startTokenRefreshMonitor(): void {
-    interval(60000).subscribe(() => {
+    interval(60000).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       const token = sessionStorage.getItem('authToken');
       if (!token || this.isTokenExpired(token)) {
         return;
       }
       if (this.shouldRefreshToken(token) && !this.tokenRefreshInProgress) {
-        this.refreshToken().subscribe({
+        this.refreshToken().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
           next: (response) => this.updateToken(response),
           error: () => { this.tokenRefreshInProgress = false; }
         });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -22,6 +22,7 @@ import {
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode, parseBackendDate } from '../../../shared/constants/currency.constants';
+import { LoggingService } from '../../../services/logging.service';
 
 interface MovimientoCobro {
   id: number;
@@ -85,6 +86,8 @@ export class CobroDetalleComponent implements OnInit {
   CURRENCY_CONSTANTS = CURRENCY_CONSTANTS;
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -118,7 +121,7 @@ export class CobroDetalleComponent implements OnInit {
         this.loadMovimientos();
       },
       error: (error: any) => {
-        console.error('Error al cargar detalle del cobro:', error);
+        this.logger.error('Error al cargar detalle del cobro:', error);
         this.showMessage('Error al cargar el detalle del cobro');
         this.loading = false;
         this.router.navigate(['/cobros']);

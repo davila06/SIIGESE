@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,6 +29,7 @@ import { ReclamosService } from '../../services/reclamos.service';
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 import { parseBackendDate } from '../../../shared/constants/currency.constants';
+import { LoggingService } from '../../../services/logging.service';
 
 @Component({
   selector: 'app-reclamos-dashboard',
@@ -90,6 +91,8 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   EstadoReclamo = EstadoReclamo;
   PrioridadReclamo = PrioridadReclamo;
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private readonly reclamosService: ReclamosService,
     private readonly snackBar: MatSnackBar,
@@ -140,7 +143,7 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error al cargar reclamos:', error);
+        this.logger.error('Error al cargar reclamos:', error);
         this.showMessage('Error al cargar los reclamos');
         this.loading = false;
       }
@@ -153,7 +156,7 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
         this.stats = stats;
       },
       error: (error) => {
-        console.error('Error al cargar estadísticas:', error);
+        this.logger.error('Error al cargar estadísticas:', error);
         this.showMessage('Error al cargar las estadísticas');
       }
     });
@@ -209,12 +212,9 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   asignarReclamo(reclamo: Reclamo): void {
-    console.log('=== MÉTODO ASIGNAR RECLAMO ACTUALIZADO - TIMESTAMP: 2025-10-27 23:51 ===');
-    console.log('Iniciando proceso de asignación para reclamo:', reclamo);
     
     // Importación dinámica del componente del diálogo
     import('../asignar-reclamo-dialog/asignar-reclamo-dialog.component').then(({ AsignarReclamoDialogComponent }) => {
-      console.log('Componente del diálogo cargado exitosamente');
       
       const dialogRef = this.dialog.open(AsignarReclamoDialogComponent, {
         width: '500px',
@@ -223,11 +223,9 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          console.log('Usuario seleccionado:', result);
           this.loading = true;
           this.reclamosService.asignarReclamo(reclamo.id, result.usuarioId).subscribe({
             next: (response) => {
-              console.log('Asignación exitosa:', response);
               this.showMessage(`Reclamo asignado exitosamente a ${result.usuarioNombre}`);
               // Actualizar el reclamo en la lista local
               const index = this.reclamos.findIndex(r => r.id === reclamo.id);
@@ -244,23 +242,21 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
               this.loading = false;
             },
             error: (error) => {
-              console.error('Error asignando reclamo:', error);
+              this.logger.error('Error asignando reclamo:', error);
               this.showMessage('Error al asignar el reclamo');
               this.loading = false;
             }
           });
         } else {
-          console.log('Asignación cancelada por el usuario');
         }
       });
     }).catch(error => {
-      console.error('Error cargando el diálogo:', error);
+      this.logger.error('Error cargando el diálogo:', error);
       this.showMessage('Error al cargar el diálogo de asignación');
     });
   }
 
   cambiarEstado(reclamo: Reclamo): void {
-    console.log('Cambiar estado:', reclamo);
     
     // Usar import dinámico para el diálogo
     import('../cambiar-estado-dialog').then(module => {
@@ -276,14 +272,6 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          console.log('🔄 Cambiando estado del reclamo:', {
-            reclamoId: reclamo.id,
-            numeroReclamo: reclamo.numeroReclamo,
-            estadoActual: reclamo.estado,
-            nuevoEstado: result.nuevoEstado,
-            comentario: result.comentario
-          });
-
           this.reclamosService.cambiarEstado(reclamo.id, result.nuevoEstado, result.comentario || `Estado cambiado a ${this.getEstadoLabel(result.nuevoEstado)}`).subscribe({
             next: (response) => {
               const estadoLabel = this.getEstadoLabel(result.nuevoEstado);
@@ -292,14 +280,14 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
               this.loadStats(); // Recargar estadísticas
             },
             error: (error) => {
-              console.error('❌ Error cambiando estado:', error);
+              this.logger.error('❌ Error cambiando estado:', error);
               this.showMessage('Error al cambiar el estado del reclamo');
             }
           });
         }
       });
     }).catch(error => {
-      console.error('❌ Error cargando diálogo de cambio de estado:', error);
+      this.logger.error('❌ Error cargando diálogo de cambio de estado:', error);
       this.showMessage('Error al cargar el diálogo de cambio de estado');
     });
   }
@@ -317,7 +305,6 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   subirDocumento(reclamo: Reclamo): void {
-    console.log('Subir documento:', reclamo);
     this.showMessage('Funcionalidad de carga de documentos en desarrollo');
   }
 
@@ -518,7 +505,7 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
       }
       this.showMessage(`Archivo exportado exitosamente como ${options.format.toUpperCase()}`);
     } catch (error) {
-      console.error('Error al exportar:', error);
+      this.logger.error('Error al exportar:', error);
       this.showMessage('Error al exportar el archivo');
     }
   }

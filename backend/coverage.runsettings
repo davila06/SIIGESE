@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat code coverage">
+        <Configuration>
+          <Format>cobertura</Format>
+          <!-- Fail the build if line coverage drops below this threshold -->
+          <Threshold>60</Threshold>
+          <ThresholdType>line</ThresholdType>
+          <ThresholdStat>minimum</ThresholdStat>
+          <!-- Include only production code from this project -->
+          <Include>[SINSEG.*]*,[Application]*,[Domain]*,[Infrastructure]*,[WebApi]*</Include>
+          <!-- Exclude test assemblies and generated code -->
+          <Exclude>[*Tests*]*,[*Migrations*]*</Exclude>
+          <ExcludeByAttribute>GeneratedCodeAttribute,ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+</RunSettings>

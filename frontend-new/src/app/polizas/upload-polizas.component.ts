@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { DataUploadResult, FailedRecord } from '../interfaces/user.interface';
 import { Router } from '@angular/router';
 import { CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
+import { LoggingService } from '../services/logging.service';
 
 @Component({
   selector: 'app-upload-polizas',
@@ -28,6 +29,8 @@ export class UploadPolizasComponent implements OnInit {
     errors: [] as string[],
     failedRecords: [] as FailedRecord[]
   };
+
+  private readonly logger = inject(LoggingService);
 
   constructor(
     private readonly apiService: ApiService,
@@ -185,7 +188,7 @@ export class UploadPolizasComponent implements OnInit {
       },
       error: (error: any) => {
         this.isLoading = false;
-        console.error('Error uploading file:', error);
+        this.logger.error('Error uploading file:', error);
 
         let errorMessage = 'Error al subir el archivo';
         if (error.status === 400) {
@@ -243,7 +246,7 @@ export class UploadPolizasComponent implements OnInit {
         });
       },
       error: (error: any) => {
-        console.error('Error descargando template:', error);
+        this.logger.error('Error descargando template:', error);
         this.snackBar.open('Error descargando template. Intente nuevamente.', 'Cerrar', {
           duration: 3000,
           panelClass: ['error-snackbar']

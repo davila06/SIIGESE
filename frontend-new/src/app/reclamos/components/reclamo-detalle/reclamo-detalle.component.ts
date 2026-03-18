@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -21,6 +21,7 @@ import {
   getEstadoReclamoLabel,
   getPrioridadReclamoLabel
 } from '../../interfaces/reclamo.interface';
+import { LoggingService } from '../../../services/logging.service';
 
 @Component({
   selector: 'app-reclamo-detalle',
@@ -50,6 +51,8 @@ export class ReclamoDetalleComponent implements OnInit {
   EstadoReclamo = EstadoReclamo;
   PrioridadReclamo = PrioridadReclamo;
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -75,7 +78,7 @@ export class ReclamoDetalleComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error cargando reclamo:', error);
+        this.logger.error('Error cargando reclamo:', error);
         this.showMessage('Error al cargar el reclamo', 'error');
         this.loading = false;
         this.router.navigate(['/reclamos']);

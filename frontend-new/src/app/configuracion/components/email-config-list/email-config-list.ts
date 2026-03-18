@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EmailConfigService } from '../../services/email-config.service';
 import { EmailConfig, ApiResponse } from '../../models/email-config.model';
+import { LoggingService } from '../../../services/logging.service';
 
 @Component({
   selector: 'app-email-config-list',
@@ -14,6 +15,8 @@ export class EmailConfigList implements OnInit {
   emailConfigs: EmailConfig[] = [];
   displayedColumns: string[] = ['configName', 'smtpServer', 'fromEmail', 'isDefault', 'isActive', 'actions'];
   loading = false;
+
+  private readonly logger = inject(LoggingService);
 
   constructor(
     private emailConfigService: EmailConfigService,
@@ -34,7 +37,7 @@ export class EmailConfigList implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading email configs:', error);
+        this.logger.error('Error loading email configs:', error);
         this.showMessage('Error al cargar las configuraciones', 'error');
         this.loading = false;
       }
@@ -57,7 +60,7 @@ export class EmailConfigList implements OnInit {
           this.loadEmailConfigs();
         },
         error: (error) => {
-          console.error('Error deleting config:', error);
+          this.logger.error('Error deleting config:', error);
           this.showMessage('Error al eliminar la configuración', 'error');
         }
       });
@@ -71,7 +74,7 @@ export class EmailConfigList implements OnInit {
         this.loadEmailConfigs();
       },
       error: (error) => {
-        console.error('Error setting default:', error);
+        this.logger.error('Error setting default:', error);
         this.showMessage('Error al establecer como predeterminada', 'error');
       }
     });
@@ -85,7 +88,7 @@ export class EmailConfigList implements OnInit {
         this.loadEmailConfigs();
       },
       error: (error) => {
-        console.error('Error toggling status:', error);
+        this.logger.error('Error toggling status:', error);
         this.showMessage('Error al cambiar el estado', 'error');
       }
     });

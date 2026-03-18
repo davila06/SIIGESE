@@ -57,4 +57,16 @@ namespace Application.Interfaces
         Task DeleteAsync(int id);
         Task<DataUploadResultDto> ProcesarExcelPolizasAsync(int perfilId, IFormFile file, int userId);
     }
+
+    public interface IChatService
+    {
+        Task<ChatSessionDto> CreateSessionAsync(int userId, string? title = null);
+        Task<IEnumerable<ChatSessionDto>> GetSessionsAsync(int userId);
+        Task<ChatSessionDetailDto> GetSessionAsync(int userId, string sessionId);
+        Task<SendMessageResponseDto> SendMessageAsync(int userId, string sessionId, SendMessageDto dto);
+        Task DeleteSessionAsync(int userId, string sessionId);
+        Task ReactToMessageAsync(int userId, int messageId, ReactToMessageDto dto);
+        Task MarkSessionAsReadAsync(int userId, string sessionId);
+        Task<ChatStatsDto> GetStatsAsync(int userId);
+    }
 }

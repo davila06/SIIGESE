@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { User, CreateUser, UpdateUser, Role } from '../interfaces/user.interface';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
+import { LoggingService } from '../services/logging.service';
 
 @Component({
   selector: 'app-usuarios',
@@ -63,6 +64,8 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['userName', 'fullName', 'roles', 'isActive', 'lastLoginAt', 'actions'];
   pageSizeOptions = [5, 10, 25, 50];
   pageSize = 10;
+
+  private readonly logger = inject(LoggingService);
 
   constructor(
     private readonly fb: FormBuilder,
@@ -138,7 +141,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading users:', error);
+        this.logger.error('Error loading users:', error);
         this.isLoading = false;
       }
     });
@@ -150,7 +153,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
         this.availableRoles = roles;
       },
       error: (error) => {
-        console.error('Error loading roles:', error);
+        this.logger.error('Error loading roles:', error);
       }
     });
   }
@@ -224,7 +227,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
           this.loadUsers();
         },
         error: (error) => {
-          console.error('Error deleting user:', error);
+          this.logger.error('Error deleting user:', error);
           this.isLoading = false;
         }
       });
@@ -260,7 +263,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
         this.resetForm();
       },
       error: (error) => {
-        console.error('Error creating user:', error);
+        this.logger.error('Error creating user:', error);
         this.isLoading = false;
       }
     });
@@ -284,7 +287,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
         this.cancelEdit();
       },
       error: (error) => {
-        console.error('Error updating user:', error);
+        this.logger.error('Error updating user:', error);
         this.isLoading = false;
       }
     });

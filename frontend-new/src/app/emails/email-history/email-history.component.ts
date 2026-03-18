@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { EmailService, EmailHistoryResponse } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoggingService } from '../../services/logging.service';
 
 @Component({
   selector: 'app-email-history',
@@ -52,6 +53,8 @@ export class EmailHistoryComponent implements OnInit {
     'PolizaPorVencer': 'warn'
   };
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private emailService: EmailService,
     private snackBar: MatSnackBar
@@ -76,7 +79,7 @@ export class EmailHistoryComponent implements OnInit {
       },
       error: (error) => {
         this.snackBar.open('Error cargando historial de emails', 'Cerrar', { duration: 3000 });
-        console.error('Error:', error);
+        this.logger.error('Error:', error);
         this.loading = false;
       }
     });
@@ -122,12 +125,10 @@ export class EmailHistoryComponent implements OnInit {
 
   viewEmailDetails(email: EmailHistoryResponse): void {
     // Implementar modal para ver detalles del email
-    console.log('Ver detalles del email:', email);
   }
 
   resendEmail(email: EmailHistoryResponse): void {
     // Implementar reenvío de email
-    console.log('Reenviar email:', email);
     this.snackBar.open('Funcionalidad de reenvío en desarrollo', 'Cerrar', { duration: 3000 });
   }
 }

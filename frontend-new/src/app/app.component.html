@@ -107,6 +107,19 @@
           <span [class.collapsed]="isCollapsed && !isMobile">Configuración</span>
           <div class="nav-indicator"></div>
         </a>
+
+        <a mat-button 
+           class="nav-item nav-item-chat" 
+           routerLink="/chat" 
+           routerLinkActive="active"
+           (click)="onNavItemClick()"
+           matTooltip="Asistente IA"
+           [matTooltipDisabled]="!isCollapsed || isMobile"
+           matTooltipPosition="right">
+          <mat-icon>smart_toy</mat-icon>
+          <span [class.collapsed]="isCollapsed && !isMobile">Asistente IA</span>
+          <div class="nav-indicator"></div>
+        </a>
      
       <a mat-button 
            class="nav-item" 

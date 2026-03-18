@@ -20,6 +20,8 @@ namespace Infrastructure.Data
         public DbSet<Cotizacion> Cotizaciones { get; set; }
         public DbSet<EmailConfig> EmailConfigs { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+        public DbSet<ChatSession> ChatSessions { get; set; }
+        public DbSet<ChatMessage> ChatMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -131,6 +133,39 @@ namespace Infrastructure.Data
                 entity.HasIndex(e => e.Placa);
                 entity.HasIndex(e => e.PerfilId);
                 entity.HasIndex(e => e.Aseguradora);
+
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            // ChatSession configuration
+            modelBuilder.Entity<ChatSession>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.SessionId).IsRequired().HasMaxLength(64);
+                entity.Property(e => e.Title).HasMaxLength(200);
+                entity.Property(e => e.LastMessage).HasMaxLength(300);
+                entity.HasIndex(e => e.SessionId).IsUnique();
+                entity.HasIndex(e => e.UserId);
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            // ChatMessage configuration
+            modelBuilder.Entity<ChatMessage>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Content).IsRequired().HasMaxLength(2000);
+                entity.HasIndex(e => e.ChatSessionId);
+
+                entity.HasOne(e => e.ChatSession)
+                    .WithMany(s => s.Messages)
+                    .HasForeignKey(e => e.ChatSessionId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasQueryFilter(e => !e.IsDeleted);
             });

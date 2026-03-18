@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
@@ -21,6 +21,7 @@ import {
   NotificationStatistics 
 } from '../../services/notification.service';
 import { parseBackendDate } from '../../../shared/constants/currency.constants';
+import { LoggingService } from '../../../services/logging.service';
 
 @Component({
   selector: 'app-automatic-notifications',
@@ -53,6 +54,8 @@ export class AutomaticNotificationsComponent implements OnInit {
   displayedColumnsOverdue = ['numeroPoliza', 'clienteNombre', 'montoVencido', 'diasMora', 'actions'];
   displayedColumnsExpiring = ['numeroPoliza', 'clienteNombre', 'fechaVencimiento', 'diasHastaVencimiento', 'montoAsegurado'];
 
+  private readonly logger = inject(LoggingService);
+
   constructor(
     private notificationService: NotificationService,
     private snackBar: MatSnackBar,
@@ -71,7 +74,7 @@ export class AutomaticNotificationsComponent implements OnInit {
         this.statistics = stats;
       },
       error: (error) => {
-        console.error('Error cargando estadísticas:', error);
+        this.logger.error('Error cargando estadísticas:', error);
         this.showMessage('Error cargando estadísticas');
       }
     });
@@ -81,7 +84,7 @@ export class AutomaticNotificationsComponent implements OnInit {
         this.overduePayments = cobros;
       },
       error: (error) => {
-        console.error('Error cargando cobros vencidos:', error);
+        this.logger.error('Error cargando cobros vencidos:', error);
         this.showMessage('Error cargando cobros vencidos');
       }
     });
@@ -92,7 +95,7 @@ export class AutomaticNotificationsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error cargando pólizas por vencer:', error);
+        this.logger.error('Error cargando pólizas por vencer:', error);
         this.showMessage('Error cargando pólizas por vencer');
         this.isLoading = false;
       }
@@ -107,7 +110,7 @@ export class AutomaticNotificationsComponent implements OnInit {
         this.loadData();
       },
       error: (error: any) => {
-        console.error('Error procesando cobros vencidos:', error);
+        this.logger.error('Error procesando cobros vencidos:', error);
         this.showMessage('Error procesando cobros vencidos');
         this.isLoading = false;
       }
@@ -122,7 +125,7 @@ export class AutomaticNotificationsComponent implements OnInit {
         this.loadData();
       },
       error: (error: any) => {
-        console.error('Error procesando pólizas por vencer:', error);
+        this.logger.error('Error procesando pólizas por vencer:', error);
         this.showMessage('Error procesando pólizas por vencer');
         this.isLoading = false;
       }
@@ -137,7 +140,7 @@ export class AutomaticNotificationsComponent implements OnInit {
         this.loadData();
       },
       error: (error: any) => {
-        console.error('Error procesando todas las notificaciones:', error);
+        this.logger.error('Error procesando todas las notificaciones:', error);
         this.showMessage('Error procesando todas las notificaciones');
         this.isLoading = false;
       }
