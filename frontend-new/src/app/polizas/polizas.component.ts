@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { Poliza, CreatePoliza } from '../interfaces/user.interface';
-import { formatCurrencyByCode, formatDateCR, MONEDAS_SISTEMA, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
+import { formatCurrencyByCode, formatDateCR, parseBackendDate, MONEDAS_SISTEMA, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-polizas',
@@ -66,37 +66,15 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   currentSortDirection: 'asc' | 'desc' | '' = '';
 
   ngAfterViewInit(): void {
-    // Configurar solo paginación (el sorting será manual)
     setTimeout(() => {
       if (this.paginator) {
         this.polizasDataSource.paginator = this.paginator;
       }
-      console.log('MatPaginator configurado:', !!this.paginator);
-      console.log('DataSource data length:', this.polizasDataSource.data.length);
     }, 0);
-
-    // Debug del formulario en tiempo real
-    if (this.polizaForm) {
-      this.polizaForm.valueChanges.subscribe(value => {
-        console.log('📝 Formulario cambió:', {
-          valid: this.polizaForm.valid,
-          invalid: this.polizaForm.invalid,
-          validForSubmission: this.isFormValidForSubmission(),
-          value: value
-        });
-      });
-
-      this.polizaForm.statusChanges.subscribe(status => {
-        console.log('🔄 Estado del formulario cambió:', status);
-        console.log('📊 Validación para envío:', this.isFormValidForSubmission());
-      });
-    }
   }
 
   // Método de sorting manual
   sortData(column: string): void {
-    console.log('Sorting manual activado:', column);
-    
     // Determinar dirección de sorting
     if (this.currentSortColumn === column) {
       // Cambiar dirección: asc -> desc -> none -> asc
@@ -113,9 +91,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       this.currentSortColumn = column;
       this.currentSortDirection = 'asc';
     }
-
-    console.log('Sort column:', this.currentSortColumn);
-    console.log('Sort direction:', this.currentSortDirection);
 
     // Aplicar sorting
     if (this.currentSortDirection === '') {
@@ -142,8 +117,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     
     // Actualizar paginación para tarjetas
     this.updatePaginatedPolizas();
-    
-    console.log('Sorting aplicado, datos ordenados');
   }
 
   // Obtener valor para sorting
@@ -158,7 +131,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       case 'aseguradora':
         return (poliza.aseguradora || '').toLowerCase();
       case 'fechaVigencia':
-        return new Date(poliza.fechaVigencia).getTime();
+        return (parseBackendDate(poliza.fechaVigencia) ?? new Date(0)).getTime();
       case 'vehiculo':
         return (poliza.placa || '').toLowerCase();
       default:
@@ -173,10 +146,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   // Método específico para manejar sorting
-  onSortChange(event: any): void {
-    // Ya no necesario con sorting manual, pero mantengo para compatibilidad
-    console.log('MatSort event (ignorado):', event);
-  }
+  onSortChange(_event: any): void { }
 
   createForm(): FormGroup {
     return this.fb.group({
@@ -204,6 +174,19 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.apiService.getPolizas().subscribe({
       next: (polizas: Poliza[]) => {
+        console.log(`📋 Pólizas cargadas: ${polizas.length}`);
+        if (polizas.length > 0) {
+          console.table(polizas.map(p => ({
+            id: p.id,
+            numeroPoliza: p.numeroPoliza,
+            nombreAsegurado: p.nombreAsegurado,
+            aseguradora: p.aseguradora,
+            frecuencia: p.frecuencia,
+            prima: p.prima,
+            moneda: p.moneda,
+            fechaVigencia: p.fechaVigencia
+          })));
+        }
         this.polizas = polizas;
         
         // Inicializar datos filtrados
@@ -217,9 +200,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
           if (this.sort) {
             this.polizasDataSource.sort = this.sort;
-            console.log('Datos cargados, sorting reconfigurado');
-            console.log('Total pólizas:', this.polizas.length);
-            console.log('DataSource data:', this.polizasDataSource.data.length);
           }
         }, 0);
         
@@ -457,118 +437,43 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   selectPoliza(poliza: Poliza): void {
-    this.selectedPoliza = poliza;
-    this.isEditMode = true;
-    this.loadPolizaToForm(poliza);
-    
-    // Scroll inmediato al top de la página
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth'
-    });
-    
-    // Efecto visual opcional con delay
-    setTimeout(() => {
-      if (this.formSection?.nativeElement) {
-        this.formSection.nativeElement.classList.add('editing-highlight');
-        setTimeout(() => {
-          this.formSection.nativeElement.classList.remove('editing-highlight');
-        }, 2000);
-      }
-    }, 500);
+    this.selectPolizaAndScroll(poliza);
   }
 
   selectPolizaAndScroll(poliza: Poliza): void {
-    console.log('🔄 Iniciando edición de póliza:', poliza.numeroPoliza);
-    
-    // Configurar datos primero
     this.selectedPoliza = poliza;
     this.isEditMode = true;
     this.loadPolizaToForm(poliza);
-    
-    console.log('📝 Datos cargados en formulario:', {
-      numeroPoliza: poliza.numeroPoliza,
-      nombreAsegurado: poliza.nombreAsegurado,
-      prima: poliza.prima,
-      isEditMode: this.isEditMode
-    });
-    
-    // Forzar detección de cambios para que Angular actualice el DOM completamente
     this.cdr.detectChanges();
-    
-    // Scroll suave al formulario con múltiples métodos para compatibilidad
-    setTimeout(() => {
-      console.log('🎯 Ejecutando scroll al formulario...');
-      
-      // Método 1: Scroll nativo del browser
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-      });
-      
-      // Método 2: Backup para navegadores que no soportan behavior smooth
-      if (window.scrollY > 0) {
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-      }
-      
-      // Método 3: Scroll a elemento específico si existe
-      if (this.formSection?.nativeElement) {
-        this.formSection.nativeElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-      
-      console.log('✅ Scroll completado, posición final:', window.scrollY);
-      
-    }, 100);
-    
-    // Efecto visual de confirmación
-    setTimeout(() => {
-      if (this.formSection?.nativeElement) {
-        console.log('✨ Aplicando efecto visual de edición...');
-        this.formSection.nativeElement.classList.add('editing-highlight');
-        
-        // Mostrar mensaje de confirmación
-        this.showMessage(`📝 Editando póliza: ${poliza.numeroPoliza}`);
-        
-        setTimeout(() => {
-          this.formSection.nativeElement.classList.remove('editing-highlight');
-        }, 2000);
-      }
-    }, 500);
+
+    // mat-sidenav-content is the real scroll container; window.scrollTo has no effect inside it
+    const scrollHost =
+      document.querySelector('mat-sidenav-content') as HTMLElement | null
+      ?? document.documentElement;
+    scrollHost.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+
+    // Apply slide-in animation right away so the user sees the form slide in as they scroll up
+    if (this.formSection?.nativeElement) {
+      const el = this.formSection.nativeElement;
+      el.classList.remove('editing-highlight');
+      // Force reflow so re-adding the class restarts the animation
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      el.offsetWidth;
+      el.classList.add('editing-highlight');
+      setTimeout(() => el.classList.remove('editing-highlight'), 500);
+    }
   }
 
   // Método de prueba para forzar scroll
   forceScrollToTop(): void {
-    console.log('Forzando scroll al top...');
-    const scrollElements = [document.documentElement, document.body, window];
-    
-    scrollElements.forEach(element => {
-      if (element === window) {
-        element.scrollTo(0, 0);
-      } else {
-        (element as HTMLElement).scrollTop = 0;
-      }
-    });
-    
-    // También intentar con todos los elementos scrollables
-    const scrollableElements = document.querySelectorAll('*');
-    scrollableElements.forEach(el => {
-      if (el.scrollTop > 0) {
-        el.scrollTop = 0;
-      }
-    });
+    [document.documentElement, document.body].forEach(el => el.scrollTop = 0);
+    window.scrollTo(0, 0);
   }
 
   loadPolizaToForm(poliza: Poliza): void {
-    console.log('📋 Cargando datos de póliza al formulario:', poliza);
-    
-    // Formatear la fecha para el input tipo date
-    const fechaVigencia = new Date(poliza.fechaVigencia).toISOString().split('T')[0];
+    // Formatear la fecha para el input tipo date (soporta DD-MM-YYYY del backend)
+    const parsed = parseBackendDate(poliza.fechaVigencia);
+    const fechaVigencia = parsed ? parsed.toISOString().split('T')[0] : '';
     
     // Preparar los valores para el formulario
     const formValues = {
@@ -591,24 +496,10 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       observaciones: poliza.observaciones || ''
     };
     
-    console.log('💾 Valores a cargar en formulario:', formValues);
-    
     // Cargar los valores al formulario
     this.polizaForm.patchValue(formValues);
-    
-    // Marcar el formulario como pristine y untouched después de cargar los datos
     this.polizaForm.markAsPristine();
     this.polizaForm.markAsUntouched();
-    
-    // Verificar que los valores se cargaron correctamente
-    setTimeout(() => {
-      console.log('✅ Verificación del formulario cargado:', {
-        formValid: this.polizaForm.valid,
-        formValue: this.polizaForm.value,
-        isEditMode: this.isEditMode,
-        selectedPoliza: this.selectedPoliza?.numeroPoliza
-      });
-    }, 50);
   }
 
   resetForm(): void {
@@ -656,29 +547,10 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   isFormValidForSubmission(): boolean {
     const requiredFields = ['numeroPoliza', 'nombreAsegurado', 
                            'prima', 'fechaVigencia', 'frecuencia', 'aseguradora'];
-    
-    const isValid = requiredFields.every(field => {
+    return requiredFields.every(field => {
       const control = this.polizaForm.get(field);
       return control && control.valid && control.value !== '' && control.value !== null;
     });
-
-    // Debug logging
-    if (!isValid) {
-      console.log('🔍 Formulario inválido. Campos con problemas:');
-      requiredFields.forEach(field => {
-        const control = this.polizaForm.get(field);
-        if (!control || !control.valid || control.value === '' || control.value === null) {
-          console.log(`❌ ${field}:`, {
-            exists: !!control,
-            valid: control?.valid,
-            value: control?.value,
-            errors: control?.errors
-          });
-        }
-      });
-    }
-
-    return isValid;
   }
 
 }

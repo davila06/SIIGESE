@@ -28,6 +28,7 @@ import {
 import { ReclamosService } from '../../services/reclamos.service';
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
+import { parseBackendDate } from '../../../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-reclamos-dashboard',
@@ -120,7 +121,7 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
         case 'prioridad':
           return data.prioridad; // Usar el valor del enum directamente
         case 'fechaReclamo':
-          return new Date(data.fechaReclamo).getTime();
+          return (parseBackendDate(data.fechaReclamo) ?? new Date(0)).getTime();
         case 'montoReclamado':
           return data.montoReclamado || 0;
         default:
@@ -490,8 +491,8 @@ export class ReclamosDashboardComponent implements OnInit, AfterViewInit {
       tipoReclamo: this.getTipoReclamoText(r.tipoReclamo),
       estado: this.getEstadoText(r.estado),
       prioridad: this.getPrioridadText(r.prioridad),
-      fechaReclamo: r.fechaReclamo ? new Date(r.fechaReclamo) : null,
-      fechaResolucion: r.fechaResolucion ? new Date(r.fechaResolucion) : null
+      fechaReclamo: r.fechaReclamo ? parseBackendDate(r.fechaReclamo) : null,
+      fechaResolucion: r.fechaResolucion ? parseBackendDate(r.fechaResolucion) : null
     }));
 
     const exportOptions = {

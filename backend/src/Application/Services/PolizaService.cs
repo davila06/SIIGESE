@@ -131,6 +131,28 @@ namespace Application.Services
                 var rows = worksheet.RowsUsed().Skip(1); // Saltar header
                 result.TotalRecords = rows.Count();
 
+                // Leer la fila de encabezados para mapeo dinámico de columnas
+                var columnMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+                var headerRow = worksheet.Row(1);
+                foreach (var cell in headerRow.CellsUsed())
+                {
+                    var h = cell.GetString().Trim();
+                    if (!string.IsNullOrEmpty(h))
+                        columnMap[h.ToUpperInvariant()] = cell.Address.ColumnNumber;
+                }
+                Console.WriteLine($"Columnas detectadas: {string.Join(", ", columnMap.Keys)}");
+
+                // Alias resolution: map common alternative header names to canonical keys
+                var nombreAliases = new[] { "NOMBRE ASEGURADO", "NOMBRE_ASEGURADO", "ASEGURADO", "TITULAR", "NOMBRE COMPLETO", "CLIENTE" };
+                if (!columnMap.ContainsKey("NOMBRE"))
+                {
+                    foreach (var alias in nombreAliases)
+                        if (columnMap.TryGetValue(alias, out var aliasCol)) { columnMap["NOMBRE"] = aliasCol; break; }
+                }
+
+                // Fallback positions depend on whether a MOD column is present in the file
+                int nombreFallback = columnMap.ContainsKey("MOD") ? 3 : 2;
+
                 if (result.TotalRecords == 0)
                 {
                     errors.Add("El archivo Excel no contiene datos o solo tiene encabezados.");
@@ -150,42 +172,46 @@ namespace Application.Services
                             // Capturar datos originales de la fila para uso posterior
                             var rowData = new Dictionary<string, string>
                             {
-                                ["POLIZA"] = GetCellValueSafe(row, 1, "POLIZA", true),
-                                ["NOMBRE"] = GetCellValueSafe(row, 2, "NOMBRE", true),
-                                ["NUMEROCEDULA"] = GetCellValueSafe(row, 3, "NUMEROCEDULA", true),
-                                ["PRIMA"] = GetCellValueSafe(row, 4, "PRIMA", true),
-                                ["MONEDA"] = GetCellValueSafe(row, 5, "MONEDA", true),
-                                ["FECHA"] = GetCellValueSafe(row, 6, "FECHA", true),
-                                ["FRECUENCIA"] = GetCellValueSafe(row, 7, "FRECUENCIA", true),
-                                ["ASEGURADORA"] = GetCellValueSafe(row, 8, "ASEGURADORA", true),
-                                ["PLACA"] = GetCellValueSafe(row, 9, "PLACA", true),
-                                ["MARCA"] = GetCellValueSafe(row, 10, "MARCA", true),
-                                ["MODELO"] = GetCellValueSafe(row, 11, "MODELO", true),
-                                ["AÑO"] = GetCellValueSafe(row, 12, "AÑO", true),
-                                ["CORREO"] = GetCellValueSafe(row, 13, "CORREO", true),
-                                ["NUMEROTELEFONO"] = GetCellValueSafe(row, 14, "NUMEROTELEFONO", true)
+                                ["POLIZA"]         = GetCell(row, columnMap, "POLIZA",         1),
+                                ["NOMBRE"]         = GetCell(row, columnMap, "NOMBRE",         nombreFallback),
+                                ["NUMEROCEDULA"]   = GetCell(row, columnMap, "NUMEROCEDULA",   3, true),
+                                ["PRIMA"]          = GetCell(row, columnMap, "PRIMA",          4),
+                                ["MONEDA"]         = GetCell(row, columnMap, "MONEDA",         5),
+                                ["FECHA"]          = GetCell(row, columnMap, "FECHA",          6),
+                                ["FRECUENCIA"]     = GetCell(row, columnMap, "FRECUENCIA",     7),
+                                ["ASEGURADORA"]    = GetCell(row, columnMap, "ASEGURADORA",    8),
+                                ["PLACA"]          = GetCell(row, columnMap, "PLACA",          9,  true),
+                                ["MARCA"]          = GetCell(row, columnMap, "MARCA",          10, true),
+                                ["MODELO"]         = GetCell(row, columnMap, "MODELO",         11, true),
+                                ["AÑO"]            = GetCell(row, columnMap, "AÑO",            12, true),
+                                ["CORREO"]         = GetCell(row, columnMap, "CORREO",         13, true),
+                                ["NUMEROTELEFONO"] = GetCell(row, columnMap, "NUMEROTELEFONO", 14, true),
+                                ["OBSERVACIONES"]  = GetCell(row, columnMap, "OBSERVACIONES",  -1, true),
+                                ["MOD"]            = GetCell(row, columnMap, "MOD",            -1, true)
                             };
 
-                            // Mapear columnas específicas del Excel según el nuevo formato
-                            // POLIZA	NOMBRE	NUMEROCEDULA	PRIMA	MONEDA	FECHA	FRECUENCIA	ASEGURADORA	PLACA	MARCA	MODELO	AÑO	CORREO	NUMEROTELEFONO
+                            // Mapear columnas por nombre de encabezado (con fallback a posición)
+                            // POLIZA | MOD | NOMBRE | PRIMA | MONEDA | FECHA | FRECUENCIA | ASEGURADORA | PLACA | MARCA | MODELO | AÑO | OBSERVACIONES | COLECTIVA
                             var poliza = new Poliza
                             {
-                                NumeroPoliza = TruncateString(GetCellValueSafe(row, 1, "POLIZA"), 50, row.RowNumber(), "POLIZA"),
-                                NombreAsegurado = TruncateString(GetCellValueSafe(row, 2, "NOMBRE"), 200, row.RowNumber(), "NOMBRE"),
-                                NumeroCedula = TruncateString(GetCellValueSafe(row, 3, "NUMEROCEDULA"), 50, row.RowNumber(), "NUMEROCEDULA"),
-                                Prima = ParseDecimal(GetCellValueSafe(row, 4, "PRIMA")),
-                                Moneda = GetCellValueSafe(row, 5, "MONEDA").ToUpperInvariant(), // No truncar moneda, será normalizada después
-                                FechaVigencia = ParseDate(GetCellValueSafe(row, 6, "FECHA")),
-                                Frecuencia = TruncateString(GetCellValueSafe(row, 7, "FRECUENCIA"), 50, row.RowNumber(), "FRECUENCIA"),
-                                Aseguradora = TruncateString(GetCellValueSafe(row, 8, "ASEGURADORA"), 100, row.RowNumber(), "ASEGURADORA"),
-                                Placa = TruncateString(GetCellValueSafe(row, 9, "PLACA", true), 8, row.RowNumber(), "PLACA"), // Máximo 8 caracteres para placa
-                                Marca = TruncateString(GetCellValueSafe(row, 10, "MARCA", true), 50, row.RowNumber(), "MARCA"),
-                                Modelo = TruncateString(GetCellValueSafe(row, 11, "MODELO", true), 50, row.RowNumber(), "MODELO"),
-                                Año = TruncateString(GetCellValueSafe(row, 12, "AÑO", true), 4, row.RowNumber(), "AÑO"),
-                                Correo = TruncateString(GetCellValueSafe(row, 13, "CORREO", true), 100, row.RowNumber(), "CORREO"),
-                                NumeroTelefono = TruncateString(GetCellValueSafe(row, 14, "NUMEROTELEFONO", true), 20, row.RowNumber(), "NUMEROTELEFONO"),
-                                PerfilId = perfilId,
-                                CreatedBy = userId.ToString()
+                                NumeroPoliza    = TruncateString(GetCell(row, columnMap, "POLIZA",         1),        50,  row.RowNumber(), "POLIZA"),
+                                Modalidad       = TruncateString(GetCell(row, columnMap, "MOD",            -1, true), 50,  row.RowNumber(), "MOD"),
+                                NombreAsegurado = TruncateString(GetCell(row, columnMap, "NOMBRE",         nombreFallback), 200, row.RowNumber(), "NOMBRE"),
+                                NumeroCedula    = TruncateString(GetCell(row, columnMap, "NUMEROCEDULA",   3, true),  50,  row.RowNumber(), "NUMEROCEDULA"),
+                                Prima           = ParseDecimal(  GetCell(row, columnMap, "PRIMA",          4)),
+                                Moneda          = GetCell(row, columnMap, "MONEDA",         5).ToUpperInvariant(),
+                                FechaVigencia   = ParseDate(     GetCell(row, columnMap, "FECHA",          6)),
+                                Frecuencia      = TruncateString(GetCell(row, columnMap, "FRECUENCIA",     7),        50,  row.RowNumber(), "FRECUENCIA"),
+                                Aseguradora     = TruncateString(GetCell(row, columnMap, "ASEGURADORA",    8),        100, row.RowNumber(), "ASEGURADORA"),
+                                Placa           = TruncateString(GetCell(row, columnMap, "PLACA",          9,  true), 8,   row.RowNumber(), "PLACA"),
+                                Marca           = TruncateString(GetCell(row, columnMap, "MARCA",          10, true), 50,  row.RowNumber(), "MARCA"),
+                                Modelo          = TruncateString(GetCell(row, columnMap, "MODELO",         11, true), 50,  row.RowNumber(), "MODELO"),
+                                Año             = TruncateString(GetCell(row, columnMap, "AÑO",            12, true), 4,   row.RowNumber(), "AÑO"),
+                                Correo          = TruncateString(GetCell(row, columnMap, "CORREO",         13, true), 100, row.RowNumber(), "CORREO"),
+                                NumeroTelefono  = TruncateString(GetCell(row, columnMap, "NUMEROTELEFONO", 14, true), 20,  row.RowNumber(), "NUMEROTELEFONO"),
+                                Observaciones   = TruncateString(GetCell(row, columnMap, "OBSERVACIONES",  -1, true), 500, row.RowNumber(), "OBSERVACIONES"),
+                                PerfilId        = perfilId,
+                                CreatedBy       = userId.ToString()
                             };
 
                         // No validar campos obligatorios, subir la data como viene
@@ -205,17 +231,26 @@ namespace Application.Services
                         var existingPoliza = await _unitOfWork.Polizas.GetByNumeroPolizaAsync(poliza.NumeroPoliza);
                         if (existingPoliza != null)
                         {
-                            var error = $"Póliza ya existe (Número: {poliza.NumeroPoliza})";
-                            errors.Add($"Fila {row.RowNumber()}: {error}");
-                            
-                            result.FailedRecords.Add(new FailedRecordDto
-                            {
-                                RowNumber = row.RowNumber(),
-                                Error = error,
-                                OriginalData = rowData
-                            });
-                            
-                            result.ErrorRecords++;
+                            // UPSERT: update existing record with fresh data from Excel
+                            existingPoliza.Modalidad       = poliza.Modalidad;
+                            existingPoliza.NombreAsegurado = poliza.NombreAsegurado;
+                            existingPoliza.NumeroCedula    = poliza.NumeroCedula;
+                            existingPoliza.Prima           = poliza.Prima;
+                            existingPoliza.Moneda          = poliza.Moneda;
+                            existingPoliza.FechaVigencia   = poliza.FechaVigencia;
+                            existingPoliza.Frecuencia      = poliza.Frecuencia;
+                            existingPoliza.Aseguradora     = poliza.Aseguradora;
+                            existingPoliza.Placa           = poliza.Placa;
+                            existingPoliza.Marca           = poliza.Marca;
+                            existingPoliza.Modelo          = poliza.Modelo;
+                            existingPoliza.Año             = poliza.Año;
+                            existingPoliza.Correo          = poliza.Correo;
+                            existingPoliza.NumeroTelefono  = poliza.NumeroTelefono;
+                            existingPoliza.Observaciones   = poliza.Observaciones;
+                            await _unitOfWork.Polizas.UpdateAsync(existingPoliza);
+                            await _unitOfWork.SaveChangesAsync();
+                            result.ProcessedRecords++;
+                            Console.WriteLine($"Fila {row.RowNumber()}: Póliza {poliza.NumeroPoliza} actualizada (upsert).");
                             continue;
                         }
 
@@ -360,6 +395,23 @@ namespace Application.Services
             return result;
         }
 
+        /// <summary>
+        /// Obtiene el valor de celda buscando primero por nombre de columna en el mapa de headers.
+        /// Si columnIndex es -1 y el header no se encuentra, retorna string vacío.
+        /// Si columnIndex > 0 y el header no se encuentra, usa la posición como fallback.
+        /// </summary>
+        private string GetCell(IXLRow row, Dictionary<string, int> columnMap, string headerName, int fallbackIndex, bool optional = false)
+        {
+            if (columnMap.TryGetValue(headerName.ToUpperInvariant(), out var col))
+                return GetCellValueSafe(row, col, headerName, optional);
+
+            // No se encontró el header en el mapa
+            if (fallbackIndex > 0)
+                return GetCellValueSafe(row, fallbackIndex, headerName, optional);
+
+            return string.Empty; // Columna no existe en este archivo
+        }
+
         private string GetCellValueSafe(IXLRow row, int columnNumber, string columnName, bool optional = false)
         {
             try
@@ -399,13 +451,21 @@ namespace Application.Services
             if (string.IsNullOrWhiteSpace(value))
                 return 0;
 
-            // Remover caracteres no numéricos excepto punto y coma
-            var cleanValue = value.Replace("$", "").Replace(",", "").Replace(" ", "").Trim();
-            
-            if (decimal.TryParse(cleanValue, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal result))
+            var clean = value.Replace("$", "").Replace(" ", "").Trim();
+
+            // Formato español/costarricense: puntos como separador de miles, coma como decimal
+            // Ejemplo: "23.586.334,00" → "23586334.00"
+            if (clean.Contains(','))
+            {
+                // La coma es el separador decimal: eliminar puntos (miles) y sustituir coma por punto
+                clean = clean.Replace(".", "").Replace(",", ".");
+            }
+            // Si solo hay puntos (sin coma), podría ser formato inglés con punto decimal
+            // Se deja tal cual para que InvariantCulture lo parsee normalmente
+
+            if (decimal.TryParse(clean, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal result))
                 return result;
-            
-            // Si no puede parsear, retornar 0 en lugar de error
+
             Console.WriteLine($"Advertencia: Valor inválido para prima '{value}', usando 0");
             return 0;
         }

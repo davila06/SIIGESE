@@ -1,8 +1,9 @@
 {
-  "/api/*": {
-    "target": "https://app-siinadseg-backend.yellowrock-611c8f36.eastus.azurecontainerapps.io",
-    "secure": true,
+  "/api": {
+    "target": "https://siinadseg-backend-app.greensmoke-63d5430a.eastus2.azurecontainerapps.io",
+    "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug"
+    "logLevel": "info",
+    "pathRewrite": { "^/api": "/api" }
   }
 }

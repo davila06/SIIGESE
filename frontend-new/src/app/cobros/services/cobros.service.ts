@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { parseBackendDate } from '../../shared/constants/currency.constants';
 import { 
   Cobro, 
   CobroRequest, 
@@ -23,7 +24,7 @@ export class CobrosService {
 
   /** Normaliza un cobro recibido del API: convierte DateTime.MinValue ("0001-...") en undefined */
   private normalizeCobro(cobro: Cobro): Cobro {
-    const fechaCobro = cobro.fechaCobro ? new Date(cobro.fechaCobro) : undefined;
+    const fechaCobro = cobro.fechaCobro ? parseBackendDate(cobro.fechaCobro) : undefined;
     return {
       ...cobro,
       fechaCobro: (fechaCobro && fechaCobro.getFullYear() > 1) ? fechaCobro : undefined

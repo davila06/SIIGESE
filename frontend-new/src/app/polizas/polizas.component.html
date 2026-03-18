@@ -18,7 +18,7 @@
         <div class="form-row">
           <mat-form-field>
             <mat-label>Número de Póliza</mat-label>
-            <input matInput formControlName="numeroPoliza" required>
+            <input matInput formControlName="numeroPoliza" required placeholder="Ingrese el número de póliza" title="Número de Póliza">
             <mat-error *ngIf="polizaForm.get('numeroPoliza')?.hasError('required')">
               Número de póliza es requerido
             </mat-error>
@@ -26,26 +26,26 @@
           
           <mat-form-field>
             <mat-label>Modalidad (Opcional)</mat-label>
-            <input matInput formControlName="modalidad">
+            <input matInput formControlName="modalidad" placeholder="Ingrese la modalidad" title="Modalidad">
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field>
             <mat-label>Nombre Asegurado</mat-label>
-            <input matInput formControlName="nombreAsegurado" required>
+            <input matInput formControlName="nombreAsegurado" required placeholder="Ingrese el nombre del asegurado" title="Nombre Asegurado">
           </mat-form-field>
           
           <mat-form-field>
             <mat-label>Número de Cédula (Opcional)</mat-label>
-            <input matInput formControlName="numeroCedula">
+            <input matInput formControlName="numeroCedula" placeholder="Ingrese el número de cédula" title="Número de Cédula">
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field>
             <mat-label>Prima</mat-label>
-            <input matInput type="number" formControlName="prima" required>
+            <input matInput type="number" formControlName="prima" required placeholder="Ingrese la prima" title="Prima">
           </mat-form-field>
           
           <mat-form-field>
@@ -59,7 +59,7 @@
           
           <mat-form-field>
             <mat-label>Fecha de Vigencia</mat-label>
-            <input matInput type="date" formControlName="fechaVigencia" required>
+            <input matInput type="date" formControlName="fechaVigencia" required placeholder="Seleccione la fecha de vigencia" title="Fecha de Vigencia">
           </mat-form-field>
         </div>
 
@@ -85,36 +85,36 @@
           
           <mat-form-field>
             <mat-label>Placa (Opcional)</mat-label>
-            <input matInput formControlName="placa">
+            <input matInput formControlName="placa" placeholder="Ingrese la placa" title="Placa">
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field>
             <mat-label>Marca (Opcional)</mat-label>
-            <input matInput formControlName="marca">
+            <input matInput formControlName="marca" placeholder="Ingrese la marca" title="Marca">
           </mat-form-field>
           
           <mat-form-field>
             <mat-label>Modelo (Opcional)</mat-label>
-            <input matInput formControlName="modelo">
+            <input matInput formControlName="modelo" placeholder="Ingrese el modelo" title="Modelo">
           </mat-form-field>
           
           <mat-form-field>
             <mat-label>Año (Opcional)</mat-label>
-            <input matInput formControlName="año" maxlength="4">
+            <input matInput formControlName="año" maxlength="4" placeholder="Ingrese el año" title="Año">
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field>
             <mat-label>Correo Electrónico (Opcional)</mat-label>
-            <input matInput type="email" formControlName="correo">
+            <input matInput type="email" formControlName="correo" placeholder="Ingrese el correo electrónico" title="Correo Electrónico">
           </mat-form-field>
           
           <mat-form-field>
             <mat-label>Número de Teléfono (Opcional)</mat-label>
-            <input matInput formControlName="numeroTelefono">
+            <input matInput formControlName="numeroTelefono" placeholder="Ingrese el número de teléfono" title="Número de Teléfono">
           </mat-form-field>
         </div>
 

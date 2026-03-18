@@ -26,7 +26,7 @@ import {
   getMetodoPagoLabel
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
-import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
+import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode, parseBackendDate } from '../../../shared/constants/currency.constants';
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 
@@ -151,20 +151,6 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
     obs.subscribe({
       next: (cobros) => {
-        console.log(`📋 [DEBUG] Tab "${tab.label}": ${cobros.length} cobros recibidos`);
-        cobros.forEach((c, i) => {
-          if (c.montoTotal === null || c.montoTotal === undefined || (typeof c.montoTotal !== 'number' && isNaN(Number(c.montoTotal)))) {
-            console.warn(`⚠️ [DEBUG] cobro[${i}] id=${c.id} montoTotal INVÁLIDO:`, c.montoTotal, '| tipo:', typeof c.montoTotal);
-          }
-          if (c.fechaVencimiento) {
-            const dv = new Date(c.fechaVencimiento);
-            if (isNaN(dv.getTime())) console.warn(`⚠️ [DEBUG] cobro[${i}] id=${c.id} fechaVencimiento INVÁLIDA:`, c.fechaVencimiento);
-          }
-          if (c.fechaCobro) {
-            const dc = new Date(c.fechaCobro);
-            if (isNaN(dc.getTime())) console.warn(`⚠️ [DEBUG] cobro[${i}] id=${c.id} fechaCobro INVÁLIDA:`, c.fechaCobro);
-          }
-        });
         tab.cobros = cobros;
         tab.dataSource.data = cobros;
         tab.loading = false;
@@ -202,20 +188,12 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   safeDate(value: any): Date | null {
-    if (!value) return null;
-    const d = new Date(value);
-    return isNaN(d.getTime()) ? null : d;
+    return parseBackendDate(value);
   }
 
   loadStats(): void {
     this.cobrosService.getCobroStats().subscribe({
-      next: (stats) => {
-        console.log('📊 [DEBUG] Stats raw:', JSON.stringify(stats));
-        console.log('📊 [DEBUG] montoTotalPendiente ->', typeof stats.montoTotalPendiente, '=', stats.montoTotalPendiente);
-        console.log('📊 [DEBUG] montoTotalCobrado  ->', typeof stats.montoTotalCobrado,  '=', stats.montoTotalCobrado);
-        console.log('📊 [DEBUG] montoPorVencer     ->', typeof stats.montoPorVencer,     '=', stats.montoPorVencer);
-        this.stats = stats;
-      },
+      next: (stats) => { this.stats = stats; },
       error: () => {}
     });
   }
@@ -433,10 +411,10 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
       ...cobro,
       estado: getEstadoCobroLabel(cobro.estado),
       metodoPago: cobro.metodoPago ? getMetodoPagoLabel(cobro.metodoPago) : '',
-      fechaVencimiento: new Date(cobro.fechaVencimiento),
-      fechaCobro: cobro.fechaCobro ? new Date(cobro.fechaCobro) : null,
-      fechaCreacion: new Date(cobro.fechaCreacion),
-      fechaActualizacion: cobro.fechaActualizacion ? new Date(cobro.fechaActualizacion) : null
+      fechaVencimiento: this.safeDate(cobro.fechaVencimiento),
+      fechaCobro: cobro.fechaCobro ? this.safeDate(cobro.fechaCobro) : null,
+      fechaCreacion: this.safeDate(cobro.fechaCreacion),
+      fechaActualizacion: cobro.fechaActualizacion ? this.safeDate(cobro.fechaActualizacion) : null
     }));
 
     const exportOptions = {

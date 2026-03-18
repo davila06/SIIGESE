@@ -20,6 +20,7 @@ import {
   PolizaVencimiento, 
   NotificationStatistics 
 } from '../../services/notification.service';
+import { parseBackendDate } from '../../../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-automatic-notifications',
@@ -187,6 +188,8 @@ export class AutomaticNotificationsComponent implements OnInit {
   }
 
   formatDate(date: Date): string {
-    return new Intl.DateTimeFormat('es-AR').format(new Date(date));
+    const d = parseBackendDate(date as unknown);
+    if (!d) return '-';
+    return new Intl.DateTimeFormat('es-AR').format(d);
   }
 }

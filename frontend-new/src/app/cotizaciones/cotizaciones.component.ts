@@ -21,7 +21,7 @@ import { MatTabsModule, MatTabGroup } from '@angular/material/tabs';
 
 import { CotizacionService } from '../services/cotizacion.service';
 import { Cotizacion, CreateCotizacion, UpdateCotizacion, TIPOS_SEGURO, ESTADOS_COTIZACION, MONEDAS, GENEROS, TIPOS_INMUEBLE, MODALIDADES, FRECUENCIAS } from '../models/cotizacion.model';
-import { formatCurrencyByCode, formatDateCR, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
+import { formatCurrencyByCode, formatDateCR, parseBackendDate, formatToBackendDate, CURRENCY_CONSTANTS } from '../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-cotizaciones',
@@ -166,7 +166,13 @@ export class CotizacionesComponent implements OnInit {
   onSubmit(): void {
     if (this.cotizacionForm.valid) {
       this.isLoading = true;
-      const cotizacionData: CreateCotizacion = this.cotizacionForm.value;
+      const rawData = this.cotizacionForm.value;
+      // Convertir DatePicker (Date objects) a DD-MM-YYYY para el backend
+      const cotizacionData = {
+        ...rawData,
+        fechaVencimiento: rawData.fechaVencimiento ? formatToBackendDate(rawData.fechaVencimiento) : null,
+        fechaNacimiento: rawData.fechaNacimiento ? formatToBackendDate(rawData.fechaNacimiento) : null
+      } as unknown as CreateCotizacion;
 
       if (this.isEditMode && this.selectedCotizacion) {
         // Actualizar cotizaci├│n existente
@@ -228,7 +234,7 @@ export class CotizacionesComponent implements OnInit {
       montoAsegurado: cotizacion.montoAsegurado,
       primaCotizada: cotizacion.primaCotizada,
       moneda: cotizacion.moneda,
-      fechaVencimiento: cotizacion.fechaVencimiento ? new Date(cotizacion.fechaVencimiento) : null,
+      fechaVencimiento: cotizacion.fechaVencimiento ? parseBackendDate(cotizacion.fechaVencimiento) : null,
       observaciones: cotizacion.observaciones,
       perfilId: cotizacion.perfilId,
       
@@ -238,7 +244,7 @@ export class CotizacionesComponent implements OnInit {
       modelo: cotizacion.modelo,
       año: cotizacion.año,
       cilindraje: cotizacion.cilindraje,
-      fechaNacimiento: cotizacion.fechaNacimiento ? new Date(cotizacion.fechaNacimiento) : null,
+      fechaNacimiento: cotizacion.fechaNacimiento ? parseBackendDate(cotizacion.fechaNacimiento) : null,
       genero: cotizacion.genero,
       ocupacion: cotizacion.ocupacion,
       direccionInmueble: cotizacion.direccionInmueble,

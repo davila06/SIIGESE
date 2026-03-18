@@ -21,7 +21,7 @@ import {
   getMetodoPagoLabel
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
-import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode } from '../../../shared/constants/currency.constants';
+import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode, parseBackendDate } from '../../../shared/constants/currency.constants';
 
 interface MovimientoCobro {
   id: number;
@@ -132,7 +132,7 @@ export class CobroDetalleComponent implements OnInit {
     const movimientos: MovimientoCobro[] = [
       {
         id: 1,
-        fecha: new Date(this.cobro.fechaCreacion),
+        fecha: parseBackendDate(this.cobro.fechaCreacion) ?? new Date(),
         descripcion: 'Cobro creado',
         usuario: 'Sistema',
         tipo: 'creacion'
@@ -142,7 +142,7 @@ export class CobroDetalleComponent implements OnInit {
     if (this.cobro.estado === EstadoCobro.Cobrado && this.cobro.fechaCobro) {
       movimientos.push({
         id: 2,
-        fecha: new Date(this.cobro.fechaCobro),
+        fecha: parseBackendDate(this.cobro.fechaCobro) ?? new Date(),
         descripcion: 'Cobro registrado',
         usuario: this.cobro.usuarioCobroNombre || 'Sistema',
         tipo: 'cobro',
@@ -154,7 +154,7 @@ export class CobroDetalleComponent implements OnInit {
     if (this.cobro.estado === EstadoCobro.Cancelado && this.cobro.fechaActualizacion) {
       movimientos.push({
         id: 3,
-        fecha: new Date(this.cobro.fechaActualizacion),
+        fecha: parseBackendDate(this.cobro.fechaActualizacion) ?? new Date(),
         descripcion: 'Cobro cancelado',
         usuario: 'Sistema',
         tipo: 'cancelacion',
