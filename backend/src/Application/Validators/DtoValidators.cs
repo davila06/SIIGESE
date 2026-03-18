@@ -49,23 +49,23 @@ namespace Application.Validators
             RuleFor(x => x.NumeroPoliza)
                 .NotEmpty().WithMessage("El número de póliza es requerido");
 
-            RuleFor(x => x.ClienteId)
-                .GreaterThan(0).WithMessage("Debe seleccionar un cliente válido");
+            RuleFor(x => x.NombreAsegurado)
+                .NotEmpty().WithMessage("El nombre del asegurado es requerido");
 
-            RuleFor(x => x.TipoSeguro)
-                .NotEmpty().WithMessage("El tipo de seguro es requerido");
+            RuleFor(x => x.Prima)
+                .GreaterThanOrEqualTo(0).WithMessage("La prima no puede ser negativa");
 
-            RuleFor(x => x.FechaInicio)
-                .NotEmpty().WithMessage("La fecha de inicio es requerida");
+            RuleFor(x => x.Moneda)
+                .NotEmpty().WithMessage("La moneda es requerida");
 
-            RuleFor(x => x.FechaVencimiento)
-                .GreaterThan(x => x.FechaInicio).WithMessage("La fecha de vencimiento debe ser posterior a la fecha de inicio");
+            RuleFor(x => x.FechaVigencia)
+                .NotEmpty().WithMessage("La fecha de vigencia es requerida");
 
-            RuleFor(x => x.MontoAsegurado)
-                .GreaterThan(0).WithMessage("El monto asegurado debe ser mayor a 0");
+            RuleFor(x => x.Frecuencia)
+                .NotEmpty().WithMessage("La frecuencia es requerida");
 
-            RuleFor(x => x.PrimaNeta)
-                .GreaterThan(0).WithMessage("La prima neta debe ser mayor a 0");
+            RuleFor(x => x.Aseguradora)
+                .NotEmpty().WithMessage("La aseguradora es requerida");
         }
     }
 

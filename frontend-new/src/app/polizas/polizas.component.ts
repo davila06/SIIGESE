@@ -471,10 +471,28 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   loadPolizaToForm(poliza: Poliza): void {
+    // --- Enterprise diagnostic log ---
+    console.group(`[PolizasComponent] loadPolizaToForm → id=${poliza.id} | ${poliza.numeroPoliza}`);
+    console.log('Raw poliza from API:', {
+      id:              poliza.id,
+      numeroPoliza:    poliza.numeroPoliza,
+      modalidad:       poliza.modalidad,
+      nombreAsegurado: poliza.nombreAsegurado,
+      numeroCedula:    poliza.numeroCedula,
+      prima:           poliza.prima,
+      moneda:          poliza.moneda,
+      fechaVigencia:   poliza.fechaVigencia,
+      frecuencia:      poliza.frecuencia,
+      aseguradora:     poliza.aseguradora,
+      placa:           poliza.placa,
+      observaciones:   poliza.observaciones,
+    });
+
     // Formatear la fecha para el input tipo date (soporta DD-MM-YYYY del backend)
     const parsed = parseBackendDate(poliza.fechaVigencia);
     const fechaVigencia = parsed ? parsed.toISOString().split('T')[0] : '';
-    
+    console.log('Parsed fechaVigencia →', fechaVigencia, '(from raw:', poliza.fechaVigencia, ')');
+
     // Preparar los valores para el formulario
     const formValues = {
       perfilId: poliza.perfilId || 1,
@@ -500,6 +518,13 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     this.polizaForm.patchValue(formValues);
     this.polizaForm.markAsPristine();
     this.polizaForm.markAsUntouched();
+
+    console.log('Form values after patchValue:', this.polizaForm.value);
+    const missing = Object.entries(this.polizaForm.value)
+      .filter(([k, v]) => v === null || v === undefined || v === '')
+      .map(([k]) => k);
+    if (missing.length) console.warn('Fields still empty after patch:', missing);
+    console.groupEnd();
   }
 
   resetForm(): void {

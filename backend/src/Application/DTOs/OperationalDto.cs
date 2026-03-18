@@ -25,34 +25,30 @@ namespace Application.DTOs
         public string TipoCliente { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// DTO para crear o actualizar una póliza desde el formulario frontend.
+    /// Todos los campos deben coincidir exactamente con el JSON que envía el frontend (camelCase → PascalCase).
+    /// </summary>
     public class CreatePolizaDto
     {
-        public string NumeroPoliza { get; set; } = string.Empty;
-        public int ClienteId { get; set; }
-        public string TipoSeguro { get; set; } = string.Empty;
-        public string Producto { get; set; } = string.Empty;
-        public string PlanCobertura { get; set; } = string.Empty;
-        public DateTime FechaInicio { get; set; }
-        public DateTime FechaVencimiento { get; set; }
-        public decimal MontoAsegurado { get; set; }
-        public decimal PrimaNeta { get; set; }
-        public decimal Impuestos { get; set; }
-        public decimal PrimaTotal { get; set; }
-        public string FormaPago { get; set; } = string.Empty;
-        public string FrecuenciaPago { get; set; } = string.Empty;
-        public string Estado { get; set; } = string.Empty;
-        public string Moneda { get; set; } = string.Empty;
-        public string Beneficiarios { get; set; } = string.Empty;
-        public string Observaciones { get; set; } = string.Empty;
-        public string AgenteCodigo { get; set; } = string.Empty;
-        public string AgenteNombre { get; set; } = string.Empty;
-        public string SucursalCodigo { get; set; } = string.Empty;
-        public string SucursalNombre { get; set; } = string.Empty;
-        public string CompaniaCodigo { get; set; } = string.Empty;
-        public string CompaniaNombre { get; set; } = string.Empty;
-        public string DeducibleMaximo { get; set; } = string.Empty;
-        public string CoaseguroMaximo { get; set; } = string.Empty;
-        public string GastosMedicoMaximo { get; set; } = string.Empty;
+        public int    PerfilId        { get; set; } = 1;
+        public string NumeroPoliza    { get; set; } = string.Empty;
+        public string Modalidad       { get; set; } = string.Empty;
+        public string NombreAsegurado { get; set; } = string.Empty;
+        public string NumeroCedula    { get; set; } = string.Empty;
+        public decimal Prima          { get; set; }
+        public string Moneda          { get; set; } = "CRC";
+        /// <summary>Fecha en formato ISO 8601 (YYYY-MM-DD) como la envía el input[type=date] del frontend.</summary>
+        public string FechaVigencia   { get; set; } = string.Empty;
+        public string Frecuencia      { get; set; } = string.Empty;
+        public string Aseguradora     { get; set; } = string.Empty;
+        public string Placa           { get; set; } = string.Empty;
+        public string Marca           { get; set; } = string.Empty;
+        public string Modelo          { get; set; } = string.Empty;
+        public string Año             { get; set; } = string.Empty;
+        public string Correo          { get; set; } = string.Empty;
+        public string NumeroTelefono  { get; set; } = string.Empty;
+        public string? Observaciones  { get; set; }
     }
 
     public class DataUploadResultDto

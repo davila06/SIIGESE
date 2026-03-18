@@ -385,14 +385,28 @@ namespace Application.Services
             var fechaActual = DateTime.UtcNow.Date;
             var fechaBase = fechaInicio.Date;
 
-            // Ajustar fecha base si es anterior a hoy
+            // For annual policies the standard 3-month window produces zero results.
+            // Use a frequency-aware minimum window so every policy always generates
+            // at least its next due date.
+            var mesesMinimoPorFrecuencia = frecuencia.ToUpperInvariant().Trim() switch
+            {
+                "ANUAL" or "ANNUAL" or "YEARLY" or "AÑO" or "YEAR" or "ANO" => 13,
+                "SEMESTRAL" or "SEMIANNUAL" or "6 MESES" or "SEMESTER"        => 7,
+                "CUATRIMESTRAL" or "4 MESES"                                   => 5,
+                "TRIMESTRAL" or "QUARTERLY" or "3 MESES" or "QUARTER"          => 4,
+                "BIMESTRAL" or "BIMONTHLY" or "2 MESES"                        => 3,
+                _                                                               => mesesAdelante
+            };
+            var ventana = Math.Max(mesesAdelante, mesesMinimoPorFrecuencia);
+
+            // Ajustar fecha base al próximo vencimiento futuro
             while (fechaBase < fechaActual)
             {
                 fechaBase = AgregarPeriodo(fechaBase, frecuencia);
             }
 
             // Generar fechas hacia adelante
-            var fechaLimite = fechaActual.AddMonths(mesesAdelante);
+            var fechaLimite = fechaActual.AddMonths(ventana);
             var fechaGeneracion = fechaBase;
 
             while (fechaGeneracion <= fechaLimite)

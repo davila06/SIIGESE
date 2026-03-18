@@ -1,11 +1,20 @@
 using AutoMapper;
 using Domain.Entities;
 using Application.DTOs;
+using System;
 
 namespace Application.Mappings
 {
     public class MappingProfile : Profile
     {
+        // Helper: parse ISO date string "YYYY-MM-DD" from the frontend form into DateTime.
+        // Falls back to UtcNow so the mapper never throws on bad input.
+        private static DateTime ParseIsoDate(string value) =>
+            DateTime.TryParse(value, System.Globalization.CultureInfo.InvariantCulture,
+                System.Globalization.DateTimeStyles.None, out var dt)
+                ? dt
+                : DateTime.UtcNow;
+
         public MappingProfile()
         {
             // Cliente mappings
@@ -21,10 +30,23 @@ namespace Application.Mappings
             CreateMap<Poliza, PolizaDto>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
-            
+
             CreateMap<PolizaDto, Poliza>()
                 .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => src.CreatedBy))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy));
+
+            // CreatePolizaDto → Poliza  (used by Create and Update endpoints from the form)
+            // FechaVigencia arrives as ISO string "YYYY-MM-DD" from the frontend date input.
+            CreateMap<CreatePolizaDto, Poliza>()
+                .ForMember(dest => dest.FechaVigencia, opt => opt.MapFrom(
+                    src => ParseIsoDate(src.FechaVigencia)))
+                // Audit fields are set explicitly in the service; ignore them here.
+                .ForMember(dest => dest.CreatedBy,  opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedBy,  opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt,  opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedAt,  opt => opt.Ignore())
+                .ForMember(dest => dest.IsDeleted,  opt => opt.Ignore())
+                .ForMember(dest => dest.EsActivo,   opt => opt.Ignore());
 
             // Cobro mappings
             CreateMap<Cobro, CobroDto>()

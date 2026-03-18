@@ -52,7 +52,10 @@ namespace Infrastructure.Data.Repositories
 
         public async Task<IEnumerable<Cobro>> GetCobrosProximosPorPeriodicidadAsync()
         {
-            var fechaLimite = DateTime.UtcNow.AddDays(30);
+            // Show 13 months ahead so that ANUAL cobros are always included;
+            // for other frequencies a 30-day window is sufficient.
+            var fechaLimiteCorto  = DateTime.UtcNow.AddDays(30);
+            var fechaLimiteLargo  = DateTime.UtcNow.AddMonths(13);
 
             return await (
                 from c in _context.Cobros
@@ -61,11 +64,23 @@ namespace Infrastructure.Data.Repositories
                       && !p.IsDeleted
                       && c.Estado == EstadoCobro.Pendiente
                       && (
-                          // Periodicidad mensual: listar siempre
+                          // MENSUAL: always show
                           (p.Frecuencia ?? string.Empty).ToUpper() == "MENSUAL"
                           ||
-                          // Otras periodicidades: solo dentro del próximo mes
-                          ((p.Frecuencia ?? string.Empty).ToUpper() != "MENSUAL" && c.FechaVencimiento <= fechaLimite)
+                          // ANUAL/SEMESTRAL/etc.: show within their full cycle window
+                          (
+                              (p.Frecuencia ?? string.Empty).ToUpper() == "ANUAL" ||
+                              (p.Frecuencia ?? string.Empty).ToUpper() == "ANNUAL" ||
+                              (p.Frecuencia ?? string.Empty).ToUpper() == "YEARLY"
+                          ) && c.FechaVencimiento <= fechaLimiteLargo
+                          ||
+                          // Everything else: next 30 days
+                          (
+                              (p.Frecuencia ?? string.Empty).ToUpper() != "MENSUAL" &&
+                              (p.Frecuencia ?? string.Empty).ToUpper() != "ANUAL" &&
+                              (p.Frecuencia ?? string.Empty).ToUpper() != "ANNUAL" &&
+                              (p.Frecuencia ?? string.Empty).ToUpper() != "YEARLY"
+                          ) && c.FechaVencimiento <= fechaLimiteCorto
                       )
                 orderby c.FechaVencimiento
                 select c

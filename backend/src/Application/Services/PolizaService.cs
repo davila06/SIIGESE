@@ -56,11 +56,19 @@ namespace Application.Services
 
         public async Task<PolizaDto> CreateAsync(CreatePolizaDto dto)
         {
+            Console.WriteLine($"[PolizaService.CreateAsync] IN  → NumeroPoliza={dto.NumeroPoliza}, NombreAsegurado={dto.NombreAsegurado}, Prima={dto.Prima}, Moneda={dto.Moneda}, Frecuencia={dto.Frecuencia}, Aseguradora={dto.Aseguradora}, FechaVigencia={dto.FechaVigencia}");
+
             var existingPoliza = await _unitOfWork.Polizas.GetByNumeroPolizaAsync(dto.NumeroPoliza);
             if (existingPoliza != null)
                 throw new InvalidOperationException("Ya existe una póliza con este número");
 
             var poliza = _mapper.Map<Poliza>(dto);
+            poliza.EsActivo  = true;
+            poliza.CreatedAt = DateTime.UtcNow;
+            poliza.UpdatedAt = DateTime.UtcNow;
+
+            Console.WriteLine($"[PolizaService.CreateAsync] OUT → Entity: NumeroPoliza={poliza.NumeroPoliza}, NombreAsegurado={poliza.NombreAsegurado}, Prima={poliza.Prima}, Frecuencia={poliza.Frecuencia}, Aseguradora={poliza.Aseguradora}, FechaVigencia={poliza.FechaVigencia:dd-MM-yyyy}");
+
             await _unitOfWork.Polizas.AddAsync(poliza);
             await _unitOfWork.SaveChangesAsync();
 
@@ -69,13 +77,17 @@ namespace Application.Services
 
         public async Task<PolizaDto> UpdateAsync(int id, CreatePolizaDto dto)
         {
+            Console.WriteLine($"[PolizaService.UpdateAsync] IN  → Id={id}, NumeroPoliza={dto.NumeroPoliza}, NombreAsegurado={dto.NombreAsegurado}, Prima={dto.Prima}, Moneda={dto.Moneda}, Frecuencia={dto.Frecuencia}, Aseguradora={dto.Aseguradora}, FechaVigencia={dto.FechaVigencia}");
+
             var poliza = await _unitOfWork.Polizas.GetByIdAsync(id);
             if (poliza == null)
                 throw new KeyNotFoundException("Póliza no encontrada");
 
             _mapper.Map(dto, poliza);
             poliza.UpdatedAt = DateTime.UtcNow;
-            
+
+            Console.WriteLine($"[PolizaService.UpdateAsync] OUT → Entity: NumeroPoliza={poliza.NumeroPoliza}, NombreAsegurado={poliza.NombreAsegurado}, Prima={poliza.Prima}, Frecuencia={poliza.Frecuencia}, Aseguradora={poliza.Aseguradora}, FechaVigencia={poliza.FechaVigencia:dd-MM-yyyy}");
+
             await _unitOfWork.Polizas.UpdateAsync(poliza);
             await _unitOfWork.SaveChangesAsync();
 
