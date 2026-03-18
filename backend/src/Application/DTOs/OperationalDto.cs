@@ -64,6 +64,8 @@ namespace Application.DTOs
         public List<string> Errors { get; set; } = new List<string>();
         public List<string> Warnings { get; set; } = new List<string>();
         public List<FailedRecordDto> FailedRecords { get; set; } = new List<FailedRecordDto>();
+        /// <summary>Ordered column headers exactly as they appeared in the uploaded file.</summary>
+        public List<string> FileHeaders { get; set; } = new List<string>();
     }
 
     public class FailedRecordDto
@@ -72,5 +74,19 @@ namespace Application.DTOs
         public string Error { get; set; } = string.Empty;
         public Dictionary<string, string> Data { get; set; } = new Dictionary<string, string>();
         public Dictionary<string, string> OriginalData { get; set; } = new Dictionary<string, string>();
+    }
+
+    /// <summary>
+    /// Request body to generate a correctable Excel file from the failed records
+    /// of a previous upload attempt. The resulting file has the same columns as
+    /// the original upload file plus a trailing MOTIVO_ERROR column.
+    /// </summary>
+    public class ErrorsExcelRequestDto
+    {
+        /// <summary>Column headers exactly as they appeared in the original uploaded file.</summary>
+        public List<string> FileHeaders { get; set; } = new List<string>();
+        public List<FailedRecordDto> FailedRecords { get; set; } = new List<FailedRecordDto>();
+        /// <summary>Original file name used only for the download file name.</summary>
+        public string OriginalFileName { get; set; } = "polizas";
     }
 }

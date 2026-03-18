@@ -9,6 +9,7 @@ using Application.Interfaces;
 using Domain.Interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using ClosedXML.Excel;
 
 namespace Application.Services
@@ -17,11 +18,24 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<PolizaService> _logger;
 
-        public PolizaService(IUnitOfWork unitOfWork, IMapper mapper)
+        // ── Validation rule sets ────────────────────────────────────────────────
+        private static readonly IReadOnlySet<string> ValidCurrencies =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "CRC", "USD", "EUR" };
+
+        private static readonly IReadOnlySet<string> ValidFrecuencias =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            { "MENSUAL", "TRIMESTRAL", "SEMESTRAL", "ANUAL", "BIMESTRAL", "SEMANAL", "QUINCENAL" };
+
+        private static readonly string[] DateFormats =
+            { "dd/MM/yyyy", "d/M/yyyy", "dd-MM-yyyy", "d-M-yyyy", "MM/dd/yyyy", "yyyy-MM-dd", "yyyy/MM/dd" };
+
+        public PolizaService(IUnitOfWork unitOfWork, IMapper mapper, ILogger<PolizaService> logger)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<PolizaDto>> GetAllAsync()
@@ -56,7 +70,8 @@ namespace Application.Services
 
         public async Task<PolizaDto> CreateAsync(CreatePolizaDto dto)
         {
-            Console.WriteLine($"[PolizaService.CreateAsync] IN  → NumeroPoliza={dto.NumeroPoliza}, NombreAsegurado={dto.NombreAsegurado}, Prima={dto.Prima}, Moneda={dto.Moneda}, Frecuencia={dto.Frecuencia}, Aseguradora={dto.Aseguradora}, FechaVigencia={dto.FechaVigencia}");
+            _logger.LogDebug("[PolizaService.CreateAsync] IN → NumeroPoliza={NumeroPoliza}, NombreAsegurado={NombreAsegurado}, Prima={Prima}, Moneda={Moneda}, Frecuencia={Frecuencia}, Aseguradora={Aseguradora}, FechaVigencia={FechaVigencia}",
+                dto.NumeroPoliza, dto.NombreAsegurado, dto.Prima, dto.Moneda, dto.Frecuencia, dto.Aseguradora, dto.FechaVigencia);
 
             var existingPoliza = await _unitOfWork.Polizas.GetByNumeroPolizaAsync(dto.NumeroPoliza);
             if (existingPoliza != null)
@@ -67,7 +82,8 @@ namespace Application.Services
             poliza.CreatedAt = DateTime.UtcNow;
             poliza.UpdatedAt = DateTime.UtcNow;
 
-            Console.WriteLine($"[PolizaService.CreateAsync] OUT → Entity: NumeroPoliza={poliza.NumeroPoliza}, NombreAsegurado={poliza.NombreAsegurado}, Prima={poliza.Prima}, Frecuencia={poliza.Frecuencia}, Aseguradora={poliza.Aseguradora}, FechaVigencia={poliza.FechaVigencia:dd-MM-yyyy}");
+            _logger.LogDebug("[PolizaService.CreateAsync] OUT → NumeroPoliza={NumeroPoliza}, NombreAsegurado={NombreAsegurado}, Prima={Prima}, Frecuencia={Frecuencia}, Aseguradora={Aseguradora}, FechaVigencia={FechaVigencia}",
+                poliza.NumeroPoliza, poliza.NombreAsegurado, poliza.Prima, poliza.Frecuencia, poliza.Aseguradora, poliza.FechaVigencia.ToString("dd-MM-yyyy"));
 
             await _unitOfWork.Polizas.AddAsync(poliza);
             await _unitOfWork.SaveChangesAsync();
@@ -77,7 +93,8 @@ namespace Application.Services
 
         public async Task<PolizaDto> UpdateAsync(int id, CreatePolizaDto dto)
         {
-            Console.WriteLine($"[PolizaService.UpdateAsync] IN  → Id={id}, NumeroPoliza={dto.NumeroPoliza}, NombreAsegurado={dto.NombreAsegurado}, Prima={dto.Prima}, Moneda={dto.Moneda}, Frecuencia={dto.Frecuencia}, Aseguradora={dto.Aseguradora}, FechaVigencia={dto.FechaVigencia}");
+            _logger.LogDebug("[PolizaService.UpdateAsync] IN → Id={Id}, NumeroPoliza={NumeroPoliza}, NombreAsegurado={NombreAsegurado}, Prima={Prima}, Moneda={Moneda}, Frecuencia={Frecuencia}, Aseguradora={Aseguradora}, FechaVigencia={FechaVigencia}",
+                id, dto.NumeroPoliza, dto.NombreAsegurado, dto.Prima, dto.Moneda, dto.Frecuencia, dto.Aseguradora, dto.FechaVigencia);
 
             var poliza = await _unitOfWork.Polizas.GetByIdAsync(id);
             if (poliza == null)
@@ -86,7 +103,8 @@ namespace Application.Services
             _mapper.Map(dto, poliza);
             poliza.UpdatedAt = DateTime.UtcNow;
 
-            Console.WriteLine($"[PolizaService.UpdateAsync] OUT → Entity: NumeroPoliza={poliza.NumeroPoliza}, NombreAsegurado={poliza.NombreAsegurado}, Prima={poliza.Prima}, Frecuencia={poliza.Frecuencia}, Aseguradora={poliza.Aseguradora}, FechaVigencia={poliza.FechaVigencia:dd-MM-yyyy}");
+            _logger.LogDebug("[PolizaService.UpdateAsync] OUT → NumeroPoliza={NumeroPoliza}, NombreAsegurado={NombreAsegurado}, Prima={Prima}, Frecuencia={Frecuencia}, Aseguradora={Aseguradora}, FechaVigencia={FechaVigencia}",
+                poliza.NumeroPoliza, poliza.NombreAsegurado, poliza.Prima, poliza.Frecuencia, poliza.Aseguradora, poliza.FechaVigencia.ToString("dd-MM-yyyy"));
 
             await _unitOfWork.Polizas.UpdateAsync(poliza);
             await _unitOfWork.SaveChangesAsync();
@@ -152,7 +170,7 @@ namespace Application.Services
                     if (!string.IsNullOrEmpty(h))
                         columnMap[h.ToUpperInvariant()] = cell.Address.ColumnNumber;
                 }
-                Console.WriteLine($"Columnas detectadas: {string.Join(", ", columnMap.Keys)}");
+                _logger.LogDebug("Columnas detectadas en archivo Excel: {Columns}", string.Join(", ", columnMap.Keys));
 
                 // Alias resolution: map common alternative header names to canonical keys
                 var nombreAliases = new[] { "NOMBRE ASEGURADO", "NOMBRE_ASEGURADO", "ASEGURADO", "TITULAR", "NOMBRE COMPLETO", "CLIENTE" };
@@ -161,6 +179,12 @@ namespace Application.Services
                     foreach (var alias in nombreAliases)
                         if (columnMap.TryGetValue(alias, out var aliasCol)) { columnMap["NOMBRE"] = aliasCol; break; }
                 }
+
+                // Preserve ordered file headers for the errors-download feature
+                result.FileHeaders = columnMap
+                    .OrderBy(kvp => kvp.Value)
+                    .Select(kvp => kvp.Key)
+                    .ToList();
 
                 // Fallback positions depend on whether a MOD column is present in the file
                 int nombreFallback = columnMap.ContainsKey("MOD") ? 3 : 2;
@@ -173,20 +197,19 @@ namespace Application.Services
                 }
                 else
                 {
-                    Console.WriteLine($"Procesando {result.TotalRecords} filas del Excel...");
+                    _logger.LogInformation("Iniciando procesamiento de {TotalRecords} filas del archivo Excel", result.TotalRecords);
                     foreach (var row in rows)
                     {
-                        Console.WriteLine($"Procesando fila {row.RowNumber()}...");
+                        _logger.LogDebug("Procesando fila {RowNumber}", row.RowNumber());
                         try
                         {
-                            // No validar cantidad de columnas, aceptar cualquier data
-
-                            // Capturar datos originales de la fila para uso posterior
+                            // ── Step 1: Capture all original cell values ────────────────────────
                             var rowData = new Dictionary<string, string>
                             {
                                 ["POLIZA"]         = GetCell(row, columnMap, "POLIZA",         1),
+                                ["MOD"]            = GetCell(row, columnMap, "MOD",            -1, true),
                                 ["NOMBRE"]         = GetCell(row, columnMap, "NOMBRE",         nombreFallback),
-                                ["NUMEROCEDULA"]   = GetCell(row, columnMap, "NUMEROCEDULA",   3, true),
+                                ["NUMEROCEDULA"]   = GetCell(row, columnMap, "NUMEROCEDULA",   -1, true),
                                 ["PRIMA"]          = GetCell(row, columnMap, "PRIMA",          4),
                                 ["MONEDA"]         = GetCell(row, columnMap, "MONEDA",         5),
                                 ["FECHA"]          = GetCell(row, columnMap, "FECHA",          6),
@@ -196,134 +219,131 @@ namespace Application.Services
                                 ["MARCA"]          = GetCell(row, columnMap, "MARCA",          10, true),
                                 ["MODELO"]         = GetCell(row, columnMap, "MODELO",         11, true),
                                 ["AÑO"]            = GetCell(row, columnMap, "AÑO",            12, true),
-                                ["CORREO"]         = GetCell(row, columnMap, "CORREO",         13, true),
-                                ["NUMEROTELEFONO"] = GetCell(row, columnMap, "NUMEROTELEFONO", 14, true),
+                                ["CORREO"]         = GetCell(row, columnMap, "CORREO",         -1, true),
+                                ["NUMEROTELEFONO"] = GetCell(row, columnMap, "NUMEROTELEFONO", -1, true),
                                 ["OBSERVACIONES"]  = GetCell(row, columnMap, "OBSERVACIONES",  -1, true),
-                                ["MOD"]            = GetCell(row, columnMap, "MOD",            -1, true)
+                                ["COLECTIVA"]      = GetCell(row, columnMap, "COLECTIVA",      -1, true),
                             };
 
-                            // Mapear columnas por nombre de encabezado (con fallback a posición)
-                            // POLIZA | MOD | NOMBRE | PRIMA | MONEDA | FECHA | FRECUENCIA | ASEGURADORA | PLACA | MARCA | MODELO | AÑO | OBSERVACIONES | COLECTIVA
+                            // ── Step 2: Strict validation (reject before touching DB) ───────────
+                            var validationErrors = ValidatePolizaRow(rowData, row.RowNumber());
+                            if (validationErrors.Any())
+                            {
+                                var errorMsg = string.Join("; ", validationErrors);
+                                errors.Add($"Fila {row.RowNumber()}: {errorMsg}");
+                                result.FailedRecords.Add(new FailedRecordDto
+                                {
+                                    RowNumber    = row.RowNumber(),
+                                    Error        = errorMsg,
+                                    OriginalData = rowData
+                                });
+                                result.ErrorRecords++;
+                                _logger.LogWarning("Fila {RowNumber}: rechazada ({ErrorCount} error(es)) — {Errors}",
+                                    row.RowNumber(), validationErrors.Count, errorMsg);
+                                continue;
+                            }
+
+                            // ── Step 3: Build entity (only reached when validation passes) ──────
                             var poliza = new Poliza
                             {
-                                NumeroPoliza    = TruncateString(GetCell(row, columnMap, "POLIZA",         1),        50,  row.RowNumber(), "POLIZA"),
-                                Modalidad       = TruncateString(GetCell(row, columnMap, "MOD",            -1, true), 50,  row.RowNumber(), "MOD"),
-                                NombreAsegurado = TruncateString(GetCell(row, columnMap, "NOMBRE",         nombreFallback), 200, row.RowNumber(), "NOMBRE"),
-                                NumeroCedula    = TruncateString(GetCell(row, columnMap, "NUMEROCEDULA",   3, true),  50,  row.RowNumber(), "NUMEROCEDULA"),
-                                Prima           = ParseDecimal(  GetCell(row, columnMap, "PRIMA",          4)),
-                                Moneda          = GetCell(row, columnMap, "MONEDA",         5).ToUpperInvariant(),
-                                FechaVigencia   = ParseDate(     GetCell(row, columnMap, "FECHA",          6)),
-                                Frecuencia      = TruncateString(GetCell(row, columnMap, "FRECUENCIA",     7),        50,  row.RowNumber(), "FRECUENCIA"),
-                                Aseguradora     = TruncateString(GetCell(row, columnMap, "ASEGURADORA",    8),        100, row.RowNumber(), "ASEGURADORA"),
-                                Placa           = TruncateString(GetCell(row, columnMap, "PLACA",          9,  true), 8,   row.RowNumber(), "PLACA"),
-                                Marca           = TruncateString(GetCell(row, columnMap, "MARCA",          10, true), 50,  row.RowNumber(), "MARCA"),
-                                Modelo          = TruncateString(GetCell(row, columnMap, "MODELO",         11, true), 50,  row.RowNumber(), "MODELO"),
-                                Año             = TruncateString(GetCell(row, columnMap, "AÑO",            12, true), 4,   row.RowNumber(), "AÑO"),
-                                Correo          = TruncateString(GetCell(row, columnMap, "CORREO",         13, true), 100, row.RowNumber(), "CORREO"),
-                                NumeroTelefono  = TruncateString(GetCell(row, columnMap, "NUMEROTELEFONO", 14, true), 20,  row.RowNumber(), "NUMEROTELEFONO"),
-                                Observaciones   = TruncateString(GetCell(row, columnMap, "OBSERVACIONES",  -1, true), 500, row.RowNumber(), "OBSERVACIONES"),
+                                NumeroPoliza    = TruncateString(rowData["POLIZA"],        50,  row.RowNumber(), "POLIZA"),
+                                Modalidad       = TruncateString(rowData["MOD"],           50,  row.RowNumber(), "MOD"),
+                                NombreAsegurado = TruncateString(rowData["NOMBRE"],        200, row.RowNumber(), "NOMBRE"),
+                                NumeroCedula    = TruncateString(rowData["NUMEROCEDULA"],  50,  row.RowNumber(), "NUMEROCEDULA"),
+                                Prima           = ParseDecimal(rowData["PRIMA"]),
+                                Moneda          = rowData["MONEDA"].Trim().ToUpperInvariant(),
+                                FechaVigencia   = ParseDate(rowData["FECHA"]),
+                                Frecuencia      = TruncateString(rowData["FRECUENCIA"].Trim().ToUpperInvariant(), 50,  row.RowNumber(), "FRECUENCIA"),
+                                Aseguradora     = TruncateString(rowData["ASEGURADORA"],   100, row.RowNumber(), "ASEGURADORA"),
+                                Placa           = TruncateString(rowData["PLACA"],         8,   row.RowNumber(), "PLACA"),
+                                Marca           = TruncateString(rowData["MARCA"],         50,  row.RowNumber(), "MARCA"),
+                                Modelo          = TruncateString(rowData["MODELO"],        50,  row.RowNumber(), "MODELO"),
+                                Año             = TruncateString(rowData["AÑO"],           4,   row.RowNumber(), "AÑO"),
+                                Correo          = TruncateString(rowData["CORREO"],        100, row.RowNumber(), "CORREO"),
+                                NumeroTelefono  = TruncateString(rowData["NUMEROTELEFONO"],20,  row.RowNumber(), "NUMEROTELEFONO"),
+                                Observaciones   = TruncateString(rowData["OBSERVACIONES"], 500, row.RowNumber(), "OBSERVACIONES"),
                                 PerfilId        = perfilId,
                                 CreatedBy       = userId.ToString()
                             };
 
-                        // No validar campos obligatorios, subir la data como viene
-                        // Validar y corregir moneda automáticamente si existe
-                        if (!string.IsNullOrEmpty(poliza.Moneda))
-                        {
-                            poliza.Moneda = NormalizeAndValidateCurrency(poliza.Moneda, row.RowNumber());
-                        }
-                        else
-                        {
-                            poliza.Moneda = "CRC"; // Default si está vacío
-                        }
+                            // ── Step 4: Upsert / duplicate check ────────────────────────────────
+                            _logger.LogDebug("Fila {RowNumber}: datos válidos, verificando duplicados", row.RowNumber());
 
-                        Console.WriteLine($"Fila {row.RowNumber()}: Datos procesados, verificando duplicados...");
+                            var existingPoliza = await _unitOfWork.Polizas.GetByNumeroPolizaAsync(poliza.NumeroPoliza);
+                            if (existingPoliza != null)
+                            {
+                                // UPSERT: update existing record with fresh data from the file
+                                existingPoliza.Modalidad       = poliza.Modalidad;
+                                existingPoliza.NombreAsegurado = poliza.NombreAsegurado;
+                                existingPoliza.NumeroCedula    = poliza.NumeroCedula;
+                                existingPoliza.Prima           = poliza.Prima;
+                                existingPoliza.Moneda          = poliza.Moneda;
+                                existingPoliza.FechaVigencia   = poliza.FechaVigencia;
+                                existingPoliza.Frecuencia      = poliza.Frecuencia;
+                                existingPoliza.Aseguradora     = poliza.Aseguradora;
+                                existingPoliza.Placa           = poliza.Placa;
+                                existingPoliza.Marca           = poliza.Marca;
+                                existingPoliza.Modelo          = poliza.Modelo;
+                                existingPoliza.Año             = poliza.Año;
+                                existingPoliza.Correo          = poliza.Correo;
+                                existingPoliza.NumeroTelefono  = poliza.NumeroTelefono;
+                                existingPoliza.Observaciones   = poliza.Observaciones;
+                                await _unitOfWork.Polizas.UpdateAsync(existingPoliza);
+                                await _unitOfWork.SaveChangesAsync();
+                                result.ProcessedRecords++;
+                                _logger.LogInformation("Fila {RowNumber}: póliza {NumeroPoliza} actualizada (upsert)", row.RowNumber(), poliza.NumeroPoliza);
+                                continue;
+                            }
 
-                        // Verificar duplicados
-                        var existingPoliza = await _unitOfWork.Polizas.GetByNumeroPolizaAsync(poliza.NumeroPoliza);
-                        if (existingPoliza != null)
-                        {
-                            // UPSERT: update existing record with fresh data from Excel
-                            existingPoliza.Modalidad       = poliza.Modalidad;
-                            existingPoliza.NombreAsegurado = poliza.NombreAsegurado;
-                            existingPoliza.NumeroCedula    = poliza.NumeroCedula;
-                            existingPoliza.Prima           = poliza.Prima;
-                            existingPoliza.Moneda          = poliza.Moneda;
-                            existingPoliza.FechaVigencia   = poliza.FechaVigencia;
-                            existingPoliza.Frecuencia      = poliza.Frecuencia;
-                            existingPoliza.Aseguradora     = poliza.Aseguradora;
-                            existingPoliza.Placa           = poliza.Placa;
-                            existingPoliza.Marca           = poliza.Marca;
-                            existingPoliza.Modelo          = poliza.Modelo;
-                            existingPoliza.Año             = poliza.Año;
-                            existingPoliza.Correo          = poliza.Correo;
-                            existingPoliza.NumeroTelefono  = poliza.NumeroTelefono;
-                            existingPoliza.Observaciones   = poliza.Observaciones;
-                            await _unitOfWork.Polizas.UpdateAsync(existingPoliza);
-                            await _unitOfWork.SaveChangesAsync();
+                            var duplicateInBatch = polizas.FirstOrDefault(p => p.NumeroPoliza == poliza.NumeroPoliza);
+                            if (duplicateInBatch != null)
+                            {
+                                var dupError = $"Número de póliza '{poliza.NumeroPoliza}' duplicado en el mismo archivo";
+                                errors.Add($"Fila {row.RowNumber()}: {dupError}");
+                                result.FailedRecords.Add(new FailedRecordDto
+                                {
+                                    RowNumber    = row.RowNumber(),
+                                    Error        = dupError,
+                                    OriginalData = rowData
+                                });
+                                result.ErrorRecords++;
+                                continue;
+                            }
+
+                            polizas.Add(poliza);
                             result.ProcessedRecords++;
-                            Console.WriteLine($"Fila {row.RowNumber()}: Póliza {poliza.NumeroPoliza} actualizada (upsert).");
-                            continue;
+                            _logger.LogDebug("Fila {RowNumber}: registro aceptado. Total aceptados: {ProcessedRecords}", row.RowNumber(), result.ProcessedRecords);
                         }
-
-                        // Verificar duplicados en el lote actual
-                        var duplicateInBatch = polizas.FirstOrDefault(p => p.NumeroPoliza == poliza.NumeroPoliza);
-                        if (duplicateInBatch != null)
+                        catch (Exception ex)
                         {
-                            var error = $"Póliza duplicada en el archivo (Número: {poliza.NumeroPoliza})";
-                            errors.Add($"Fila {row.RowNumber()}: {error}");
-                            
+                            var errorMsg = ex.Message;
+                            errors.Add($"Fila {row.RowNumber()}: {errorMsg}");
+
+                            // Best-effort capture of original data when an unexpected exception occurs
+                            var fallbackData = new Dictionary<string, string>();
+                            try
+                            {
+                                foreach (var kvp in columnMap)
+                                    fallbackData[kvp.Key] = GetCellValueSafe(row, kvp.Value, kvp.Key, optional: true);
+                            }
+                            catch
+                            {
+                                fallbackData["Error"] = "No se pudieron extraer los datos originales";
+                            }
+
                             result.FailedRecords.Add(new FailedRecordDto
                             {
-                                RowNumber = row.RowNumber(),
-                                Error = error,
-                                OriginalData = rowData
+                                RowNumber    = row.RowNumber(),
+                                Error        = errorMsg,
+                                OriginalData = fallbackData
                             });
-                            
                             result.ErrorRecords++;
-                            continue;
+                            _logger.LogWarning(ex, "Error inesperado en fila {RowNumber}: {ErrorMessage}", row.RowNumber(), ex.Message);
                         }
-
-                        // Si llegamos aquí, el registro es válido
-                        polizas.Add(poliza);
-                        result.ProcessedRecords++;
-                        Console.WriteLine($"Fila {row.RowNumber()}: ¡Registro válido agregado! Total válidos: {result.ProcessedRecords}");
                     }
-                    catch (Exception ex)
-                    {
-                        var error = ex.Message;
-                        errors.Add($"Fila {row.RowNumber()}: {error}");
-                        
-                        // Intentar capturar datos originales incluso en caso de excepción
-                        var originalData = new Dictionary<string, string>();
-                        try
-                        {
-                            for (int i = 1; i <= 14; i++)
-                            {
-                                var columnNames = new[] { "", "POLIZA", "NOMBRE", "NUMEROCEDULA", "PRIMA", "MONEDA", "FECHA", "FRECUENCIA", "ASEGURADORA", "PLACA", "MARCA", "MODELO", "AÑO", "CORREO", "NUMEROTELEFONO" };
-                                var columnName = i < columnNames.Length ? columnNames[i] : $"Col{i}";
-                                originalData[columnName] = GetCellValueSafe(row, i, columnName, true);
-                            }
-                        }
-                        catch
-                        {
-                            originalData["Error"] = "No se pudieron extraer los datos originales";
-                        }
-                        
-                        result.FailedRecords.Add(new FailedRecordDto
-                        {
-                            RowNumber = row.RowNumber(),
-                            Error = error,
-                            OriginalData = originalData
-                        });
-                        
-                        result.ErrorRecords++;
-                        Console.WriteLine($"Error en fila {row.RowNumber()}: {ex.Message}");
-                        Console.WriteLine($"StackTrace: {ex.StackTrace}");
-                    }
-                }
 
-                Console.WriteLine($"Resumen procesamiento: {result.ProcessedRecords} válidos, {result.ErrorRecords} errores de {result.TotalRecords} total");
+                _logger.LogInformation("Resumen procesamiento Excel: {ProcessedRecords} válidos, {ErrorRecords} errores de {TotalRecords} total",
+                    result.ProcessedRecords, result.ErrorRecords, result.TotalRecords);
 
                 // Guardar registros válidos (si los hay)
                 if (polizas.Any())
@@ -408,6 +428,79 @@ namespace Application.Services
         }
 
         /// <summary>
+        /// Validates the required fields and format rules for a single Excel row.
+        /// Returns an empty list when the row is valid; otherwise returns one message per failing rule.
+        /// </summary>
+        private static List<string> ValidatePolizaRow(Dictionary<string, string> rowData, int rowNumber)
+        {
+            var errors = new List<string>();
+
+            // POLIZA — required
+            if (!rowData.TryGetValue("POLIZA", out var poliza) || string.IsNullOrWhiteSpace(poliza))
+                errors.Add("POLIZA es obligatoria");
+
+            // NOMBRE — required
+            if (!rowData.TryGetValue("NOMBRE", out var nombre) || string.IsNullOrWhiteSpace(nombre))
+                errors.Add("NOMBRE es obligatorio");
+
+            // PRIMA — required, must be a positive decimal
+            rowData.TryGetValue("PRIMA", out var primaRaw);
+            if (string.IsNullOrWhiteSpace(primaRaw))
+            {
+                errors.Add("PRIMA es obligatoria");
+            }
+            else
+            {
+                // Re-use the same normalization logic as ParseDecimal
+                var cleanedPrima = primaRaw.Replace("$", "").Replace(" ", "").Trim();
+                if (cleanedPrima.Contains(','))
+                    cleanedPrima = cleanedPrima.Replace(".", "").Replace(",", ".");
+
+                if (!decimal.TryParse(cleanedPrima, NumberStyles.Number, CultureInfo.InvariantCulture, out var prima)
+                    || prima <= 0)
+                    errors.Add($"PRIMA '{primaRaw}' inválida — debe ser un número positivo (ej. 1250.00 o 1.250,00)");
+            }
+
+            // MONEDA — required, CRC | USD | EUR
+            rowData.TryGetValue("MONEDA", out var moneda);
+            if (string.IsNullOrWhiteSpace(moneda))
+                errors.Add("MONEDA es obligatoria");
+            else if (!ValidCurrencies.Contains(moneda.Trim()))
+                errors.Add($"MONEDA '{moneda}' no es válida — valores permitidos: CRC, USD, EUR");
+
+            // FECHA — required, parseable date
+            rowData.TryGetValue("FECHA", out var fecha);
+            if (string.IsNullOrWhiteSpace(fecha))
+            {
+                errors.Add("FECHA es obligatoria");
+            }
+            else if (!DateTime.TryParseExact(fecha.Trim(), DateFormats,
+                         CultureInfo.InvariantCulture, DateTimeStyles.None, out _)
+                     && !DateTime.TryParse(fecha.Trim(), out _))
+            {
+                errors.Add($"FECHA '{fecha}' formato inválido — use DD/MM/AAAA (ej. 31/12/2025)");
+            }
+
+            // FRECUENCIA — required, allowed values
+            rowData.TryGetValue("FRECUENCIA", out var frecuencia);
+            if (string.IsNullOrWhiteSpace(frecuencia))
+            {
+                errors.Add("FRECUENCIA es obligatoria");
+            }
+            else if (!ValidFrecuencias.Contains(frecuencia.Trim()))
+            {
+                errors.Add($"FRECUENCIA '{frecuencia}' no es válida — " +
+                           $"valores permitidos: {string.Join(", ", ValidFrecuencias)}");
+            }
+
+            // ASEGURADORA — required
+            if (!rowData.TryGetValue("ASEGURADORA", out var aseguradora) || string.IsNullOrWhiteSpace(aseguradora))
+                errors.Add("ASEGURADORA es obligatoria");
+
+            return errors;
+        }
+
+        /// <summary>
         /// Obtiene el valor de celda buscando primero por nombre de columna en el mapa de headers.
         /// Si columnIndex es -1 y el header no se encuentra, retorna string vacío.
         /// Si columnIndex > 0 y el header no se encuentra, usa la posición como fallback.
@@ -440,7 +533,7 @@ namespace Application.Services
             catch (Exception ex)
             {
                 // En caso de error, retornar vacío en lugar de lanzar excepción
-                Console.WriteLine($"Advertencia fila {row.RowNumber()}, columna '{columnName}': {ex.Message}");
+                _logger.LogWarning(ex, "Advertencia fila {RowNumber}, columna '{ColumnName}': {ErrorMessage}", row.RowNumber(), columnName, ex.Message);
                 return string.Empty;
             }
         }
@@ -454,7 +547,8 @@ namespace Application.Services
                 return value;
 
             var truncated = value.Substring(0, maxLength);
-            Console.WriteLine($"Fila {rowNumber}: Campo '{fieldName}' truncado de '{value}' a '{truncated}' (máximo {maxLength} caracteres)");
+            _logger.LogDebug("Fila {RowNumber}: campo '{FieldName}' truncado de {OriginalLength} a {MaxLength} caracteres",
+                rowNumber, fieldName, value.Length, maxLength);
             return truncated;
         }
 
@@ -478,7 +572,7 @@ namespace Application.Services
             if (decimal.TryParse(clean, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal result))
                 return result;
 
-            Console.WriteLine($"Advertencia: Valor inválido para prima '{value}', usando 0");
+            _logger.LogWarning("Valor inválido para prima '{PrimaValue}', se asignará 0", value);
             return 0;
         }
 
@@ -511,7 +605,7 @@ namespace Application.Services
             }
 
             // Si no puede parsear, retornar fecha actual en lugar de error
-            Console.WriteLine($"Advertencia: Formato de fecha inválido '{value}', usando fecha actual");
+            _logger.LogWarning("Formato de fecha inválido '{DateValue}', se usará la fecha actual", value);
             return DateTime.Today;
         }
 
@@ -531,19 +625,19 @@ namespace Application.Services
             // Convertir formatos largos a códigos ISO
             if (upperCurrency.Contains("COLON") || upperCurrency == "COL")
             {
-                Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' convertida automáticamente a 'CRC'");
+                _logger.LogDebug("Fila {RowNumber}: moneda '{Currency}' normalizada a 'CRC'", rowNumber, currency);
                 return "CRC";
             }
             
             if (upperCurrency.Contains("DOLAR") || upperCurrency.Contains("DOLLAR") || upperCurrency == "DOL")
             {
-                Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' convertida automáticamente a 'USD'");
+                _logger.LogDebug("Fila {RowNumber}: moneda '{Currency}' normalizada a 'USD'", rowNumber, currency);
                 return "USD";
             }
 
             if (upperCurrency.Contains("EURO") || upperCurrency == "EUR")
             {
-                Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' convertida automáticamente a 'EUR'");
+                _logger.LogDebug("Fila {RowNumber}: moneda '{Currency}' normalizada a 'EUR'", rowNumber, currency);
                 return "EUR";
             }
 
@@ -552,7 +646,7 @@ namespace Application.Services
                 return currency.ToUpperInvariant();
 
             // Si no se puede convertir, devolver CRC por defecto
-            Console.WriteLine($"Fila {rowNumber}: Moneda '{currency}' no reconocida, asignando 'CRC' por defecto");
+            _logger.LogWarning("Fila {RowNumber}: moneda '{Currency}' no reconocida, se asignará 'CRC' por defecto", rowNumber, currency);
             return "CRC";
         }
 

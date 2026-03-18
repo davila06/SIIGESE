@@ -225,6 +225,19 @@ export class UploadPolizasComponent implements OnInit {
     }
   }
 
+  downloadDemo(): void {
+    const link = document.createElement('a');
+    link.href = '/assets/demo/DEMO_polizas.xlsx';
+    link.download = 'DEMO_polizas.xlsx';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    this.snackBar.open('✅ Archivo DEMO descargado con 10 registros de ejemplo', 'Cerrar', {
+      duration: 4000,
+      panelClass: ['success-snackbar']
+    });
+  }
+
   downloadTemplate(): void {
     this.isLoading = true;
 
@@ -259,85 +272,50 @@ export class UploadPolizasComponent implements OnInit {
   }
 
   downloadErrorsFile(): void {
-    if (this.uploadStats.failedRecords.length === 0) {
-      this.snackBar.open('No hay errores para descargar', 'Cerrar', {
-        duration: 3000
-      });
+    if (!this.uploadResult?.failedRecords?.length) {
+      this.snackBar.open('No hay registros con errores para descargar', 'Cerrar', { duration: 3000 });
       return;
     }
 
-    // Crear datos para el Excel de errores mejorado
-    const headers = [
-      'Fila Original',
-      'Error Detectado',
-      'POLIZA',
-      'NOMBRE',
-      'NUMEROCEDULA',
-      'PRIMA',
-      'MONEDA',
-      'FECHA',
-      'FRECUENCIA',
-      'ASEGURADORA',
-      'MARCA',
-      'MODELO',
-      'PLACA',
-      'AÑO',
-      'CORREO',
-      'NUMEROTELEFONO',
-      'Instrucciones de Corrección'
-    ];
+    const payload = {
+      fileHeaders: this.uploadResult.fileHeaders ?? [],
+      failedRecords: this.uploadResult.failedRecords,
+      originalFileName: this.selectedFile?.name ?? 'polizas',
+    };
 
-    const errorData = this.uploadStats.failedRecords.map(record => [
-      record.rowNumber.toString(),
-      record.error,
-      record.originalData['POLIZA'] || record.originalData['Número Póliza'] || '',
-      record.originalData['NOMBRE'] || record.originalData['Nombre Asegurado'] || '',
-      record.originalData['NUMEROCEDULA'] || record.originalData['Número Cédula'] || '',
-      record.originalData['PRIMA'] || record.originalData['Prima'] || '',
-      record.originalData['MONEDA'] || record.originalData['Moneda'] || '',
-      record.originalData['FECHA'] || record.originalData['Fecha Vigencia'] || '',
-      record.originalData['FRECUENCIA'] || record.originalData['Frecuencia'] || '',
-      record.originalData['ASEGURADORA'] || record.originalData['Aseguradora'] || '',
-      record.originalData['MARCA'] || record.originalData['Marca'] || '',
-      record.originalData['MODELO'] || record.originalData['Modelo'] || '',
-      record.originalData['PLACA'] || record.originalData['Placa'] || '',
-      record.originalData['AÑO'] || record.originalData['Año'] || '',
-      record.originalData['CORREO'] || record.originalData['Correo'] || '',
-      record.originalData['NUMEROTELEFONO'] || record.originalData['Número Teléfono'] || '',
-      'Corrige el error indicado y vuelve a subir el archivo'
-    ]);
+    this.isLoading = true;
+    this.apiService.downloadPolizasErrorsExcel(payload).subscribe({
+      next: (blob: Blob) => {
+        this.isLoading = false;
+        const errorCount = this.uploadResult!.failedRecords.length;
+        const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+        const baseName = (this.selectedFile?.name ?? 'polizas').replace(/\.[^.]+$/, '');
+        const fileName = `ERRORES_${baseName}_${timestamp}_${errorCount}reg.xlsx`;
 
-    // Crear contenido CSV mejorado con BOM para caracteres especiales
-    let csvContent = '\ufeff'; // BOM para UTF-8
-    csvContent += headers.map(header => `"${header}"`).join(',') + '\n';
-    
-    errorData.forEach(row => {
-      csvContent += row.map(value => `"${value.toString().replace(/"/g, '""')}"`).join(',') + '\n';
-    });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
 
-    // Crear y descargar archivo con nombre más descriptivo
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-
-    const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
-    const fileName = `ERRORES_Polizas_${timestamp}_${this.uploadStats.failedRecords.length}_registros.csv`;
-    link.setAttribute('download', fileName);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-
-    this.snackBar.open(
-      `📄 Archivo de errores descargado: ${this.uploadStats.failedRecords.length} registros para revisar`,
-      'Cerrar',
-      {
-        duration: 5000,
-        panelClass: ['success-snackbar']
+        this.snackBar.open(
+          `📥 Archivo descargado: ${errorCount} registro(s) con errores para corregir`,
+          'Cerrar',
+          { duration: 6000, panelClass: ['success-snackbar'] }
+        );
+      },
+      error: (err: any) => {
+        this.isLoading = false;
+        this.logger.error('Error descargando archivo de errores:', err);
+        this.snackBar.open('Error descargando el archivo de errores. Intente de nuevo.', 'Cerrar', {
+          duration: 5000,
+          panelClass: ['error-snackbar']
+        });
       }
-    );
+    });
   }
 
   navigateToPolizas(): void {

@@ -86,6 +86,14 @@
           Descargar Template
         </button>
 
+        <button mat-stroked-button
+                color="accent"
+                (click)="downloadDemo()"
+                class="demo-button">
+          <mat-icon>filter_10</mat-icon>
+          Descargar DEMO
+        </button>
+
         <button mat-button
                 (click)="clearFile()"
                 [disabled]="!selectedFile"

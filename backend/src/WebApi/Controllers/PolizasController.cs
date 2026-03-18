@@ -363,6 +363,59 @@ namespace WebApi.Controllers
             }
         }
 
+        /// <summary>
+        /// Genera un archivo Excel corregible a partir de los registros rechazados en un upload previo.
+        /// El archivo tiene las mismas columnas que el archivo original más una columna MOTIVO_ERROR al final,
+        /// de modo que el usuario pueda corregir y resubir directamente.
+        /// </summary>
+        [HttpPost("errors-excel")]
+        [Authorize(Roles = "Admin,DataLoader")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DownloadErrorsExcel([FromBody] ErrorsExcelRequestDto request)
+        {
+            if (request.FailedRecords == null || request.FailedRecords.Count == 0)
+                return BadRequest(new { message = "No hay registros con errores para generar el archivo." });
+
+            try
+            {
+                // Column headers: original file columns + trailing error column
+                var outputHeaders = request.FileHeaders
+                    .Select(h => h.ToUpperInvariant())
+                    .Append("MOTIVO_ERROR")
+                    .ToArray();
+
+                var excelBytes = await _excelService.GenerateExcelAsync(
+                    request.FailedRecords,
+                    outputHeaders,
+                    record =>
+                    {
+                        var values = request.FileHeaders
+                            .Select(h => (object)(record.OriginalData.TryGetValue(h, out var val) ? val : string.Empty))
+                            .ToList();
+                        values.Add(record.Error);
+                        return values.ToArray();
+                    });
+
+                var baseName = Path.GetFileNameWithoutExtension(request.OriginalFileName ?? "polizas");
+                var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                var fileName = $"ERRORES_{baseName}_{timestamp}_{request.FailedRecords.Count}reg.xlsx";
+
+                _logger.LogInformation(
+                    "Archivo de errores generado: {FileName}, {ErrorCount} registros, solicitado por usuario {UserId}",
+                    fileName, request.FailedRecords.Count, GetCurrentUserId());
+
+                return File(excelBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generando archivo Excel de errores");
+                return StatusCode(500, new { message = "Error generando archivo de errores" });
+            }
+        }
+
         private string GetCurrentUserId()
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0";

@@ -168,6 +168,21 @@ Ver [AZURE_DEPLOYMENT_COMPLETE_GUIDE.md](AZURE_DEPLOYMENT_COMPLETE_GUIDE.md) par
 
 ---
 
+## Arquitectura — Consideraciones de escala
+
+### Token blacklist (logout / revocación de JWT)
+
+El backend implementa `TokenBlacklistService` sobre `IDistributedCache`. El comportamiento en producción depende de la configuración:
+
+| Escenario | Implementación activa | Notas |
+|-----------|----------------------|-------|
+| **Single-instance** (configuración actual) | `AddDistributedMemoryCache()` — caché en proceso | Los tokens revocados se pierden al reiniciar la instancia; aceptable en single-instance porque cada solicitud llega al mismo proceso. |
+| **Multi-instance** (escalado horizontal) | `AddStackExchangeRedisCache()` — Azure Cache for Redis | Activar configurando `ConnectionStrings__Redis` en App Service → Configuration → Application settings. |
+
+> **Nota de operación:** El despliegue actual es single-instance (Azure App Service, un solo plan). Si en el futuro se activa el escalado horizontal, debe provisionarse Azure Cache for Redis (Basic C0 ~$17/mes) **antes** de escalar, para evitar que tokens revocados sean aceptados por instancias que no comparten la caché en memoria.
+
+---
+
 ## Calidad de código
 
 - TypeScript estricto: `strict: true`, `strictTemplates: true`, `strictInjectionParameters: true`

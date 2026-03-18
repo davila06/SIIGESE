@@ -286,6 +286,8 @@ export interface DataUploadResult {
   failedRecords: FailedRecord[];
   message?: string;
   status?: string;
+  /** Ordered column headers exactly as they appeared in the uploaded file. */
+  fileHeaders?: string[];
 }
 
 export interface FailedRecord {

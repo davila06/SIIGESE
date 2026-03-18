@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import {
   DataUploadResult,
+  FailedRecord,
   LoginRequest,
   LoginResponse,
   User,
@@ -80,6 +81,24 @@ export class ApiService {
 
   downloadPolizasTemplate(): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/polizas/template`, { responseType: 'blob' });
+  }
+
+  /**
+   * Generates and downloads a correctable Excel file containing only the
+   * records that failed validation in a previous upload. The file has the
+   * same columns as the original upload file plus a trailing MOTIVO_ERROR
+   * column so the user can fix and re-upload directly.
+   */
+  downloadPolizasErrorsExcel(payload: {
+    fileHeaders: string[];
+    failedRecords: FailedRecord[];
+    originalFileName: string;
+  }): Observable<Blob> {
+    return this.http.post(
+      `${this.apiUrl}/polizas/errors-excel`,
+      payload,
+      { responseType: 'blob' }
+    );
   }
 
   // Users endpoints
