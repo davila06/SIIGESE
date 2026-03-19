@@ -53,15 +53,17 @@ mat-sidenav-content {
   letter-spacing: 0.02em;
 }
 
-// Primary raised button — gradient + glow
+// Primary raised button — neon gradient + glow
 .mat-mdc-raised-button.mat-primary {
   background: var(--color-primary-grad) !important;
-  box-shadow: 0 4px 14px rgba(21, 87, 240, 0.35) !important;
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.55), 0 4px 14px rgba(0, 0, 0, 0.6) !important;
+  color: #0A0A14 !important;
+  font-weight: 700 !important;
   transition: var(--transition-base);
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(21, 87, 240, 0.48) !important;
-    transform: translateY(-1px);
+    box-shadow: 0 0 22px rgba(0, 229, 255, 0.80), 0 4px 20px rgba(191, 0, 255, 0.45) !important;
+    transform: translateY(-2px);
   }
 
   &:active {
@@ -75,47 +77,56 @@ mat-sidenav-content {
   border-color: var(--color-primary) !important;
   color: var(--color-primary) !important;
   transition: var(--transition-base);
-  --mat-outlined-button-ripple-color: rgba(21, 87, 240, 0.10);
+  --mat-outlined-button-ripple-color: rgba(0, 229, 255, 0.15);
 
   &:hover {
-    background: rgba(21, 87, 240, 0.06) !important;
+    background: rgba(0, 229, 255, 0.08) !important;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.30) !important;
   }
 }
 
-// Button ripple — use brand blue so ripple matches button identity
+// Button ripple — neon cyan
 .mat-mdc-raised-button.mat-primary,
 .mat-mdc-flat-button.mat-primary {
-  --mat-filled-button-ripple-color: rgba(21, 87, 240, 0.14);
+  --mat-filled-button-ripple-color: rgba(0, 229, 255, 0.20);
 }
 
-// Cards — consistent elevation + radius
+// Cards — neon glow border + dark surface
 mat-card,
 .mat-mdc-card {
   box-shadow: var(--shadow-sm) !important;
   border-radius: var(--radius-lg) !important;
   border: 1px solid var(--color-border) !important;
+  background-color: var(--color-surface) !important;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    border-color: rgba(0, 229, 255, 0.40) !important;
+    box-shadow: var(--shadow-md) !important;
+  }
 }
 
-// Table headers — uppercase labels
+// Table headers — neon accent
 .mat-mdc-header-row {
   background: var(--color-surface-2) !important;
-  border-bottom: 2px solid var(--color-border) !important;
+  border-bottom: 1px solid rgba(0, 229, 255, 0.30) !important;
 }
 
 .mat-mdc-header-cell {
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   font-size: 11px !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.07em;
-  color: var(--color-text-primary) !important;
+  letter-spacing: 0.10em;
+  color: #00E5FF !important;
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.50);
 }
 
 .mat-mdc-row {
   transition: background 0.15s ease;
 
-  &:hover { background: rgba(21, 87, 240, 0.04) !important; }
+  &:hover { background: rgba(0, 229, 255, 0.06) !important; }
 
-  &:nth-child(even) { background: rgba(21, 87, 240, 0.02); }
+  &:nth-child(even) { background: rgba(0, 229, 255, 0.02); }
 }
 
 .mat-mdc-row:last-child td {
@@ -129,31 +140,36 @@ mat-card,
   font-size: 11px !important;
 }
 
-// Semantic status chip color variants
+// Semantic status chip color variants — neon style
 .mat-mdc-chip.chip-pending {
-  --mdc-chip-label-text-color:          #92400E;
-  --mdc-chip-elevated-container-color:  var(--color-warning-bg);
+  --mdc-chip-label-text-color:          #FFE600;
+  --mdc-chip-elevated-container-color:  rgba(255, 230, 0, 0.12);
+  box-shadow: 0 0 8px rgba(255, 230, 0, 0.30) !important;
 }
 .mat-mdc-chip.chip-active,
 .mat-mdc-chip.chip-paid {
-  --mdc-chip-label-text-color:          #065F46;
-  --mdc-chip-elevated-container-color:  var(--color-success-bg);
+  --mdc-chip-label-text-color:          #00FF88;
+  --mdc-chip-elevated-container-color:  rgba(0, 255, 136, 0.12);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.30) !important;
 }
 .mat-mdc-chip.chip-overdue {
-  --mdc-chip-label-text-color:          #991B1B;
-  --mdc-chip-elevated-container-color:  var(--color-error-bg);
+  --mdc-chip-label-text-color:          #FF2060;
+  --mdc-chip-elevated-container-color:  rgba(255, 32, 96, 0.12);
+  box-shadow: 0 0 8px rgba(255, 32, 96, 0.30) !important;
 }
 .mat-mdc-chip.chip-cancelled {
-  --mdc-chip-label-text-color:          #475569;
-  --mdc-chip-elevated-container-color:  #F8FAFC;
+  --mdc-chip-label-text-color:          #445577;
+  --mdc-chip-elevated-container-color:  rgba(68, 85, 119, 0.15);
 }
 .mat-mdc-chip.chip-review {
-  --mdc-chip-label-text-color:          #1E40AF;
-  --mdc-chip-elevated-container-color:  var(--color-info-bg);
+  --mdc-chip-label-text-color:          #00E5FF;
+  --mdc-chip-elevated-container-color:  rgba(0, 229, 255, 0.12);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.30) !important;
 }
 .mat-mdc-chip.chip-resolved {
-  --mdc-chip-label-text-color:          #4C1D95;
-  --mdc-chip-elevated-container-color:  #EDE9FE;
+  --mdc-chip-label-text-color:          #BF00FF;
+  --mdc-chip-elevated-container-color:  rgba(191, 0, 255, 0.12);
+  box-shadow: 0 0 8px rgba(191, 0, 255, 0.30) !important;
 }
 
 // Dialogs — rounded containers
@@ -171,53 +187,57 @@ mat-card,
   }
 }
 
-// ── Semantic badge classes ───────────────────────────────────────────
+// ── Semantic badge classes — neon glow style ───────────────────────
 .badge-pending {
   background: var(--color-warning-bg);
-  color: #92400E;
+  color: #FFE600;
   border: 1px solid var(--color-warning-border);
   border-radius: var(--radius-full);
   padding: 2px 10px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
+  text-shadow: 0 0 6px rgba(255, 230, 0, 0.70);
 }
 
 .badge-active {
   background: var(--color-success-bg);
-  color: #065F46;
+  color: #00FF88;
   border: 1px solid var(--color-success-border);
   border-radius: var(--radius-full);
   padding: 2px 10px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
+  text-shadow: 0 0 6px rgba(0, 255, 136, 0.70);
 }
 
 .badge-overdue {
   background: var(--color-error-bg);
-  color: #991B1B;
+  color: #FF2060;
   border: 1px solid var(--color-error-border);
   border-radius: var(--radius-full);
   padding: 2px 10px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
+  text-shadow: 0 0 6px rgba(255, 32, 96, 0.70);
 }
 
 .badge-info {
   background: var(--color-info-bg);
-  color: #1E40AF;
+  color: #00E5FF;
   border: 1px solid var(--color-info-border);
   border-radius: var(--radius-full);
   padding: 2px 10px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   display: inline-flex;
   align-items: center;
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.70);
 }
 
 .badge-cancelled {

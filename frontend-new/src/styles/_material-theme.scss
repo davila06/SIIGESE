@@ -1,15 +1,15 @@
 // ═══════════════════════════════════════════════════════════════════
 // SINSEG — Angular Material v20 Custom M3 Theme
-// "Sapphire Electric" — Azure Blue × Violet
+// "Neon Cyberpunk" — Cyan Neon × Violet Neon
 // ═══════════════════════════════════════════════════════════════════
 @use '@angular/material' as mat;
 
 // ── Define M3 theme ─────────────────────────────────────────────────
-// azure-palette closely maps to the vivid royal-blue primary (#1557F0)
+// cyan-palette maps closest to the neon cyan #00E5FF primary
 $sinseg-theme: mat.define-theme((
   color: (
-    theme-type:  light,
-    primary:     mat.$azure-palette,
+    theme-type:  dark,
+    primary:     mat.$cyan-palette,
     tertiary:    mat.$violet-palette,
   ),
   typography: (

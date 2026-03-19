@@ -1,68 +1,68 @@
 // ═══════════════════════════════════════════════════════════════════
-// SINSEG — Design System: "Sapphire Electric"
+// SINSEG — Design System: "Neon Cyberpunk"
 // Global CSS Custom Properties (Design Tokens)
 // ═══════════════════════════════════════════════════════════════════
 
 :root {
 
   // ── BRAND ───────────────────────────────────────────────────────
-  --color-primary:         #1557F0;
-  --color-primary-light:   #4080FF;
-  --color-primary-dark:    #0E44C4;
-  --color-primary-grad:    linear-gradient(135deg, #1557F0 0%, #9333EA 100%);
-  --color-primary-glow:    rgba(21, 87, 240, 0.25);
+  --color-primary:         #00E5FF;
+  --color-primary-light:   #66F0FF;
+  --color-primary-dark:    #00B8D4;
+  --color-primary-grad:    linear-gradient(135deg, #00E5FF 0%, #BF00FF 100%);
+  --color-primary-glow:    rgba(0, 229, 255, 0.35);
 
-  // ── SURFACES ────────────────────────────────────────────────────
-  --color-bg:              #F0F4FF;
-  --color-surface:         #FFFFFF;
-  --color-surface-2:       #F8FAFF;
-  --color-border:          #C7D4F8;
-  --color-border-light:    #E0E8FF;
+  // ── SURFACES (dark base) ────────────────────────────────────────
+  --color-bg:              #0A0A14;
+  --color-surface:         #111122;
+  --color-surface-2:       #161630;
+  --color-border:          rgba(0, 229, 255, 0.18);
+  --color-border-light:    rgba(0, 229, 255, 0.08);
 
   // ── TEXT ────────────────────────────────────────────────────────
-  --color-text-primary:    #060D28;
-  --color-text-secondary:  #3A4970;
-  --color-text-muted:      #8696C1;
-  --color-text-inverse:    #FFFFFF;
+  --color-text-primary:    #E8F4FF;
+  --color-text-secondary:  #8BBCDD;
+  --color-text-muted:      #445577;
+  --color-text-inverse:    #0A0A14;
 
   // ── SIDEBAR ─────────────────────────────────────────────────────
-  --sidebar-bg:            #060D28;
-  --sidebar-bg-2:          #0F1B45;
-  --sidebar-active-bg:     rgba(21, 87, 240, 0.16);
-  --sidebar-active-border: #4080FF;
-  --sidebar-text:          #B8C9FA;
-  --sidebar-text-muted:    #3A4D82;
-  --sidebar-icon-active:   #7BAEFF;
+  --sidebar-bg:            #06060F;
+  --sidebar-bg-2:          #0A0A1A;
+  --sidebar-active-bg:     rgba(0, 229, 255, 0.12);
+  --sidebar-active-border: #00E5FF;
+  --sidebar-text:          #7AAABB;
+  --sidebar-text-muted:    #334466;
+  --sidebar-icon-active:   #00E5FF;
 
   // ── SEMANTIC ────────────────────────────────────────────────────
-  --color-success:         #059669;
-  --color-success-bg:      #ECFDF5;
-  --color-success-border:  #6EE7B7;
-  --color-warning:         #D97706;
-  --color-warning-bg:      #FFFBEB;
-  --color-warning-border:  #FCD34D;
-  --color-error:           #DC2626;
-  --color-error-bg:        #FEF2F2;
-  --color-error-border:    #FCA5A5;
-  --color-info:            #1557F0;
-  --color-info-bg:         #EFF6FF;
-  --color-info-border:     #93C5FD;
+  --color-success:         #00FF88;
+  --color-success-bg:      rgba(0, 255, 136, 0.10);
+  --color-success-border:  rgba(0, 255, 136, 0.35);
+  --color-warning:         #FFE600;
+  --color-warning-bg:      rgba(255, 230, 0, 0.10);
+  --color-warning-border:  rgba(255, 230, 0, 0.35);
+  --color-error:           #FF2060;
+  --color-error-bg:        rgba(255, 32, 96, 0.10);
+  --color-error-border:    rgba(255, 32, 96, 0.35);
+  --color-info:            #00E5FF;
+  --color-info-bg:         rgba(0, 229, 255, 0.10);
+  --color-info-border:     rgba(0, 229, 255, 0.35);
 
   // ── STATUS (cobros / reclamos) ───────────────────────────────────
-  --status-pending:        #D97706;
-  --status-active:         #059669;
-  --status-overdue:        #DC2626;
-  --status-cancelled:      #8696C1;
-  --status-review:         #1557F0;
-  --status-resolved:       #9333EA;
+  --status-pending:        #FFE600;
+  --status-active:         #00FF88;
+  --status-overdue:        #FF2060;
+  --status-cancelled:      #445577;
+  --status-review:         #00E5FF;
+  --status-resolved:       #BF00FF;
 
-  // ── SHADOW SYSTEM ───────────────────────────────────────────────
-  --shadow-xs:   0 1px 2px rgba(6, 13, 40, 0.05);
-  --shadow-sm:   0 2px 8px rgba(6, 13, 40, 0.07), 0 1px 2px rgba(6, 13, 40, 0.05);
-  --shadow-md:   0 4px 16px rgba(6, 13, 40, 0.09), 0 2px 4px rgba(6, 13, 40, 0.05);
-  --shadow-lg:   0 8px 32px rgba(6, 13, 40, 0.12), 0 4px 8px rgba(6, 13, 40, 0.05);
-  --shadow-xl:   0 20px 60px rgba(6, 13, 40, 0.16), 0 8px 16px rgba(6, 13, 40, 0.07);
-  --shadow-glow: 0 0 0 3px rgba(21, 87, 240, 0.22);
+  // ── SHADOW SYSTEM (neon glow) ────────────────────────────────────
+  --shadow-xs:   0 1px 4px rgba(0, 0, 0, 0.6);
+  --shadow-sm:   0 2px 12px rgba(0, 229, 255, 0.10), 0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-md:   0 4px 20px rgba(0, 229, 255, 0.15), 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-lg:   0 8px 36px rgba(0, 229, 255, 0.20), 0 4px 10px rgba(0, 0, 0, 0.7);
+  --shadow-xl:   0 16px 56px rgba(0, 229, 255, 0.25), 0 8px 20px rgba(0, 0, 0, 0.8);
+  --shadow-glow: 0 0 0 2px #00E5FF, 0 0 18px rgba(0, 229, 255, 0.50);
 
   // ── BORDER RADIUS ───────────────────────────────────────────────
   --radius-sm:   6px;
@@ -85,55 +85,13 @@
 // DARK MODE OVERRIDES — prefers-color-scheme: dark
 // WCAG AA compliant: all text/bg pairs verified ≥ 4.5:1
 // ═══════════════════════════════════════════════════════════════════
+// Neon theme is inherently dark — no separate dark-mode overrides needed.
+// Dark mode preserves the same neon palette with slightly punchier glows.
 @media (prefers-color-scheme: dark) {
   :root {
-    // ── BRAND (brighter for dark bg) ────────────────────────────
-    --color-primary:         #4080FF;   // vivid blue-400
-    --color-primary-light:   #6098FF;
-    --color-primary-dark:    #1557F0;
-    --color-primary-glow:    rgba(64, 128, 255, 0.30);
-
-    // ── SURFACES (deep navy scale) ──────────────────────────────
-    --color-bg:              #060D28;   // deep navy
-    --color-surface:         #0F1B45;   // navy-800
-    --color-surface-2:       #162054;   // navy-750
-    --color-border:          #1E2E6B;   // navy-700
-    --color-border-light:    #0F1B45;
-
-    // ── TEXT ───────────────────────────────────────────────────
-    --color-text-primary:    #E8EEFB;   // near-white with blue tint
-    --color-text-secondary:  #B8C9FA;   // blue-200
-    --color-text-muted:      #4A5B8F;   // muted navy
-    --color-text-inverse:    #060D28;
-
-    // ── SIDEBAR ────────────────────────────────────────────────
-    --sidebar-bg:            #030A1E;   // even deeper navy
-    --sidebar-bg-2:          #060D28;
-    --sidebar-text-muted:    #2C3B6E;
-
-    // ── SEMANTIC — dark-mode tinted surfaces ─────────────────
-    --color-success:         #34D399;
-    --color-success-bg:      rgba(5, 150, 105, 0.14);
-    --color-success-border:  rgba(110, 231, 183, 0.30);
-
-    --color-warning:         #FBBF24;
-    --color-warning-bg:      rgba(217, 119, 6, 0.14);
-    --color-warning-border:  rgba(252, 211, 77, 0.30);
-
-    --color-error:           #F87171;
-    --color-error-bg:        rgba(220, 38, 38, 0.14);
-    --color-error-border:    rgba(252, 165, 165, 0.30);
-
-    --color-info:            #60A5FA;
-    --color-info-bg:         rgba(21, 87, 240, 0.14);
-    --color-info-border:     rgba(147, 197, 253, 0.30);
-
-    // ── SHADOWS ─────────────────────────────────────────────────
-    --shadow-xs:   0 1px 2px rgba(0, 0, 0, 0.35);
-    --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.40), 0 1px 2px rgba(0, 0, 0, 0.28);
-    --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.45), 0 2px 4px rgba(0, 0, 0, 0.28);
-    --shadow-lg:   0 8px 32px rgba(0, 0, 0, 0.50), 0 4px 8px rgba(0, 0, 0, 0.28);
-    --shadow-xl:   0 20px 60px rgba(0, 0, 0, 0.60), 0 8px 16px rgba(0, 0, 0, 0.33);
-    --shadow-glow: 0 0 0 3px rgba(64, 128, 255, 0.35);
+    --shadow-sm:   0 2px 16px rgba(0, 229, 255, 0.14), 0 1px 3px rgba(0, 0, 0, 0.7);
+    --shadow-md:   0 4px 24px rgba(0, 229, 255, 0.20), 0 2px 6px rgba(0, 0, 0, 0.7);
+    --shadow-lg:   0 8px 40px rgba(0, 229, 255, 0.26), 0 4px 10px rgba(0, 0, 0, 0.8);
+    --shadow-glow: 0 0 0 2px #00E5FF, 0 0 24px rgba(0, 229, 255, 0.60);
   }
 }
