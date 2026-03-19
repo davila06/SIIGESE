@@ -17,7 +17,7 @@
       margin: 0;
       font-size: 28px;
       font-weight: 500;
-      color: #333;
+      color: var(--color-text-primary);
 
       mat-icon {
         font-size: 32px;
@@ -90,19 +90,19 @@
           font-size: 32px;
           font-weight: 700;
           margin: 0 0 2px;
-          color: #212121;
+          color: var(--color-text-primary);
         }
 
         p {
           font-size: 14px;
-          color: #757575;
+          color: var(--color-text-secondary);
           margin: 0 0 4px;
         }
 
         .stat-amount {
           font-size: 13px;
           font-weight: 500;
-          color: #555;
+          color: var(--color-text-secondary);
         }
       }
 
@@ -142,8 +142,24 @@
   // ── Tabs ────────────────────────────────────────────────────────────────────
   .cobros-tabs {
     ::ng-deep .mat-mdc-tab-header {
-      background-color: #fafafa;
-      border-bottom: 1px solid #e0e0e0;
+      background-color: var(--color-surface);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    ::ng-deep .mat-mdc-tab-label-container {
+      background-color: var(--color-surface);
+    }
+
+    ::ng-deep .mdc-tab__text-label {
+      color: var(--color-text-secondary) !important;
+    }
+
+    ::ng-deep .mdc-tab--active .mdc-tab__text-label {
+      color: var(--color-primary) !important;
+    }
+
+    ::ng-deep .mdc-tab-indicator__content--underline {
+      border-color: var(--color-primary) !important;
     }
 
     ::ng-deep .mat-mdc-tab {
@@ -172,7 +188,7 @@
       margin-left: 8px;
       border-radius: 10px;
       background-color: var(--color-primary);
-      color: #fff;
+      color: var(--color-text-inverse);
       font-size: 11px;
       font-weight: 600;
       vertical-align: middle;
@@ -200,13 +216,13 @@
 
       .filter-label {
         font-size: 14px;
-        color: #757575;
+        color: var(--color-text-secondary);
         white-space: nowrap;
       }
 
       ::ng-deep .mat-mdc-chip.selected {
         background-color: var(--color-primary) !important;
-        color: #fff !important;
+        color: var(--color-text-inverse) !important;
       }
     }
   }
@@ -242,7 +258,7 @@
     justify-content: center;
     padding: 60px 24px;
     gap: 16px;
-    color: #757575;
+    color: var(--color-text-secondary);
   }
 
   // ── Table ────────────────────────────────────────────────────────────────────
@@ -254,8 +270,8 @@
     width: 100%;
 
     th {
-      background-color: #f5f5f5;
-      color: #555;
+      background-color: var(--color-surface-2);
+      color: var(--color-primary) !important;
       font-weight: 600;
       font-size: 13px;
       white-space: nowrap;
@@ -263,11 +279,11 @@
 
     td {
       font-size: 14px;
-      color: #333;
+      color: var(--color-text-primary);
     }
 
     tr:hover td {
-      background-color: #fafafa;
+      background-color: var(--color-primary-glow);
     }
   }
 
@@ -287,7 +303,7 @@
   }
 
   .no-email {
-    color: #bdbdbd;
+    color: var(--color-text-muted);
   }
 
   // ── Estado badges ────────────────────────────────────────────────────────────
@@ -307,23 +323,27 @@
     }
 
     &.badge-pendiente {
-      background-color: #FFF3E0;
-      color: #E65100;
+      background-color: var(--color-warning-bg);
+      color: var(--color-warning);
+      border: 1px solid var(--color-warning-border);
     }
 
     &.badge-cobrado {
-      background-color: #E8F5E9;
-      color: #1B5E20;
+      background-color: var(--color-success-bg);
+      color: var(--color-success);
+      border: 1px solid var(--color-success-border);
     }
 
     &.badge-vencido {
-      background-color: #FFEBEE;
-      color: #B71C1C;
+      background-color: var(--color-error-bg);
+      color: var(--color-error);
+      border: 1px solid var(--color-error-border);
     }
 
     &.badge-cancelado {
-      background-color: #F3E5F5;
-      color: #4A148C;
+      background-color: rgba(191, 0, 255, 0.10);
+      color: #BF00FF;
+      border: 1px solid rgba(191, 0, 255, 0.35);
     }
   }
 
@@ -335,10 +355,10 @@
   }
 
   .btn-email {
-    color: #1565C0 !important;
+    color: var(--color-primary) !important;
 
     &:hover:not([disabled]) {
-      background-color: rgba(21,101,192,0.08);
+      background-color: var(--color-primary-glow);
     }
 
     &[disabled] {
@@ -353,7 +373,7 @@
     justify-content: center;
     gap: 8px;
     padding: 24px;
-    color: #9E9E9E;
+    color: var(--color-text-muted);
     font-size: 14px;
   }
 
@@ -365,7 +385,7 @@
     justify-content: center;
     padding: 60px 24px;
     text-align: center;
-    color: #9E9E9E;
+    color: var(--color-text-muted);
 
     mat-icon {
       font-size: 64px;
@@ -379,7 +399,7 @@
       margin: 0 0 8px;
       font-size: 18px;
       font-weight: 500;
-      color: #616161;
+      color: var(--color-text-secondary);
     }
 
     p {
