@@ -1,4 +1,776 @@
-/* You can add global styles to this file, and also import other style files */
+// ═══════════════════════════════════════════════════════════════════
+// SINSEG — Global Styles
+// ═══════════════════════════════════════════════════════════════════
 
+// ── Design tokens (CSS custom properties) ───────────────────────────
+@use 'styles/variables';
+
+// ── Angular Material v20 Custom M3 Theme ────────────────────────────
+@use 'styles/material-theme';
+
+// ── Base reset + typography ──────────────────────────────────────────
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+  margin: 0;
+  font-family: var(--font-family-brand);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ── Typography CSS variables (font shorthand) ────────────────────────
+:root {
+  --font-display:  800 32px/1.1 var(--font-family-brand);
+  --font-heading:  700 20px/1.3 var(--font-family-brand);
+  --font-subhead:  600 15px/1.4 var(--font-family-brand);
+  --font-body:     400 14px/1.5 var(--font-family-brand);
+  --font-small:    500 12px/1.4 var(--font-family-brand);
+}
+
+// ── mat-sidenav-content background ──────────────────────────────────
+mat-sidenav-content {
+  background-color: var(--color-bg) !important;
+}
+
+// ── Material component overrides ─────────────────────────────────────
+
+// Form fields — rounded outline
+.mat-mdc-form-field {
+  --mdc-shape-small: 8px;
+  --mdc-outlined-text-field-focus-outline-color:     var(--color-primary);
+  --mdc-outlined-text-field-focus-label-text-color:  var(--color-primary);
+  --mdc-outlined-text-field-label-text-color:        var(--color-text-secondary);
+}
+
+// Buttons — pill shape
+.mat-mdc-raised-button,
+.mat-mdc-flat-button,
+.mat-mdc-stroked-button {
+  border-radius: var(--radius-full) !important;
+  letter-spacing: 0.02em;
+}
+
+// Primary raised button — gradient + glow
+.mat-mdc-raised-button.mat-primary {
+  background: var(--color-primary-grad) !important;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35) !important;
+  transition: var(--transition-base);
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45) !important;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// Stroked/outlined primary buttons — primary border + soft fill on hover
+.mat-mdc-outlined-button.mat-primary,
+.mat-mdc-stroked-button.mat-primary {
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  transition: var(--transition-base);
+  --mat-outlined-button-ripple-color: rgba(79, 70, 229, 0.10);
+
+  &:hover {
+    background: rgba(79, 70, 229, 0.06) !important;
+  }
+}
+
+// Button ripple — use brand violet so ripple matches button identity
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-flat-button.mat-primary {
+  --mat-filled-button-ripple-color: rgba(79, 70, 229, 0.14);
+}
+
+// Cards — consistent elevation + radius
+mat-card,
+.mat-mdc-card {
+  box-shadow: var(--shadow-sm) !important;
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+// Table headers — uppercase labels
+.mat-mdc-header-row {
+  background: var(--color-surface-2) !important;
+  border-bottom: 2px solid var(--color-border) !important;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.07em;
+  color: var(--color-text-primary) !important;
+}
+
+.mat-mdc-row {
+  transition: background 0.15s ease;
+
+  &:hover { background: rgba(79, 70, 229, 0.03) !important; }
+
+  &:nth-child(even) { background: rgba(79, 70, 229, 0.01); }
+}
+
+.mat-mdc-row:last-child td {
+  border-bottom: none !important;
+}
+
+// Chips — pill + bold labels
+.mat-mdc-chip {
+  border-radius: var(--radius-full) !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+
+// Semantic status chip color variants
+.mat-mdc-chip.chip-pending {
+  --mdc-chip-label-text-color:          #92400E;
+  --mdc-chip-elevated-container-color:  var(--color-warning-bg);
+}
+.mat-mdc-chip.chip-active,
+.mat-mdc-chip.chip-paid {
+  --mdc-chip-label-text-color:          #065F46;
+  --mdc-chip-elevated-container-color:  var(--color-success-bg);
+}
+.mat-mdc-chip.chip-overdue {
+  --mdc-chip-label-text-color:          #991B1B;
+  --mdc-chip-elevated-container-color:  var(--color-error-bg);
+}
+.mat-mdc-chip.chip-cancelled {
+  --mdc-chip-label-text-color:          #475569;
+  --mdc-chip-elevated-container-color:  #F8FAFC;
+}
+.mat-mdc-chip.chip-review {
+  --mdc-chip-label-text-color:          #1E40AF;
+  --mdc-chip-elevated-container-color:  var(--color-info-bg);
+}
+.mat-mdc-chip.chip-resolved {
+  --mdc-chip-label-text-color:          #4C1D95;
+  --mdc-chip-elevated-container-color:  #EDE9FE;
+}
+
+// Dialogs — rounded containers
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: 16px;
+}
+
+// Snackbar — rounded + shadow + bottom-right (position set via MAT_SNACK_BAR_DEFAULT_OPTIONS)
+.mat-mdc-snack-bar-container {
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+
+  .mdc-snackbar__surface {
+    border-radius: var(--radius-md) !important;
+  }
+}
+
+// ── Semantic badge classes ───────────────────────────────────────────
+.badge-pending {
+  background: var(--color-warning-bg);
+  color: #92400E;
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-active {
+  background: var(--color-success-bg);
+  color: #065F46;
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-overdue {
+  background: var(--color-error-bg);
+  color: #991B1B;
+  border: 1px solid var(--color-error-border);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-info {
+  background: var(--color-info-bg);
+  color: #1E40AF;
+  border: 1px solid var(--color-info-border);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-cancelled {
+  background: #F8FAFC;
+  color: #475569;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-review {
+  background: #EDE9FE;
+  color: #5B21B6;
+  border: 1px solid #C4B5FD;
+  border-radius: var(--radius-full);
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+// ── Snackbar semantic variants ───────────────────────────────────────
+.success-snackbar .mdc-snackbar__surface {
+  background-color: #064E3B !important;
+  color: white !important;
+  border-left: 4px solid var(--color-success) !important;
+}
+
+.error-snackbar .mdc-snackbar__surface {
+  background-color: #7F1D1D !important;
+  color: white !important;
+  border-left: 4px solid var(--color-error) !important;
+}
+
+.warning-snackbar .mdc-snackbar__surface {
+  background-color: #78350F !important;
+  color: white !important;
+  border-left: 4px solid var(--color-warning) !important;
+}
+
+.info-snackbar .mdc-snackbar__surface {
+  background-color: #1E3A5F !important;
+  color: white !important;
+  border-left: 4px solid var(--color-info) !important;
+}
+
+// ── Global animations ────────────────────────────────────────────────
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page-enter {
+  animation: pageEnter 0.35s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+// Staggered stat card entrance (nth-child delays, fires once on DOM entry)
+.stats-container,
+.stats-cards,
+.stats-loading {
+  .stat-card {
+    animation: pageEnter 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .stat-card:nth-child(1) { animation-delay:  30ms; }
+  .stat-card:nth-child(2) { animation-delay:  90ms; }
+  .stat-card:nth-child(3) { animation-delay: 150ms; }
+  .stat-card:nth-child(4) { animation-delay: 210ms; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e8e8f0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease infinite;
+  border-radius: var(--radius-sm);
+
+  @media (prefers-color-scheme: dark) {
+    background: linear-gradient(90deg, #1E293B 25%, #263245 50%, #1E293B 75%);
+    background-size: 200% 100%;
+  }
+}
+
+// Skeleton element sizes
+.skeleton-icon    { width: 48px; height: 48px; border-radius: 12px !important; flex-shrink: 0; }
+.skeleton-icon-box{ width: 52px; height: 52px; border-radius: 12px !important; margin-bottom: 12px; }
+.skeleton-number  { width: 56px; height: 28px; margin-bottom: 8px; border-radius: var(--radius-sm); }
+.skeleton-label   { width: 88px; height: 14px; border-radius: var(--radius-sm); opacity: 0.7; }
+.skeleton-info    { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+
+// Skeleton stat card layout
+.stats-skeleton .stat-card {
+  pointer-events: none;
+
+  .stat-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+}
+
+// ── Focus ring (accessibility) ───────────────────────────────────────
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+// ── Custom scrollbar ─────────────────────────────────────────────────
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+  &:hover { background: #94A3B8; }
+  @media (prefers-color-scheme: dark) {
+    background: #334155;
+    &:hover { background: #475569; }
+  }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// POLISH FINAL — Accessibility, States & Print
+// ───────────────────────────────────────────────────────────────────
+
+// ── Focus ring — Material MDC element-level overrides ─────────────────
+// MDC resets outline via its state-layer system; restore a consistent 2px
+// brand-colour ring for keyboard users on all interactive elements.
+.mat-mdc-button:focus-visible,
+.mat-mdc-raised-button:focus-visible,
+.mat-mdc-flat-button:focus-visible,
+.mat-mdc-outlined-button:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 3px;
+}
+
+.mat-mdc-icon-button:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.mat-mdc-chip:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+  text-decoration: none;
+}
+
+// ── Loading states ─────────────────────────────────────────────────────
+// Globally override the MDC circle stroke so every spinner uses brand colour
+mat-progress-spinner circle,
+mat-spinner circle,
+.mat-mdc-progress-spinner circle {
+  stroke: var(--color-primary) !important;
+}
+
+// Full-section loading overlay utility — wrap in position:relative container
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+
+  .loading-text {
+    font: var(--font-small);
+    color: var(--color-text-secondary);
+    letter-spacing: 0.03em;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: rgba(15, 23, 42, 0.80);
+  }
+}
+
+// ── Empty states ───────────────────────────────────────────────────────
+// Usage: <div class="empty-state">
+//          <mat-icon>inbox</mat-icon>
+//          <span class="empty-title">Sin registros</span>
+//          <span class="empty-message">No se encontraron resultados.</span>
+//        </div>
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 24px;
+  text-align: center;
+
+  mat-icon,
+  .mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: var(--color-text-muted);
+    opacity: 0.7;
+  }
+
+  .empty-title {
+    margin: 0;
+    font: var(--font-subhead);
+    color: var(--color-text-primary);
+  }
+
+  .empty-message {
+    margin: 0;
+    font: var(--font-body);
+    color: var(--color-text-secondary);
+    max-width: 320px;
+  }
+}
+
+// ── Error states ───────────────────────────────────────────────────────
+// Inline form-field error hint — ensure design-token colour is used
+.mat-mdc-form-field-error {
+  color: var(--color-error) !important;
+}
+
+// Dismissible API-error banner shown above page content
+// Usage: <div class="error-banner"> <mat-icon>error</mat-icon>
+//          <span class="error-banner-message">…</span> </div>
+.error-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  border-left: 4px solid var(--color-error);
+  border-radius: var(--radius-md);
+  color: var(--color-error);
+  font: var(--font-body);
+  margin-bottom: 16px;
+
+  mat-icon,
+  .mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .error-banner-message {
+    flex: 1;
+    font-weight: 500;
+  }
+}
+
+// ── Print styles ───────────────────────────────────────────────────────
+@media print {
+  // Suppress drop-shadows (not visible on paper, waste ink)
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  // Hide navigation chrome
+  mat-sidenav,
+  .mat-drawer-backdrop,
+  .sidebar-wrapper,
+  .app-toolbar,
+  .mat-toolbar,
+  .mat-mdc-toolbar,
+  .mat-mdc-paginator,
+  .no-print {
+    display: none !important;
+  }
+
+  // Let content span the full page width
+  mat-sidenav-content {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+
+  // Cards — thin border replaces elevation; keep together across pages
+  mat-card,
+  .mat-mdc-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+  }
+
+  // Tables — full-width, rows stay together
+  .mat-mdc-table           { width: 100% !important; }
+  .mat-mdc-row,
+  .mat-mdc-header-row      { page-break-inside: avoid; }
+
+  // Full-width content wrapper
+  .page-content,
+  .content-area            { width: 100% !important; max-width: 100% !important; padding: 0 !important; }
+}
+
+// ───────────────────────────────────────────────────────────────────
+// DARK MODE — Material M3 component overrides
+// Tokens in _variables.scss swap surfaces/text automatically.
+// The rules below handle MDC hard-coded values and edge cases.
+// ───────────────────────────────────────────────────────────────────
+@media (prefers-color-scheme: dark) {
+
+  // Body + sidenav background
+  body {
+    color-scheme: dark;
+  }
+
+  mat-sidenav-content {
+    background-color: var(--color-bg) !important;
+  }
+
+  // ── Cards ────────────────────────────────────────────────────────────
+  mat-card,
+  .mat-mdc-card {
+    background-color: var(--color-surface) !important;
+    border-color: var(--color-border) !important;
+
+    // card titles and subtitles
+    .mat-mdc-card-title  { color: var(--color-text-primary); }
+    .mat-mdc-card-subtitle { color: var(--color-text-secondary); }
+  }
+
+  // ── Outline Form Fields ───────────────────────────────────────────
+  .mat-mdc-form-field {
+    --mdc-outlined-text-field-outline-color:           var(--color-border);
+    --mdc-outlined-text-field-hover-outline-color:     var(--color-text-muted);
+    --mdc-outlined-text-field-input-text-color:        var(--color-text-primary);
+    --mdc-outlined-text-field-label-text-color:        var(--color-text-secondary);
+    --mdc-outlined-text-field-container-color:         var(--color-surface);
+    --mat-select-panel-background-color:               var(--color-surface);
+  }
+
+  // ── Select panel ─────────────────────────────────────────────────
+  .mat-mdc-select-panel,
+  .mdc-menu-surface {
+    background-color: var(--color-surface) !important;
+    border: 1px solid var(--color-border);
+  }
+
+  .mat-mdc-option {
+    color: var(--color-text-primary);
+
+    &:hover:not(.mdc-list-item--disabled),
+    &:focus:not(.mdc-list-item--disabled) {
+      background-color: rgba(99, 102, 241, 0.10);
+    }
+
+    &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+      background-color: rgba(99, 102, 241, 0.15);
+      color: var(--color-primary);
+    }
+  }
+
+  // ── Tables ───────────────────────────────────────────────────────────
+  .mat-mdc-table {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-primary);
+  }
+
+  .mat-mdc-header-row {
+    background: var(--color-surface-2) !important;
+    border-bottom-color: var(--color-border) !important;
+  }
+
+  .mat-mdc-header-cell {
+    color: var(--color-text-primary) !important;
+    border-bottom-color: var(--color-border) !important;
+  }
+
+  .mat-mdc-cell {
+    color: var(--color-text-primary);
+    border-bottom-color: var(--color-border) !important;
+  }
+
+  .mat-mdc-row:hover {
+    background: rgba(99, 102, 241, 0.07) !important;
+  }
+
+  .mat-mdc-row:nth-child(even) {
+    background: rgba(99, 102, 241, 0.03);
+  }
+
+  // ── Paginator ─────────────────────────────────────────────────────────
+  .mat-mdc-paginator {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-secondary);
+    border-top-color: var(--color-border) !important;
+  }
+
+  // ── Chips ──────────────────────────────────────────────────────────────
+  .mat-mdc-chip {
+    --mdc-chip-elevated-container-color: var(--color-surface-2);
+    --mdc-chip-label-text-color:         var(--color-text-secondary);
+    --mdc-chip-outline-color:            var(--color-border);
+  }
+
+  // Semantic chip overrides remain the same hues but on dark surfaces
+  .mat-mdc-chip.chip-pending {
+    --mdc-chip-elevated-container-color: rgba(245, 158, 11, 0.15);
+    --mdc-chip-label-text-color:         #FCD34D;
+  }
+  .mat-mdc-chip.chip-active,
+  .mat-mdc-chip.chip-paid {
+    --mdc-chip-elevated-container-color: rgba(16, 185, 129, 0.15);
+    --mdc-chip-label-text-color:         #6EE7B7;
+  }
+  .mat-mdc-chip.chip-overdue {
+    --mdc-chip-elevated-container-color: rgba(239, 68, 68, 0.15);
+    --mdc-chip-label-text-color:         #FCA5A5;
+  }
+  .mat-mdc-chip.chip-cancelled {
+    --mdc-chip-elevated-container-color: rgba(100, 116, 139, 0.15);
+    --mdc-chip-label-text-color:         #94A3B8;
+  }
+  .mat-mdc-chip.chip-review {
+    --mdc-chip-elevated-container-color: rgba(59, 130, 246, 0.15);
+    --mdc-chip-label-text-color:         #93C5FD;
+  }
+  .mat-mdc-chip.chip-resolved {
+    --mdc-chip-elevated-container-color: rgba(139, 92, 246, 0.15);
+    --mdc-chip-label-text-color:         #C4B5FD;
+  }
+
+  // ── Dialogs ──────────────────────────────────────────────────────────
+  .mat-mdc-dialog-container,
+  .mdc-dialog__surface {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-primary);
+  }
+
+  // ── Snackbar ─────────────────────────────────────────────────────────
+  .mat-mdc-snack-bar-container .mdc-snackbar__surface {
+    background-color: #263245 !important;
+    color: var(--color-text-primary) !important;
+    border-left-color: var(--color-primary) !important;
+  }
+
+  // ── Tabs ─────────────────────────────────────────────────────────────
+  .mat-mdc-tab-header {
+    background-color: var(--color-surface) !important;
+    border-bottom-color: var(--color-border) !important;
+  }
+
+  .mat-mdc-tab {
+    color: var(--color-text-secondary);
+
+    &.mdc-tab--active {
+      color: var(--color-primary);
+    }
+  }
+
+  .mdc-tab-indicator__content--underline {
+    border-color: var(--color-primary) !important;
+  }
+
+  // ── Input / Textarea native ────────────────────────────────────
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill {
+    -webkit-box-shadow:      0 0 0 1000px var(--color-surface) inset !important;
+    -webkit-text-fill-color: var(--color-text-primary) !important;
+    caret-color:             var(--color-text-primary);
+  }
+
+  // ── Progress spinner ─────────────────────────────────────────────
+  .mat-mdc-progress-spinner circle {
+    stroke: var(--color-primary) !important;
+  }
+
+  // ── Badge classes on dark — opaque tinted backgrounds for correct contrast evaluation
+  .badge-pending  { background: #272007; color: #FCD34D; border-color: #433810; }
+  .badge-active   { background: #062520; color: #6EE7B7; border-color: #0d3b33; }
+  .badge-overdue  { background: #270f0f; color: #FCA5A5; border-color: #3e1515; }
+  .badge-info     { background: #0c1e3a; color: #93C5FD; border-color: #142e57; }
+  .badge-cancelled{ background: #1a2233; color: #94A3B8; border-color: #273348; }
+  .badge-review   { background: #1a0f38; color: #C4B5FD; border-color: #2e1a5e; }
+
+  // ── Text selection on dark ───────────────────────────────────────
+  ::selection {
+    background: rgba(99, 102, 241, 0.30);
+    color: var(--color-text-primary);
+  }}
+
+// ── Text selection color ─────────────────────────────────────────────
+::selection {
+  background: rgba(79, 70, 229, 0.15);
+  color: var(--color-text-primary);
+}
+
+// ── Dialog panel overrides (poliza-detail) ───────────────────────────
+.pd-dialog-panel .mat-mdc-dialog-container {
+  border-radius: 16px !important;
+  overflow: hidden;
+  padding: 0 !important;
+}
+.pd-dialog-panel .mdc-dialog__surface {
+  border-radius: 16px !important;
+  overflow: hidden;
+}
+
+// ── Responsive — Mobile / Tablet ─────────────────────────────────────
+
+// 7.3 Tables — horizontal scroll + touch on mobile
+@media (max-width: 768px) {
+  .table-container,
+  .mat-mdc-table-container {
+    overflow-x: auto !important;
+  }
+
+  .mat-mdc-table {
+    min-width: 600px;
+  }
+}
+
+// 7.4 Dialogs — full-screen on mobile
+@media (max-width: 640px) {
+  .cdk-overlay-pane {
+    max-width: 100vw !important;
+    width: 100vw !important;
+  }
+
+  .mat-mdc-dialog-container {
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+
+  .mdc-dialog__surface {
+    border-radius: 0 !important;
+    max-height: 100dvh !important;
+  }
+
+  // Poliza detail dialog preserves its own rounded style on desktop only
+  .pd-dialog-panel .mat-mdc-dialog-container,
+  .pd-dialog-panel .mdc-dialog__surface {
+    border-radius: 0 !important;
+  }
+}
+

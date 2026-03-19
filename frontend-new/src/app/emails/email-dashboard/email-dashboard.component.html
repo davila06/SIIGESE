@@ -6,53 +6,58 @@
 
   <div class="stats-cards" *ngIf="!loading">
     <mat-card class="stat-card success">
-      <mat-card-header>
-        <mat-icon>mark_email_read</mat-icon>
-        <mat-card-title>Emails Enviados</mat-card-title>
-      </mat-card-header>
       <mat-card-content>
+        <div class="stat-icon-box">
+          <mat-icon>mark_email_read</mat-icon>
+        </div>
         <div class="stat-number">{{ stats.totalSent || 0 }}</div>
         <div class="stat-label">Total este mes</div>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="stat-card error">
-      <mat-card-header>
-        <mat-icon>error_outline</mat-icon>
-        <mat-card-title>Emails Fallidos</mat-card-title>
-      </mat-card-header>
       <mat-card-content>
+        <div class="stat-icon-box">
+          <mat-icon>error_outline</mat-icon>
+        </div>
         <div class="stat-number">{{ stats.totalFailed || 0 }}</div>
         <div class="stat-label">Total este mes</div>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="stat-card warning">
-      <mat-card-header>
-        <mat-icon>schedule</mat-icon>
-        <mat-card-title>Cobros Pendientes</mat-card-title>
-      </mat-card-header>
       <mat-card-content>
+        <div class="stat-icon-box">
+          <mat-icon>schedule</mat-icon>
+        </div>
         <div class="stat-number">{{ stats.pendingCobros || 0 }}</div>
         <div class="stat-label">Requieren notificación</div>
       </mat-card-content>
     </mat-card>
 
     <mat-card class="stat-card info">
-      <mat-card-header>
-        <mat-icon>policy</mat-icon>
-        <mat-card-title>Pólizas por Vencer</mat-card-title>
-      </mat-card-header>
       <mat-card-content>
+        <div class="stat-icon-box">
+          <mat-icon>policy</mat-icon>
+        </div>
         <div class="stat-number">{{ stats.polizasPorVencer || 0 }}</div>
         <div class="stat-label">Próximos 30 días</div>
       </mat-card-content>
     </mat-card>
   </div>
 
+  <div class="stats-cards stats-skeleton" *ngIf="loading">
+    <mat-card class="stat-card" *ngFor="let i of [1,2,3,4]">
+      <mat-card-content>
+        <div class="skeleton skeleton-icon-box"></div>
+        <div class="skeleton skeleton-number"></div>
+        <div class="skeleton skeleton-label"></div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
   <div class="loading-container" *ngIf="loading">
-    <mat-spinner></mat-spinner>
-    <p>Cargando información...</p>
+    <p class="loading-text">Cargando información...</p>
   </div>
 
   <div class="action-cards">

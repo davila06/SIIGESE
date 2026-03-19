@@ -1,0 +1,130 @@
+<div class="pd-dialog">
+
+  <!-- ── Header gradient ───────────────────────────────────────── -->
+  <div class="pd-header">
+    <div class="pd-avatar">{{ avatarLetter }}</div>
+
+    <div class="pd-header-info">
+      <div class="pd-poliza-number">
+        <mat-icon>policy</mat-icon>
+        <span>{{ poliza.numeroPoliza }}</span>
+      </div>
+      <h2 class="pd-asegurado">{{ poliza.nombreAsegurado }}</h2>
+      <div class="pd-chips">
+        <span class="pd-chip pd-chip-aseg"><mat-icon>shield</mat-icon>{{ poliza.aseguradora }}</span>
+        <span class="pd-chip pd-chip-freq"><mat-icon>repeat</mat-icon>{{ poliza.frecuencia }}</span>
+        <span class="pd-chip" [class.pd-chip-usd]="poliza.moneda==='USD'" [class.pd-chip-eur]="poliza.moneda==='EUR'">
+          <mat-icon>payments</mat-icon>{{ poliza.moneda }}
+        </span>
+        <span *ngIf="poliza.modalidad" class="pd-chip pd-chip-modal">
+          <mat-icon>category</mat-icon>{{ poliza.modalidad }}
+        </span>
+      </div>
+    </div>
+
+    <button mat-icon-button class="pd-close-btn" (click)="close()" matTooltip="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- ── Body ──────────────────────────────────────────────────── -->
+  <mat-dialog-content class="pd-body">
+
+    <!-- Prima destacada -->
+    <div class="pd-prima-hero">
+      <div class="pd-prima-label">Prima</div>
+      <div class="pd-prima-value">{{ formatCurrency(poliza.prima, poliza.moneda) }}</div>
+      <div class="pd-prima-sub">{{ poliza.moneda }} · {{ poliza.frecuencia }}</div>
+    </div>
+
+    <!-- Info grid -->
+    <div class="pd-info-grid">
+
+      <div class="pd-info-item">
+        <div class="pd-info-icon-wrap pd-icon-date"><mat-icon>event</mat-icon></div>
+        <div class="pd-info-text">
+          <span class="pd-info-label">Vigencia</span>
+          <span class="pd-info-value">{{ formatDate(poliza.fechaVigencia) }}</span>
+        </div>
+      </div>
+
+      <div class="pd-info-item" *ngIf="poliza.numeroCedula">
+        <div class="pd-info-icon-wrap pd-icon-id"><mat-icon>badge</mat-icon></div>
+        <div class="pd-info-text">
+          <span class="pd-info-label">Cédula</span>
+          <span class="pd-info-value">{{ poliza.numeroCedula }}</span>
+        </div>
+      </div>
+
+      <!-- Vehículo -->
+      <div class="pd-info-item" *ngIf="poliza.placa">
+        <div class="pd-info-icon-wrap pd-icon-car"><mat-icon>directions_car</mat-icon></div>
+        <div class="pd-info-text">
+          <span class="pd-info-label">Placa</span>
+          <span class="pd-info-value">{{ poliza.placa }}</span>
+        </div>
+      </div>
+
+      <div class="pd-info-item" *ngIf="poliza.marca || poliza.modelo">
+        <div class="pd-info-icon-wrap pd-icon-car"><mat-icon>garage</mat-icon></div>
+        <div class="pd-info-text">
+          <span class="pd-info-label">Vehículo</span>
+          <span class="pd-info-value">
+            {{ poliza.marca || '' }} {{ poliza.modelo || '' }}
+            <span *ngIf="poliza['a\u00f1o']" class="pd-year">({{ poliza['a\u00f1o'] }})</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Contacto -->
+      <div class="pd-info-item" *ngIf="poliza.correo">
+        <div class="pd-info-icon-wrap pd-icon-email"><mat-icon>email</mat-icon></div>
+        <div class="pd-info-text">
+          <span class="pd-info-label">Correo</span>
+          <span class="pd-info-value">{{ poliza.correo }}</span>
+        </div>
+      </div>
+
+      <div class="pd-info-item" *ngIf="poliza.numeroTelefono">
+        <div class="pd-info-icon-wrap pd-icon-phone"><mat-icon>phone</mat-icon></div>
+        <div class="pd-info-text">
+          <span class="pd-info-label">Teléfono</span>
+          <span class="pd-info-value">{{ poliza.numeroTelefono }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Observaciones -->
+    <div class="pd-obs-section" *ngIf="poliza.observaciones">
+      <div class="pd-obs-header">
+        <mat-icon>notes</mat-icon>
+        <span>Observaciones</span>
+      </div>
+      <p class="pd-obs-text">{{ poliza.observaciones }}</p>
+    </div>
+
+    <!-- Meta footer -->
+    <div class="pd-meta">
+      <span *ngIf="poliza.fechaCreacion">
+        <mat-icon>calendar_today</mat-icon> Creada {{ formatDate(poliza.fechaCreacion) }}
+      </span>
+      <span *ngIf="poliza.usuarioCreacion">
+        <mat-icon>person</mat-icon> {{ poliza.usuarioCreacion }}
+      </span>
+    </div>
+
+  </mat-dialog-content>
+
+  <!-- ── Actions ───────────────────────────────────────────────── -->
+  <mat-dialog-actions class="pd-actions">
+    <button mat-stroked-button color="warn" (click)="delete()">
+      <mat-icon>delete_sweep</mat-icon> Eliminar
+    </button>
+    <span class="pd-actions-spacer"></span>
+    <button mat-stroked-button (click)="close()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="edit()">
+      <mat-icon>edit_note</mat-icon> Editar
+    </button>
+  </mat-dialog-actions>
+</div>

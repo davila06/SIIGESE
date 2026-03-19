@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, inject } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -48,6 +48,7 @@ import { LoggingService } from '../services/logging.service';
 })
 export class UsuariosComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('formSection', { read: ElementRef }) formSection!: ElementRef;
 
   users: User[] = [];
   filteredUsers: User[] = [];
@@ -58,6 +59,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   searchTerm = '';
   isLoading = false;
   isEditMode = false;
+  showForm = false;
   selectedUser: User | null = null;
   currentUserId: number | null = null;
   
@@ -179,13 +181,17 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   newUser() {
     this.isEditMode = false;
     this.selectedUser = null;
+    this.showForm = true;
     this.initForm();
+    setTimeout(() => this.formSection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   }
 
   editUser(user: User) {
     this.isEditMode = true;
     this.selectedUser = user;
+    this.showForm = true;
     this.loadUserToForm(user);
+    setTimeout(() => this.formSection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   }
 
   selectUser(user: User) {
@@ -211,6 +217,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   cancelEdit() {
     this.isEditMode = false;
     this.selectedUser = null;
+    this.showForm = false;
     this.initForm();
   }
 
@@ -260,7 +267,7 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
     this.apiService.createUser(userData).subscribe({
       next: (user) => {
         this.loadUsers();
-        this.resetForm();
+        this.cancelEdit();
       },
       error: (error) => {
         this.logger.error('Error creating user:', error);

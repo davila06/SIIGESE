@@ -1,0 +1,147 @@
+<div class="upd-wrap">
+
+  <!-- ── LOADING ─────────────────────────────────────────────────── -->
+  <div *ngIf="state === 'loading'" class="upd-loading">
+
+    <div class="upd-orbit">
+      <div class="upd-ring upd-ring--1"></div>
+      <div class="upd-ring upd-ring--2"></div>
+      <div class="upd-ring upd-ring--3"></div>
+      <div class="upd-core">
+        <mat-icon>{{ loadingSteps[activeStep].icon }}</mat-icon>
+      </div>
+    </div>
+
+    <p class="upd-current-label">{{ loadingSteps[activeStep].label }}</p>
+
+    <div class="upd-steps">
+      <div *ngFor="let step of loadingSteps; let i = index"
+           class="upd-step"
+           [class.is-active]="i === activeStep"
+           [class.is-done]="i < activeStep">
+        <span class="upd-dot">
+          <mat-icon *ngIf="i < activeStep">check</mat-icon>
+          <span *ngIf="i >= activeStep">{{ i + 1 }}</span>
+        </span>
+        <span class="upd-step-lbl">{{ step.label }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SUCCESS ─────────────────────────────────────────────────── -->
+  <div *ngIf="state === 'success'" class="upd-success">
+
+    <div class="upd-burst">
+      <div class="upd-burst-ring upd-burst-ring--1"></div>
+      <div class="upd-burst-ring upd-burst-ring--2"></div>
+      <div class="upd-check-wrap">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+    </div>
+
+    <h2 class="upd-success-title">¡Carga completada!</h2>
+    <p class="upd-success-sub">Tus pólizas fueron importadas exitosamente</p>
+
+    <div class="upd-counters">
+      <div class="upd-counter upd-counter--total">
+        <span class="upd-counter-num">{{ uploadStats.totalRecords }}</span>
+        <span class="upd-counter-lbl">Total leídos</span>
+      </div>
+      <div class="upd-counter upd-counter--ok">
+        <span class="upd-counter-num">{{ animatedProcessed }}</span>
+        <span class="upd-counter-lbl">Procesados</span>
+      </div>
+      <div class="upd-counter upd-counter--err" *ngIf="uploadStats.errorRecords > 0">
+        <span class="upd-counter-num">{{ animatedErrors }}</span>
+        <span class="upd-counter-lbl">Con errores</span>
+      </div>
+    </div>
+
+    <div *ngIf="uploadStats.failedRecords.length > 0" class="upd-warn-bar">
+      <mat-icon>warning_amber</mat-icon>
+      <span>{{ uploadStats.failedRecords.length }} registros con errores</span>
+      <button mat-stroked-button color="warn" (click)="downloadErrorsFile()" [disabled]="isDownloading">
+        <mat-icon>download</mat-icon> Descargar
+      </button>
+    </div>
+
+    <div class="upd-actions">
+      <div class="upd-countdown">
+        <svg viewBox="0 0 44 44">
+          <circle cx="22" cy="22" r="18" class="upd-track"/>
+          <circle cx="22" cy="22" r="18" class="upd-progress"
+                  [style.stroke-dashoffset]="countdownOffset"/>
+        </svg>
+        <span class="upd-countdown-num">{{ countdownSeconds }}</span>
+      </div>
+
+      <div class="upd-btns">
+        <button mat-raised-button color="primary" (click)="goToPolizas()">
+          <mat-icon>list_alt</mat-icon> Ver Pólizas
+        </button>
+        <button mat-stroked-button (click)="closeAndContinue()">
+          <mat-icon>add</mat-icon> Cargar otro
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ERROR ───────────────────────────────────────────────────── -->
+  <div *ngIf="state === 'error'" class="upd-error">
+
+    <div class="upd-error-icon">
+      <mat-icon>error_outline</mat-icon>
+    </div>
+
+    <h2 class="upd-error-title">
+      {{ errorMessage ? 'Error al procesar' : 'Carga con errores' }}
+    </h2>
+
+    <!-- HTTP / fatal error -->
+    <p *ngIf="errorMessage" class="upd-error-msg">{{ errorMessage }}</p>
+
+    <!-- Partial errors from server -->
+    <ng-container *ngIf="!errorMessage && result">
+      <div class="upd-counters">
+        <div class="upd-counter upd-counter--total">
+          <span class="upd-counter-num">{{ uploadStats.totalRecords }}</span>
+          <span class="upd-counter-lbl">Total</span>
+        </div>
+        <div class="upd-counter upd-counter--ok">
+          <span class="upd-counter-num">{{ uploadStats.processedRecords }}</span>
+          <span class="upd-counter-lbl">Procesados</span>
+        </div>
+        <div class="upd-counter upd-counter--err">
+          <span class="upd-counter-num">{{ uploadStats.errorRecords }}</span>
+          <span class="upd-counter-lbl">Con errores</span>
+        </div>
+      </div>
+
+      <mat-expansion-panel *ngIf="uploadStats.errors.length > 0" class="upd-error-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Ver detalles ({{ uploadStats.errors.length }})</mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="upd-error-list">
+          <div *ngFor="let err of uploadStats.errors; let i = index" class="upd-error-item">
+            <span class="upd-err-num">{{ i + 1 }}.</span>
+            <span>{{ err }}</span>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </ng-container>
+
+    <div class="upd-error-actions">
+      <button mat-raised-button color="warn"
+              *ngIf="uploadStats.failedRecords.length > 0"
+              (click)="downloadErrorsFile()"
+              [disabled]="isDownloading">
+        <mat-icon>download</mat-icon>
+        Descargar errores ({{ uploadStats.failedRecords.length }})
+      </button>
+      <button mat-stroked-button (click)="closeAndContinue()">
+        <mat-icon>refresh</mat-icon> Intentar de nuevo
+      </button>
+    </div>
+  </div>
+
+</div>

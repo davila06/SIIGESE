@@ -1,6 +1,6 @@
 ﻿.cobros-dashboard {
   padding: 24px;
-  background-color: #f5f5f5;
+  background-color: var(--color-bg);
   min-height: 100vh;
 
   // ── Header ─────────────────────────────────────────────────────────────────
@@ -23,7 +23,7 @@
         font-size: 32px;
         width: 32px;
         height: 32px;
-        color: #3F51B5;
+        color: var(--color-primary);
       }
     }
 
@@ -74,7 +74,7 @@
         justify-content: center;
         width: 52px;
         height: 52px;
-        border-radius: 50%;
+        border-radius: 12px;
 
         mat-icon {
           font-size: 28px;
@@ -107,18 +107,27 @@
       }
 
       &.stat-pending {
-        border-left: 4px solid #FF9800;
-        .stat-icon { background-color: rgba(255,152,0,0.1); color: #FF9800; }
+        border-left: 4px solid var(--status-pending);
+        .stat-icon {
+          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          color: white;
+        }
       }
 
       &.stat-collected {
-        border-left: 4px solid #4CAF50;
-        .stat-icon { background-color: rgba(76,175,80,0.1); color: #4CAF50; }
+        border-left: 4px solid var(--status-active);
+        .stat-icon {
+          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          color: white;
+        }
       }
 
       &.stat-overdue {
-        border-left: 4px solid #F44336;
-        .stat-icon { background-color: rgba(244,67,54,0.1); color: #F44336; }
+        border-left: 4px solid var(--status-overdue);
+        .stat-icon {
+          background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+          color: white;
+        }
       }
     }
   }
@@ -162,7 +171,7 @@
       padding: 0 6px;
       margin-left: 8px;
       border-radius: 10px;
-      background-color: #3F51B5;
+      background-color: var(--color-primary);
       color: #fff;
       font-size: 11px;
       font-weight: 600;
@@ -196,9 +205,32 @@
       }
 
       ::ng-deep .mat-mdc-chip.selected {
-        background-color: #3F51B5 !important;
+        background-color: var(--color-primary) !important;
         color: #fff !important;
       }
+    }
+  }
+
+  // ── Responsive ──────────────────────────────────────────────────────────────
+  @media (max-width: 640px) {
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px;
+
+    .stats-container {
+      grid-template-columns: 1fr;
     }
   }
 
@@ -245,7 +277,7 @@
     align-items: center;
     gap: 4px;
     font-size: 13px;
-    color: #3F51B5;
+    color: var(--color-primary);
 
     .email-icon {
       font-size: 16px;

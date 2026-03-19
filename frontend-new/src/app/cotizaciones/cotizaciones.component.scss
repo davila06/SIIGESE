@@ -9,9 +9,9 @@
   text-align: center;
 
   .page-title {
-    font-size: 2.5rem;
-    font-weight: 300;
-    color: #1976d2;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--color-text-primary);
     margin: 0;
     display: flex;
     align-items: center;
@@ -19,9 +19,9 @@
     gap: 12px;
 
     mat-icon {
-      font-size: 2.5rem;
-      width: auto;
-      height: auto;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
     }
   }
 
@@ -75,7 +75,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #1976d2;
+      color: var(--color-primary);
     }
   }
 
@@ -108,7 +108,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #1976d2;
+      color: var(--color-primary);
     }
 
     .header-actions {
@@ -126,7 +126,7 @@
 
       .mat-mdc-header-cell {
         font-weight: 600;
-        color: #1976d2;
+        color: var(--color-primary);
         border-bottom: 2px solid #e0e0e0;
       }
 
@@ -136,7 +136,7 @@
 
         .numero-cotizacion {
           font-weight: 600;
-          color: #1976d2;
+          color: var(--color-primary);
         }
 
         .solicitante-info {
@@ -188,7 +188,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #1976d2;
+      color: var(--color-primary);
     }
   }
 
@@ -196,7 +196,7 @@
     margin-bottom: 32px;
 
     .section-title {
-      color: #1976d2;
+      color: var(--color-primary);
       font-size: 1.2rem;
       font-weight: 500;
       margin-bottom: 16px;
@@ -210,7 +210,7 @@
         content: '';
         width: 4px;
         height: 20px;
-        background-color: #1976d2;
+        background-color: var(--color-primary);
         border-radius: 2px;
       }
     }
@@ -249,7 +249,7 @@
 // Estados y chips
 .mat-mdc-chip {
   &.mat-primary {
-    background-color: #1976d2;
+    background-color: var(--color-primary);
     color: white;
   }
 

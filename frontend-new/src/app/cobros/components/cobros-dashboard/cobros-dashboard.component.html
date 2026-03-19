@@ -68,11 +68,15 @@
     </mat-card>
   </div>
 
-  <div class="stats-container" *ngIf="!stats">
+  <div class="stats-container stats-skeleton" *ngIf="!stats">
     <mat-card class="stat-card" *ngFor="let i of [1,2,3]">
       <mat-card-content>
         <div class="stat-content">
-          <mat-spinner diameter="36"></mat-spinner>
+          <div class="skeleton skeleton-icon"></div>
+          <div class="skeleton-info">
+            <div class="skeleton skeleton-number"></div>
+            <div class="skeleton skeleton-label"></div>
+          </div>
         </div>
       </mat-card-content>
     </mat-card>

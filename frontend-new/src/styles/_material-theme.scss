@@ -1,0 +1,34 @@
+// ═══════════════════════════════════════════════════════════════════
+// SINSEG — Angular Material v20 Custom M3 Theme
+// Replaces the prebuilt indigo-pink.css
+// ═══════════════════════════════════════════════════════════════════
+@use '@angular/material' as mat;
+
+// ── Define M3 theme ─────────────────────────────────────────────────
+// $violet-palette is the closest built-in M3 palette to indigo/violet
+$sinseg-theme: mat.define-theme((
+  color: (
+    theme-type:  light,
+    primary:     mat.$violet-palette,
+    tertiary:    mat.$azure-palette,
+  ),
+  typography: (
+    brand-family:    'Inter, Roboto, sans-serif',
+    plain-family:    'Inter, Roboto, sans-serif',
+    bold-weight:     700,
+    medium-weight:   500,
+    regular-weight:  400,
+  ),
+  density: (scale: -1),
+));
+
+// ── Apply core baseline styles (ripple, strong-focus, etc.) ─────────
+// mat.core() must be included exactly once in the application
+@include mat.core();
+
+// ── Apply M3 theme tokens as CSS custom properties on :root ─────────
+// This sets --mat-sys-primary, --mat-sys-secondary, etc.
+// All Angular Material M3 components reference these tokens internally
+:root {
+  @include mat.theme($sinseg-theme);
+}

@@ -1,0 +1,293 @@
+.pd-dialog {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* ── Header ──────────────────────────────── */
+.pd-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 20px 18px;
+  background: var(--color-primary-grad);
+  color: white;
+  animation: pdHeaderIn 0.4s cubic-bezier(0.34, 1.15, 0.64, 1) both;
+}
+
+.pd-avatar {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  border: 2.5px solid rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  animation: pdAvatarPop 0.45s cubic-bezier(0.34, 1.6, 0.64, 1) 0.08s both;
+}
+
+.pd-header-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.pd-poliza-number {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+  margin-bottom: 4px;
+  font-family: 'Courier New', monospace;
+
+  mat-icon { font-size: 13px; width: 13px; height: 13px; }
+}
+
+.pd-asegurado {
+  margin: 0 0 8px;
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pd-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 9px 3px 6px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.17);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  animation: pdChipIn 0.3s ease both;
+
+  mat-icon { font-size: 12px; width: 12px; height: 12px; }
+
+  &.pd-chip-usd { background: rgba(21, 101, 192, 0.55); border-color: rgba(144,202,249,0.5); }
+  &.pd-chip-eur { background: rgba(239, 108, 0, 0.45); border-color: rgba(255,204,128,0.5); }
+
+  &:nth-child(1) { animation-delay: 0.12s; }
+  &:nth-child(2) { animation-delay: 0.19s; }
+  &:nth-child(3) { animation-delay: 0.26s; }
+  &:nth-child(4) { animation-delay: 0.33s; }
+}
+
+.pd-close-btn {
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.75) !important;
+  &:hover { color: white !important; background: rgba(255,255,255,0.15) !important; }
+}
+
+/* ── Body ─────────────────────────────────── */
+.pd-body {
+  padding: 0 !important;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Prima hero */
+.pd-prima-hero {
+  text-align: center;
+  padding: 24px 20px 16px;
+  background: linear-gradient(180deg, #f7f8ff 0%, #fff 100%);
+  border-bottom: 1px solid #eef0f8;
+  animation: pdFadeUp 0.35s ease 0.15s both;
+}
+
+.pd-prima-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #9da5c5;
+  margin-bottom: 4px;
+}
+
+.pd-prima-value {
+  font-size: 30px;
+  font-weight: 700;
+  color: #3f3f60;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.pd-prima-sub {
+  font-size: 12px;
+  color: #a0a8c8;
+  font-weight: 500;
+}
+
+/* Info grid */
+.pd-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 8px 0;
+}
+
+.pd-info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f3f4fb;
+  animation: pdFadeUp 0.3s ease both;
+
+  &:nth-child(1) { animation-delay: 0.18s; }
+  &:nth-child(2) { animation-delay: 0.24s; }
+  &:nth-child(3) { animation-delay: 0.30s; }
+  &:nth-child(4) { animation-delay: 0.36s; }
+  &:nth-child(5) { animation-delay: 0.42s; }
+  &:nth-child(6) { animation-delay: 0.48s; }
+}
+
+.pd-info-icon-wrap {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+  &.pd-icon-date  { background: var(--color-info-bg);    color: var(--color-info); }
+  &.pd-icon-id    { background: rgba(139,92,246,0.10);    color: #7C3AED; }
+  &.pd-icon-car   { background: var(--color-success-bg); color: var(--color-success); }
+  &.pd-icon-email { background: var(--color-warning-bg); color: var(--color-warning); }
+  &.pd-icon-phone { background: rgba(20,184,166,0.10);   color: #0D9488; }
+}
+
+.pd-info-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pd-info-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #b0b8d8;
+  line-height: 1.2;
+}
+
+.pd-info-value {
+  font-size: 13px;
+  font-weight: 500;
+  color: #3a3a5c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pd-year {
+  color: #9da5c5;
+  font-size: 12px;
+}
+
+/* Observaciones */
+.pd-obs-section {
+  margin: 4px 20px 4px;
+  padding: 14px 16px;
+  background: #fafbff;
+  border-radius: 10px;
+  border: 1px solid #eef0f8;
+  animation: pdFadeUp 0.3s ease 0.5s both;
+}
+
+.pd-obs-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8890b8;
+  margin-bottom: 8px;
+
+  mat-icon { font-size: 15px; width: 15px; height: 15px; }
+}
+
+.pd-obs-text {
+  margin: 0;
+  font-size: 13px;
+  color: #4a4a6a;
+  line-height: 1.6;
+}
+
+/* Meta */
+.pd-meta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  padding: 10px 20px 16px;
+  font-size: 11px;
+  color: #b8bcd4;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    mat-icon { font-size: 13px; width: 13px; height: 13px; }
+  }
+}
+
+/* ── Actions ───────────────────────────────── */
+.pd-actions {
+  display: flex !important;
+  align-items: center;
+  padding: 12px 20px !important;
+  gap: 8px;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+
+  button {
+    border-radius: var(--radius-full) !important;
+  }
+}
+
+.pd-actions-spacer { flex: 1; }
+
+/* ── Animations ────────────────────────────── */
+@keyframes pdHeaderIn {
+  from { transform: translateY(-8px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes pdAvatarPop {
+  from { transform: scale(0.5); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+@keyframes pdChipIn {
+  from { opacity: 0; transform: translateX(-5px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pdFadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -124,6 +124,7 @@ builder.Services.AddScoped<ICotizacionService, Infrastructure.Services.Cotizacio
 builder.Services.AddScoped<IExcelService, ExcelService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEmailConfigService, EmailConfigService>();
+builder.Services.AddScoped<IEmailDashboardService, EmailDashboardService>();
 builder.Services.AddScoped<INotificationService, Infrastructure.Services.NotificationService>();
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IChatService, ChatService>();

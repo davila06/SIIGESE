@@ -51,6 +51,9 @@ const routes = [
     MatDividerModule,
     MatDialogModule,
     MatTabsModule,
+  ],
+  exports: [
+    ChatComponent
   ]
 })
 export class ChatModule {}

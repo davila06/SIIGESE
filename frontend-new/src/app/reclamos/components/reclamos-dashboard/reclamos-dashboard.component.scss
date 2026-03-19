@@ -1,6 +1,6 @@
 .reclamos-dashboard {
   padding: 24px;
-  background-color: #f5f5f5;
+  background-color: var(--color-bg);
   min-height: 100vh;
 
   .dashboard-header {
@@ -22,7 +22,7 @@
         font-size: 32px;
         width: 32px;
         height: 32px;
-        color: #FF5722;
+        color: var(--color-primary);
       }
     }
 
@@ -62,38 +62,38 @@
       }
 
       &.pending {
-        border-left: 4px solid #FF9800;
+        border-left: 4px solid var(--status-pending);
         
         .stat-icon {
-          background-color: rgba(255, 152, 0, 0.1);
-          color: #FF9800;
+          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          color: white;
         }
       }
 
       &.reviewing {
-        border-left: 4px solid #2196F3;
+        border-left: 4px solid var(--status-review);
         
         .stat-icon {
-          background-color: rgba(33, 150, 243, 0.1);
-          color: #2196F3;
+          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+          color: white;
         }
       }
 
       &.approved {
-        border-left: 4px solid #4CAF50;
+        border-left: 4px solid var(--status-active);
         
         .stat-icon {
-          background-color: rgba(76, 175, 80, 0.1);
-          color: #4CAF50;
+          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          color: white;
         }
       }
 
       &.resolved {
-        border-left: 4px solid #9C27B0;
+        border-left: 4px solid var(--status-resolved);
         
         .stat-icon {
-          background-color: rgba(156, 39, 176, 0.1);
-          color: #9C27B0;
+          background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+          color: white;
         }
       }
 
@@ -159,6 +159,30 @@
     }
   }
 
+  // Responsive
+  @media (max-width: 640px) {
+    .dashboard-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      .header-actions {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 16px;
+
+    .stats-container,
+    .stats-loading {
+      grid-template-columns: 1fr;
+    }
+  }
+
   // Filtros
   .filters-card {
     margin-bottom: 24px;
@@ -212,7 +236,7 @@
               }
 
               &.selected {
-                background-color: #FF5722;
+                background-color: var(--color-primary);
                 color: white;
               }
             }

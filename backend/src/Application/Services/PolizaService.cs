@@ -253,7 +253,7 @@ namespace Application.Services
                                 Prima           = ParseDecimal(rowData["PRIMA"]),
                                 Moneda          = rowData["MONEDA"].Trim().ToUpperInvariant(),
                                 FechaVigencia   = ParseDate(rowData["FECHA"]),
-                                Frecuencia      = TruncateString(rowData["FRECUENCIA"].Trim().ToUpperInvariant(), 50,  row.RowNumber(), "FRECUENCIA"),
+                                Frecuencia      = TruncateString(NormalizeFrecuencia(rowData["FRECUENCIA"].Trim()), 50,  row.RowNumber(), "FRECUENCIA"),
                                 Aseguradora     = TruncateString(rowData["ASEGURADORA"],   100, row.RowNumber(), "ASEGURADORA"),
                                 Placa           = TruncateString(rowData["PLACA"],         8,   row.RowNumber(), "PLACA"),
                                 Marca           = TruncateString(rowData["MARCA"],         50,  row.RowNumber(), "MARCA"),
@@ -536,6 +536,23 @@ namespace Application.Services
                 _logger.LogWarning(ex, "Advertencia fila {RowNumber}, columna '{ColumnName}': {ErrorMessage}", row.RowNumber(), columnName, ex.Message);
                 return string.Empty;
             }
+        }
+
+        private static string NormalizeFrecuencia(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return value;
+            // Map any casing (MENSUAL, mensual, Mensual) to the canonical Title Case
+            return value.ToUpperInvariant() switch
+            {
+                "MENSUAL"    => "Mensual",
+                "TRIMESTRAL" => "Trimestral",
+                "SEMESTRAL"  => "Semestral",
+                "ANUAL"      => "Anual",
+                "BIMESTRAL"  => "Bimestral",
+                "SEMANAL"    => "Semanal",
+                "QUINCENAL"  => "Quincenal",
+                _            => value.Trim() // preserve unknown values as-is
+            };
         }
 
         private string TruncateString(string value, int maxLength, int rowNumber, string fieldName)

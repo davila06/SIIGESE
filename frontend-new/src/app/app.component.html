@@ -36,6 +36,10 @@
 
       <!-- Navigation Menu -->
       <nav class="sidebar-nav">
+
+        <!-- ── GESTIÓN ── -->
+        <div class="nav-section-label" [class.collapsed-label]="isCollapsed && !isMobile">Gestión</div>
+
         <a mat-button 
            class="nav-item" 
            routerLink="/polizas" 
@@ -85,52 +89,47 @@
           <span [class.collapsed]="isCollapsed && !isMobile">Notificaciones</span>
           <div class="nav-indicator"></div>
         </a>
-        
-        <a mat-button 
-           class="nav-item" 
-           routerLink="/usuarios" 
-           routerLinkActive="active"
-           *ngIf="isAdmin()"
-           (click)="onNavItemClick()">
-          <mat-icon>people</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Usuarios</span>
-          <div class="nav-indicator"></div>
-        </a>
 
-        <a mat-button 
-           class="nav-item" 
-           routerLink="/configuracion" 
-           routerLinkActive="active"
-           *ngIf="isAdmin()"
-           (click)="onNavItemClick()">
-          <mat-icon>settings</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Configuración</span>
-          <div class="nav-indicator"></div>
-        </a>
+        <!-- ── ADMINISTRACIÓN (admin only) ── -->
+        <ng-container *ngIf="isAdmin()">
+          <div class="nav-section-label" [class.collapsed-label]="isCollapsed && !isMobile">Administración</div>
 
-        <a mat-button 
-           class="nav-item nav-item-chat" 
-           routerLink="/chat" 
-           routerLinkActive="active"
-           (click)="onNavItemClick()"
-           matTooltip="Asistente IA"
-           [matTooltipDisabled]="!isCollapsed || isMobile"
-           matTooltipPosition="right">
-          <mat-icon>smart_toy</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Asistente IA</span>
-          <div class="nav-indicator"></div>
-        </a>
-     
-      <a mat-button 
-           class="nav-item" 
-           routerLink="/polizas/upload" 
-           routerLinkActive="active"
-           *ngIf="canUploadExcel()"
-           (click)="onNavItemClick()">
-          <mat-icon>cloud_upload</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Subir Pólizas Excel</span>
-          <div class="nav-indicator"></div>
-        </a>
+          <a mat-button 
+             class="nav-item" 
+             routerLink="/usuarios" 
+             routerLinkActive="active"
+             (click)="onNavItemClick()">
+            <mat-icon>people</mat-icon>
+            <span [class.collapsed]="isCollapsed && !isMobile">Usuarios</span>
+            <div class="nav-indicator"></div>
+          </a>
+
+          <a mat-button 
+             class="nav-item" 
+             routerLink="/configuracion" 
+             routerLinkActive="active"
+             (click)="onNavItemClick()">
+            <mat-icon>settings</mat-icon>
+            <span [class.collapsed]="isCollapsed && !isMobile">Configuración</span>
+            <div class="nav-indicator"></div>
+          </a>
+        </ng-container>
+
+        <!-- ── HERRAMIENTAS ── -->
+        <ng-container *ngIf="canUploadExcel()">
+          <div class="nav-section-label" [class.collapsed-label]="isCollapsed && !isMobile">Herramientas</div>
+
+          <a mat-button 
+             class="nav-item" 
+             routerLink="/polizas/upload" 
+             routerLinkActive="active"
+             (click)="onNavItemClick()">
+            <mat-icon>cloud_upload</mat-icon>
+            <span [class.collapsed]="isCollapsed && !isMobile">Subir Pólizas Excel</span>
+            <div class="nav-indicator"></div>
+          </a>
+        </ng-container>
+
       </nav>
 
       <!-- Sidebar Footer / User Profile -->
@@ -174,11 +173,52 @@
       </mat-toolbar>
 
       <!-- Page Content -->
-      <div class="page-content">
+      <div class="page-content" [@routeAnimations]="currentRoute">
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
+
+  <!-- ── AI Chat Dialog ─────────────────────────────────────────────── -->
+  <div class="ai-dialog-backdrop" *ngIf="isChatOpen" (click)="toggleChat()"></div>
+  <div class="ai-dialog" *ngIf="isChatOpen" [@aiDialogAnim] role="dialog" aria-label="Asistente IA">
+
+    <!-- Header -->
+    <div class="ai-dialog-header">
+      <div class="ai-dialog-header-glow"></div>
+      <div class="ai-dialog-avatar">
+        <div class="ai-dialog-avatar-ring"></div>
+        <mat-icon>smart_toy</mat-icon>
+      </div>
+      <div class="ai-dialog-title">
+        <span class="ai-dialog-title-main">SIIGESE Assistant</span>
+        <span class="ai-dialog-title-sub">
+          <span class="ai-status-dot"></span>Disponible
+        </span>
+      </div>
+      <div class="ai-dialog-actions">
+        <button class="ai-dialog-btn-close" (click)="toggleChat()" aria-label="Cerrar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="ai-dialog-body">
+      <app-chat></app-chat>
+    </div>
+  </div>
+
+  <!-- ── Floating Chat Button ─────────────────────────────────────────── -->
+  <button class="chat-fab-custom" (click)="toggleChat()" [class.is-open]="isChatOpen" aria-label="Asistente IA">
+    <span class="chat-fab-ring"></span>
+    <span class="chat-fab-ring chat-fab-ring--delay"></span>
+    <span class="chat-fab-inner">
+      <mat-icon class="chat-fab-icon chat-fab-icon--robot" [class.hidden]="isChatOpen">smart_toy</mat-icon>
+      <mat-icon class="chat-fab-icon chat-fab-icon--close" [class.hidden]="!isChatOpen">keyboard_arrow_down</mat-icon>
+    </span>
+    <span class="chat-fab-label" [class.hidden]="isChatOpen">IA</span>
+  </button>
 </div>
 
 <!-- Login View -->

@@ -280,5 +280,10 @@ namespace Infrastructure.Services
   <div class='footer'><p>© 2025 SINSEG - Sistema Integral de Administración de Seguros</p></div>
 </div></body></html>";
         }
+
+        public async Task SendGenericEmailAsync(string toEmail, string subject, string body)
+        {
+            await SendEmailAsync(toEmail, subject, body);
+        }
     }
 }

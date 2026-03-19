@@ -1,5 +1,6 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ChatModule } from './chat/chat.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -9,6 +10,7 @@ import localeEsCR from '@angular/common/locales/es-CR';
 // Angular Material Date
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 // Angular Material Modules
 import { MatButtonModule } from '@angular/material/button';
@@ -40,6 +42,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PolizasComponent } from './polizas/polizas.component';
 import { UploadPolizasComponent } from './polizas/upload-polizas.component';
+import { UploadProgressDialogComponent } from './polizas/upload-progress-dialog.component';
+import { PolizaDetailDialogComponent } from './polizas/poliza-detail-dialog.component';
 import { LoginComponent } from './auth/login.component';
 import { CotizacionesComponent } from './cotizaciones/cotizaciones.component';
 import { ChangePasswordComponent } from './auth/change-password/change-password.component';
@@ -67,6 +71,8 @@ export const CUSTOM_DATE_FORMATS = {
     AppComponent,
     PolizasComponent,
     UploadPolizasComponent,
+    UploadProgressDialogComponent,
+    PolizaDetailDialogComponent,
     LoginComponent,
     ChangePasswordComponent
   ],
@@ -106,7 +112,10 @@ export const CUSTOM_DATE_FORMATS = {
     MatNativeDateModule,
     
     // Standalone Components
-    UsuariosComponent
+    UsuariosComponent,
+
+    // Chat (eager — used as floating panel)
+    ChatModule
   ],
   providers: [
     {
@@ -125,6 +134,14 @@ export const CUSTOM_DATE_FORMATS = {
     {
       provide: MAT_DATE_LOCALE,
       useValue: 'es-CR'
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+        duration: 4000
+      }
     }
   ],
   bootstrap: [AppComponent]

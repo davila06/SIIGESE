@@ -1,6 +1,6 @@
 <div class="usuarios-container">
   <div class="content-wrapper">
-    <h2 style="color: white; text-align: center; margin-bottom: 30px; font-size: 28px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Gestión de Usuarios</h2>
+    <h2 class="page-heading">Gestión de Usuarios</h2>
 
     <!-- Mensaje informativo para no administradores -->
     <mat-card *ngIf="!isAdmin()" class="info-card">
@@ -15,7 +15,7 @@
     </mat-card>
 
     <!-- Formulario para crear/editar usuario - Solo visible para administradores -->
-    <mat-card class="form-section" #formSection *ngIf="isAdmin()">
+    <mat-card class="form-section" #formSection *ngIf="isAdmin() && showForm">
       <mat-card-header>
         <mat-card-title>
           <mat-icon>{{isEditMode ? 'edit' : 'person_add'}}</mat-icon>
@@ -30,7 +30,9 @@
               <input matInput 
                      formControlName="userName" 
                      required
-                     autocomplete="new-password"
+                     autocomplete="off"
+                     placeholder="ej. jperez"
+                     title="Nombre de usuario"
                      spellcheck="false">
               <mat-error *ngIf="userForm.get('userName')?.hasError('required')">
                 Nombre de usuario es requerido
@@ -43,7 +45,9 @@
                      type="email" 
                      formControlName="email" 
                      required
-                     autocomplete="new-password"
+                     autocomplete="email"
+                     placeholder="ej. jperez@empresa.com"
+                     title="Correo electrónico"
                      spellcheck="false">
               <mat-error *ngIf="userForm.get('email')?.hasError('required')">
                 Email es requerido
@@ -61,6 +65,8 @@
                      formControlName="firstName" 
                      required
                      autocomplete="off"
+                     placeholder="ej. Juan"
+                     title="Nombre"
                      spellcheck="false">
               <mat-error *ngIf="userForm.get('firstName')?.hasError('required')">
                 Nombre es requerido
@@ -73,6 +79,8 @@
                      formControlName="lastName" 
                      required
                      autocomplete="off"
+                     placeholder="ej. Pérez"
+                     title="Apellido"
                      spellcheck="false">
               <mat-error *ngIf="userForm.get('lastName')?.hasError('required')">
                 Apellido es requerido
@@ -88,6 +96,8 @@
                      formControlName="password" 
                      required
                      autocomplete="new-password"
+                     placeholder="Mínimo 6 caracteres"
+                     title="Contraseña"
                      spellcheck="false">
               <mat-error *ngIf="userForm.get('password')?.hasError('required')">
                 Contraseña es requerida
@@ -104,6 +114,8 @@
                      formControlName="confirmPassword" 
                      required
                      autocomplete="new-password"
+                     placeholder="Repite la contraseña"
+                     title="Confirmar contraseña"
                      spellcheck="false">
               <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('required')">
                 Confirmación de contraseña es requerida
@@ -258,7 +270,9 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
                 [class.selected]="selectedUser?.id === row.id"
-                (click)="selectUser(row)"></tr>
+                tabindex="0"
+                (click)="selectUser(row)"
+                (keydown.enter)="selectUser(row)"></tr>
           </table>
 
           <!-- Mensaje cuando no hay datos -->

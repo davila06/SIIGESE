@@ -1,13 +1,13 @@
 {
   "/api": {
-    "target": "https://siinadseg-backend-app.greensmoke-63d5430a.eastus2.azurecontainerapps.io",
+    "target": "http://localhost:5000",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "info",
     "pathRewrite": { "^/api": "/api" }
   },
   "/hubs": {
-    "target": "https://siinadseg-backend-app.greensmoke-63d5430a.eastus2.azurecontainerapps.io",
+    "target": "http://localhost:5000",
     "secure": false,
     "changeOrigin": true,
     "ws": true,

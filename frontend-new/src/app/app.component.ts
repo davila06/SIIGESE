@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, HostListener, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { Router } from '@angular/router';
+import { trigger, transition, style, animate, query } from '@angular/animations';
+import { Router, NavigationEnd } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { MatSidenav } from '@angular/material/sidenav';
 import { AuthService } from './services/auth.service';
 import { User } from './interfaces/user.interface';
@@ -11,7 +12,30 @@ import { TitleService } from './services/title.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: false
+  standalone: false,
+  animations: [
+    // Route page-enter transition
+    trigger('routeAnimations', [
+      transition('* <=> *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(10px)' }),
+          animate('260ms cubic-bezier(0.4, 0, 0.2, 1)',
+            style({ opacity: 1, transform: 'translateY(0)' }))
+        ], { optional: true })
+      ])
+    ]),
+    trigger('aiDialogAnim', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(28px) scale(0.94)' }),
+        animate('280ms cubic-bezier(0.34, 1.32, 0.64, 1)',
+          style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
+      ]),
+      transition(':leave', [
+        animate('180ms cubic-bezier(0.4, 0, 0.2, 1)',
+          style({ opacity: 0, transform: 'translateY(16px) scale(0.95)' }))
+      ])
+    ])
+  ]
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('sidenav', { static: false }) sidenav!: MatSidenav;
@@ -19,8 +43,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   title = 'SIIGESE - Sistema Integral de Gestión de Seguros';
   currentUser$: Observable<User | null>;
+  currentRoute = '';
   isCollapsed = false;
   isMobile = false;
+  isChatOpen = false;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -36,7 +62,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     // Inicializar el servicio de título para actualizaciones automáticas
     this.titleService.updateTitle(this.router.url);
-    
+
+    // Track current route for page-enter animation trigger
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      takeUntil(this.destroy$)
+    ).subscribe((e: any) => {
+      this.currentRoute = (e as NavigationEnd).urlAfterRedirects;
+    });
+
     // Verificar autenticación al iniciar la app
     this.currentUser$.pipe(takeUntil(this.destroy$)).subscribe(user => {
       if (!user && !this.router.url.includes('login')) {
@@ -63,9 +97,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private checkScreenSize(): void {
-    this.isMobile = window.innerWidth <= 768;
+    const width = window.innerWidth;
+    this.isMobile = width <= 768;
     if (this.isMobile) {
       this.isCollapsed = false; // En móvil no usar collapsed state
+    } else if (width < 1100) {
+      // Tablet (769–1099px): auto-collapse sidebar to 70px icon-only mode
+      this.isCollapsed = true;
     }
     this.updateContentMargin();
   }
@@ -77,6 +115,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         this.updateContentMargin();
       }, 50);
     }
+  }
+
+  toggleChat(): void {
+    this.isChatOpen = !this.isChatOpen;
   }
 
   private updateContentMargin(): void {

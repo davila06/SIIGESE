@@ -9,7 +9,7 @@
 }
 
 .header-icon {
-  background: linear-gradient(45deg, #2196F3 30%, #21CBF3 90%);
+  background: var(--color-primary-grad);
   color: white;
   display: flex;
   align-items: center;

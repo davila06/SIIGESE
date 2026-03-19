@@ -1,6 +1,8 @@
 ﻿import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { PolizaDetailDialogComponent } from './poliza-detail-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -54,7 +56,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     private readonly apiService: ApiService,
     public readonly authService: AuthService,
     private readonly snackBar: MatSnackBar,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private readonly dialog: MatDialog
   ) {
     this.polizaForm = this.createForm();
   }
@@ -239,6 +242,13 @@ export class PolizasComponent implements OnInit, AfterViewInit {
             this.resetForm();
             this.showMessage('Póliza actualizada exitosamente');
             this.isLoading = false;
+
+            // Scroll to top after update so the table is visible
+            const pageContent = document.querySelector('.page-content') as HTMLElement | null;
+            if (pageContent) { pageContent.scrollTo({ top: 0, behavior: 'smooth' }); }
+            const host = document.querySelector('mat-sidenav-content') as HTMLElement | null;
+            if (host) { host.scrollTop = 0; }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           },
           error: (error: any) => {
             this.logger.error('Error updating poliza:', error);
@@ -439,21 +449,54 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return poliza.id;
   }
 
+  openPolizaDetail(poliza: Poliza): void {
+    const ref = this.dialog.open(PolizaDetailDialogComponent, {
+      data: { poliza },
+      width: '520px',
+      maxWidth: '95vw',
+      panelClass: 'pd-dialog-panel',
+      autoFocus: false,
+      restoreFocus: false  // prevents browser from scrolling back to the trigger card
+    });
+    ref.afterClosed().subscribe(result => {
+      if (result === 'edit') {
+        this.selectPolizaAndScroll(poliza);
+      } else if (result === 'delete') {
+        this.deletePoliza(poliza);
+      }
+    });
+  }
+
   selectPoliza(poliza: Poliza): void {
     this.selectPolizaAndScroll(poliza);
   }
 
   selectPolizaAndScroll(poliza: Poliza): void {
-    // Phase 1: scroll + skeleton
+    // Phase 1: skeleton
     this.formLoadingState = 'loading';
     this.selectedPoliza = poliza;
     this.isEditMode = true;
     this.cdr.detectChanges();
 
-    const scrollHost =
-      document.querySelector('mat-sidenav-content') as HTMLElement | null
-      ?? document.documentElement;
-    scrollHost.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    // Scroll immediately + again after form loads (covers all scroll hosts)
+    const doScroll = () => {
+      // .page-content is the real overflow-y:auto container defined in app.component.scss
+      const pageContent = document.querySelector('.page-content') as HTMLElement | null;
+      if (pageContent) {
+        pageContent.scrollTop = 0;
+        pageContent.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      // Fallback: mat-sidenav-content + window
+      const sidenavContent = document.querySelector('mat-sidenav-content') as HTMLElement | null;
+      if (sidenavContent) { sidenavContent.scrollTop = 0; }
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    doScroll();
+    setTimeout(doScroll, 50);
+    setTimeout(doScroll, 250);
 
     // Phase 2: fill form after shimmer window (200ms)
     setTimeout(() => {
@@ -495,7 +538,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       prima: poliza.prima,
       moneda: poliza.moneda,
       fechaVigencia: fechaVigencia,
-      frecuencia: poliza.frecuencia,
+      frecuencia: this.normalizeFrecuencia(poliza.frecuencia),
       aseguradora: poliza.aseguradora,
       placa: poliza.placa || '',
       marca: poliza.marca || '',
@@ -509,6 +552,16 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     this.polizaForm.patchValue(formValues);
     this.polizaForm.markAsPristine();
     this.polizaForm.markAsUntouched();
+  }
+
+  private normalizeFrecuencia(val: string): string {
+    if (!val) return val;
+    const map: Record<string, string> = {
+      'MENSUAL': 'Mensual', 'TRIMESTRAL': 'Trimestral',
+      'SEMESTRAL': 'Semestral', 'ANUAL': 'Anual',
+      'BIMESTRAL': 'Bimestral', 'SEMANAL': 'Semanal', 'QUINCENAL': 'Quincenal'
+    };
+    return map[val.toUpperCase()] ?? val;
   }
 
   resetForm(): void {

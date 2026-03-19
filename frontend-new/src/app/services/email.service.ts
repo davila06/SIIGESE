@@ -72,7 +72,7 @@ export interface EmailStats {
   providedIn: 'root'
 })
 export class EmailService {
-  private apiUrl = `${environment.apiUrl}/api/email`;
+  private apiUrl = `${environment.apiUrl}/email`;
 
   constructor(private http: HttpClient) { }
 

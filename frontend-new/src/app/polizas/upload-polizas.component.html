@@ -71,17 +71,18 @@
       <mat-card-actions class="upload-actions">
         <button mat-raised-button
                 color="primary"
-                [disabled]="!selectedFile || isLoading"
+                [disabled]="!selectedFile"
                 (click)="uploadExcel()"
                 class="upload-button">
-          <mat-icon *ngIf="!isLoading">upload</mat-icon>
-          <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
-          {{ isLoading ? 'Subiendo...' : 'Subir Archivo' }}
+          <mat-icon>upload</mat-icon>
+          Subir Archivo
         </button>
 
         <button mat-stroked-button
                 (click)="downloadTemplate()"
-                class="template-button">
+                class="template-button"
+                matTooltip="Formato vacío para rellenar con tus datos. Se genera desde el servidor con las columnas requeridas."
+                matTooltipPosition="above">
           <mat-icon>download</mat-icon>
           Descargar Template
         </button>
@@ -89,7 +90,9 @@
         <button mat-stroked-button
                 color="accent"
                 (click)="downloadDemo()"
-                class="demo-button">
+                class="demo-button"
+                matTooltip="Archivo de ejemplo con 10 registros pre-cargados para entender el formato esperado."
+                matTooltipPosition="above">
           <mat-icon>filter_10</mat-icon>
           Descargar DEMO
         </button>
@@ -102,107 +105,6 @@
           Limpiar
         </button>
       </mat-card-actions>
-    </mat-card>
-
-    <!-- Upload Progress -->
-    <mat-card *ngIf="isLoading" class="progress-card">
-      <mat-card-content>
-        <div class="progress-content">
-          <mat-icon class="progress-icon">sync</mat-icon>
-          <div class="progress-text">
-            <h3>Procesando archivo...</h3>
-            <p>Por favor espera mientras procesamos tu archivo Excel</p>
-          </div>
-        </div>
-        <mat-progress-bar mode="indeterminate" class="progress-bar"></mat-progress-bar>
-      </mat-card-content>
-    </mat-card>
-
-    <!-- Upload Results -->
-    <mat-card *ngIf="uploadResult && !isLoading" class="results-card">
-      <mat-card-header>
-        <mat-card-title>
-          <mat-icon [color]="uploadResult.success ? 'primary' : 'warn'">
-            {{ uploadResult.success ? 'check_circle' : 'error' }}
-          </mat-icon>
-          Resultado del Procesamiento
-        </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <!-- Success Stats -->
-        <div class="stats-grid" *ngIf="uploadResult.success">
-          <div class="stat-card success">
-            <mat-icon>description</mat-icon>
-            <div class="stat-info">
-              <span class="stat-number">{{ uploadStats.totalRecords }}</span>
-              <span class="stat-label">Total Registros</span>
-            </div>
-          </div>
-          
-          <div class="stat-card processed">
-            <mat-icon>check_circle</mat-icon>
-            <div class="stat-info">
-              <span class="stat-number">{{ uploadStats.processedRecords }}</span>
-              <span class="stat-label">Procesados</span>
-            </div>
-          </div>
-          
-          <div class="stat-card errors" *ngIf="uploadStats.errorRecords > 0">
-            <mat-icon>error</mat-icon>
-            <div class="stat-info">
-              <span class="stat-number">{{ uploadStats.errorRecords }}</span>
-              <span class="stat-label">Con Errores</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Error Details -->
-        <div *ngIf="uploadStats.errors.length > 0" class="error-section">
-          <h4>
-            <mat-icon>warning</mat-icon>
-            Errores Encontrados
-          </h4>
-          <mat-expansion-panel class="error-panel">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Ver detalles de errores ({{ uploadStats.errors.length }})
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="error-list">
-              <div *ngFor="let error of uploadStats.errors; let i = index" class="error-item">
-                <span class="error-number">{{ i + 1 }}.</span>
-                <span class="error-message">{{ error }}</span>
-              </div>
-            </div>
-          </mat-expansion-panel>
-          
-          <!-- Botón para descargar archivo de errores -->
-          <div class="error-actions" *ngIf="uploadStats.failedRecords.length > 0">
-            <div class="error-info-box">
-              <mat-icon color="warn">info</mat-icon>
-              <span>Los registros con errores se han descargado automáticamente para su corrección</span>
-            </div>
-            <button mat-raised-button
-                    color="warn"
-                    (click)="downloadErrorsFile()"
-                    class="download-errors-btn">
-              <mat-icon>download</mat-icon>
-              Descargar Errores Nuevamente ({{ uploadStats.failedRecords.length }} registros)
-            </button>
-          </div>
-        </div>
-
-        <!-- Success Actions -->
-        <div *ngIf="uploadResult.success" class="success-actions">
-          <button mat-raised-button
-                  color="primary"
-                  (click)="navigateToPolizas()">
-            <mat-icon>list</mat-icon>
-            Ver Pólizas Cargadas
-          </button>
-        </div>
-      </mat-card-content>
     </mat-card>
 
     <!-- Instructions Card -->
