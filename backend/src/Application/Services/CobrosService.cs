@@ -390,12 +390,14 @@ namespace Application.Services
             // at least its next due date.
             var mesesMinimoPorFrecuencia = frecuencia.ToUpperInvariant().Trim() switch
             {
-                "ANUAL" or "ANNUAL" or "YEARLY" or "AÑO" or "YEAR" or "ANO" => 13,
-                "SEMESTRAL" or "SEMIANNUAL" or "6 MESES" or "SEMESTER"        => 7,
-                "CUATRIMESTRAL" or "4 MESES"                                   => 5,
-                "TRIMESTRAL" or "QUARTERLY" or "3 MESES" or "QUARTER"          => 4,
-                "BIMESTRAL" or "BIMONTHLY" or "2 MESES"                        => 3,
-                _                                                               => mesesAdelante
+                "ANUAL" or "ANNUAL" or "YEARLY" or "AÑO" or "YEAR" or "ANO"        => 13,
+                "SEMESTRAL" or "SEMIANNUAL" or "6 MESES" or "SEMESTER"             => 7,
+                "CUATRIMESTRAL" or "4 MESES"                                        => 5,
+                "TRIMESTRAL" or "QUARTERLY" or "3 MESES" or "QUARTER"              => 4,
+                "BIMESTRAL" or "BIMONTHLY" or "2 MESES"                            => 3,
+                // DM = Débito Mensual (cobro mensual por débito automático)
+                "DM" or "DEBITO MENSUAL" or "MENSUAL" or "MONTHLY" or "MES" or "MONTH" => mesesAdelante,
+                _                                                                   => mesesAdelante
             };
             var ventana = Math.Max(mesesAdelante, mesesMinimoPorFrecuencia);
 
@@ -424,6 +426,8 @@ namespace Application.Services
 
             return frecuenciaNormalizada switch
             {
+                // DM = Débito Mensual → cobro cada mes
+                "DM" or "DEBITO MENSUAL" or
                 "MENSUAL" or "MONTHLY" or "MES" or "MONTH" => fecha.AddMonths(1),
                 "BIMESTRAL" or "BIMONTHLY" or "2 MESES" => fecha.AddMonths(2),
                 "TRIMESTRAL" or "QUARTERLY" or "3 MESES" or "QUARTER" => fecha.AddMonths(3),
