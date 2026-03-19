@@ -56,11 +56,11 @@ mat-sidenav-content {
 // Primary raised button — gradient + glow
 .mat-mdc-raised-button.mat-primary {
   background: var(--color-primary-grad) !important;
-  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(21, 87, 240, 0.35) !important;
   transition: var(--transition-base);
 
   &:hover {
-    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.45) !important;
+    box-shadow: 0 6px 20px rgba(21, 87, 240, 0.48) !important;
     transform: translateY(-1px);
   }
 
@@ -75,17 +75,17 @@ mat-sidenav-content {
   border-color: var(--color-primary) !important;
   color: var(--color-primary) !important;
   transition: var(--transition-base);
-  --mat-outlined-button-ripple-color: rgba(79, 70, 229, 0.10);
+  --mat-outlined-button-ripple-color: rgba(21, 87, 240, 0.10);
 
   &:hover {
-    background: rgba(79, 70, 229, 0.06) !important;
+    background: rgba(21, 87, 240, 0.06) !important;
   }
 }
 
-// Button ripple — use brand violet so ripple matches button identity
+// Button ripple — use brand blue so ripple matches button identity
 .mat-mdc-raised-button.mat-primary,
 .mat-mdc-flat-button.mat-primary {
-  --mat-filled-button-ripple-color: rgba(79, 70, 229, 0.14);
+  --mat-filled-button-ripple-color: rgba(21, 87, 240, 0.14);
 }
 
 // Cards — consistent elevation + radius
@@ -113,9 +113,9 @@ mat-card,
 .mat-mdc-row {
   transition: background 0.15s ease;
 
-  &:hover { background: rgba(79, 70, 229, 0.03) !important; }
+  &:hover { background: rgba(21, 87, 240, 0.04) !important; }
 
-  &:nth-child(even) { background: rgba(79, 70, 229, 0.01); }
+  &:nth-child(even) { background: rgba(21, 87, 240, 0.02); }
 }
 
 .mat-mdc-row:last-child td {

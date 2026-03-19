@@ -1,16 +1,16 @@
 // ═══════════════════════════════════════════════════════════════════
 // SINSEG — Angular Material v20 Custom M3 Theme
-// Replaces the prebuilt indigo-pink.css
+// "Sapphire Electric" — Azure Blue × Violet
 // ═══════════════════════════════════════════════════════════════════
 @use '@angular/material' as mat;
 
 // ── Define M3 theme ─────────────────────────────────────────────────
-// $violet-palette is the closest built-in M3 palette to indigo/violet
+// azure-palette closely maps to the vivid royal-blue primary (#1557F0)
 $sinseg-theme: mat.define-theme((
   color: (
     theme-type:  light,
-    primary:     mat.$violet-palette,
-    tertiary:    mat.$azure-palette,
+    primary:     mat.$azure-palette,
+    tertiary:    mat.$violet-palette,
   ),
   typography: (
     brand-family:    'Inter, Roboto, sans-serif',
