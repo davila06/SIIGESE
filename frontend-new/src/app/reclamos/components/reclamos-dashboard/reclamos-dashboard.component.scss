@@ -16,7 +16,7 @@
       margin: 0;
       font-size: 28px;
       font-weight: 500;
-      color: #333;
+      color: var(--color-text-primary);
 
       mat-icon {
         font-size: 32px;
@@ -127,14 +127,14 @@
               margin: 0;
               font-size: 32px;
               font-weight: 600;
-              color: #333;
+              color: var(--color-text-primary);
               line-height: 1;
             }
 
             p {
               margin: 4px 0 8px 0;
               font-size: 14px;
-              color: #666;
+              color: var(--color-text-secondary);
               font-weight: 500;
             }
 
@@ -222,7 +222,7 @@
 
           .filter-label {
             font-weight: 500;
-            color: #666;
+            color: var(--color-text-secondary);
             white-space: nowrap;
           }
 
@@ -264,7 +264,7 @@
         }
 
         p {
-          color: #666;
+          color: var(--color-text-secondary);
           font-size: 16px;
         }
       }
@@ -274,13 +274,21 @@
         
         .mat-mdc-header-cell {
           font-weight: 600;
-          color: #333;
-          background-color: #f8f9fa;
+          color: var(--color-primary) !important;
+          background-color: var(--color-surface-2);
+          font-size: 13px;
+          white-space: nowrap;
+        }
+
+        .mat-mdc-row:hover .mat-mdc-cell {
+          background-color: var(--color-primary-glow);
         }
 
         .mat-mdc-cell {
           padding: 16px 8px;
-          border-bottom: 1px solid #e0e0e0;
+          border-bottom: 1px solid var(--color-border);
+          color: var(--color-text-primary);
+          font-size: 14px;
 
           &:first-child {
             padding-left: 16px;
@@ -300,11 +308,7 @@
             font-size: 18px;
             width: 18px;
             height: 18px;
-            color: #666;
-          }
-
-          span {
-            font-size: 13px;
+              color: var(--color-text-secondary);
           }
         }
 
@@ -318,7 +322,7 @@
         }
 
         .sin-asignar {
-          color: #999;
+          color: var(--color-text-muted);
           font-style: italic;
           font-size: 13px;
         }
@@ -364,26 +368,26 @@
           font-size: 64px;
           width: 64px;
           height: 64px;
-          color: #ccc;
+          color: var(--color-text-muted);
           margin-bottom: 16px;
         }
 
         h3 {
           margin: 0 0 8px 0;
-          color: #666;
+          color: var(--color-text-secondary);
           font-weight: 500;
         }
 
         p {
           margin: 0;
-          color: #999;
+          color: var(--color-text-muted);
           font-size: 14px;
         }
       }
 
       mat-paginator {
-        border-top: 1px solid #e0e0e0;
-        background-color: #fafafa;
+        border-top: 1px solid var(--color-border);
+        background-color: var(--color-surface);
       }
     }
   }

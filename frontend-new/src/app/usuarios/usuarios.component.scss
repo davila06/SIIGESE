@@ -21,10 +21,10 @@
 // Secciones principales
 .form-section, .toolbar-section, .table-section {
   margin-bottom: 24px;
-  background: white;
+  background: var(--color-surface);
   border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e8e8e8;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--color-border);
 }
 
 .mat-card-header {
@@ -113,25 +113,32 @@
 
 .users-table {
   width: 100%;
-  background: white;
+  background: transparent;
   
-  .mat-header-cell {
+  .mat-mdc-header-cell, th {
     font-weight: 600;
-    color: #333;
-    background: #f8f9fa;
+    color: var(--color-primary) !important;
+    background-color: var(--color-surface-2);
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .mat-mdc-cell, td {
+    color: var(--color-text-primary);
+    font-size: 14px;
   }
   
-  .mat-row {
+  .mat-mdc-row {
     transition: background-color 0.2s ease;
     cursor: pointer;
-    
-    &:hover {
-      background-color: #f5f7ff;
-    }
-    
-    &.selected {
-      background-color: #e3f2fd;
-    }
+  }
+
+  .mat-mdc-row:hover .mat-mdc-cell {
+    background-color: var(--color-primary-glow);
+  }
+  
+  .mat-mdc-row.selected .mat-mdc-cell {
+    background-color: var(--color-primary-glow);
   }
 }
 
@@ -149,12 +156,12 @@
 
 .user-name {
   font-weight: 500;
-  color: #333;
+  color: var(--color-text-primary);
 }
 
 .user-email {
   font-size: 12px;
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 // Roles
@@ -194,12 +201,12 @@
   align-items: center;
   justify-content: center;
   padding: 48px 16px;
-  color: #666;
+  color: var(--color-text-secondary);
   
   .mat-icon {
     font-size: 48px;
     margin-bottom: 16px;
-    color: #ccc;
+    color: var(--color-text-muted);
   }
   
   p {
@@ -280,7 +287,7 @@
 
 .mat-paginator {
   background: transparent;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
 }
 
 // Scroll suave

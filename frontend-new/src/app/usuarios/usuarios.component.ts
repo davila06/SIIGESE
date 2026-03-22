@@ -3,7 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
+import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,6 +48,7 @@ import { LoggingService } from '../services/logging.service';
 })
 export class UsuariosComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('formSection', { read: ElementRef }) formSection!: ElementRef;
 
   users: User[] = [];
@@ -84,9 +85,11 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Configurar paginator después de que la vista esté inicializada
     if (this.paginator) {
       this.usersDataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.usersDataSource.sort = this.sort;
     }
   }
 

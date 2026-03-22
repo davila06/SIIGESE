@@ -1,9 +1,10 @@
-﻿import { Component, OnInit, ViewChild, inject } from '@angular/core';
+﻿import { Component, OnInit, AfterViewInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,13 +36,15 @@ import { LoggingService } from '../../../services/logging.service';
     MatTooltipModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSortModule,
     MatChipsModule
   ],
   templateUrl: './email-template-manager.component.html',
   styleUrls: ['./email-template-manager.component.scss']
 })
-export class EmailTemplateManagerComponent implements OnInit {
+export class EmailTemplateManagerComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   templates = new MatTableDataSource<EmailTemplate>();
   displayedColumns: string[] = ['name', 'templateType', 'isDefault', 'createdDate', 'actions'];
@@ -124,11 +127,17 @@ export class EmailTemplateManagerComponent implements OnInit {
     this.resetForm();
   }
 
+  ngAfterViewInit(): void {
+    this.templates.paginator = this.paginator;
+    this.templates.sort = this.sort;
+  }
+
   loadTemplates() {
     this.templateService.getTemplatesByType(this.selectedTemplateType).subscribe({
       next: (templates) => {
         this.templates.data = templates;
-        this.templates.paginator = this.paginator;
+        if (this.paginator) this.templates.paginator = this.paginator;
+        if (this.sort) this.templates.sort = this.sort;
       },
       error: (error) => {
         this.logger.error('Error cargando templates:', error);

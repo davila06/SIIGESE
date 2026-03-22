@@ -26,7 +26,7 @@
   }
 
   .page-subtitle {
-    color: #666;
+    color: var(--color-text-secondary);
     font-size: 1.1rem;
     margin: 8px 0 0 0;
   }
@@ -51,16 +51,16 @@
     font-size: 64px;
     height: 64px;
     width: 64px;
-    color: #999;
+    color: var(--color-text-muted);
   }
 
   .no-data-title {
-    color: #666;
+    color: var(--color-text-secondary);
     margin-top: 16px;
   }
 
   .no-data-text {
-    color: #999;
+    color: var(--color-text-muted);
   }
 }
 
@@ -126,13 +126,18 @@
 
       .mat-mdc-header-cell {
         font-weight: 600;
-        color: var(--color-primary);
-        border-bottom: 2px solid #e0e0e0;
+        color: var(--color-primary) !important;
+        background-color: var(--color-surface-2);
+        border-bottom: 2px solid var(--color-border);
+        font-size: 13px;
+        white-space: nowrap;
       }
 
       .mat-mdc-cell {
         padding: 12px 8px;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid var(--color-border);
+        color: var(--color-text-primary);
+        font-size: 14px;
 
         .numero-cotizacion {
           font-weight: 600;
@@ -147,13 +152,13 @@
         }
 
         .email {
-          color: #666;
+          color: var(--color-text-secondary);
           font-size: 0.9rem;
         }
 
         .monto {
           font-weight: 600;
-          color: #2e7d32;
+          color: var(--color-primary);
         }
 
         .actions-container {
@@ -171,8 +176,8 @@
         }
       }
 
-      .mat-mdc-row:hover {
-        background-color: #f5f5f5;
+      .mat-mdc-row:hover .mat-mdc-cell {
+        background-color: var(--color-primary-glow);
       }
     }
   }
@@ -201,7 +206,7 @@
       font-weight: 500;
       margin-bottom: 16px;
       padding-bottom: 8px;
-      border-bottom: 2px solid #e3f2fd;
+      border-bottom: 2px solid var(--color-border);
       display: flex;
       align-items: center;
       gap: 8px;
@@ -237,7 +242,7 @@
     gap: 16px;
     justify-content: flex-end;
     padding-top: 24px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--color-border);
 
     button {
       min-width: 140px;

@@ -9,13 +9,13 @@
 
     h2 {
       margin: 0 0 8px 0;
-      color: #1976d2;
+      color: var(--color-primary);
       font-weight: 500;
     }
 
     .subtitle {
       margin: 0;
-      color: #666;
+      color: var(--color-text-secondary);
       font-size: 14px;
     }
   }
@@ -81,19 +81,20 @@
   .variables-panel {
     margin: 20px 0;
     padding: 16px;
-    background-color: #f5f5f5;
+    background-color: var(--color-surface-2);
     border-radius: 8px;
+    border: 1px solid var(--color-border);
 
     h3 {
       margin: 0 0 8px 0;
       font-size: 16px;
-      color: #333;
+      color: var(--color-text-primary);
     }
 
     .variables-help {
       margin: 0 0 12px 0;
       font-size: 14px;
-      color: #666;
+      color: var(--color-text-secondary);
     }
 
     .variables-chips {
@@ -129,36 +130,36 @@
   .preview-panel {
     .preview-container {
       min-height: 400px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid var(--color-border);
       border-radius: 4px;
-      background-color: #fafafa;
+      background-color: var(--color-surface-2);
 
       .preview-subject {
         padding: 12px 16px;
-        border-bottom: 1px solid #e0e0e0;
-        background-color: #fff;
+        border-bottom: 1px solid var(--color-border);
+        background-color: var(--color-surface);
         font-size: 14px;
 
         strong {
-          color: #333;
+          color: var(--color-text-primary);
         }
       }
 
       .preview-content {
         padding: 16px;
-        background-color: #fff;
+        background-color: var(--color-surface);
         font-family: Arial, sans-serif;
         line-height: 1.5;
 
         // Estilos para el contenido del email
         h1, h2, h3 {
-          color: #333;
+          color: var(--color-text-primary);
           margin: 16px 0 8px 0;
         }
 
         p {
           margin: 8px 0;
-          color: #666;
+          color: var(--color-text-secondary);
         }
 
         .amount {
@@ -167,7 +168,7 @@
         }
 
         strong {
-          color: #333;
+          color: var(--color-text-primary);
         }
       }
 
@@ -177,7 +178,7 @@
         align-items: center;
         justify-content: center;
         height: 300px;
-        color: #999;
+        color: var(--color-text-muted);
 
         mat-icon {
           font-size: 48px;
@@ -198,6 +199,23 @@
     .table-container {
       .templates-table {
         width: 100%;
+
+        ::ng-deep th.mat-mdc-header-cell {
+          background-color: var(--color-surface-2);
+          color: var(--color-primary) !important;
+          font-weight: 600;
+          font-size: 13px;
+          white-space: nowrap;
+        }
+
+        ::ng-deep td.mat-mdc-cell {
+          color: var(--color-text-primary);
+          font-size: 14px;
+        }
+
+        ::ng-deep .mat-mdc-row:hover .mat-mdc-cell {
+          background-color: var(--color-primary-glow);
+        }
 
         mat-chip {
           font-size: 12px;
