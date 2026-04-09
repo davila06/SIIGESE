@@ -223,13 +223,15 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(): void {
-    if (!this.polizaForm.valid) {
+    const requiredFields = ['numeroPoliza', 'nombreAsegurado', 'prima', 'fechaVigencia', 'frecuencia', 'aseguradora'];
+    const invalidRequired = requiredFields.filter(key => {
+      const control = this.polizaForm.get(key);
+      return !control || !control.value || control.value === '';
+    });
+    if (invalidRequired.length > 0) {
       this.polizaForm.markAllAsTouched();
-      const invalidFields = Object.keys(this.polizaForm.controls)
-        .filter(key => this.polizaForm.get(key)?.invalid)
-        .join(', ');
-      this.logger.warn('Formulario inválido, campos con error:', invalidFields);
-      this.showMessage('Por favor, corrija los campos con errores antes de guardar', 'warning');
+      this.logger.warn('Campos requeridos vacíos:', invalidRequired.join(', '));
+      this.showMessage('Por favor, complete todos los campos requeridos', 'warning');
       return;
     }
     this.isLoading = true;
