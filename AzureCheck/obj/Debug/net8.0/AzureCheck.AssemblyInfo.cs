@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AzureCheck")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+76aefe27e8577134c3a6bdb57c50121f1b3988ce")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c411875238d2a10c729951f38e41590ddaed5f15")]
 [assembly: System.Reflection.AssemblyProductAttribute("AzureCheck")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AzureCheck")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

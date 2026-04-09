@@ -223,59 +223,66 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit(): void {
-    if (this.polizaForm.valid) {
-      this.isLoading = true;
-      const polizaData: CreatePoliza = this.polizaForm.value;
+    if (!this.polizaForm.valid) {
+      this.polizaForm.markAllAsTouched();
+      const invalidFields = Object.keys(this.polizaForm.controls)
+        .filter(key => this.polizaForm.get(key)?.invalid)
+        .join(', ');
+      this.logger.warn('Formulario inválido, campos con error:', invalidFields);
+      this.showMessage('Por favor, corrija los campos con errores antes de guardar', 'warning');
+      return;
+    }
+    this.isLoading = true;
+    const polizaData: CreatePoliza = this.polizaForm.value;
 
-      if (this.isEditMode && this.selectedPoliza) {
-        // Actualizar póliza existente
-        this.apiService.updatePoliza(this.selectedPoliza.id, polizaData).subscribe({
-          next: (updatedPoliza: Poliza) => {
-            const index = this.polizas.findIndex(p => p.id === updatedPoliza.id);
-            if (index !== -1) {
-              this.polizas[index] = updatedPoliza;
-            }
-            
-            // Actualizar todas las listas filtradas y vistas
-            this.performSearch();
-            
-            this.resetForm();
-            this.showMessage('Póliza actualizada exitosamente');
-            this.isLoading = false;
+    if (this.isEditMode && this.selectedPoliza) {
+      // Actualizar póliza existente
+      this.apiService.updatePoliza(this.selectedPoliza.id, polizaData).subscribe({
+        next: (updatedPoliza: Poliza) => {
+          const index = this.polizas.findIndex(p => p.id === updatedPoliza.id);
+          if (index !== -1) {
+            this.polizas[index] = updatedPoliza;
+          }
+          
+          // Actualizar todas las listas filtradas y vistas
+          this.performSearch();
+          
+          this.resetForm();
+          this.showMessage('Póliza actualizada exitosamente');
+          this.isLoading = false;
 
-            // Scroll to top after update so the table is visible
-            const pageContent = document.querySelector('.page-content') as HTMLElement | null;
-            if (pageContent) { pageContent.scrollTo({ top: 0, behavior: 'smooth' }); }
-            const host = document.querySelector('mat-sidenav-content') as HTMLElement | null;
-            if (host) { host.scrollTop = 0; }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          },
-          error: (error: any) => {
-            this.logger.error('Error updating poliza:', error);
-            this.showMessage('Error al actualizar la póliza', 'error');
-            this.isLoading = false;
-          }
-        });
-      } else {
-        // Crear nueva póliza
-        this.apiService.createPoliza(polizaData).subscribe({
-          next: (poliza: Poliza) => {
-            this.polizas.push(poliza);
-            
-            // Actualizar todas las listas filtradas y vistas
-            this.performSearch();
-            
-            this.resetForm();
-            this.showMessage('Póliza creada exitosamente');
-            this.isLoading = false;
-          },
-          error: (error: any) => {
-            this.logger.error('Error creating poliza:', error);
-            this.showMessage('Error al crear la póliza', 'error');
-            this.isLoading = false;
-          }
-        });
-      }
+          // Scroll to top after update so the table is visible
+          const pageContent = document.querySelector('.page-content') as HTMLElement | null;
+          if (pageContent) { pageContent.scrollTo({ top: 0, behavior: 'smooth' }); }
+          const host = document.querySelector('mat-sidenav-content') as HTMLElement | null;
+          if (host) { host.scrollTop = 0; }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        error: (error: any) => {
+          this.logger.error('Error updating poliza:', error);
+          this.showMessage('Error al actualizar la póliza', 'error');
+          this.isLoading = false;
+        }
+      });
+    } else {
+      // Crear nueva póliza
+      this.apiService.createPoliza(polizaData).subscribe({
+        next: (poliza: Poliza) => {
+          this.polizas.push(poliza);
+          
+          // Actualizar todas las listas filtradas y vistas
+          this.performSearch();
+          
+          this.resetForm();
+          this.showMessage('Póliza creada exitosamente');
+          this.isLoading = false;
+        },
+        error: (error: any) => {
+          this.logger.error('Error creating poliza:', error);
+          this.showMessage('Error al crear la póliza', 'error');
+          this.isLoading = false;
+        }
+      });
     }
   }
 

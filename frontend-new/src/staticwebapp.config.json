@@ -1,19 +1,27 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/api/*", "/_framework/*", "/assets/*", "/*.js", "/*.css", "/*.ico", "/*.png", "/*.jpg", "/*.jpeg", "/*.gif", "/*.svg"]
+    "exclude": ["/api/*", "/_framework/*", "/assets/*", "/*.js", "/*.css", "/*.ico", "/*.png", "/*.jpg", "/*.jpeg", "/*.gif", "/*.svg", "/*.woff", "/*.woff2", "/*.ttf", "/*.eot"]
   },
   "routes": [
     {
+      "route": "/index.html",
+      "headers": {
+        "Cache-Control": "no-store, no-cache, must-revalidate"
+      }
+    },
+    {
       "route": "/*.js",
       "headers": {
-        "Content-Type": "application/javascript"
+        "Content-Type": "application/javascript",
+        "Cache-Control": "public, max-age=31536000, immutable"
       }
     },
     {
       "route": "/*.css",
       "headers": {
-        "Content-Type": "text/css"
+        "Content-Type": "text/css",
+        "Cache-Control": "public, max-age=31536000, immutable"
       }
     },
     {
@@ -24,12 +32,6 @@
       "rewrite": "/index.html"
     }
   ],
-  "responseOverrides": {
-    "404": {
-      "rewrite": "/index.html",
-      "statusCode": 200
-    }
-  },
   "mimeTypes": {
     ".json": "application/json",
     ".js": "application/javascript",
