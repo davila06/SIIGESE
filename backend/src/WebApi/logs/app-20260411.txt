@@ -10355,3 +10355,127 @@ OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
 DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
 2026-04-11 22:41:02.863 -06:00 [INF] AuthenticationScheme: Bearer was challenged.
 2026-04-11 22:41:02.866 -06:00 [INF] Request finished HTTP/1.1 POST http://localhost:5000/hubs/chat/negotiate?negotiateVersion=1 - 401 0 null 10.9974ms
+2026-04-11 22:46:05.140 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/analytics/dashboard - null null
+2026-04-11 22:46:05.205 -06:00 [INF] Executing endpoint 'WebApi.Controllers.AnalyticsController.GetDashboard (WebApi)'
+2026-04-11 22:46:05.217 -06:00 [INF] Route matched with {action = "GetDashboard", controller = "Analytics"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Application.DTOs.ExecutiveDashboardDto]] GetDashboard() on controller WebApi.Controllers.AnalyticsController (WebApi).
+2026-04-11 22:46:05.941 -06:00 [INF] Executed DbCommand (153ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit) AND [p].[IsDeleted] = CAST(0 AS bit)
+2026-04-11 22:46:05.981 -06:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Prima], [p].[Frecuencia], [p].[Aseguradora]
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit) AND [p].[IsDeleted] = CAST(0 AS bit)
+2026-04-11 22:46:06.052 -06:00 [INF] Executed DbCommand (24ms) [Parameters=[@__mesActualInicio_0='?' (DbType = DateTime2), @__AddMonths_1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[MontoTotal], [c].[MontoCobrado], [c].[Estado]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[FechaVencimiento] >= @__mesActualInicio_0 AND [c].[FechaVencimiento] < @__AddMonths_1
+2026-04-11 22:46:06.079 -06:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COALESCE(SUM([c].[MontoTotal]), 0.0)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] IN (0, 3)
+2026-04-11 22:46:06.100 -06:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Reclamos] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[IsDeleted] = CAST(0 AS bit) AND [r].[Estado] <> 6 AND [r].[Estado] <> 7
+2026-04-11 22:46:06.115 -06:00 [INF] Executed DbCommand (10ms) [Parameters=[@__mesActualInicio_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Estado]
+FROM [Cotizaciones] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[FechaCreacion] >= @__mesActualInicio_0
+2026-04-11 22:46:06.132 -06:00 [INF] Executed DbCommand (9ms) [Parameters=[@__mesActualInicio_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [e].[IsSuccess]
+FROM [EmailLogs] AS [e]
+WHERE [e].[IsDeleted] = CAST(0 AS bit) AND [e].[IsDeleted] = CAST(0 AS bit) AND [e].[SentAt] >= @__mesActualInicio_0
+2026-04-11 22:46:06.152 -06:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[FechaResolucion], [r].[FechaLimiteRespuesta]
+FROM [Reclamos] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[IsDeleted] = CAST(0 AS bit) AND [r].[FechaResolucion] IS NOT NULL AND [r].[FechaLimiteRespuesta] IS NOT NULL
+2026-04-11 22:46:06.164 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__mesAnteriorInicio_0='?' (DbType = DateTime2), @__mesActualInicio_1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[MontoTotal], [c].[MontoCobrado]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[FechaVencimiento] >= @__mesAnteriorInicio_0 AND [c].[FechaVencimiento] < @__mesActualInicio_1
+2026-04-11 22:46:06.177 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[@__AddMonths_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[FechaVencimiento], [c].[MontoTotal], [c].[MontoCobrado], [c].[Estado], [c].[Moneda]
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[FechaVencimiento] >= @__AddMonths_0
+2026-04-11 22:46:06.224 -06:00 [INF] Executed DbCommand (9ms) [Parameters=[@__now_0='?' (DbType = DateTime2), @__AddDays_1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit) AND [p].[IsDeleted] = CAST(0 AS bit) AND [p].[FechaVigencia] >= @__now_0 AND [p].[FechaVigencia] <= @__AddDays_1
+2026-04-11 22:46:06.243 -06:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Reclamos] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[IsDeleted] = CAST(0 AS bit) AND [r].[UsuarioAsignadoId] IS NULL AND [r].[Estado] <> 6 AND [r].[Estado] <> 7
+2026-04-11 22:46:06.255 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[FechaReclamo], [r].[FechaResolucion] AS [FechaRes]
+FROM [Reclamos] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[IsDeleted] = CAST(0 AS bit) AND [r].[FechaResolucion] IS NOT NULL
+2026-04-11 22:46:06.270 -06:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [r].[MontoReclamado], [r].[MontoAprobado]
+FROM [Reclamos] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[IsDeleted] = CAST(0 AS bit) AND [r].[MontoAprobado] IS NOT NULL AND [r].[MontoReclamado] > 0.0
+2026-04-11 22:46:06.283 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[@__mesActualInicio_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[IsDeleted] = CAST(0 AS bit) AND [p].[CreatedAt] >= @__mesActualInicio_0
+2026-04-11 22:46:06.293 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__mesAnteriorInicio_0='?' (DbType = DateTime2), @__mesActualInicio_1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[IsDeleted] = CAST(0 AS bit) AND [p].[CreatedAt] >= @__mesAnteriorInicio_0 AND [p].[CreatedAt] < @__mesActualInicio_1
+2026-04-11 22:46:06.305 -06:00 [INF] Executed DbCommand (8ms) [Parameters=[@__now_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Reclamos] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[IsDeleted] = CAST(0 AS bit) AND [r].[FechaLimiteRespuesta] IS NOT NULL AND [r].[FechaLimiteRespuesta] < @__now_0 AND [r].[Estado] <> 6 AND [r].[Estado] <> 7
+2026-04-11 22:46:06.327 -06:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[Prima]
+FROM [Cotizaciones] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = N'PENDIENTE'
+2026-04-11 22:46:06.334 -06:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [c].[FechaCreacion], [c].[FechaActualizacion] AS [FechaConv]
+FROM [Cotizaciones] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = N'CONVERTIDA' AND [c].[FechaActualizacion] IS NOT NULL
+2026-04-11 22:46:06.343 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__mesActualInicio_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(0 AS bit) AND [p].[UpdatedAt] IS NOT NULL AND [p].[UpdatedAt] >= @__mesActualInicio_0
+2026-04-11 22:46:06.354 -06:00 [INF] Executed DbCommand (7ms) [Parameters=[@__AddDays_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cobros] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = 3 AND [c].[FechaVencimiento] < @__AddDays_0
+2026-04-11 22:46:06.366 -06:00 [INF] Executed DbCommand (6ms) [Parameters=[@__now_0='?' (DbType = DateTime2), @__AddDays_1='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Polizas] AS [p]
+WHERE [p].[IsDeleted] = CAST(0 AS bit) AND [p].[EsActivo] = CAST(1 AS bit) AND [p].[IsDeleted] = CAST(0 AS bit) AND [p].[FechaVigencia] >= @__now_0 AND [p].[FechaVigencia] <= @__AddDays_1
+2026-04-11 22:46:06.380 -06:00 [INF] Executed DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Reclamos] AS [r]
+WHERE [r].[IsDeleted] = CAST(0 AS bit) AND [r].[IsDeleted] = CAST(0 AS bit) AND [r].[Prioridad] = 3 AND [r].[UsuarioAsignadoId] IS NULL
+2026-04-11 22:46:06.396 -06:00 [INF] Executed DbCommand (11ms) [Parameters=[@__AddHours_0='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM [Cotizaciones] AS [c]
+WHERE [c].[IsDeleted] = CAST(0 AS bit) AND [c].[IsDeleted] = CAST(0 AS bit) AND [c].[Estado] = N'PENDIENTE' AND [c].[FechaCreacion] <= @__AddHours_0
+2026-04-11 22:46:06.410 -06:00 [INF] Executing OkObjectResult, writing value of type 'Application.DTOs.ExecutiveDashboardDto'.
+2026-04-11 22:46:06.429 -06:00 [INF] Executed action WebApi.Controllers.AnalyticsController.GetDashboard (WebApi) in 1206.3251ms
+2026-04-11 22:46:06.432 -06:00 [INF] Executed endpoint 'WebApi.Controllers.AnalyticsController.GetDashboard (WebApi)'
+2026-04-11 22:46:06.436 -06:00 [INF] Request finished HTTP/1.1 GET http://localhost:5000/api/analytics/dashboard - 200 null application/json; charset=utf-8 1303.1833ms
+2026-04-11 22:47:40.266 -06:00 [WRN] Distributed cache: In-Memory — token blacklist NOT shared across instances. Set ConnectionStrings:Redis for multi-instance deployments.
+2026-04-11 22:47:42.383 -06:00 [INF] Executed DbCommand (57ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-11 22:47:42.465 -06:00 [INF] Executed DbCommand (60ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-11 22:47:42.472 -06:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-11 22:47:42.478 -06:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-11 22:47:42.561 -06:00 [INF] Executed DbCommand (64ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-04-11 22:47:42.594 -06:00 [INF] No migrations were applied. The database is already up to date.
+2026-04-11 22:47:42.597 -06:00 [INF] Database migration completed successfully
+2026-04-11 22:47:42.623 -06:00 [INF] User profile is available. Using 'C:\Users\davil\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-11 22:47:42.749 -06:00 [INF] Now listening on: http://localhost:5000
+2026-04-11 22:47:42.753 -06:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-11 22:47:42.754 -06:00 [INF] Hosting environment: Development
+2026-04-11 22:47:42.756 -06:00 [INF] Content root path: c:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
+2026-04-11 22:49:22.919 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/chat/sessions - null null
