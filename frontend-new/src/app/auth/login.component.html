@@ -52,11 +52,6 @@
           <span>{{ loginError }}</span>
         </div>
 
-        <div class="auth-hint" *ngIf="isDevelopment">
-          <mat-icon aria-hidden="true">info</mat-icon>
-          <span>Local: admin@iads.com / password123</span>
-        </div>
-
         <div class="field-group">
           <label class="field-label" for="login-email">Correo electrónico</label>
           <div class="field-input-wrap" [class.has-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
