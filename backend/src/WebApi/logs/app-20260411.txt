@@ -10479,3 +10479,109 @@ ORDER BY [MigrationId];
 2026-04-11 22:47:42.754 -06:00 [INF] Hosting environment: Development
 2026-04-11 22:47:42.756 -06:00 [INF] Content root path: c:\Users\davil\SINSEG\enterprise-web-app\backend\src\WebApi
 2026-04-11 22:49:22.919 -06:00 [INF] Request starting HTTP/1.1 GET http://localhost:5000/api/chat/sessions - null null
+2026-04-11 23:00:06.695 -06:00 [WRN] Distributed cache: In-Memory — token blacklist NOT shared across instances. Set ConnectionStrings:Redis for multi-instance deployments.
+2026-04-11 23:00:52.036 -06:00 [WRN] Distributed cache: In-Memory — token blacklist NOT shared across instances. Set ConnectionStrings:Redis for multi-instance deployments.
+2026-04-11 23:00:55.486 -06:00 [INF] Executed DbCommand (132ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-11 23:00:55.644 -06:00 [INF] Executed DbCommand (111ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-11 23:00:55.735 -06:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-11 23:00:55.823 -06:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-11 23:00:55.958 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-04-11 23:00:56.016 -06:00 [INF] Applying migration '20260411054658_AddEmailLogs'.
+2026-04-11 23:00:56.395 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [EmailLogs] (
+    [Id] int NOT NULL IDENTITY,
+    [ToEmail] nvarchar(100) NOT NULL,
+    [ToName] nvarchar(200) NULL,
+    [Subject] nvarchar(250) NOT NULL,
+    [Body] nvarchar(max) NOT NULL,
+    [EmailType] nvarchar(50) NOT NULL,
+    [SentAt] datetime2 NOT NULL,
+    [IsSuccess] bit NOT NULL,
+    [ErrorMessage] nvarchar(1000) NULL,
+    [SenderName] nvarchar(100) NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [IsDeleted] bit NOT NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    CONSTRAINT [PK_EmailLogs] PRIMARY KEY ([Id])
+);
+2026-04-11 23:00:56.482 -06:00 [INF] Executed DbCommand (80ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailLogs_EmailType] ON [EmailLogs] ([EmailType]);
+2026-04-11 23:00:56.568 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailLogs_IsSuccess] ON [EmailLogs] ([IsSuccess]);
+2026-04-11 23:00:56.653 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_EmailLogs_SentAt] ON [EmailLogs] ([SentAt]);
+2026-04-11 23:00:56.739 -06:00 [INF] Executed DbCommand (80ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260411054658_AddEmailLogs', N'8.0.0');
+2026-04-11 23:00:56.880 -06:00 [INF] Applying migration '20260411055226_AddReclamoHistorial'.
+2026-04-11 23:00:57.578 -06:00 [INF] Executed DbCommand (81ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [ReclamoHistoriales] (
+    [Id] int NOT NULL IDENTITY,
+    [ReclamoId] int NOT NULL,
+    [TipoEvento] nvarchar(50) NOT NULL,
+    [ValorAnterior] nvarchar(200) NULL,
+    [ValorNuevo] nvarchar(200) NULL,
+    [Descripcion] nvarchar(500) NOT NULL,
+    [Usuario] nvarchar(100) NOT NULL,
+    [CreatedAt] datetime2 NOT NULL,
+    [UpdatedAt] datetime2 NULL,
+    [IsDeleted] bit NOT NULL,
+    [CreatedBy] nvarchar(max) NOT NULL,
+    [UpdatedBy] nvarchar(max) NULL,
+    CONSTRAINT [PK_ReclamoHistoriales] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ReclamoHistoriales_Reclamos_ReclamoId] FOREIGN KEY ([ReclamoId]) REFERENCES [Reclamos] ([Id]) ON DELETE CASCADE
+);
+2026-04-11 23:00:57.669 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2026-04-11T05:52:25.5444684Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2026-04-11 23:00:57.757 -06:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2026-04-11T05:52:25.5444692Z'
+WHERE [Id] = 2;
+SELECT @@ROWCOUNT;
+2026-04-11 23:00:57.845 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Roles] SET [CreatedAt] = '2026-04-11T05:52:25.5444694Z'
+WHERE [Id] = 3;
+SELECT @@ROWCOUNT;
+2026-04-11 23:00:57.935 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [UserRoles] SET [CreatedAt] = '2026-04-11T05:52:25.6966682Z'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2026-04-11 23:00:58.022 -06:00 [INF] Executed DbCommand (80ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+UPDATE [Users] SET [CreatedAt] = '2026-04-11T05:52:25.5444963Z', [PasswordHash] = N'$2a$11$mcl9ymhKGXTXQ1xw2lEFP.NCjBkI5Hg1FuRgfhtFHu0pKbT6Sb7ce'
+WHERE [Id] = 1;
+SELECT @@ROWCOUNT;
+2026-04-11 23:00:58.110 -06:00 [INF] Executed DbCommand (81ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ReclamoHistoriales_CreatedAt] ON [ReclamoHistoriales] ([CreatedAt]);
+2026-04-11 23:00:58.194 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_ReclamoHistoriales_ReclamoId] ON [ReclamoHistoriales] ([ReclamoId]);
+2026-04-11 23:00:58.283 -06:00 [INF] Executed DbCommand (78ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20260411055226_AddReclamoHistorial', N'8.0.0');
+2026-04-11 23:01:05.830 -06:00 [WRN] Distributed cache: In-Memory — token blacklist NOT shared across instances. Set ConnectionStrings:Redis for multi-instance deployments.
+2026-04-11 23:01:51.727 -06:00 [INF] Executed DbCommand (46ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-11 23:01:51.829 -06:00 [INF] Executed DbCommand (53ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-11 23:01:51.961 -06:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2026-04-11 23:09:16.338 -06:00 [WRN] Distributed cache: In-Memory — token blacklist NOT shared across instances. Set ConnectionStrings:Redis for multi-instance deployments.
+2026-04-11 23:09:18.793 -06:00 [INF] Executed DbCommand (96ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2026-04-11 23:09:18.901 -06:00 [INF] Executed DbCommand (91ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2026-04-11 23:09:19.001 -06:00 [INF] Executed DbCommand (85ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];

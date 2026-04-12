@@ -446,7 +446,7 @@
                 </div>
 
                 <div class="form-actions form-row-8">
-                  <button mat-raised-button color="primary" type="submit" [disabled]="isLoading || polizaForm.invalid">
+                  <button mat-raised-button color="primary" type="submit" [disabled]="isLoading || !isFormValidForSubmission()">
                     <mat-icon>{{isEditMode ? 'update' : 'save'}}</mat-icon>
                     {{submitButtonText}}
                   </button>
