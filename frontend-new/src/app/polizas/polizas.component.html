@@ -394,7 +394,7 @@
                   <mat-form-field appearance="outline">
                     <mat-label>Aseguradora</mat-label>
                     <mat-select formControlName="aseguradora" required>
-                      <mat-option *ngFor="let a of aseguradorasSistema" [value]="a.value">{{a.label}}</mat-option>
+                      <mat-option *ngFor="let a of availableAseguradoras" [value]="a.value">{{a.label}}</mat-option>
                     </mat-select>
                   </mat-form-field>
                   <mat-form-field appearance="outline">

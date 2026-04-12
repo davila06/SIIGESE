@@ -55,6 +55,18 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   monedasSistema = MONEDAS_SISTEMA;
   aseguradorasSistema = ASEGURADORAS_SISTEMA;
 
+  get availableAseguradoras(): Array<{ value: string; label: string }> {
+    const currentValue = this.polizaForm.get('aseguradora')?.value;
+    if (!currentValue || this.aseguradorasSistema.some(a => a.value === currentValue)) {
+      return this.aseguradorasSistema;
+    }
+
+    return [
+      ...this.aseguradorasSistema,
+      { value: currentValue, label: currentValue }
+    ];
+  }
+
   private readonly logger = inject(LoggingService);
 
   constructor(
@@ -573,7 +585,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       moneda: poliza.moneda,
       fechaVigencia: fechaVigencia,
       frecuencia: this.normalizeFrecuencia(poliza.frecuencia),
-      aseguradora: poliza.aseguradora,
+      aseguradora: this.normalizeAseguradora(poliza.aseguradora),
       placa: poliza.placa || '',
       marca: poliza.marca || '',
       modelo: poliza.modelo || '',
@@ -596,6 +608,36 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       'BIMESTRAL': 'Bimestral', 'SEMANAL': 'Semanal', 'QUINCENAL': 'Quincenal'
     };
     return map[val.toUpperCase()] ?? val;
+  }
+
+  private normalizeAseguradora(val: string): string {
+    if (!val) return val;
+
+    const normalized = val.trim().toUpperCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[._-]+/g, ' ')
+      .replace(/\s+/g, ' ');
+
+    const map: Record<string, string> = {
+      INS: 'INS',
+      'INSTITUTO NACIONAL DE SEGUROS': 'INS',
+      SAGICOR: 'SAGICOR',
+      'SAGICOR SEGUROS': 'SAGICOR',
+      ASSA: 'ASSA',
+      'ASSA COMPANIA DE SEGUROS': 'ASSA',
+      'ASSA COMPAÑIA DE SEGUROS': 'ASSA',
+      BCR: 'BCR_SEGUROS',
+      'BCR SEGUROS': 'BCR_SEGUROS',
+      BCR_SEGUROS: 'BCR_SEGUROS',
+      MAPFRE: 'MAPFRE',
+      'MAPFRE SEGUROS COSTA RICA': 'MAPFRE',
+      OTROS: 'OTROS',
+      OTRAS: 'OTROS',
+      'OTRAS ASEGURADORAS': 'OTROS'
+    };
+
+    return map[normalized] ?? val.trim();
   }
 
   /** Reinicia el estado del formulario y navega al listado */

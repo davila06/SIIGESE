@@ -124,6 +124,18 @@ describe('PolizasComponent', () => {
     expect(submitButton.disabled).toBeFalse();
   }));
 
+  it('should normalize legacy insurer values when loading a poliza for edit', fakeAsync(() => {
+    component.selectPolizaAndScroll({
+      ...basePoliza,
+      aseguradora: 'Sagicor Seguros'
+    });
+    tick(200);
+    fixture.detectChanges();
+
+    expect(component.polizaForm.get('aseguradora')?.value).toBe('SAGICOR');
+    expect(component.isFormValidForSubmission()).toBeTrue();
+  }));
+
   it('should update an existing poliza and reset the form after submit', fakeAsync(() => {
     component.selectPolizaAndScroll(basePoliza);
     tick(200);
