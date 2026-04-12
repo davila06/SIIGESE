@@ -1,18 +1,11 @@
-// ─── Variables ───────────────────────────────────────────────────────────────
-$brand-dark:    #0a0f1e;
-$brand-mid:     #111827;
-$brand-accent:  #4F46E5;
-$brand-accent2: #818cf8;
-$text-primary:  #f9fafb;
-$text-muted:    #9ca3af;
-$border:        rgba(255,255,255,0.08);
-$surface:       rgba(255,255,255,0.03);
+// ─── Login page — design tokens only (no local color overrides)
+// All colors derive from the global neon cyberpunk design system in styles/_variables.scss
 
 // ─── Layout ──────────────────────────────────────────────────────────────────
 .login-page {
   display: flex;
   min-height: 100vh;
-  background: $brand-dark;
+  background: var(--color-bg);
 }
 
 // ─── Brand panel (left) ──────────────────────────────────────────────────────
@@ -22,24 +15,24 @@ $surface:       rgba(255,255,255,0.03);
   flex-direction: column;
   justify-content: space-between;
   padding: 56px 52px;
-  background: linear-gradient(160deg, #0d1226 0%, #111827 60%, #0f172a 100%);
-  border-right: 1px solid $border;
+  background: linear-gradient(160deg, var(--sidebar-bg) 0%, var(--sidebar-bg-2) 60%, var(--color-bg) 100%);
+  border-right: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
 
-  // Subtle grid pattern
+  // Neon grid pattern
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(99,102,241,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(99,102,241,0.04) 1px, transparent 1px);
+      linear-gradient(var(--color-border-light) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border-light) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
   }
 
-  // Glow orb
+  // Neon cyan glow orb (brand primary)
   &::after {
     content: '';
     position: absolute;
@@ -47,7 +40,7 @@ $surface:       rgba(255,255,255,0.03);
     left: -80px;
     width: 420px;
     height: 420px;
-    background: radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--color-primary-glow) 0%, transparent 70%);
     pointer-events: none;
   }
 }
@@ -60,26 +53,67 @@ $surface:       rgba(255,255,255,0.03);
 .brand-logo {
   width: 64px;
   height: 64px;
-  background: linear-gradient(135deg, $brand-accent 0%, #4f46e5 100%);
-  border-radius: 18px;
+  background: var(--color-primary-grad);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 36px;
-  box-shadow: 0 8px 32px rgba(99,102,241,0.3);
+  box-shadow:
+    0 8px 32px var(--color-primary-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.24);
+  position: relative;
+  overflow: hidden;
+}
 
-  mat-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-    color: #fff;
-  }
+.brand-logo-grid {
+  position: absolute;
+  inset: 11px;
+  border-radius: 12px;
+  border: 1px solid rgba(191, 219, 254, 0.34);
+  background:
+    linear-gradient(90deg, rgba(191, 219, 254, 0.22) 1px, transparent 1px),
+    linear-gradient(rgba(191, 219, 254, 0.22) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+.brand-logo-stem {
+  position: absolute;
+  left: 24px;
+  top: 18px;
+  width: 4px;
+  height: 28px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, #ffffff, #bfdbfe 75%, #93c5fd);
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
+}
+
+.brand-logo-bar {
+  position: absolute;
+  left: 24px;
+  top: 18px;
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #ffffff, #bfdbfe 75%, #93c5fd);
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
+}
+
+.brand-logo-beam {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 16px;
+  height: 16px;
+  border-top: 2px solid rgba(255, 255, 255, 0.84);
+  border-right: 2px solid rgba(255, 255, 255, 0.84);
+  border-radius: 0 12px 0 0;
 }
 
 .brand-name {
   font-size: 42px;
   font-weight: 800;
-  color: $text-primary;
+  color: var(--color-text-primary);
   letter-spacing: 4px;
   margin: 0 0 8px;
   line-height: 1;
@@ -87,7 +121,7 @@ $surface:       rgba(255,255,255,0.03);
 
 .brand-tagline {
   font-size: 14px;
-  color: $text-muted;
+  color: var(--color-text-secondary);
   margin: 0 0 56px;
   font-weight: 400;
   letter-spacing: 0.3px;
@@ -103,24 +137,25 @@ $surface:       rgba(255,255,255,0.03);
   display: flex;
   align-items: center;
   gap: 14px;
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: 12px;
+  background: var(--color-border-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   padding: 14px 18px;
-  color: $text-muted;
+  color: var(--sidebar-text);
   font-size: 14px;
-  transition: border-color 0.2s;
+  transition: var(--transition-fast);
 
   &:hover {
-    border-color: rgba(99,102,241,0.3);
-    color: $text-primary;
+    border-color: var(--color-primary);
+    color: var(--color-text-primary);
+    background: var(--sidebar-active-bg);
   }
 
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
-    color: $brand-accent;
+    color: var(--color-primary);
     flex-shrink: 0;
   }
 }
@@ -129,7 +164,7 @@ $surface:       rgba(255,255,255,0.03);
   position: relative;
   z-index: 1;
   font-size: 12px;
-  color: rgba(156,163,175,0.5);
+  color: var(--color-text-muted);
   margin: 0;
 }
 
@@ -140,7 +175,7 @@ $surface:       rgba(255,255,255,0.03);
   align-items: center;
   justify-content: center;
   padding: 40px 24px;
-  background: $brand-mid;
+  background: var(--color-surface);
 }
 
 .form-wrapper {
@@ -159,17 +194,46 @@ $surface:       rgba(255,255,255,0.03);
   margin-bottom: 36px;
 }
 
+.auth-alert,
+.auth-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 12px;
+  margin-bottom: 12px;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.auth-alert {
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-error);
+}
+
+.auth-hint {
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--color-info);
+}
+
 .form-title {
   font-size: 26px;
   font-weight: 700;
-  color: $text-primary;
+  color: var(--color-text-primary);
   margin: 0 0 8px;
   line-height: 1.2;
 }
 
 .form-subtitle {
   font-size: 14px;
-  color: $text-muted;
+  color: var(--color-text-secondary);
   margin: 0;
   line-height: 1.5;
 }
@@ -190,7 +254,7 @@ $surface:       rgba(255,255,255,0.03);
 .field-label {
   font-size: 13px;
   font-weight: 500;
-  color: #d1d5db;
+  color: var(--color-text-secondary);
   letter-spacing: 0.2px;
 }
 
@@ -198,20 +262,20 @@ $surface:       rgba(255,255,255,0.03);
   position: relative;
   display: flex;
   align-items: center;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 10px;
-  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: var(--transition-fast);
 
   &:focus-within {
-    border-color: $brand-accent;
-    background: rgba(99,102,241,0.06);
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    border-color: var(--color-primary);
+    background: var(--sidebar-active-bg);
+    box-shadow: 0 0 0 3px var(--color-primary-glow);
   }
 
   &.has-error {
-    border-color: #f87171;
-    box-shadow: 0 0 0 3px rgba(248,113,113,0.15);
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px var(--color-error-bg);
   }
 }
 
@@ -221,7 +285,7 @@ $surface:       rgba(255,255,255,0.03);
   font-size: 18px !important;
   width: 18px !important;
   height: 18px !important;
-  color: $text-muted;
+  color: var(--color-text-muted);
   pointer-events: none;
   flex-shrink: 0;
 }
@@ -233,19 +297,20 @@ $surface:       rgba(255,255,255,0.03);
   border: none;
   outline: none;
   font-size: 15px;
-  color: $text-primary;
+  color: var(--color-text-primary);
   font-family: inherit;
 
   &::placeholder {
-    color: rgba(156,163,175,0.5);
+    color: var(--color-text-muted);
+    opacity: 0.6;
   }
 
-  // Remove browser autofill yellow
+  // Prevent browser autofill background flash
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 100px #1a2033 inset !important;
-    -webkit-text-fill-color: $text-primary !important;
+    -webkit-box-shadow: 0 0 0 100px var(--color-surface-2) inset !important;
+    -webkit-text-fill-color: var(--color-text-primary) !important;
     transition: background-color 5000s ease-in-out 0s;
   }
 }
@@ -256,17 +321,24 @@ $surface:       rgba(255,255,255,0.03);
   background: none;
   border: none;
   cursor: pointer;
-  color: $text-muted;
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 4px;
-  border-radius: 6px;
-  transition: color 0.2s, background 0.2s;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+
+  // Accessible — keyboard reachable
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    color: var(--color-primary);
+  }
 
   &:hover {
-    color: $text-primary;
-    background: rgba(255,255,255,0.06);
+    color: var(--color-text-primary);
+    background: var(--color-border-light);
   }
 
   mat-icon {
@@ -278,7 +350,7 @@ $surface:       rgba(255,255,255,0.03);
 
 .field-error {
   font-size: 12px;
-  color: #f87171;
+  color: var(--color-error);
   margin-top: 2px;
 }
 
@@ -291,27 +363,27 @@ $surface:       rgba(255,255,255,0.03);
   width: 100%;
   padding: 14px 24px;
   margin-top: 4px;
-  background: linear-gradient(135deg, $brand-accent 0%, #4f46e5 100%);
-  color: #fff;
+  background: var(--color-primary-grad);
+  color: var(--color-bg);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   letter-spacing: 0.3px;
-  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.35);
+  transition: var(--transition-base);
+  box-shadow: var(--shadow-md);
   font-family: inherit;
 
   &:hover:not(:disabled) {
     opacity: 0.92;
     transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(99,102,241,0.45);
+    box-shadow: var(--shadow-glow);
   }
 
   &:active:not(:disabled) {
     transform: translateY(0);
-    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    box-shadow: var(--shadow-sm);
   }
 
   &:disabled {
@@ -343,18 +415,23 @@ $surface:       rgba(255,255,255,0.03);
   border: none;
   cursor: pointer;
   font-size: 13px;
-  color: $brand-accent2;
+  color: var(--color-primary);
   font-family: inherit;
   padding: 4px 8px;
-  border-radius: 6px;
-  transition: color 0.2s, background 0.2s;
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
   display: inline-flex;
   align-items: center;
   gap: 4px;
 
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
   &:hover {
-    color: $text-primary;
-    background: rgba(99,102,241,0.1);
+    color: var(--color-text-primary);
+    background: var(--sidebar-active-bg);
   }
 
   &.back-link {
@@ -367,17 +444,47 @@ $surface:       rgba(255,255,255,0.03);
 }
 
 // ─── Responsive ──────────────────────────────────────────────────────────────
-@media (max-width: 768px) {
+@media (max-width: 960px) {
   .brand-panel {
-    display: none;
+    flex: 0 0 38%;
+    padding: 40px 32px;
+
+    .brand-features {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+  }
+
+  .brand-panel {
+    flex: 0 0 auto;
+    padding: 32px 24px;
+    min-height: 160px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+
+    // On mobile show compact brand only
+    .brand-features { display: none; }
+    .brand-tagline   { margin-bottom: 0; }
+    .brand-content   { display: flex; align-items: center; gap: 16px; }
+    .brand-logo      { margin-bottom: 0; width: 48px; height: 48px; flex-shrink: 0; }
+
+    // Bottom copyright pushed into brand-content flow
+    .brand-copyright { display: none; }
   }
 
   .form-panel {
-    background: $brand-dark;
+    flex: 1;
+    background: var(--color-bg);
+    padding: 32px 20px;
   }
 
   .form-wrapper {
-    max-width: 360px;
+    max-width: 100%;
   }
 
   .form-title {

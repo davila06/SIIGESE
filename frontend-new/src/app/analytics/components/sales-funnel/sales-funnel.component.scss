@@ -1,0 +1,263 @@
+﻿:host { display: block; }
+
+.sales-funnel {
+  padding: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  @media (max-width: 768px) { padding: 16px; }
+}
+
+// ─── Page header ─────────────────────────────────────────────────────────────
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  &__left { display: flex; align-items: center; gap: 12px; }
+
+  &__icon { font-size: 32px; width: 40px; height: 40px; color: #00E5FF; }
+
+  &__title  { margin: 0; font-size: 22px; font-weight: 700; color: #f0f4ff; }
+  &__subtitle { font-size: 13px; color: #94a3b8; }
+}
+
+// ─── Layout ───────────────────────────────────────────────────────────────────
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.grid-row { margin-bottom: 24px; }
+
+// ─── KPI Strip ────────────────────────────────────────────────────────────────
+.kpi-strip {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.kpi-card {
+  flex: 1;
+  min-width: 130px;
+  background: var(--bg-card, #1e2a3a);
+  border: 1px solid var(--border-color, rgba(255,255,255,.08));
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &__label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .06em; }
+  &__value  { font-size: 22px; font-weight: 700; color: #f0f4ff; }
+
+  &--success { border-left: 3px solid #10b981; }
+  &--warn    { border-left: 3px solid #f59e0b; }
+  &--info    { border-left: 3px solid #00E5FF; }
+  &--danger  { border-left: 3px solid #ef4444; }
+}
+
+.danger-text { color: #ef4444; }
+
+// ─── Chart wraps ──────────────────────────────────────────────────────────────
+.chart-wrap {
+  height: 300px;
+  width: 100%;
+
+  &--sm      { height: 180px; }
+  &--pie     { height: 280px; }
+  &--pipeline { height: 320px; }
+  &--ticket  { height: 280px; }
+}
+
+// ─── Funnel visual (custom) ───────────────────────────────────────────────────
+.funnel-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.funnel-stage { display: flex; flex-direction: column; gap: 2px; }
+
+.funnel-bar-wrap {
+  background: rgba(255,255,255,.06);
+  border-radius: 4px;
+  height: 20px;
+  overflow: hidden;
+}
+
+.funnel-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width .4s ease;
+  min-width: 4px;
+}
+
+.funnel-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+
+  &__label { flex: 1; color: #cbd5e1; }
+  &__count { font-weight: 700; color: #f0f4ff; min-width: 40px; text-align: right; }
+  &__pct   { min-width: 36px; text-align: right; font-weight: 600; }
+}
+
+.funnel-arrow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #64748b;
+  padding-left: 8px;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+}
+
+// ─── Tipo label / section ─────────────────────────────────────────────────────
+.tipo-chart-wrap { margin-top: 12px; }
+
+.chart-label {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-bottom: 6px;
+}
+
+// ─── Perdidas KPI ─────────────────────────────────────────────────────────────
+.perdidas-kpi {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #94a3b8;
+
+  &__label { color: #94a3b8; }
+}
+
+// ─── Velocidad legend ─────────────────────────────────────────────────────────
+.velocidad-legend {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+// ─── Tipo stats custom bars ───────────────────────────────────────────────────
+.tipo-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.tipo-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 40px;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+
+  &__name { color: #e2e8f0; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  &__bar-wrap {
+    background: rgba(255,255,255,.06);
+    border-radius: 4px;
+    height: 12px;
+    overflow: hidden;
+  }
+
+  &__bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00E5FF, #8B5CF6);
+    border-radius: 4px;
+    transition: width .4s ease;
+    min-width: 4px;
+  }
+
+  &__count { text-align: right; color: #94a3b8; font-size: 12px; }
+}
+
+// ─── Pipeline summary ─────────────────────────────────────────────────────────
+.pipeline-summary {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.pipeline-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,.04);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.06);
+
+  &__mes        { font-weight: 700; color: #f0f4ff; font-size: 12px; }
+  &__pendiente  { color: #f59e0b; }
+  &__convertido { color: #00E5FF; }
+  &__anual      { font-size: 10px; }
+}
+
+// ─── Chips ────────────────────────────────────────────────────────────────────
+.chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+
+  &--success { background: var(--color-success-bg); color: var(--color-success); }
+  &--info    { background: var(--color-info-bg); color: var(--color-info); }
+  &--warning { background: var(--color-warning-bg); color: var(--color-warning); }
+  &--danger  { background: var(--color-error-bg); color: var(--color-error); }
+}
+
+// ─── Ticket table ─────────────────────────────────────────────────────────────
+.ticket-table {
+  width: 100%;
+  font-size: 13px;
+
+  th { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+  .mat-mdc-row:hover { background: rgba(255,255,255,.03); }
+}
+
+.valor-cell { font-weight: 700; color: #00E5FF; }
+
+// ─── Misc ─────────────────────────────────────────────────────────────────────
+.page-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.page-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px;
+  color: #ef4444;
+  text-align: center;
+}
+
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 120px;
+  color: #64748b;
+  font-size: 14px;
+}

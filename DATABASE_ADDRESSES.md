@@ -1,36 +1,36 @@
-# 🗄️ DIRECCIONES DE BASE DE DATOS - SIIGESE
+﻿# ðŸ—„ï¸ DIRECCIONES DE BASE DE DATOS - OmnIA
 
-# 🗄️ DIRECCIONES DE BASE DE DATOS - SIIGESE
+# ðŸ—„ï¸ DIRECCIONES DE BASE DE DATOS - OmnIA
 
-## 📋 RESUMEN RÁPIDO
+## ðŸ“‹ RESUMEN RÃPIDO
 
-### �️ **SQL SERVER EXPRESS LOCAL** (CONFIGURACIÓN ACTUAL)
+### ï¿½ï¸ **SQL SERVER EXPRESS LOCAL** (CONFIGURACIÃ“N ACTUAL)
 ```
 Servidor: Karo\SQLEXPRESS
 Base de Datos: SinsegAppDb
-Autenticación: Windows Authentication
+AutenticaciÃ³n: Windows Authentication
 Connection String: Server=Karo\SQLEXPRESS;Database=SinsegAppDb;Trusted_Connection=True;Connection Timeout=30;
 ```
 
-### � **DOCKER SQL SERVER** (Alternativa)
+### ï¿½ **DOCKER SQL SERVER** (Alternativa)
 ```
 Servidor: localhost,1433
 Usuario: sa
-Contraseña: DevPassword123!
+ContraseÃ±a: DevPassword123!
 Base de Datos: MiAppDb
 Connection String: Server=localhost,1433;Database=MiAppDb;User Id=sa;Password=DevPassword123!;TrustServerCertificate=true;
 ```
 
-### ☁️ **AZURE SQL DATABASE** (Producción)
+### â˜ï¸ **AZURE SQL DATABASE** (ProducciÃ³n)
 ```
 Servidor: siinadseg-sqlserver-1019.database.windows.net
 Usuario: siinadseg_admin
-Contraseña: P@ssw0rd123!
+ContraseÃ±a: P@ssw0rd123!
 Base de Datos: SiinadsegDB
 Connection String: Server=tcp:siinadseg-sqlserver-1019.database.windows.net,1433;Database=SiinadsegDB;User ID=siinadseg_admin;Password=P@ssw0rd123!;Encrypt=True;TrustServerCertificate=False;
 ```
 
-## 🚀 COMANDOS RÁPIDOS
+## ðŸš€ COMANDOS RÃPIDOS
 
 ### Iniciar Docker Database
 ```bash
@@ -47,11 +47,11 @@ docker-compose up db -d
 2. **Docker**: `localhost,1433` con `sa/DevPassword123!`
 3. **Azure**: `siinadseg-sqlserver-1019.database.windows.net` con `siinadseg_admin/P@ssw0rd123!`
 
-## 📁 ARCHIVOS RELACIONADOS
-- `docker-compose.yml` - Configuración de Docker
-- `EJECUTAR_COMPLETO.sql` - Script de creación de BD
+## ðŸ“ ARCHIVOS RELACIONADOS
+- `docker-compose.yml` - ConfiguraciÃ³n de Docker
+- `EJECUTAR_COMPLETO.sql` - Script de creaciÃ³n de BD
 - `test-database-connections.ps1` - Test de conexiones
-- `README_DATABASE.md` - Documentación completa
+- `README_DATABASE.md` - DocumentaciÃ³n completa
 
 ---
 *Actualizado: 20 de octubre de 2025*

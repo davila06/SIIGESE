@@ -26,7 +26,7 @@
             <mat-icon>schedule</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.reclamosAbiertos }}</h3>
+            <h3 [appCountUp]="stats.reclamosAbiertos || 0">{{ stats.reclamosAbiertos || 0 }}</h3>
             <p>Pendientes</p>
           </div>
         </div>
@@ -40,7 +40,7 @@
             <mat-icon>rate_review</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.reclamosEnProceso }}</h3>
+            <h3 [appCountUp]="stats.reclamosEnProceso || 0">{{ stats.reclamosEnProceso || 0 }}</h3>
             <p>En Revisión</p>
           </div>
         </div>
@@ -54,7 +54,7 @@
             <mat-icon>check_circle</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.reclamosResueltos }}</h3>
+            <h3 [appCountUp]="stats.reclamosResueltos || 0">{{ stats.reclamosResueltos || 0 }}</h3>
             <p>Aprobados</p>
             <span class="stat-amount">${{ stats.totalMontoAprobado | number:'1.2-2' }}</span>
           </div>
@@ -69,7 +69,7 @@
             <mat-icon>task_alt</mat-icon>
           </div>
           <div class="stat-info">
-            <h3>{{ stats.reclamosCerrados }}</h3>
+            <h3 [appCountUp]="stats.reclamosCerrados || 0">{{ stats.reclamosCerrados || 0 }}</h3>
             <p>Resueltos</p>
             <span class="stat-time">Cerrados</span>
           </div>
@@ -99,7 +99,7 @@
       <div class="filters-container">
         <mat-form-field class="search-field" appearance="outline">
           <mat-label>Buscar reclamos</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Buscar por número, cliente o descripción...">
+          <input matInput (input)="applyFilter($event)" placeholder="Buscar por número, cliente o descripción...">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
@@ -107,50 +107,57 @@
           <!-- Filtro por Estado -->
           <div class="filter-group">
             <span class="filter-label">Estado:</span>
-            <mat-chip-set>
-              <mat-chip 
+            <mat-chip-listbox hideSingleSelectionIndicator>
+              <mat-chip-option 
                 [class.selected]="filtroEstado === null"
+                [selected]="filtroEstado === null"
                 (click)="filtrarPorEstado(null)">
                 Todos
-              </mat-chip>
-              <mat-chip 
+              </mat-chip-option>
+              <mat-chip-option 
                 [class.selected]="filtroEstado === EstadoReclamo.Abierto"
+                [selected]="filtroEstado === EstadoReclamo.Abierto"
                 (click)="filtrarPorEstado(EstadoReclamo.Abierto)">
                 Pendientes
-              </mat-chip>
-              <mat-chip 
+              </mat-chip-option>
+              <mat-chip-option 
                 [class.selected]="filtroEstado === EstadoReclamo.EnProceso"
+                [selected]="filtroEstado === EstadoReclamo.EnProceso"
                 (click)="filtrarPorEstado(EstadoReclamo.EnProceso)">
                 En Revisión
-              </mat-chip>
-              <mat-chip 
+              </mat-chip-option>
+              <mat-chip-option 
                 [class.selected]="filtroEstado === EstadoReclamo.Resuelto"
+                [selected]="filtroEstado === EstadoReclamo.Resuelto"
                 (click)="filtrarPorEstado(EstadoReclamo.Resuelto)">
                 Aprobados
-              </mat-chip>
-            </mat-chip-set>
+              </mat-chip-option>
+            </mat-chip-listbox>
           </div>
 
           <!-- Filtro por Tipo -->
           <div class="filter-group">
             <span class="filter-label">Tipo:</span>
-            <mat-chip-set>
-              <mat-chip 
+            <mat-chip-listbox hideSingleSelectionIndicator>
+              <mat-chip-option 
                 [class.selected]="filtroTipo === TipoReclamo.Siniestro"
+                [selected]="filtroTipo === TipoReclamo.Siniestro"
                 (click)="filtrarPorTipo(TipoReclamo.Siniestro)">
                 Siniestros
-              </mat-chip>
-              <mat-chip 
+              </mat-chip-option>
+              <mat-chip-option 
                 [class.selected]="filtroTipo === TipoReclamo.Facturacion"
+                [selected]="filtroTipo === TipoReclamo.Facturacion"
                 (click)="filtrarPorTipo(TipoReclamo.Facturacion)">
                 Facturación
-              </mat-chip>
-              <mat-chip 
+              </mat-chip-option>
+              <mat-chip-option 
                 [class.selected]="filtroTipo === TipoReclamo.Servicio"
+                [selected]="filtroTipo === TipoReclamo.Servicio"
                 (click)="filtrarPorTipo(TipoReclamo.Servicio)">
                 Quejas
-              </mat-chip>
-            </mat-chip-set>
+              </mat-chip-option>
+            </mat-chip-listbox>
           </div>
 
           <!-- Botón limpiar filtros -->

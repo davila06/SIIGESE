@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Interfaces;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,16 @@ namespace WebApi.Controllers
             {
                 var sessions = await _chatService.GetSessionsAsync(GetUserId());
                 return Ok(sessions);
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogWarning(ex, "SQL error fetching chat sessions; returning empty result to keep UI responsive");
+                return Ok(Array.Empty<ChatSessionDto>());
+            }
+            catch (TimeoutException ex)
+            {
+                _logger.LogWarning(ex, "Timeout fetching chat sessions; returning empty result to keep UI responsive");
+                return Ok(Array.Empty<ChatSessionDto>());
             }
             catch (Exception ex)
             {
@@ -200,6 +211,16 @@ namespace WebApi.Controllers
             {
                 var stats = await _chatService.GetStatsAsync(GetUserId());
                 return Ok(stats);
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogWarning(ex, "SQL error fetching chat stats; returning default stats");
+                return Ok(new ChatStatsDto());
+            }
+            catch (TimeoutException ex)
+            {
+                _logger.LogWarning(ex, "Timeout fetching chat stats; returning default stats");
+                return Ok(new ChatStatsDto());
             }
             catch (Exception ex)
             {

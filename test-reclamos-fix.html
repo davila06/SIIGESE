@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Crear Reclamo - SIIGESE</title>
+    <title>Test Crear Reclamo - OmnIA</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -112,23 +112,23 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧪 TEST CREAR RECLAMO - SIIGESE</h1>
-            <h2>📋 Verificación de Funcionalidad de Reclamos</h2>
-            <p>Prueba del Mock API Interceptor para creación de reclamos</p>
+            <h1>ðŸ§ª TEST CREAR RECLAMO - OmnIA</h1>
+            <h2>ðŸ“‹ VerificaciÃ³n de Funcionalidad de Reclamos</h2>
+            <p>Prueba del Mock API Interceptor para creaciÃ³n de reclamos</p>
         </div>
 
         <div class="test-section">
-            <h3>📋 1. Formulario de Crear Reclamo</h3>
+            <h3>ðŸ“‹ 1. Formulario de Crear Reclamo</h3>
             <p>Complete el formulario para crear un nuevo reclamo de prueba</p>
             
             <form id="reclamoForm">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="polizaId">ID de Póliza *</label>
+                        <label for="polizaId">ID de PÃ³liza *</label>
                         <input type="number" id="polizaId" value="1" required>
                     </div>
                     <div class="form-group">
-                        <label for="numeroPoliza">Número de Póliza *</label>
+                        <label for="numeroPoliza">NÃºmero de PÃ³liza *</label>
                         <input type="text" id="numeroPoliza" value="POL-VEH-2024-001" required>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
                     </div>
                     <div class="form-group">
                         <label for="clienteApellido">Apellido del Cliente *</label>
-                        <input type="text" id="clienteApellido" value="Pérez García" required>
+                        <input type="text" id="clienteApellido" value="PÃ©rez GarcÃ­a" required>
                     </div>
                 </div>
 
@@ -151,7 +151,7 @@
                             <option value="">Seleccione un tipo</option>
                             <option value="0">Siniestro</option>
                             <option value="1">Servicio</option>
-                            <option value="2">Facturación</option>
+                            <option value="2">FacturaciÃ³n</option>
                             <option value="3">Cobertura</option>
                             <option value="4">Proceso</option>
                             <option value="5">Otro</option>
@@ -164,13 +164,13 @@
                             <option value="0">Baja</option>
                             <option value="1" selected>Media</option>
                             <option value="2">Alta</option>
-                            <option value="3">Crítica</option>
+                            <option value="3">CrÃ­tica</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="descripcion">Descripción del Reclamo *</label>
+                    <label for="descripcion">DescripciÃ³n del Reclamo *</label>
                     <textarea id="descripcion" placeholder="Describa detalladamente el motivo del reclamo..." required></textarea>
                 </div>
 
@@ -183,7 +183,7 @@
                         <label for="moneda">Moneda *</label>
                         <select id="moneda" required>
                             <option value="CRC">Colones (CRC)</option>
-                            <option value="USD">Dólares (USD)</option>
+                            <option value="USD">DÃ³lares (USD)</option>
                             <option value="EUR">Euros (EUR)</option>
                         </select>
                     </div>
@@ -191,34 +191,34 @@
 
                 <div class="form-group">
                     <label for="observaciones">Observaciones Adicionales</label>
-                    <textarea id="observaciones" placeholder="Información adicional relevante..."></textarea>
+                    <textarea id="observaciones" placeholder="InformaciÃ³n adicional relevante..."></textarea>
                 </div>
 
-                <button type="submit">📋 Crear Reclamo</button>
-                <button type="button" onclick="clearForm()" class="secondary">🔄 Limpiar Formulario</button>
+                <button type="submit">ðŸ“‹ Crear Reclamo</button>
+                <button type="button" onclick="clearForm()" class="secondary">ðŸ”„ Limpiar Formulario</button>
             </form>
 
             <div id="createResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>📊 2. Test de Lista de Reclamos</h3>
+            <h3>ðŸ“Š 2. Test de Lista de Reclamos</h3>
             <p>Verificar que se cargue correctamente la lista de reclamos existentes</p>
-            <button onclick="testGetReclamos()" class="secondary">📋 Obtener Lista de Reclamos</button>
+            <button onclick="testGetReclamos()" class="secondary">ðŸ“‹ Obtener Lista de Reclamos</button>
             <div id="reclamosResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>📈 3. Test de Estadísticas de Reclamos</h3>
-            <p>Verificar que se calculen correctamente las estadísticas</p>
-            <button onclick="testReclamosStats()" class="secondary">📊 Obtener Estadísticas</button>
+            <h3>ðŸ“ˆ 3. Test de EstadÃ­sticas de Reclamos</h3>
+            <p>Verificar que se calculen correctamente las estadÃ­sticas</p>
+            <button onclick="testReclamosStats()" class="secondary">ðŸ“Š Obtener EstadÃ­sticas</button>
             <div id="statsResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>🌐 4. Navegación al Módulo</h3>
-            <p>Ir directamente al módulo de reclamos en la aplicación</p>
-            <button onclick="navigateToReclamos()" class="secondary">🚀 Ir al Módulo de Reclamos</button>
+            <h3>ðŸŒ 4. NavegaciÃ³n al MÃ³dulo</h3>
+            <p>Ir directamente al mÃ³dulo de reclamos en la aplicaciÃ³n</p>
+            <button onclick="navigateToReclamos()" class="secondary">ðŸš€ Ir al MÃ³dulo de Reclamos</button>
             <div id="navigationResult" class="result"></div>
         </div>
     </div>
@@ -232,14 +232,14 @@
             element.className = `result ${type}`;
         }
 
-        // Manejar envío del formulario
+        // Manejar envÃ­o del formulario
         document.getElementById('reclamoForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             await createReclamo();
         });
 
         async function createReclamo() {
-            showResult('createResult', '⏳ Creando reclamo...', 'info');
+            showResult('createResult', 'â³ Creando reclamo...', 'info');
             
             const formData = {
                 polizaId: parseInt(document.getElementById('polizaId').value),
@@ -254,9 +254,9 @@
                 observaciones: document.getElementById('observaciones').value || null
             };
 
-            // Validación básica
+            // ValidaciÃ³n bÃ¡sica
             if (!formData.descripcion || formData.descripcion.length < 10) {
-                showResult('createResult', '❌ Error: La descripción debe tener al menos 10 caracteres', 'error');
+                showResult('createResult', 'âŒ Error: La descripciÃ³n debe tener al menos 10 caracteres', 'error');
                 return;
             }
 
@@ -272,39 +272,39 @@
 
                 if (response.ok) {
                     const createdReclamo = await response.json();
-                    const message = `✅ Reclamo creado exitosamente:
+                    const message = `âœ… Reclamo creado exitosamente:
 
-📋 NUEVO RECLAMO:
-• ID: ${createdReclamo.id}
-• Número: ${createdReclamo.numeroReclamo}
-• Cliente: ${createdReclamo.clienteNombre} ${createdReclamo.clienteApellido}
-• Póliza: ${createdReclamo.numeroPoliza}
-• Tipo: ${getTipoReclamoLabel(createdReclamo.tipoReclamo)}
-• Estado: ${getEstadoReclamoLabel(createdReclamo.estado)}
-• Prioridad: ${getPrioridadLabel(createdReclamo.prioridad)}
-• Monto: ${createdReclamo.montoReclamado ? formatCurrency(createdReclamo.montoReclamado, createdReclamo.moneda) : 'N/A'}
-• Fecha Límite: ${new Date(createdReclamo.fechaLimiteRespuesta).toLocaleDateString()}
+ðŸ“‹ NUEVO RECLAMO:
+â€¢ ID: ${createdReclamo.id}
+â€¢ NÃºmero: ${createdReclamo.numeroReclamo}
+â€¢ Cliente: ${createdReclamo.clienteNombre} ${createdReclamo.clienteApellido}
+â€¢ PÃ³liza: ${createdReclamo.numeroPoliza}
+â€¢ Tipo: ${getTipoReclamoLabel(createdReclamo.tipoReclamo)}
+â€¢ Estado: ${getEstadoReclamoLabel(createdReclamo.estado)}
+â€¢ Prioridad: ${getPrioridadLabel(createdReclamo.prioridad)}
+â€¢ Monto: ${createdReclamo.montoReclamado ? formatCurrency(createdReclamo.montoReclamado, createdReclamo.moneda) : 'N/A'}
+â€¢ Fecha LÃ­mite: ${new Date(createdReclamo.fechaLimiteRespuesta).toLocaleDateString()}
 
-📝 DESCRIPCIÓN:
+ðŸ“ DESCRIPCIÃ“N:
 ${createdReclamo.descripcion}
 
-🔍 Datos completos: ${JSON.stringify(createdReclamo, null, 2)}`;
+ðŸ” Datos completos: ${JSON.stringify(createdReclamo, null, 2)}`;
                     showResult('createResult', message, 'success');
                     
-                    // Limpiar formulario después de crear exitosamente
+                    // Limpiar formulario despuÃ©s de crear exitosamente
                     setTimeout(() => {
                         clearForm();
                     }, 2000);
                 } else {
-                    showResult('createResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('createResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('createResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('createResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         async function testGetReclamos() {
-            showResult('reclamosResult', '⏳ Cargando lista de reclamos...', 'info');
+            showResult('reclamosResult', 'â³ Cargando lista de reclamos...', 'info');
             
             try {
                 const response = await fetch(API_URL, {
@@ -317,7 +317,7 @@ ${createdReclamo.descripcion}
 
                 if (response.ok) {
                     const reclamos = await response.json();
-                    let message = `✅ Lista de reclamos cargada exitosamente (${reclamos.length} registros):
+                    let message = `âœ… Lista de reclamos cargada exitosamente (${reclamos.length} registros):
 
 `;
                     
@@ -326,28 +326,28 @@ ${createdReclamo.descripcion}
                         const estado = getEstadoReclamoLabel(reclamo.estado);
                         const prioridad = getPrioridadLabel(reclamo.prioridad);
                         message += `${index + 1}. ${reclamo.numeroReclamo}
-   • Cliente: ${reclamo.clienteNombre} ${reclamo.clienteApellido}
-   • Póliza: ${reclamo.numeroPoliza}
-   • Tipo: ${tipo}
-   • Estado: ${estado}
-   • Prioridad: ${prioridad}
-   • Monto: ${reclamo.montoReclamado ? formatCurrency(reclamo.montoReclamado, reclamo.moneda) : 'N/A'}
-   • Fecha: ${new Date(reclamo.fechaReclamo).toLocaleDateString()}
+   â€¢ Cliente: ${reclamo.clienteNombre} ${reclamo.clienteApellido}
+   â€¢ PÃ³liza: ${reclamo.numeroPoliza}
+   â€¢ Tipo: ${tipo}
+   â€¢ Estado: ${estado}
+   â€¢ Prioridad: ${prioridad}
+   â€¢ Monto: ${reclamo.montoReclamado ? formatCurrency(reclamo.montoReclamado, reclamo.moneda) : 'N/A'}
+   â€¢ Fecha: ${new Date(reclamo.fechaReclamo).toLocaleDateString()}
    
 `;
                     });
 
                     showResult('reclamosResult', message, 'success');
                 } else {
-                    showResult('reclamosResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('reclamosResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('reclamosResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('reclamosResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         async function testReclamosStats() {
-            showResult('statsResult', '⏳ Cargando estadísticas de reclamos...', 'info');
+            showResult('statsResult', 'â³ Cargando estadÃ­sticas de reclamos...', 'info');
             
             try {
                 const response = await fetch(`${API_URL}/stats`, {
@@ -360,40 +360,40 @@ ${createdReclamo.descripcion}
 
                 if (response.ok) {
                     const stats = await response.json();
-                    const message = `✅ Estadísticas de reclamos:
+                    const message = `âœ… EstadÃ­sticas de reclamos:
 
-📊 RESUMEN GENERAL:
-• Total de Reclamos: ${stats.totalReclamos}
-• Reclamos Abiertos: ${stats.reclamosAbiertos}
-• Reclamos En Proceso: ${stats.reclamosEnProceso}
-• Reclamos Resueltos: ${stats.reclamosResueltos}
-• Reclamos Cerrados: ${stats.reclamosCerrados}
-• Reclamos Rechazados: ${stats.reclamosRechazados}
+ðŸ“Š RESUMEN GENERAL:
+â€¢ Total de Reclamos: ${stats.totalReclamos}
+â€¢ Reclamos Abiertos: ${stats.reclamosAbiertos}
+â€¢ Reclamos En Proceso: ${stats.reclamosEnProceso}
+â€¢ Reclamos Resueltos: ${stats.reclamosResueltos}
+â€¢ Reclamos Cerrados: ${stats.reclamosCerrados}
+â€¢ Reclamos Rechazados: ${stats.reclamosRechazados}
 
-💰 MONTOS:
-• Total Reclamado: ${formatCurrency(stats.totalMontoReclamado, stats.monedaPrincipal)}
-• Total Aprobado: ${formatCurrency(stats.totalMontoAprobado, stats.monedaPrincipal)}
+ðŸ’° MONTOS:
+â€¢ Total Reclamado: ${formatCurrency(stats.totalMontoReclamado, stats.monedaPrincipal)}
+â€¢ Total Aprobado: ${formatCurrency(stats.totalMontoAprobado, stats.monedaPrincipal)}
 
-⚠️ PRIORIDADES:
-• Prioridad Alta: ${stats.reclamosPrioridadAlta}
-• Prioridad Crítica: ${stats.reclamosPrioridadCritica}
-• Reclamos Vencidos: ${stats.reclamosVencidos}
+âš ï¸ PRIORIDADES:
+â€¢ Prioridad Alta: ${stats.reclamosPrioridadAlta}
+â€¢ Prioridad CrÃ­tica: ${stats.reclamosPrioridadCritica}
+â€¢ Reclamos Vencidos: ${stats.reclamosVencidos}
 
-🔍 Datos completos: ${JSON.stringify(stats, null, 2)}`;
+ðŸ” Datos completos: ${JSON.stringify(stats, null, 2)}`;
                     showResult('statsResult', message, 'success');
                 } else {
-                    showResult('statsResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('statsResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('statsResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('statsResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         function navigateToReclamos() {
-            showResult('navigationResult', '🌐 Redirigiendo al módulo de reclamos...', 'info');
+            showResult('navigationResult', 'ðŸŒ Redirigiendo al mÃ³dulo de reclamos...', 'info');
             setTimeout(() => {
                 window.open('http://localhost:4200/reclamos', '_blank');
-                showResult('navigationResult', '✅ Navegación iniciada - Se abrió nueva pestaña con el módulo de reclamos', 'success');
+                showResult('navigationResult', 'âœ… NavegaciÃ³n iniciada - Se abriÃ³ nueva pestaÃ±a con el mÃ³dulo de reclamos', 'success');
             }, 1000);
         }
 
@@ -402,7 +402,7 @@ ${createdReclamo.descripcion}
             document.getElementById('polizaId').value = '1';
             document.getElementById('numeroPoliza').value = 'POL-VEH-2024-001';
             document.getElementById('clienteNombre').value = 'Juan Carlos';
-            document.getElementById('clienteApellido').value = 'Pérez García';
+            document.getElementById('clienteApellido').value = 'PÃ©rez GarcÃ­a';
             document.getElementById('prioridad').value = '1';
             document.getElementById('moneda').value = 'CRC';
         }
@@ -412,7 +412,7 @@ ${createdReclamo.descripcion}
             const tipos = {
                 0: 'Siniestro',
                 1: 'Servicio', 
-                2: 'Facturación',
+                2: 'FacturaciÃ³n',
                 3: 'Cobertura',
                 4: 'Proceso',
                 5: 'Otro'
@@ -437,20 +437,20 @@ ${createdReclamo.descripcion}
                 0: 'Baja',
                 1: 'Media',
                 2: 'Alta',
-                3: 'Crítica'
+                3: 'CrÃ­tica'
             };
             return prioridades[prioridad] || 'Desconocido';
         }
 
         function formatCurrency(amount, currency) {
-            const symbol = currency === 'USD' ? '$' : currency === 'EUR' ? '€' : '₡';
+            const symbol = currency === 'USD' ? '$' : currency === 'EUR' ? 'â‚¬' : 'â‚¡';
             return `${symbol}${amount?.toLocaleString()}`;
         }
 
-        // Auto-ejecutar test básico al cargar la página
+        // Auto-ejecutar test bÃ¡sico al cargar la pÃ¡gina
         window.onload = function() {
             setTimeout(() => {
-                console.log('🚀 Iniciando test automático de reclamos...');
+                console.log('ðŸš€ Iniciando test automÃ¡tico de reclamos...');
                 testReclamosStats();
             }, 1000);
         };

@@ -15,20 +15,25 @@
       <div class="sidebar-header">
         <div class="brand-container">
           <div class="brand-icon">
-            <mat-icon>security</mat-icon>
+            <div class="brand-mark" aria-hidden="true">
+              <span class="brand-mark-grid"></span>
+              <span class="brand-mark-stem"></span>
+              <span class="brand-mark-bar"></span>
+              <span class="brand-mark-beam"></span>
+            </div>
           </div>
           <div class="brand-text" [class.collapsed]="isCollapsed && !isMobile">
-            <h3>SIIGESE</h3>
-            <p>Sistema Integral de Gestión de Seguros</p>
+            <h3>IADS</h3>
+            <p>IAsistente Digital de Servicios</p>
           </div>
         </div>
         
-        <!-- Toggle button único - funciona tanto expandido como colapsado -->
+        <!-- Toggle button unico: funciona tanto expandido como colapsado -->
         <button mat-icon-button 
                 (click)="toggleSidebar()" 
                 class="sidebar-toggle"
                 *ngIf="!isMobile"
-                [matTooltip]="isCollapsed ? 'Expandir menú' : 'Colapsar menú'"
+                [matTooltip]="isCollapsed ? 'Expandir men&uacute;' : 'Colapsar men&uacute;'"
                 matTooltipPosition="right">
           <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
         </button>
@@ -37,122 +42,163 @@
       <!-- Navigation Menu -->
       <nav class="sidebar-nav">
 
-        <!-- ── GESTIÓN ── -->
-        <div class="nav-section-label" [class.collapsed-label]="isCollapsed && !isMobile">Gestión</div>
+        <section class="nav-quick-access" *ngIf="quickAccessItems.length > 0">
+          <div class="nav-section-label" *ngIf="!(isCollapsed && !isMobile)">
+            Accesos r&aacute;pidos
+          </div>
 
-        <a mat-button 
-           class="nav-item" 
-           routerLink="/polizas" 
-           routerLinkActive="active"
-           (click)="onNavItemClick()">
-          <mat-icon>business</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Pólizas</span>
-          <div class="nav-indicator"></div>
-        </a>
-        
-        <a mat-button 
-           class="nav-item" 
-           routerLink="/cobros" 
-           routerLinkActive="active"
-           (click)="onNavItemClick()">
-          <mat-icon>payment</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Cobros</span>
-          <div class="nav-indicator"></div>
-        </a>
-        
-        <a mat-button 
-           class="nav-item" 
-           routerLink="/reclamos" 
-           routerLinkActive="active"
-           (click)="onNavItemClick()">
-          <mat-icon>report_problem</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Reclamos</span>
-          <div class="nav-indicator"></div>
-        </a>
-                
-        <a mat-button 
-           class="nav-item" 
-           routerLink="/cotizaciones" 
-           routerLinkActive="active"
-           (click)="onNavItemClick()">
-          <mat-icon>request_quote</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Cotizaciones</span>
-          <div class="nav-indicator"></div>
-        </a>
-        
-        <a mat-button 
-           class="nav-item" 
-           routerLink="/emails" 
-           routerLinkActive="active"
-           (click)="onNavItemClick()">
-          <mat-icon>email</mat-icon>
-          <span [class.collapsed]="isCollapsed && !isMobile">Notificaciones</span>
-          <div class="nav-indicator"></div>
-        </a>
-
-        <!-- ── ADMINISTRACIÓN (admin only) ── -->
-        <ng-container *ngIf="isAdmin()">
-          <div class="nav-section-label" [class.collapsed-label]="isCollapsed && !isMobile">Administración</div>
-
-          <a mat-button 
-             class="nav-item" 
-             routerLink="/usuarios" 
+          <a mat-button
+             class="nav-item nav-item-favorite"
+             *ngFor="let item of quickAccessItems; trackBy: trackByQuickAccessRoute"
+             [routerLink]="item.route"
              routerLinkActive="active"
-             (click)="onNavItemClick()">
-            <mat-icon>people</mat-icon>
-            <span [class.collapsed]="isCollapsed && !isMobile">Usuarios</span>
+             [routerLinkActiveOptions]="{ exact: item.route === '/analytics' }"
+             (click)="onValueNavClick(item.route)">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span [class.collapsed]="isCollapsed && !isMobile">{{ item.label }}</span>
+            <button type="button"
+                    class="nav-pin-btn"
+                    *ngIf="!(isCollapsed && !isMobile)"
+                    [class.pinned]="isPinnedRoute(item.route)"
+                    [attr.aria-label]="isPinnedRoute(item.route) ? 'Desfijar acceso rápido' : 'Fijar acceso rápido'"
+                    (click)="togglePinnedRoute(item.route, $event)">
+              <mat-icon>{{ isPinnedRoute(item.route) ? 'keep_off' : 'push_pin' }}</mat-icon>
+            </button>
             <div class="nav-indicator"></div>
           </a>
+        </section>
 
-          <a mat-button 
-             class="nav-item" 
-             routerLink="/configuracion" 
-             routerLinkActive="active"
-             (click)="onNavItemClick()">
-            <mat-icon>settings</mat-icon>
-            <span [class.collapsed]="isCollapsed && !isMobile">Configuración</span>
-            <div class="nav-indicator"></div>
-          </a>
-        </ng-container>
+        <section class="nav-group">
+          <button class="nav-group-toggle"
+                  type="button"
+                  *ngIf="!(isCollapsed && !isMobile)"
+                  (click)="toggleNavGroup('gestion')"
+                  [attr.aria-expanded]="navGroups.gestion">
+            <span class="nav-section-label">Gesti&oacute;n</span>
+            <mat-icon [class.expanded]="navGroups.gestion">expand_more</mat-icon>
+          </button>
 
-        <!-- ── HERRAMIENTAS ── -->
-        <ng-container *ngIf="canUploadExcel()">
-          <div class="nav-section-label" [class.collapsed-label]="isCollapsed && !isMobile">Herramientas</div>
+          <div class="nav-group-items" [class.group-collapsed]="!navGroups.gestion && !(isCollapsed && !isMobile)">
+            <a mat-button
+               class="nav-item"
+               *ngFor="let item of gestionMenuItems; trackBy: trackByMenuRoute"
+               [routerLink]="item.route"
+               routerLinkActive="active"
+               (click)="onValueNavClick(item.route)">
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span [class.collapsed]="isCollapsed && !isMobile">{{ item.label }}</span>
+              <button type="button"
+                      class="nav-pin-btn"
+                      *ngIf="!(isCollapsed && !isMobile)"
+                      [class.pinned]="isPinnedRoute(item.route)"
+                      [attr.aria-label]="isPinnedRoute(item.route) ? 'Desfijar acceso rápido' : 'Fijar acceso rápido'"
+                      (click)="togglePinnedRoute(item.route, $event)">
+                <mat-icon>{{ isPinnedRoute(item.route) ? 'keep_off' : 'push_pin' }}</mat-icon>
+              </button>
+              <div class="nav-indicator"></div>
+            </a>
+          </div>
+        </section>
 
-          <a mat-button 
-             class="nav-item" 
-             routerLink="/polizas/upload" 
-             routerLinkActive="active"
-             (click)="onNavItemClick()">
-            <mat-icon>cloud_upload</mat-icon>
-            <span [class.collapsed]="isCollapsed && !isMobile">Subir Pólizas Excel</span>
-            <div class="nav-indicator"></div>
-          </a>
-        </ng-container>
+        <section class="nav-group">
+          <button class="nav-group-toggle"
+                  type="button"
+                  *ngIf="!(isCollapsed && !isMobile)"
+                  (click)="toggleNavGroup('analitica')"
+                  [attr.aria-expanded]="navGroups.analitica">
+            <span class="nav-section-label">Anal&iacute;tica</span>
+            <mat-icon [class.expanded]="navGroups.analitica">expand_more</mat-icon>
+          </button>
+
+          <div class="nav-group-items" [class.group-collapsed]="!navGroups.analitica && !(isCollapsed && !isMobile)">
+            <div class="nav-subsection-label" *ngIf="!(isCollapsed && !isMobile)">Core</div>
+            <a mat-button
+               class="nav-item"
+               *ngFor="let item of analyticsCoreItems; trackBy: trackByAnalyticsRoute"
+               [routerLink]="item.route"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{ exact: item.route === '/analytics' }"
+               (click)="onAnalyticsNavClick(item.route)">
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span [class.collapsed]="isCollapsed && !isMobile">{{ item.label }}</span>
+              <button type="button"
+                      class="nav-pin-btn"
+                      *ngIf="!(isCollapsed && !isMobile)"
+                      [class.pinned]="isPinnedRoute(item.route)"
+                      [attr.aria-label]="isPinnedRoute(item.route) ? 'Desfijar acceso rápido' : 'Fijar acceso rápido'"
+                      (click)="togglePinnedRoute(item.route, $event)">
+                <mat-icon>{{ isPinnedRoute(item.route) ? 'keep_off' : 'push_pin' }}</mat-icon>
+              </button>
+              <div class="nav-indicator"></div>
+            </a>
+
+            <div class="analytics-extra" *ngIf="analyticsExpanded && !(isCollapsed && !isMobile)">
+              <div class="nav-subsection-label">Explorar</div>
+              <a mat-button
+                 class="nav-item"
+                 *ngFor="let item of analyticsExploreItems; trackBy: trackByAnalyticsRoute"
+                 [routerLink]="item.route"
+                 routerLinkActive="active"
+                 (click)="onAnalyticsNavClick(item.route)">
+                <mat-icon>{{ item.icon }}</mat-icon>
+                <span [class.collapsed]="isCollapsed && !isMobile">{{ item.label }}</span>
+                <button type="button"
+                        class="nav-pin-btn"
+                        *ngIf="!(isCollapsed && !isMobile)"
+                        [class.pinned]="isPinnedRoute(item.route)"
+                        [attr.aria-label]="isPinnedRoute(item.route) ? 'Desfijar acceso rápido' : 'Fijar acceso rápido'"
+                        (click)="togglePinnedRoute(item.route, $event)">
+                  <mat-icon>{{ isPinnedRoute(item.route) ? 'keep_off' : 'push_pin' }}</mat-icon>
+                </button>
+                <div class="nav-indicator"></div>
+              </a>
+            </div>
+
+            <button class="nav-show-more"
+                    type="button"
+                    *ngIf="!(isCollapsed && !isMobile)"
+                    (click)="toggleAnalyticsExpanded()"
+                    [attr.aria-expanded]="analyticsExpanded">
+              <span>{{ analyticsExpanded ? 'Ver menos' : 'Ver m&aacute;s' }}</span>
+              <mat-icon [class.expanded]="analyticsExpanded">expand_more</mat-icon>
+            </button>
+          </div>
+        </section>
+
+        <section class="nav-group">
+          <button class="nav-group-toggle"
+                  type="button"
+                  *ngIf="!(isCollapsed && !isMobile)"
+                  (click)="toggleNavGroup('sistema')"
+                  [attr.aria-expanded]="navGroups.sistema">
+            <span class="nav-section-label">Sistema</span>
+            <mat-icon [class.expanded]="navGroups.sistema">expand_more</mat-icon>
+          </button>
+
+          <div class="nav-group-items" [class.group-collapsed]="!navGroups.sistema && !(isCollapsed && !isMobile)">
+            <a mat-button
+               class="nav-item"
+               *ngFor="let item of sistemaMenuItems; trackBy: trackByMenuRoute"
+               [routerLink]="item.route"
+               routerLinkActive="active"
+               (click)="onValueNavClick(item.route)">
+              <mat-icon>{{ item.icon }}</mat-icon>
+              <span [class.collapsed]="isCollapsed && !isMobile">{{ item.label }}</span>
+              <button type="button"
+                      class="nav-pin-btn"
+                      *ngIf="!(isCollapsed && !isMobile)"
+                      [class.pinned]="isPinnedRoute(item.route)"
+                      [attr.aria-label]="isPinnedRoute(item.route) ? 'Desfijar acceso rápido' : 'Fijar acceso rápido'"
+                      (click)="togglePinnedRoute(item.route, $event)">
+                <mat-icon>{{ isPinnedRoute(item.route) ? 'keep_off' : 'push_pin' }}</mat-icon>
+              </button>
+              <div class="nav-indicator"></div>
+            </a>
+          </div>
+        </section>
 
       </nav>
 
-      <!-- Sidebar Footer / User Profile -->
-      <div class="sidebar-footer">
-        <div class="user-profile" [class.collapsed]="isCollapsed && !isMobile">
-          <div class="user-avatar">
-            <span>{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</span>
-          </div>
-          <div class="user-details" [class.collapsed]="isCollapsed && !isMobile">
-            <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span>
-            <span class="user-role">{{ user.roles[0]?.name || 'Usuario' }}</span>
-            <span class="current-module">{{ getCurrentModule() }}</span>
-          </div>
-        </div>
-        
-        <button mat-icon-button 
-                (click)="logout()" 
-                class="logout-btn"
-                matTooltip="Cerrar Sesión"
-                matTooltipPosition="right">
-          <mat-icon>logout</mat-icon>
-        </button>
-      </div>
     </mat-sidenav>
 
     <!-- Main Content -->
@@ -163,14 +209,78 @@
           <mat-icon>menu</mat-icon>
         </button>
         <div class="mobile-title">
-          <span class="app-name">SIIGESE</span>
+          <span class="app-name">IADS IAsistente Digital de Servicios</span>
           <span class="module-name">{{ getCurrentModule() }}</span>
         </div>
         <span class="toolbar-spacer"></span>
-        <div class="mobile-user">
-          <span>{{ user.firstName }}</span>
-        </div>
+        <button class="mobile-account-btn"
+                type="button"
+                [matMenuTriggerFor]="profileMenu"
+                aria-label="Mi perfil">
+          <div class="user-avatar mobile-avatar">
+            <span aria-hidden="true">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</span>
+          </div>
+        </button>
       </mat-toolbar>
+
+      <div class="content-shell-header" *ngIf="!isMobile">
+        <div class="content-shell-header__text">
+          <h1>{{ getCurrentModule() }}</h1>
+          <p>Panel operativo</p>
+        </div>
+
+        <div class="content-shell-header__actions">
+          <button class="header-account-btn"
+                  type="button"
+                  [matMenuTriggerFor]="profileMenu"
+                  aria-label="Mi perfil">
+            <div class="user-avatar header-avatar">
+              <span aria-hidden="true">{{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}</span>
+            </div>
+            <div class="header-account-meta">
+              <span class="header-account-label">Mi perfil</span>
+              <span class="header-account-name">{{ user.firstName }} {{ user.lastName }}</span>
+              <span class="header-account-role">{{ user.roles[0]?.name || 'Usuario' }}</span>
+            </div>
+            <mat-icon class="header-account-chevron" aria-hidden="true">expand_more</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <mat-menu #profileMenu="matMenu" class="profile-menu-panel" panelClass="profile-menu-panel" yPosition="below" xPosition="before">
+        <div class="pm-header">
+          <div class="pm-avatar" aria-hidden="true">
+            {{ user.firstName.charAt(0) }}{{ user.lastName.charAt(0) }}
+          </div>
+          <div class="pm-info">
+            <span class="pm-name">{{ user.firstName }} {{ user.lastName }}</span>
+            <span class="pm-email">{{ user.email }}</span>
+            <span class="pm-role">{{ user.roles[0]?.name || 'Usuario' }}</span>
+            <span class="pm-last-login" *ngIf="user.lastLoginAt">
+              &Uacute;ltimo acceso: {{ user.lastLoginAt | date:'dd/MM/yyyy HH:mm' }}
+            </span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item class="pm-primary-item" (click)="navigateToChangePassword()">
+          <mat-icon aria-hidden="true">lock_reset</mat-icon>
+          <span>Cambiar contrase&ntilde;a</span>
+        </button>
+
+        <button mat-menu-item class="pm-primary-item" (click)="themeService.toggle()">
+          <mat-icon aria-hidden="true">{{ themeService.isDark ? 'light_mode' : 'dark_mode' }}</mat-icon>
+          <span>{{ themeService.isDark ? 'Modo claro' : 'Modo oscuro' }}</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item class="pm-logout-item" (click)="logout()">
+          <mat-icon aria-hidden="true">logout</mat-icon>
+          <span>Cerrar sesi&oacute;n</span>
+        </button>
+      </mat-menu>
 
       <!-- Page Content -->
       <div class="page-content" [@routeAnimations]="currentRoute">
@@ -179,9 +289,22 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 
-  <!-- ── AI Chat Dialog ─────────────────────────────────────────────── -->
-  <div class="ai-dialog-backdrop" *ngIf="isChatOpen" (click)="toggleChat()"></div>
-  <div class="ai-dialog" *ngIf="isChatOpen" [@aiDialogAnim] role="dialog" aria-label="Asistente IA">
+  <!-- AI Chat Dialog -->
+    <button class="ai-dialog-backdrop"
+      *ngIf="isChatOpen"
+      type="button"
+      (click)="closeChat()"
+      aria-label="Cerrar asistente IA"></button>
+    <dialog class="ai-dialog"
+      *ngIf="isChatOpen"
+      open
+      [@aiDialogAnim]
+      [style.right.px]="chatFabRight"
+      [style.top.px]="chatDialogTop"
+      [style.bottom.px]="chatDialogBottom"
+      aria-label="Asistente IA"
+      aria-modal="true"
+      (cancel)="handleDialogCancel($event)">
 
     <!-- Header -->
     <div class="ai-dialog-header">
@@ -191,13 +314,13 @@
         <mat-icon>smart_toy</mat-icon>
       </div>
       <div class="ai-dialog-title">
-        <span class="ai-dialog-title-main">SIIGESE Assistant</span>
+        <span class="ai-dialog-title-main">IADS IAsistente Digital de Servicios</span>
         <span class="ai-dialog-title-sub">
           <span class="ai-status-dot"></span>Disponible
         </span>
       </div>
       <div class="ai-dialog-actions">
-        <button class="ai-dialog-btn-close" (click)="toggleChat()" aria-label="Cerrar">
+        <button class="ai-dialog-btn-close" type="button" (click)="closeChat()" aria-label="Cerrar" autofocus>
           <mat-icon>close</mat-icon>
         </button>
       </div>
@@ -207,17 +330,37 @@
     <div class="ai-dialog-body">
       <app-chat></app-chat>
     </div>
-  </div>
+  </dialog>
 
-  <!-- ── Floating Chat Button ─────────────────────────────────────────── -->
-  <button class="chat-fab-custom" (click)="toggleChat()" [class.is-open]="isChatOpen" aria-label="Asistente IA">
-    <span class="chat-fab-ring"></span>
-    <span class="chat-fab-ring chat-fab-ring--delay"></span>
-    <span class="chat-fab-inner">
-      <mat-icon class="chat-fab-icon chat-fab-icon--robot" [class.hidden]="isChatOpen">smart_toy</mat-icon>
-      <mat-icon class="chat-fab-icon chat-fab-icon--close" [class.hidden]="!isChatOpen">keyboard_arrow_down</mat-icon>
+  <!-- ── Floating Chat Button — Aurora Orb + Orbiting Energy ──────────── -->
+    <button class="chat-fab-custom"
+      #chatFabButton
+      [class.is-open]="isChatOpen"
+      [class.is-dragging]="isDraggingChatFab"
+      [style.right.px]="chatFabRight"
+      [style.bottom.px]="chatFabBottom"
+      (pointerdown)="onChatFabPointerDown($event)"
+      (click)="onChatFabClick($event)"
+      aria-label="Asistente IA">
+    <!-- Aurora rotating gradient layer -->
+    <span class="fab-aurora"></span>
+    <!-- Orbiting energy dots -->
+    <span class="fab-orbit fab-orbit--1"><span class="fab-orb"></span></span>
+    <span class="fab-orbit fab-orbit--2"><span class="fab-orb fab-orb--2"></span></span>
+    <!-- Glass inner surface -->
+    <span class="fab-glass">
+      <!-- Sparkle SVG (4-point star, IA open → arrow down) -->
+      <span class="fab-icon-wrap">
+        <svg class="fab-sparkle" [class.hidden]="isChatOpen" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M12 2 L13.2 9.8 L21 11 L13.2 12.2 L12 20 L10.8 12.2 L3 11 L10.8 9.8 Z" fill="white"/>
+          <path d="M19 3 L19.6 6.4 L23 7 L19.6 7.6 L19 11 L18.4 7.6 L15 7 L18.4 6.4 Z" fill="rgba(255,255,255,0.6)" />
+          <path d="M5 16 L5.4 18.6 L8 19 L5.4 19.4 L5 22 L4.6 19.4 L2 19 L4.6 18.6 Z" fill="rgba(255,255,255,0.45)" />
+        </svg>
+        <mat-icon class="fab-icon-close" [class.hidden]="!isChatOpen">keyboard_arrow_down</mat-icon>
+      </span>
     </span>
-    <span class="chat-fab-label" [class.hidden]="isChatOpen">IA</span>
+    <!-- Live indicator dot -->
+    <span class="fab-live" [class.hidden]="isChatOpen"></span>
   </button>
 </div>
 

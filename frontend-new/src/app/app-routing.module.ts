@@ -15,7 +15,12 @@ const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [loginGuard] },
   { path: 'change-password', component: ChangePasswordComponent },
-  { path: 'dashboard', redirectTo: '/polizas', pathMatch: 'full' }, // Redirect dashboard to polizas
+  { path: 'dashboard', redirectTo: '/analytics', pathMatch: 'full' }, // Redirect to analytics home
+  {
+    path: 'analytics',
+    loadChildren: () => import('./analytics/analytics.module').then(m => m.AnalyticsModule),
+    canActivate: [authGuard]
+  },
   { path: 'polizas', component: PolizasComponent, canActivate: [authGuard] },
   { path: 'polizas/upload', component: UploadPolizasComponent, canActivate: [authGuard, dataLoaderGuard] },
   { path: 'cotizaciones', component: CotizacionesComponent, canActivate: [authGuard] },

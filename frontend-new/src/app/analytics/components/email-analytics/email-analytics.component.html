@@ -1,0 +1,228 @@
+﻿<div class="email-analytics">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">email</mat-icon>
+      <div>
+        <h1 class="page-header__title">AnalÃ­tica de Emails</h1>
+        <span class="page-header__subtitle">Volumen, tasa de Ã©xito, cobertura y heatmap de envÃ­os</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <mat-form-field appearance="outline" style="width:140px">
+        <mat-label>PerÃ­odo</mat-label>
+        <mat-select [(ngModel)]="days" (ngModelChange)="load()">
+          <mat-option [value]="7">7 dÃ­as</mat-option>
+          <mat-option [value]="30">30 dÃ­as</mat-option>
+          <mat-option [value]="60">60 dÃ­as</mat-option>
+          <mat-option [value]="90">90 dÃ­as</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button (click)="load()" [disabled]="loading">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <ng-container *ngIf="!loading && !error && data">
+
+    <!-- KPIs -->
+    <div class="kpi-row" style="margin-bottom:20px">
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Enviados (perÃ­odo)</span>
+        <span class="kpi-mini__value">{{ data.totalEnviadosPeriodo | number }}</span>
+      </div>
+      <div class="kpi-mini" [class.kpi-mini--success]="data.tasaExitoGlobal >= 95" [class.kpi-mini--warning]="data.tasaExitoGlobal < 95">
+        <span class="kpi-mini__label">Tasa Ã‰xito</span>
+        <span class="kpi-mini__value" [class.kpi-mini__value--success]="data.tasaExitoGlobal >= 95" [class.kpi-mini__value--warn]="data.tasaExitoGlobal < 95">
+          {{ data.tasaExitoGlobal | number:'1.1-1' }}%
+        </span>
+      </div>
+      <div class="kpi-mini kpi-mini--danger">
+        <span class="kpi-mini__label">Fallidos</span>
+        <span class="kpi-mini__value kpi-mini__value--danger">{{ data.totalFallidosPeriodo | number }}</span>
+      </div>
+      <div class="kpi-mini" *ngIf="data.coberturaCobros">
+        <span class="kpi-mini__label">Cobertura Cobros</span>
+        <span class="kpi-mini__value" [class.kpi-mini__value--success]="data.coberturaCobros.porcentajeCoberturaNotificada >= 80">
+          {{ data.coberturaCobros.porcentajeCoberturaNotificada | number:'1.1-1' }}%
+        </span>
+      </div>
+    </div>
+
+    <!-- Volumen diario + Por tipo -->
+    <div class="grid-2col" style="margin-bottom:20px">
+
+      <app-chart-card title="Volumen Diario de EnvÃ­os" icon="bar_chart"
+        [subtitle]="'Ãšltimos ' + days + ' dÃ­as'">
+        <ngx-charts-bar-vertical-stacked [animations]="false"
+          [results]="volumenChart"
+          [scheme]="colorScheme"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [legend]="true" [legendPosition]="legendBelow"
+          >
+        </ngx-charts-bar-vertical-stacked>
+      </app-chart-card>
+
+      <app-chart-card title="DistribuciÃ³n por Tipo de Email" icon="pie_chart"
+        tooltip="Emails enviados agrupados por tipo o plantilla">
+        <ngx-charts-pie-chart [animations]="false"
+          [results]="tipoChart"
+          [scheme]="colorScheme"
+          [legend]="true" [legendPosition]="legendBelow"
+          [labels]="false"
+          >
+        </ngx-charts-pie-chart>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Cobertura cobros + Tabla tipo stats -->
+    <div class="grid-2col" style="margin-bottom:20px">
+
+      <app-chart-card title="Cobertura de Notificaciones â€” Cobros Vencidos" icon="mark_email_read"
+        tooltip="% de cobros vencidos que han recibido al menos un email de notificaciÃ³n">
+        <ngx-charts-pie-chart [animations]="false"
+          [results]="coberturaChart"
+          [scheme]="coberturaColors"
+          [legend]="true" [legendPosition]="legendBelow"
+          [labels]="true"
+          >
+        </ngx-charts-pie-chart>
+        <div class="cobertura-stats" *ngIf="data.coberturaCobros">
+          <div class="cob-row">
+            <span class="cob-dot cob-dot--success"></span>
+            <span>Notificados: <strong>{{ data.coberturaCobros.conEmailNotificado }}</strong></span>
+          </div>
+          <div class="cob-row">
+            <span class="cob-dot cob-dot--warning"></span>
+            <span>No notificados: <strong>{{ data.coberturaCobros.conEmailNoNotificado }}</strong></span>
+          </div>
+          <div class="cob-row">
+            <span class="cob-dot cob-dot--neutral"></span>
+            <span>Sin email registrado: <strong>{{ data.coberturaCobros.sinEmail }}</strong></span>
+          </div>
+        </div>
+      </app-chart-card>
+
+      <app-chart-card title="EstadÃ­sticas por Tipo" icon="table_chart">
+        <table mat-table [dataSource]="data.porTipo" class="tipo-table">
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let t"><strong>{{ t.tipo }}</strong></td>
+          </ng-container>
+          <ng-container matColumnDef="enviados">
+            <th mat-header-cell *matHeaderCellDef>Enviados</th>
+            <td mat-cell *matCellDef="let t">{{ t.enviados | number }}</td>
+          </ng-container>
+          <ng-container matColumnDef="tasaExito">
+            <th mat-header-cell *matHeaderCellDef>% Ã‰xito</th>
+            <td mat-cell *matCellDef="let t">
+              <span class="chip" [class]="t.tasaExito >= 95 ? 'chip--success' : t.tasaExito >= 80 ? 'chip--warning' : 'chip--danger'">
+                {{ t.tasaExito | number:'1.1-1' }}%
+              </span>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="['tipo','enviados','tasaExito']"></tr>
+          <tr mat-row *matRowDef="let r; columns: ['tipo','enviados','tasaExito'];"></tr>
+        </table>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Heatmap Horas de EnvÃ­o -->
+    <app-chart-card title="Heatmap de EnvÃ­os por Hora y DÃ­a" icon="grid_view"
+      tooltip="Densidad de envÃ­os por hora del dÃ­a y dÃ­a de la semana">
+      <div class="heatmap-container">
+        <div class="heatmap-y-labels">
+          <span *ngFor="let dia of diasLabels" class="heatmap-label">{{ dia }}</span>
+        </div>
+        <div class="heatmap-body">
+          <div class="heatmap-row" *ngFor="let row of heatmapGrid; let d = index">
+            <div *ngFor="let val of row; let h = index"
+                 class="heatmap-cell"
+                 [style.background]="heatmapColor(val)"
+                 [matTooltip]="diasLabels[d] + ' ' + h + 'h: ' + val + ' envÃ­os'">
+            </div>
+          </div>
+          <div class="heatmap-x-axis">
+            <span *ngFor="let h of heatmapHours" class="heatmap-h-label">{{ h }}</span>
+          </div>
+        </div>
+      </div>
+    </app-chart-card>
+
+    <!-- 5.4 CorrelaciÃ³n Email â†’ Cobro (ROI del canal) -->
+    <div class="section-header" style="margin-top:24px;margin-bottom:12px">
+      <mat-icon>insights</mat-icon>
+      <span>5.4 â€” CorrelaciÃ³n Email â†’ Cobro (ROI del Canal)</span>
+      <span class="section-header__subtitle">Impacto del email en la tasa de pago de cobros vencidos</span>
+    </div>
+
+    <div class="kpi-row" style="margin-bottom:20px" *ngIf="correlacion">
+      <div class="kpi-mini" [class.kpi-mini--success]="correlacion.tasaPagoConEmail >= 50">
+        <span class="kpi-mini__label">Tasa Pago (con email)</span>
+        <span class="kpi-mini__value kpi-mini__value--success">{{ correlacion.tasaPagoConEmail | number:'1.1-1' }}%</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Tasa Pago (sin email)</span>
+        <span class="kpi-mini__value">{{ correlacion.tasaPagoSinEmail | number:'1.1-1' }}%</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Cobros con email notificado</span>
+        <span class="kpi-mini__value">{{ correlacion.totalCobrosVencidosConEmail | number }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Cobros sin email notificado</span>
+        <span class="kpi-mini__value">{{ correlacion.totalCobrosVencidosSinEmail | number }}</span>
+      </div>
+      <div class="kpi-mini" *ngIf="correlacion.tasaPagoConEmail > correlacion.tasaPagoSinEmail">
+        <span class="kpi-mini__label">Uplift del canal email</span>
+        <span class="kpi-mini__value kpi-mini__value--success">
+          +{{ (correlacion.tasaPagoConEmail - correlacion.tasaPagoSinEmail) | number:'1.1-1' }} pp
+        </span>
+      </div>
+    </div>
+
+    <div class="grid-2col" style="margin-bottom:20px" *ngIf="correlacion">
+
+      <app-chart-card title="DistribuciÃ³n de Cobros por Velocidad de Pago" icon="bar_chart"
+        tooltip="De los cobros vencidos que recibieron email: Â¿cuÃ¡ndo pagaron?">
+        <ngx-charts-bar-vertical [animations]="false"
+          [results]="correlacionChart"
+          [scheme]="correlacionColors"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [showDataLabel]="true"
+          [gradient]="false"
+          >
+        </ngx-charts-bar-vertical>
+      </app-chart-card>
+
+      <app-chart-card title="Comparativa Tasa de Pago â€” Con vs Sin Email" icon="compare_arrows"
+        tooltip="Porcentaje de cobros vencidos pagados: grupo notificado por email vs. grupo no notificado">
+        <ngx-charts-bar-vertical [animations]="false"
+          [results]="roiChart"
+          [scheme]="roiColors"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [showDataLabel]="true"
+          [yAxisTickFormatting]="formatPct"
+          >
+        </ngx-charts-bar-vertical>
+      </app-chart-card>
+
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon><p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+
+</div>
+

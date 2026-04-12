@@ -68,6 +68,10 @@ namespace Application.Mappings
                 .ForMember(dest => dest.TipoReclamo, opt => opt.MapFrom(src => Enum.Parse<TipoReclamo>(src.TipoReclamo)))
                 .ForMember(dest => dest.Prioridad, opt => opt.MapFrom(src => Enum.Parse<PrioridadReclamo>(src.Prioridad)));
 
+            // ReclamoHistorial → DTO
+            CreateMap<ReclamoHistorial, ReclamoHistorialEntryDto>()
+                .ForMember(dest => dest.FechaEvento, opt => opt.MapFrom(src => src.CreatedAt));
+
             // CreateReclamoDto → Reclamo (used when creating a new reclamo from the API)
             // Audit fields, generated fields, and navigation properties are set by the service.
             CreateMap<CreateReclamoDto, Reclamo>()

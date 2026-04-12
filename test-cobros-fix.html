@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Cobros - SIIGESE</title>
+    <title>Test Cobros - OmnIA</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -87,50 +87,50 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧪 TEST DE FUNCIONALIDAD - MÓDULO DE COBROS</h1>
-            <h2>SIIGESE - Sistema de Gestión de Seguros</h2>
-            <p>Verificación del Mock API Interceptor para Cobros</p>
+            <h1>ðŸ§ª TEST DE FUNCIONALIDAD - MÃ“DULO DE COBROS</h1>
+            <h2>OmnIA - Sistema de GestiÃ³n de Seguros</h2>
+            <p>VerificaciÃ³n del Mock API Interceptor para Cobros</p>
         </div>
 
         <div class="test-section">
-            <h3>📊 1. Test de Estadísticas de Cobros</h3>
-            <p>Verificar que se carguen correctamente las estadísticas de cobros</p>
-            <button onclick="testCobroStats()">Obtener Estadísticas</button>
+            <h3>ðŸ“Š 1. Test de EstadÃ­sticas de Cobros</h3>
+            <p>Verificar que se carguen correctamente las estadÃ­sticas de cobros</p>
+            <button onclick="testCobroStats()">Obtener EstadÃ­sticas</button>
             <div id="statsResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>💰 2. Test de Lista de Cobros</h3>
+            <h3>ðŸ’° 2. Test de Lista de Cobros</h3>
             <p>Verificar que se cargue correctamente la lista de cobros</p>
             <button onclick="testGetCobros()">Obtener Lista de Cobros</button>
             <div id="cobrosResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>➕ 3. Test de Crear Cobro</h3>
+            <h3>âž• 3. Test de Crear Cobro</h3>
             <p>Verificar que se pueda crear un nuevo cobro</p>
             <button onclick="testCreateCobro()">Crear Nuevo Cobro</button>
             <div id="createResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>💳 4. Test de Registrar Pago</h3>
+            <h3>ðŸ’³ 4. Test de Registrar Pago</h3>
             <p>Verificar que se pueda registrar un pago</p>
             <button onclick="testRegistrarCobro()">Registrar Pago</button>
             <div id="registrarResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>❌ 5. Test de Cancelar Cobro</h3>
+            <h3>âŒ 5. Test de Cancelar Cobro</h3>
             <p>Verificar que se pueda cancelar un cobro</p>
             <button onclick="testCancelarCobro()">Cancelar Cobro</button>
             <div id="cancelarResult" class="result"></div>
         </div>
 
         <div class="test-section">
-            <h3>🌐 6. Test de Navegación a Módulo</h3>
-            <p>Verificar la navegación al módulo de cobros en la aplicación</p>
-            <button onclick="navigateToCobros()">Ir al Módulo de Cobros</button>
+            <h3>ðŸŒ 6. Test de NavegaciÃ³n a MÃ³dulo</h3>
+            <p>Verificar la navegaciÃ³n al mÃ³dulo de cobros en la aplicaciÃ³n</p>
+            <button onclick="navigateToCobros()">Ir al MÃ³dulo de Cobros</button>
             <div id="navigationResult" class="result"></div>
         </div>
     </div>
@@ -145,7 +145,7 @@
         }
 
         async function testCobroStats() {
-            showResult('statsResult', '⏳ Cargando estadísticas...', 'info');
+            showResult('statsResult', 'â³ Cargando estadÃ­sticas...', 'info');
             
             try {
                 const response = await fetch(`${API_URL}/stats`, {
@@ -158,30 +158,30 @@
 
                 if (response.ok) {
                     const stats = await response.json();
-                    const message = `✅ Estadísticas cargadas exitosamente:
+                    const message = `âœ… EstadÃ­sticas cargadas exitosamente:
 
-📈 RESUMEN DE COBROS:
-• Total Pendientes: ${stats.totalPendientes}
-• Total Cobrados: ${stats.totalCobrados}
-• Total Vencidos: ${stats.totalVencidos}
+ðŸ“ˆ RESUMEN DE COBROS:
+â€¢ Total Pendientes: ${stats.totalPendientes}
+â€¢ Total Cobrados: ${stats.totalCobrados}
+â€¢ Total Vencidos: ${stats.totalVencidos}
 
-💰 MONTOS:
-• Monto Pendiente: ₡${stats.montoTotalPendiente?.toLocaleString()}
-• Monto Cobrado: ₡${stats.montoTotalCobrado?.toLocaleString()}
-• Monto Por Vencer: ₡${stats.montoPorVencer?.toLocaleString()}
+ðŸ’° MONTOS:
+â€¢ Monto Pendiente: â‚¡${stats.montoTotalPendiente?.toLocaleString()}
+â€¢ Monto Cobrado: â‚¡${stats.montoTotalCobrado?.toLocaleString()}
+â€¢ Monto Por Vencer: â‚¡${stats.montoPorVencer?.toLocaleString()}
 
-🔍 Datos recibidos: ${JSON.stringify(stats, null, 2)}`;
+ðŸ” Datos recibidos: ${JSON.stringify(stats, null, 2)}`;
                     showResult('statsResult', message, 'success');
                 } else {
-                    showResult('statsResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('statsResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('statsResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('statsResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         async function testGetCobros() {
-            showResult('cobrosResult', '⏳ Cargando lista de cobros...', 'info');
+            showResult('cobrosResult', 'â³ Cargando lista de cobros...', 'info');
             
             try {
                 const response = await fetch(API_URL, {
@@ -194,34 +194,34 @@
 
                 if (response.ok) {
                     const cobros = await response.json();
-                    let message = `✅ Lista de cobros cargada exitosamente (${cobros.length} registros):
+                    let message = `âœ… Lista de cobros cargada exitosamente (${cobros.length} registros):
 
 `;
                     
                     cobros.forEach((cobro, index) => {
                         const estado = getEstadoLabel(cobro.estado);
                         message += `${index + 1}. ${cobro.numeroRecibo}
-   • Cliente: ${cobro.clienteNombre} ${cobro.clienteApellido}
-   • Póliza: ${cobro.numeroPoliza}
-   • Monto: ₡${cobro.montoTotal?.toLocaleString()}
-   • Estado: ${estado}
-   • Vencimiento: ${new Date(cobro.fechaVencimiento).toLocaleDateString()}
+   â€¢ Cliente: ${cobro.clienteNombre} ${cobro.clienteApellido}
+   â€¢ PÃ³liza: ${cobro.numeroPoliza}
+   â€¢ Monto: â‚¡${cobro.montoTotal?.toLocaleString()}
+   â€¢ Estado: ${estado}
+   â€¢ Vencimiento: ${new Date(cobro.fechaVencimiento).toLocaleDateString()}
    
 `;
                     });
 
-                    message += `\n🔍 Datos completos: ${JSON.stringify(cobros, null, 2)}`;
+                    message += `\nðŸ” Datos completos: ${JSON.stringify(cobros, null, 2)}`;
                     showResult('cobrosResult', message, 'success');
                 } else {
-                    showResult('cobrosResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('cobrosResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('cobrosResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('cobrosResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         async function testCreateCobro() {
-            showResult('createResult', '⏳ Creando nuevo cobro...', 'info');
+            showResult('createResult', 'â³ Creando nuevo cobro...', 'info');
             
             const newCobro = {
                 polizaId: 6,
@@ -243,28 +243,28 @@
 
                 if (response.ok) {
                     const createdCobro = await response.json();
-                    const message = `✅ Cobro creado exitosamente:
+                    const message = `âœ… Cobro creado exitosamente:
 
-📄 NUEVO COBRO:
-• ID: ${createdCobro.id}
-• Número Recibo: ${createdCobro.numeroRecibo}
-• Póliza ID: ${createdCobro.polizaId}
-• Monto: ₡${createdCobro.montoTotal?.toLocaleString()}
-• Estado: ${getEstadoLabel(createdCobro.estado)}
-• Fecha Creación: ${new Date(createdCobro.fechaCreacion).toLocaleString()}
+ðŸ“„ NUEVO COBRO:
+â€¢ ID: ${createdCobro.id}
+â€¢ NÃºmero Recibo: ${createdCobro.numeroRecibo}
+â€¢ PÃ³liza ID: ${createdCobro.polizaId}
+â€¢ Monto: â‚¡${createdCobro.montoTotal?.toLocaleString()}
+â€¢ Estado: ${getEstadoLabel(createdCobro.estado)}
+â€¢ Fecha CreaciÃ³n: ${new Date(createdCobro.fechaCreacion).toLocaleString()}
 
-🔍 Datos completos: ${JSON.stringify(createdCobro, null, 2)}`;
+ðŸ” Datos completos: ${JSON.stringify(createdCobro, null, 2)}`;
                     showResult('createResult', message, 'success');
                 } else {
-                    showResult('createResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('createResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('createResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('createResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         async function testRegistrarCobro() {
-            showResult('registrarResult', '⏳ Registrando pago...', 'info');
+            showResult('registrarResult', 'â³ Registrando pago...', 'info');
             
             const cobroId = 2; // Cobro pendiente
             const registroData = {
@@ -287,32 +287,32 @@
 
                 if (response.ok) {
                     const updatedCobro = await response.json();
-                    const message = `✅ Pago registrado exitosamente:
+                    const message = `âœ… Pago registrado exitosamente:
 
-💳 COBRO ACTUALIZADO:
-• Recibo: ${updatedCobro.numeroRecibo}
-• Cliente: ${updatedCobro.clienteNombre} ${updatedCobro.clienteApellido}
-• Monto Cobrado: ₡${updatedCobro.montoCobrado?.toLocaleString()}
-• Método de Pago: ${getMetodoPagoLabel(updatedCobro.metodoPago)}
-• Estado: ${getEstadoLabel(updatedCobro.estado)}
-• Fecha de Cobro: ${new Date(updatedCobro.fechaCobro).toLocaleString()}
+ðŸ’³ COBRO ACTUALIZADO:
+â€¢ Recibo: ${updatedCobro.numeroRecibo}
+â€¢ Cliente: ${updatedCobro.clienteNombre} ${updatedCobro.clienteApellido}
+â€¢ Monto Cobrado: â‚¡${updatedCobro.montoCobrado?.toLocaleString()}
+â€¢ MÃ©todo de Pago: ${getMetodoPagoLabel(updatedCobro.metodoPago)}
+â€¢ Estado: ${getEstadoLabel(updatedCobro.estado)}
+â€¢ Fecha de Cobro: ${new Date(updatedCobro.fechaCobro).toLocaleString()}
 
-🔍 Datos completos: ${JSON.stringify(updatedCobro, null, 2)}`;
+ðŸ” Datos completos: ${JSON.stringify(updatedCobro, null, 2)}`;
                     showResult('registrarResult', message, 'success');
                 } else {
-                    showResult('registrarResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('registrarResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('registrarResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('registrarResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         async function testCancelarCobro() {
-            showResult('cancelarResult', '⏳ Cancelando cobro...', 'info');
+            showResult('cancelarResult', 'â³ Cancelando cobro...', 'info');
             
             const cobroId = 4; // Cobro pendiente
             const cancelData = {
-                motivo: 'Cobro cancelado desde test - Cliente solicitó cancelación'
+                motivo: 'Cobro cancelado desde test - Cliente solicitÃ³ cancelaciÃ³n'
             };
 
             try {
@@ -327,31 +327,31 @@
 
                 if (response.ok) {
                     const canceledCobro = await response.json();
-                    const message = `✅ Cobro cancelado exitosamente:
+                    const message = `âœ… Cobro cancelado exitosamente:
 
-❌ COBRO CANCELADO:
-• Recibo: ${canceledCobro.numeroRecibo}
-• Cliente: ${canceledCobro.clienteNombre} ${canceledCobro.clienteApellido}
-• Monto: ₡${canceledCobro.montoTotal?.toLocaleString()}
-• Estado: ${getEstadoLabel(canceledCobro.estado)}
-• Motivo: ${canceledCobro.observaciones}
-• Fecha Actualización: ${new Date(canceledCobro.fechaActualizacion).toLocaleString()}
+âŒ COBRO CANCELADO:
+â€¢ Recibo: ${canceledCobro.numeroRecibo}
+â€¢ Cliente: ${canceledCobro.clienteNombre} ${canceledCobro.clienteApellido}
+â€¢ Monto: â‚¡${canceledCobro.montoTotal?.toLocaleString()}
+â€¢ Estado: ${getEstadoLabel(canceledCobro.estado)}
+â€¢ Motivo: ${canceledCobro.observaciones}
+â€¢ Fecha ActualizaciÃ³n: ${new Date(canceledCobro.fechaActualizacion).toLocaleString()}
 
-🔍 Datos completos: ${JSON.stringify(canceledCobro, null, 2)}`;
+ðŸ” Datos completos: ${JSON.stringify(canceledCobro, null, 2)}`;
                     showResult('cancelarResult', message, 'success');
                 } else {
-                    showResult('cancelarResult', `❌ Error ${response.status}: ${await response.text()}`, 'error');
+                    showResult('cancelarResult', `âŒ Error ${response.status}: ${await response.text()}`, 'error');
                 }
             } catch (error) {
-                showResult('cancelarResult', `❌ Error de conexión: ${error.message}`, 'error');
+                showResult('cancelarResult', `âŒ Error de conexiÃ³n: ${error.message}`, 'error');
             }
         }
 
         function navigateToCobros() {
-            showResult('navigationResult', '🌐 Redirigiendo al módulo de cobros...', 'info');
+            showResult('navigationResult', 'ðŸŒ Redirigiendo al mÃ³dulo de cobros...', 'info');
             setTimeout(() => {
                 window.open('http://localhost:4200/cobros', '_blank');
-                showResult('navigationResult', '✅ Navegación iniciada - Se abrió nueva pestaña con el módulo de cobros', 'success');
+                showResult('navigationResult', 'âœ… NavegaciÃ³n iniciada - Se abriÃ³ nueva pestaÃ±a con el mÃ³dulo de cobros', 'success');
             }, 1000);
         }
 
@@ -370,16 +370,16 @@
                 case 0: return 'Efectivo';
                 case 1: return 'Transferencia';
                 case 2: return 'Cheque';
-                case 3: return 'Tarjeta de Crédito';
-                case 4: return 'Tarjeta de Débito';
+                case 3: return 'Tarjeta de CrÃ©dito';
+                case 4: return 'Tarjeta de DÃ©bito';
                 default: return 'Desconocido';
             }
         }
 
-        // Auto-ejecutar test básico al cargar la página
+        // Auto-ejecutar test bÃ¡sico al cargar la pÃ¡gina
         window.onload = function() {
             setTimeout(() => {
-                console.log('🚀 Iniciando test automático de cobros...');
+                console.log('ðŸš€ Iniciando test automÃ¡tico de cobros...');
                 testCobroStats();
             }, 1000);
         };

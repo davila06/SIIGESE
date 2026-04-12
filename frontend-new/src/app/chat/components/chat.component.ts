@@ -7,6 +7,7 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
+  HostListener,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -66,6 +67,8 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
   ngOnInit(): void {
+    this.adjustLayoutForViewport();
+
     this.chatService.sessions
       .pipe(takeUntil(this.destroy$))
       .subscribe(s => {
@@ -161,6 +164,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
           this.messages = detail.messages;
           this.shouldScrollToBottom = true;
           this.chatService.connectToSession(session.sessionId);
+          if (window.innerWidth <= 1024) {
+            this.isSidebarOpen = false;
+          }
           if (session.unreadCount > 0) {
             this.chatService.markAsRead(session.sessionId).subscribe();
           }
@@ -278,6 +284,11 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.adjustLayoutForViewport();
+  }
+
   get filteredSessions(): ChatSession[] {
     const term = this.searchSessionTerm.toLowerCase().trim();
     if (!term) return this.sessions;
@@ -385,5 +396,9 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
     } catch {
       // ignore
     }
+  }
+
+  private adjustLayoutForViewport(): void {
+    this.isSidebarOpen = window.innerWidth > 1024;
   }
 }

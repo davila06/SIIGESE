@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,14 +44,14 @@ namespace Infrastructure.Services
             _logger = logger;
         }
 
-        // ── Sessions ────────────────────────────────────────────────────────────
+        // â”€â”€ Sessions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         public async Task<ChatSessionDto> CreateSessionAsync(int userId, string? title = null)
         {
             var session = new ChatSession
             {
                 UserId = userId,
-                Title = title ?? "Nueva conversación",
+                Title = title ?? "Nueva conversaciÃ³n",
                 LastActivityAt = DateTime.UtcNow,
                 CreatedBy = userId.ToString()
             };
@@ -69,7 +69,7 @@ namespace Infrastructure.Services
         public async Task<ChatSessionDetailDto> GetSessionAsync(int userId, string sessionId)
         {
             var session = await _chatRepo.GetSessionBySessionIdAsync(sessionId, userId)
-                ?? throw new KeyNotFoundException($"Sesión {sessionId} no encontrada");
+                ?? throw new KeyNotFoundException($"SesiÃ³n {sessionId} no encontrada");
 
             var messages = await _chatRepo.GetMessagesBySessionAsync(session.Id);
             return new ChatSessionDetailDto
@@ -82,7 +82,7 @@ namespace Infrastructure.Services
         public async Task DeleteSessionAsync(int userId, string sessionId)
         {
             var session = await _chatRepo.GetSessionBySessionIdAsync(sessionId, userId)
-                ?? throw new KeyNotFoundException($"Sesión {sessionId} no encontrada");
+                ?? throw new KeyNotFoundException($"SesiÃ³n {sessionId} no encontrada");
 
             await _chatRepo.DeleteSessionAsync(session);
         }
@@ -90,7 +90,7 @@ namespace Infrastructure.Services
         public async Task MarkSessionAsReadAsync(int userId, string sessionId)
         {
             var session = await _chatRepo.GetSessionBySessionIdAsync(sessionId, userId)
-                ?? throw new KeyNotFoundException($"Sesión {sessionId} no encontrada");
+                ?? throw new KeyNotFoundException($"SesiÃ³n {sessionId} no encontrada");
 
             await _chatRepo.MarkSessionMessagesReadAsync(session.Id, userId);
         }
@@ -136,12 +136,12 @@ namespace Infrastructure.Services
             };
         }
 
-        // ── Message handling ─────────────────────────────────────────────────────
+        // â”€â”€ Message handling â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         public async Task<SendMessageResponseDto> SendMessageAsync(int userId, string sessionId, SendMessageDto dto)
         {
             var session = await _chatRepo.GetSessionBySessionIdAsync(sessionId, userId)
-                ?? throw new KeyNotFoundException($"Sesión {sessionId} no encontrada");
+                ?? throw new KeyNotFoundException($"SesiÃ³n {sessionId} no encontrada");
 
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -196,7 +196,7 @@ namespace Infrastructure.Services
             };
         }
 
-        // ── AI Engine ─────────────────────────────────────────────────────────────
+        // â”€â”€ AI Engine â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private async Task<(string Response, object? RichContent, List<string>? QuickReplies)> GenerateResponseAsync(
             string input, int userId)
@@ -246,27 +246,27 @@ namespace Infrastructure.Services
             return "unknown";
         }
 
-        // ── Intent handlers ───────────────────────────────────────────────────────
+        // â”€â”€ Intent handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private static (string, object?, List<string>?) BuildGreeting()
         {
             var greetings = new[]
             {
-                "¡Hola! Soy **SIIGESE Assistant**, tu asistente inteligente de gestión de seguros.",
-                "¡Buenos días! Soy tu asistente virtual de **SIIGESE**.",
-                "¡Hola! Estoy aquí para ayudarte con la gestión de tus seguros."
+                "Â¡Hola! Soy **OmnIA Assistant**, tu asistente inteligente de gestiÃ³n de seguros.",
+                "Â¡Buenos dÃ­as! Soy tu asistente virtual de **OmnIA**.",
+                "Â¡Hola! Estoy aquÃ­ para ayudarte con la gestiÃ³n de tus seguros."
             };
 
             var response = greetings[new Random().Next(greetings.Length)] +
-                "\n\n¿En qué puedo ayudarte hoy?";
+                "\n\nÂ¿En quÃ© puedo ayudarte hoy?";
 
             var quickReplies = new List<string>
             {
-                "Ver mis pólizas",
+                "Ver mis pÃ³lizas",
                 "Consultar cobros",
                 "Ver reclamos",
-                "Estadísticas",
-                "¿Qué puedes hacer?"
+                "EstadÃ­sticas",
+                "Â¿QuÃ© puedes hacer?"
             };
 
             return (response, null, quickReplies);
@@ -275,16 +275,16 @@ namespace Infrastructure.Services
         private static (string, object?, List<string>?) BuildHelp()
         {
             var response = "Puedo ayudarte con las siguientes tareas:\n\n" +
-                           "📋 **Pólizas** — Buscar pólizas por número, asegurado o aseguradora\n" +
-                           "💰 **Cobros** — Consultar estado de cobros y pagos pendientes\n" +
-                           "⚠️ **Reclamos** — Ver reclamos activos, pendientes o vencidos\n" +
-                           "📊 **Estadísticas** — Resumen general del sistema\n\n" +
-                           "Solo escríbeme lo que necesitas en lenguaje natural. Por ejemplo:\n" +
-                           "*\"Busca la póliza de Juan Pérez\"* o *\"¿Cuántos cobros tengo pendientes?\"*";
+                           "ðŸ“‹ **PÃ³lizas** â€” Buscar pÃ³lizas por nÃºmero, asegurado o aseguradora\n" +
+                           "ðŸ’° **Cobros** â€” Consultar estado de cobros y pagos pendientes\n" +
+                           "âš ï¸ **Reclamos** â€” Ver reclamos activos, pendientes o vencidos\n" +
+                           "ðŸ“Š **EstadÃ­sticas** â€” Resumen general del sistema\n\n" +
+                           "Solo escrÃ­beme lo que necesitas en lenguaje natural. Por ejemplo:\n" +
+                           "*\"Busca la pÃ³liza de Juan PÃ©rez\"* o *\"Â¿CuÃ¡ntos cobros tengo pendientes?\"*";
 
             var quickReplies = new List<string>
             {
-                "Ver mis pólizas",
+                "Ver mis pÃ³lizas",
                 "Cobros pendientes",
                 "Reclamos activos",
                 "Resumen general"
@@ -322,15 +322,15 @@ namespace Infrastructure.Services
                 }
 
                 if (matches.Count == 0)
-                    return ($"No encontré pólizas que coincidan con **\"{searchTerm}\"**. " +
-                            "Intenta buscar por número de póliza, nombre del asegurado o aseguradora.",
+                    return ($"No encontrÃ© pÃ³lizas que coincidan con **\"{searchTerm}\"**. " +
+                            "Intenta buscar por nÃºmero de pÃ³liza, nombre del asegurado o aseguradora.",
                             null,
-                            new List<string> { "Ver todas las pólizas", "Buscar por aseguradora" });
+                            new List<string> { "Ver todas las pÃ³lizas", "Buscar por aseguradora" });
 
                 var richContent = new
                 {
                     type = "polizas_table",
-                    title = matches.Count == 1 ? "Póliza encontrada" : $"{matches.Count} pólizas encontradas",
+                    title = matches.Count == 1 ? "PÃ³liza encontrada" : $"{matches.Count} pÃ³lizas encontradas",
                     rows = matches.Select(p => new
                     {
                         numeroPoliza = p.NumeroPoliza,
@@ -342,15 +342,15 @@ namespace Infrastructure.Services
                 };
 
                 var summaryText = matches.Count == 1
-                    ? $"Encontré la póliza **{matches[0].NumeroPoliza}** a nombre de **{matches[0].NombreAsegurado}**."
-                    : $"Encontré **{matches.Count} pólizas** que coinciden con tu búsqueda:";
+                    ? $"EncontrÃ© la pÃ³liza **{matches[0].NumeroPoliza}** a nombre de **{matches[0].NombreAsegurado}**."
+                    : $"EncontrÃ© **{matches.Count} pÃ³lizas** que coinciden con tu bÃºsqueda:";
 
-                return (summaryText, richContent, new List<string> { "Ver detalle completo", "Cobros de esta póliza", "Reclamos asociados" });
+                return (summaryText, richContent, new List<string> { "Ver detalle completo", "Cobros de esta pÃ³liza", "Reclamos asociados" });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error querying policies for chat");
-                return ("Ocurrió un error al consultar las pólizas. Por favor intenta de nuevo.", null, null);
+                return ("OcurriÃ³ un error al consultar las pÃ³lizas. Por favor intenta de nuevo.", null, null);
             }
         }
 
@@ -384,7 +384,7 @@ namespace Infrastructure.Services
 
                 var text = $"Hay **{pendientes.Count} cobros pendientes** y **{vencidos.Count} vencidos** en el sistema.";
                 if (vencidos.Count > 0)
-                    text += $"\n\n⚠️ Tienes **{vencidos.Count} cobros vencidos** que requieren atención inmediata.";
+                    text += $"\n\nâš ï¸ Tienes **{vencidos.Count} cobros vencidos** que requieren atenciÃ³n inmediata.";
 
                 return (text, richContent, new List<string>
                 {
@@ -396,7 +396,7 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error querying cobros for chat");
-                return ("Ocurrió un error al consultar los cobros. Por favor intenta de nuevo.", null, null);
+                return ("OcurriÃ³ un error al consultar los cobros. Por favor intenta de nuevo.", null, null);
             }
         }
 
@@ -425,13 +425,13 @@ namespace Infrastructure.Services
                 };
 
                 var text = $"Actualmente hay **{total} reclamos** en el sistema.\n\n" +
-                           $"• **{pendientes}** pendientes de atención\n" +
-                           $"• **{enProceso}** en proceso\n" +
-                           $"• **{vencidos}** vencidos\n\n" +
+                           $"â€¢ **{pendientes}** pendientes de atenciÃ³n\n" +
+                           $"â€¢ **{enProceso}** en proceso\n" +
+                           $"â€¢ **{vencidos}** vencidos\n\n" +
                            $"El monto total reclamado es **{montoTotal:C0}**.";
 
                 if (vencidos > 0)
-                    text += $"\n\n⚠️ Hay **{vencidos} reclamos vencidos** que necesitan resolución urgente.";
+                    text += $"\n\nâš ï¸ Hay **{vencidos} reclamos vencidos** que necesitan resoluciÃ³n urgente.";
 
                 return (text, richContent, new List<string>
                 {
@@ -443,7 +443,7 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error querying reclamos for chat");
-                return ("Ocurrió un error al consultar los reclamos. Por favor intenta de nuevo.", null, null);
+                return ("OcurriÃ³ un error al consultar los reclamos. Por favor intenta de nuevo.", null, null);
             }
         }
 
@@ -463,7 +463,7 @@ namespace Infrastructure.Services
                     title = "Resumen General del Sistema",
                     cards = new[]
                     {
-                        new { icon = "business", label = "Pólizas Activas", value = totalPolizas.ToString(), color = "purple" },
+                        new { icon = "business", label = "PÃ³lizas Activas", value = totalPolizas.ToString(), color = "purple" },
                         new { icon = "payment", label = "Cobros Totales", value = totalCobros.ToString(), color = "blue" },
                         new { icon = "gavel", label = "Reclamos Totales", value = totalReclamos.ToString(), color = "orange" },
                         new { icon = "attach_money", label = "Monto Reclamado", value = montoReclamado.ToString("C0"), color = "red" }
@@ -474,16 +474,16 @@ namespace Infrastructure.Services
                     ? Math.Round((double)montoAprobado / (double)montoReclamado * 100, 1)
                     : 0;
 
-                var text = $"📊 **Resumen del Sistema SIIGESE**\n\n" +
-                           $"• **{totalPolizas}** pólizas activas\n" +
-                           $"• **{totalCobros}** cobros registrados\n" +
-                           $"• **{totalReclamos}** reclamos en el sistema\n" +
-                           $"• Monto total reclamado: **{montoReclamado:C0}**\n" +
-                           $"• Tasa de aprobación: **{approvalRate}%**";
+                var text = $"ðŸ“Š **Resumen del Sistema OmnIA**\n\n" +
+                           $"â€¢ **{totalPolizas}** pÃ³lizas activas\n" +
+                           $"â€¢ **{totalCobros}** cobros registrados\n" +
+                           $"â€¢ **{totalReclamos}** reclamos en el sistema\n" +
+                           $"â€¢ Monto total reclamado: **{montoReclamado:C0}**\n" +
+                           $"â€¢ Tasa de aprobaciÃ³n: **{approvalRate}%**";
 
                 return (text, richContent, new List<string>
                 {
-                    "Ver pólizas",
+                    "Ver pÃ³lizas",
                     "Ver cobros",
                     "Ver reclamos"
                 });
@@ -491,37 +491,37 @@ namespace Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error generating stats for chat");
-                return ("Ocurrió un error al generar las estadísticas. Por favor intenta de nuevo.", null, null);
+                return ("OcurriÃ³ un error al generar las estadÃ­sticas. Por favor intenta de nuevo.", null, null);
             }
         }
 
         private static (string, object?, List<string>?) BuildFarewell()
         {
-            return ("¡Hasta luego! Ha sido un placer ayudarte. No dudes en volver cuando necesites asistencia. 👋",
+            return ("Â¡Hasta luego! Ha sido un placer ayudarte. No dudes en volver cuando necesites asistencia. ðŸ‘‹",
                     null,
-                    new List<string> { "Nueva consulta", "Ver mis pólizas" });
+                    new List<string> { "Nueva consulta", "Ver mis pÃ³lizas" });
         }
 
         private static (string, object?, List<string>?) BuildFallback(string input)
         {
             var response = "No estoy seguro de entender tu consulta. Puedo ayudarte con:\n\n" +
-                           "• **Pólizas** — buscar o consultar pólizas\n" +
-                           "• **Cobros** — estados y pagos pendientes\n" +
-                           "• **Reclamos** — seguimiento de siniestros\n" +
-                           "• **Estadísticas** — resumen general\n\n" +
-                           "¿Puedes reformular tu pregunta?";
+                           "â€¢ **PÃ³lizas** â€” buscar o consultar pÃ³lizas\n" +
+                           "â€¢ **Cobros** â€” estados y pagos pendientes\n" +
+                           "â€¢ **Reclamos** â€” seguimiento de siniestros\n" +
+                           "â€¢ **EstadÃ­sticas** â€” resumen general\n\n" +
+                           "Â¿Puedes reformular tu pregunta?";
 
             return (response, null, new List<string>
             {
-                "Ver mis pólizas",
+                "Ver mis pÃ³lizas",
                 "Consultar cobros",
                 "Ver reclamos",
-                "Estadísticas generales",
-                "¿Qué puedes hacer?"
+                "EstadÃ­sticas generales",
+                "Â¿QuÃ© puedes hacer?"
             });
         }
 
-        // ── Helpers ───────────────────────────────────────────────────────────────
+        // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private static bool AnyMatch(string text, params string[] keywords)
             => keywords.Any(k => text.Contains(k, StringComparison.OrdinalIgnoreCase));
@@ -587,15 +587,15 @@ namespace Infrastructure.Services
         }
     }
 
-    // ── Extension helpers ─────────────────────────────────────────────────────
+    // â”€â”€ Extension helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     internal static class StringExtensions
     {
         private static readonly (string, string)[] _diacritics =
         {
-            ("áàäâ", "a"), ("éèëê", "e"), ("íìïî", "i"), ("óòöô", "o"), ("úùüû", "u"),
-            ("ÁÀÄÂ", "A"), ("ÉÈËÊ", "E"), ("ÍÌÏÎ", "I"), ("ÓÒÖÔ", "O"), ("ÚÙÜÛ", "U"),
-            ("ñ", "n"), ("Ñ", "N")
+            ("Ã¡Ã Ã¤Ã¢", "a"), ("Ã©Ã¨Ã«Ãª", "e"), ("Ã­Ã¬Ã¯Ã®", "i"), ("Ã³Ã²Ã¶Ã´", "o"), ("ÃºÃ¹Ã¼Ã»", "u"),
+            ("ÃÃ€Ã„Ã‚", "A"), ("Ã‰ÃˆÃ‹ÃŠ", "E"), ("ÃÃŒÃÃŽ", "I"), ("Ã“Ã’Ã–Ã”", "O"), ("ÃšÃ™ÃœÃ›", "U"),
+            ("Ã±", "n"), ("Ã‘", "N")
         };
 
         public static string RemoveDiacritics(this string text)
@@ -607,3 +607,4 @@ namespace Infrastructure.Services
         }
     }
 }
+

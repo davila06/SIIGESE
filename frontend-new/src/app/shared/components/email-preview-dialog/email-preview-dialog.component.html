@@ -1,0 +1,97 @@
+<div class="epd-wrapper">
+
+  <!-- ── Header ────────────────────────────────────────────── -->
+  <div class="epd-header" [class.epd-header--preview]="data.mode === 'preview'"
+       [class.epd-header--details]="data.mode === 'details'">
+    <div class="epd-header-content">
+      <mat-icon class="epd-header-icon">
+        {{ data.mode === 'preview' ? 'visibility' : 'email' }}
+      </mat-icon>
+      <span class="epd-header-title">
+        {{ data.mode === 'preview' ? 'Vista Previa del Email' : 'Detalles del Email' }}
+      </span>
+    </div>
+    <button mat-icon-button class="epd-close-btn" (click)="close()"
+            aria-label="Cerrar diálogo" matTooltip="Cerrar">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- ── Subject bar ───────────────────────────────────────── -->
+  <div class="epd-subject-bar">
+    <mat-icon class="epd-subject-icon">subject</mat-icon>
+    <span class="epd-subject-text">{{ data.subject }}</span>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <!-- ── PREVIEW MODE: rendered HTML body ─────────────────── -->
+  <div *ngIf="data.mode === 'preview'" mat-dialog-content class="epd-content epd-content--preview">
+    <div *ngIf="safeHtml; else emptyBody" class="epd-html-frame" [innerHTML]="safeHtml"></div>
+    <ng-template #emptyBody>
+      <div class="epd-empty-state">
+        <mat-icon>mail_outline</mat-icon>
+        <span>El cuerpo del email está vacío.</span>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- ── DETAILS MODE: metadata card ─────────────────────── -->
+  <div *ngIf="data.mode === 'details'" mat-dialog-content class="epd-content epd-content--details">
+
+    <div class="epd-detail-row" *ngIf="data.toEmail">
+      <mat-icon class="epd-detail-icon">alternate_email</mat-icon>
+      <div class="epd-detail-text">
+        <span class="epd-detail-label">Destinatario</span>
+        <span class="epd-detail-value epd-detail-value--mono">{{ recipientDisplay }}</span>
+      </div>
+    </div>
+
+    <div class="epd-detail-row" *ngIf="data.sentAt">
+      <mat-icon class="epd-detail-icon">schedule</mat-icon>
+      <div class="epd-detail-text">
+        <span class="epd-detail-label">Fecha de envío</span>
+        <span class="epd-detail-value">{{ data.sentAt | date:'dd/MM/yyyy · HH:mm:ss' }}</span>
+      </div>
+    </div>
+
+    <div class="epd-detail-row" *ngIf="data.emailType">
+      <mat-icon class="epd-detail-icon">label_outline</mat-icon>
+      <div class="epd-detail-text">
+        <span class="epd-detail-label">Tipo</span>
+        <span class="epd-detail-value">{{ emailTypeLabel }}</span>
+      </div>
+    </div>
+
+    <div class="epd-detail-row">
+      <mat-icon class="epd-detail-icon"
+                [class.epd-icon--success]="data.isSuccess"
+                [class.epd-icon--error]="!data.isSuccess">
+        {{ data.isSuccess ? 'check_circle' : 'cancel' }}
+      </mat-icon>
+      <div class="epd-detail-text">
+        <span class="epd-detail-label">Estado</span>
+        <span class="epd-detail-value"
+              [class.epd-status--success]="data.isSuccess"
+              [class.epd-status--error]="!data.isSuccess">
+          {{ data.isSuccess ? 'Enviado exitosamente' : 'Error al enviar' }}
+        </span>
+      </div>
+    </div>
+
+    <div class="epd-error-box" *ngIf="!data.isSuccess && data.errorMessage">
+      <mat-icon>info_outline</mat-icon>
+      <span>{{ data.errorMessage }}</span>
+    </div>
+
+  </div>
+
+  <!-- ── Actions ───────────────────────────────────────────── -->
+  <div mat-dialog-actions class="epd-actions">
+    <button mat-button (click)="close()">
+      <mat-icon>close</mat-icon>
+      Cerrar
+    </button>
+  </div>
+
+</div>

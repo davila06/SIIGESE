@@ -96,6 +96,13 @@ namespace Infrastructure.Data.Repositories
     {
         public UserRepository(ApplicationDbContext context) : base(context) { }
 
+        public override async Task UpdateAsync(User entity)
+        {
+            entity.UpdatedAt = DateTime.UtcNow;
+            _dbSet.Update(entity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _dbSet.FirstOrDefaultAsync(u => u.Email == email);
@@ -221,6 +228,33 @@ namespace Infrastructure.Data.Repositories
         public async Task<IEnumerable<DataRecord>> GetByPerfilIdAsync(int perfilId)
         {
             return await _dbSet.Where(dr => dr.PerfilId == perfilId).ToListAsync();
+        }
+    }
+
+    public class EmailLogRepository : Repository<EmailLog>, IEmailLogRepository
+    {
+        public EmailLogRepository(ApplicationDbContext context) : base(context) { }
+
+        public async Task<IEnumerable<EmailLog>> GetPagedAsync(int pageNumber, int pageSize)
+        {
+            var safePageNumber = pageNumber <= 0 ? 1 : pageNumber;
+            var safePageSize = pageSize <= 0 ? 10 : pageSize;
+
+            return await _dbSet
+                .OrderByDescending(e => e.SentAt)
+                .Skip((safePageNumber - 1) * safePageSize)
+                .Take(safePageSize)
+                .ToListAsync();
+        }
+
+        public async Task<int> GetSuccessCountAsync()
+        {
+            return await _dbSet.CountAsync(e => e.IsSuccess);
+        }
+
+        public async Task<int> GetFailedCountAsync()
+        {
+            return await _dbSet.CountAsync(e => !e.IsSuccess);
         }
     }
 

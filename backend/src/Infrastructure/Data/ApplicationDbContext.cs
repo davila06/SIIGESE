@@ -19,9 +19,11 @@ namespace Infrastructure.Data
         public DbSet<Reclamo> Reclamos { get; set; }
         public DbSet<Cotizacion> Cotizaciones { get; set; }
         public DbSet<EmailConfig> EmailConfigs { get; set; }
+        public DbSet<EmailLog> EmailLogs { get; set; }
         public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
         public DbSet<ChatSession> ChatSessions { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<ReclamoHistorial> ReclamoHistoriales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -110,6 +112,75 @@ namespace Infrastructure.Data
                 entity.HasQueryFilter(e => !e.IsDeleted);
             });
 
+            // PasswordResetToken configuration
+            modelBuilder.Entity<PasswordResetToken>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Token).IsRequired();
+                entity.HasIndex(e => e.ExpiresAt);
+
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Keep this aligned with User soft-delete query filter.
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            // Cotizacion configuration
+            modelBuilder.Entity<Cotizacion>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Prima).HasPrecision(18, 2);
+
+                entity.HasOne(e => e.Usuario)
+                    .WithMany()
+                    .HasForeignKey(e => e.UsuarioId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Keep this aligned with User soft-delete query filter.
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            // Cobro configuration
+            modelBuilder.Entity<Cobro>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.MontoTotal).HasPrecision(18, 2);
+                entity.Property(e => e.MontoCobrado).HasPrecision(18, 2);
+
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            // Reclamo configuration
+            modelBuilder.Entity<Reclamo>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.MontoReclamado).HasPrecision(18, 2);
+                entity.Property(e => e.MontoAprobado).HasPrecision(18, 2);
+
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            // EmailLog configuration
+            modelBuilder.Entity<EmailLog>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.ToEmail).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.ToName).HasMaxLength(200);
+                entity.Property(e => e.Subject).IsRequired().HasMaxLength(250);
+                entity.Property(e => e.EmailType).HasMaxLength(50);
+                entity.Property(e => e.SenderName).HasMaxLength(100);
+                entity.Property(e => e.ErrorMessage).HasMaxLength(1000);
+
+                entity.HasIndex(e => e.SentAt);
+                entity.HasIndex(e => e.IsSuccess);
+                entity.HasIndex(e => e.EmailType);
+
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
             // Poliza configuration
             modelBuilder.Entity<Poliza>(entity =>
             {
@@ -134,6 +205,28 @@ namespace Infrastructure.Data
                 entity.HasIndex(e => e.PerfilId);
                 entity.HasIndex(e => e.Aseguradora);
 
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            // ReclamoHistorial configuration
+            modelBuilder.Entity<ReclamoHistorial>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.TipoEvento).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.ValorAnterior).HasMaxLength(200);
+                entity.Property(e => e.ValorNuevo).HasMaxLength(200);
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.Usuario).IsRequired().HasMaxLength(100);
+
+                entity.HasIndex(e => e.ReclamoId);
+                entity.HasIndex(e => e.CreatedAt);
+
+                entity.HasOne(e => e.Reclamo)
+                    .WithMany()
+                    .HasForeignKey(e => e.ReclamoId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // History entries are immutable — global query filter only hides soft-deleted rows.
                 entity.HasQueryFilter(e => !e.IsDeleted);
             });
 

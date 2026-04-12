@@ -1,8 +1,19 @@
 <div class="cobro-detalle-container">
-  <!-- Loading Spinner -->
-  <div *ngIf="loading" class="loading-container">
-    <mat-spinner></mat-spinner>
-    <p>Cargando detalle del cobro...</p>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="empty-state" style="padding: 64px 24px">
+    <mat-spinner diameter="48"></mat-spinner>
+    <span class="empty-message" style="margin-top: 16px">Cargando detalle del cobro...</span>
+  </div>
+
+  <!-- Error / Not-found State -->
+  <div *ngIf="!loading && !cobro" class="empty-state">
+    <mat-icon style="color: var(--color-error)">error_outline</mat-icon>
+    <span class="empty-title">Cobro no encontrado</span>
+    <span class="empty-message">No se pudo cargar la información del cobro. Es posible que haya sido eliminado o no tengas permisos para verlo.</span>
+    <button mat-stroked-button (click)="volver()" style="margin-top: 8px">
+      <mat-icon>arrow_back</mat-icon>
+      Volver al listado
+    </button>
   </div>
 
   <!-- Contenido del detalle -->

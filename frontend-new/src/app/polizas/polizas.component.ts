@@ -1,4 +1,5 @@
-﻿import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, inject } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, ChangeDetectorRef, inject, HostListener } from '@angular/core';
+import { MatTabGroup } from '@angular/material/tabs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { Poliza, CreatePoliza } from '../interfaces/user.interface';
+import { ConfirmDialogComponent, ConfirmDialogData } from '../shared/components/confirm-dialog.component';
 import { formatCurrencyByCode, formatDateCR, parseBackendDate, MONEDAS_SISTEMA, CURRENCY_CONSTANTS, ASEGURADORAS_SISTEMA } from '../shared/constants/currency.constants';
 import { LoggingService } from '../services/logging.service';
 
@@ -20,6 +22,7 @@ import { LoggingService } from '../services/logging.service';
 })
 export class PolizasComponent implements OnInit, AfterViewInit {
   @ViewChild('formSection') formSection!: ElementRef;
+  @ViewChild(MatTabGroup) tabGroup!: MatTabGroup;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   
@@ -30,6 +33,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   selectedPoliza: Poliza | null = null;
   isEditMode = false;
   formLoadingState: 'idle' | 'loading' | 'loaded' = 'idle';
+
+  // Vista activa (tarjetas / tabla), persiste en localStorage
+  currentView: 'cards' | 'table' = 'cards';
   
   // Variables de paginación
   pageSize = 10;
@@ -60,12 +66,46 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     private readonly dialog: MatDialog
   ) {
     this.polizaForm = this.createForm();
+    // Restaurar preferencia de vista almacenada
+    const savedView = localStorage.getItem('polizasView');
+    if (savedView === 'table' || savedView === 'cards') {
+      this.currentView = savedView;
+    }
   }
 
   ngOnInit(): void {
     this.loadPolizas();
     // Asegurar que el formulario esté siempre limpio al iniciar
     this.resetForm();
+  }
+
+  /** Tecla Escape: cancela edición */
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.isEditMode) {
+      this.resetForm();
+    }
+  }
+
+  /** Navega al tab del formulario para crear nueva póliza */
+  goToNewForm(): void {
+    this.resetFormValues();
+    setTimeout(() => {
+      if (this.tabGroup) this.tabGroup.selectedIndex = 1;
+    }, 0);
+  }
+
+  /** Maneja cambio de tab — si vuelve al listado cancelando edición */
+  onTabChange(index: number): void {
+    if (index === 0 && this.isEditMode) {
+      this.resetFormValues();
+    }
+  }
+
+  /** Cambia vista tarjetas/tabla y persiste en localStorage */
+  onViewChange(view: 'cards' | 'table'): void {
+    this.currentView = view;
+    localStorage.setItem('polizasView', view);
   }
 
   // Variables para sorting manual
@@ -248,17 +288,10 @@ export class PolizasComponent implements OnInit, AfterViewInit {
           
           // Actualizar todas las listas filtradas y vistas
           this.performSearch();
-          
-          this.resetForm();
+
           this.showMessage('Póliza actualizada exitosamente');
           this.isLoading = false;
-
-          // Scroll to top after update so the table is visible
-          const pageContent = document.querySelector('.page-content') as HTMLElement | null;
-          if (pageContent) { pageContent.scrollTo({ top: 0, behavior: 'smooth' }); }
-          const host = document.querySelector('mat-sidenav-content') as HTMLElement | null;
-          if (host) { host.scrollTop = 0; }
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          this.resetForm();
         },
         error: (error: any) => {
           this.logger.error('Error updating poliza:', error);
@@ -274,10 +307,10 @@ export class PolizasComponent implements OnInit, AfterViewInit {
           
           // Actualizar todas las listas filtradas y vistas
           this.performSearch();
-          
-          this.resetForm();
+
           this.showMessage('Póliza creada exitosamente');
           this.isLoading = false;
+          this.resetForm();
         },
         error: (error: any) => {
           this.logger.error('Error creating poliza:', error);
@@ -289,20 +322,28 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   }
 
   deletePoliza(poliza: Poliza): void {
-    if (confirm(`¿Está seguro de eliminar la póliza ${poliza.numeroPoliza}?`)) {
+    const data: ConfirmDialogData = {
+      title: 'Eliminar Póliza',
+      message: `¿Está seguro de eliminar la póliza ${poliza.numeroPoliza}?`,
+      detail: `Asegurado: ${poliza.nombreAsegurado}. Esta acción no se puede deshacer.`,
+      confirmText: 'Eliminar',
+      confirmColor: 'warn',
+      icon: 'delete_sweep'
+    };
+    this.dialog.open(ConfirmDialogComponent, {
+      data,
+      width: '420px',
+      maxWidth: '95vw',
+      autoFocus: false
+    }).afterClosed().subscribe((confirmed: boolean) => {
+      if (!confirmed) return;
       this.apiService.deletePoliza(poliza.id).subscribe({
         next: () => {
-          // Actualizar todas las listas
           this.polizas = this.polizas.filter(p => p.id !== poliza.id);
-          
-          // Actualizar búsqueda y paginación
           this.performSearch();
-          
-          // Si estaba editando esta póliza, cancelar edición
           if (this.selectedPoliza?.id === poliza.id) {
             this.resetForm();
           }
-          
           this.showMessage('Póliza eliminada exitosamente');
         },
         error: (error: any) => {
@@ -310,7 +351,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
           this.showMessage('Error al eliminar la póliza', 'error');
         }
       });
-    }
+    });
   }
 
   private showMessage(message: string, type: 'success' | 'error' | 'warning' = 'success'): void {
@@ -387,8 +428,14 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         
         // Buscar en placa (si existe)
         const placaMatch = this.normalizeText(poliza.placa?.toLowerCase() || '').includes(searchLower);
+
+        // Buscar en aseguradora
+        const aseguradoraMatch = this.normalizeText(poliza.aseguradora?.toLowerCase() || '').includes(searchLower);
+
+        // Buscar en cédula
+        const cedulaMatch = (poliza.numeroCedula || '').toLowerCase().includes(searchLower);
         
-        return numeroMatch || nombreMatch || placaMatch;
+        return numeroMatch || nombreMatch || placaMatch || aseguradoraMatch || cedulaMatch;
       });
     }
     
@@ -487,25 +534,8 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     this.isEditMode = true;
     this.cdr.detectChanges();
 
-    // Scroll immediately + again after form loads (covers all scroll hosts)
-    const doScroll = () => {
-      // .page-content is the real overflow-y:auto container defined in app.component.scss
-      const pageContent = document.querySelector('.page-content') as HTMLElement | null;
-      if (pageContent) {
-        pageContent.scrollTop = 0;
-        pageContent.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      // Fallback: mat-sidenav-content + window
-      const sidenavContent = document.querySelector('mat-sidenav-content') as HTMLElement | null;
-      if (sidenavContent) { sidenavContent.scrollTop = 0; }
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-
-    doScroll();
-    setTimeout(doScroll, 50);
-    setTimeout(doScroll, 250);
+    // Switch to form tab
+    if (this.tabGroup) this.tabGroup.selectedIndex = 1;
 
     // Phase 2: fill form after shimmer window (200ms)
     setTimeout(() => {
@@ -528,11 +558,6 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     }, 200);
   }
 
-  // Método de prueba para forzar scroll
-  forceScrollToTop(): void {
-    [document.documentElement, document.body].forEach(el => el.scrollTop = 0);
-    window.scrollTo(0, 0);
-  }
 
   loadPolizaToForm(poliza: Poliza): void {
     const parsed = parseBackendDate(poliza.fechaVigencia);
@@ -573,21 +598,27 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return map[val.toUpperCase()] ?? val;
   }
 
+  /** Reinicia el estado del formulario y navega al listado */
   resetForm(): void {
-    // Resetear completamente el formulario
+    this.resetFormValues();
+    if (this.tabGroup) this.tabGroup.selectedIndex = 0;
+  }
+
+  /** Solo reinicia los valores del formulario sin cambiar de tab */
+  private resetFormValues(): void {
     this.polizaForm.reset();
     this.selectedPoliza = null;
     this.isEditMode = false;
-    
+
     // Restablecer valores por defecto
     this.polizaForm.patchValue({
       perfilId: 1,
       moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY,
       prima: 0,
-      fechaVigencia: new Date().toISOString().split('T')[0] // Fecha actual por defecto
+      fechaVigencia: new Date().toISOString().split('T')[0]
     });
-    
-    // Limpiar completamente los estados de validación
+
+    // Limpiar estados de validación
     Object.keys(this.polizaForm.controls).forEach(key => {
       const control = this.polizaForm.get(key);
       if (control) {
@@ -597,8 +628,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
         control.updateValueAndValidity();
       }
     });
-    
-    // Forzar actualización de la vista
+
     this.cdr.detectChanges();
   }
 
@@ -608,6 +638,12 @@ export class PolizasComponent implements OnInit, AfterViewInit {
 
   get formTitle(): string {
     return this.isEditMode ? 'Editar Póliza' : 'Agregar Nueva Póliza';
+  }
+
+  get formTabLabel(): string {
+    return this.isEditMode && this.selectedPoliza
+      ? `Editar: ${this.selectedPoliza.numeroPoliza}`
+      : 'Nueva Póliza';
   }
 
   get submitButtonText(): string {
@@ -622,6 +658,30 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       const control = this.polizaForm.get(field);
       return control && control.valid && control.value !== '' && control.value !== null;
     });
+  }
+
+  /** Retorna 'expired' | 'warning' | 'active' según fechaVigencia */
+  getPolizaStatus(poliza: Poliza): 'expired' | 'warning' | 'active' {
+    const vigencia = parseBackendDate(poliza.fechaVigencia);
+    if (!vigencia) return 'active';
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+    if (vigencia < hoy) return 'expired';
+    const diffDays = (vigencia.getTime() - hoy.getTime()) / (1000 * 60 * 60 * 24);
+    if (diffDays <= 30) return 'warning';
+    return 'active';
+  }
+
+  getPolizaStatusLabel(poliza: Poliza): string {
+    const s = this.getPolizaStatus(poliza);
+    return s === 'expired' ? 'Vencida' : s === 'warning' ? 'Por vencer' : 'Vigente';
+  }
+
+  /** Símbolo de moneda dinámico para el campo Prima */
+  get currencyPrefix(): string {
+    const moneda = this.polizaForm.get('moneda')?.value || CURRENCY_CONSTANTS.DEFAULT_CURRENCY;
+    const prefixMap: Record<string, string> = { CRC: '₡', USD: '$', EUR: '€' };
+    return prefixMap[moneda] ?? moneda;
   }
 
 }

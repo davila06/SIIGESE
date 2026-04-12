@@ -33,7 +33,7 @@
         <div class="stat-content">
           <div class="stat-icon"><mat-icon>schedule</mat-icon></div>
           <div class="stat-info">
-            <h3>{{ stats.totalPendientes }}</h3>
+            <h3 [appCountUp]="safeNumber(stats.totalPendientes)">{{ safeNumber(stats.totalPendientes) }}</h3>
             <p>Pendientes</p>
             <span class="stat-amount">{{ getCurrencySymbol() }}{{ safeNumber(stats.montoTotalPendiente) | number:'1.2-2' }}</span>
           </div>
@@ -46,7 +46,7 @@
         <div class="stat-content">
           <div class="stat-icon"><mat-icon>check_circle</mat-icon></div>
           <div class="stat-info">
-            <h3>{{ stats.totalCobrados }}</h3>
+            <h3 [appCountUp]="safeNumber(stats.totalCobrados)">{{ safeNumber(stats.totalCobrados) }}</h3>
             <p>Cobrados</p>
             <span class="stat-amount">{{ getCurrencySymbol() }}{{ safeNumber(stats.montoTotalCobrado) | number:'1.2-2' }}</span>
           </div>
@@ -59,7 +59,7 @@
         <div class="stat-content">
           <div class="stat-icon"><mat-icon>warning</mat-icon></div>
           <div class="stat-info">
-            <h3>{{ stats.totalVencidos }}</h3>
+            <h3 [appCountUp]="safeNumber(stats.totalVencidos)">{{ safeNumber(stats.totalVencidos) }}</h3>
             <p>Vencidos</p>
             <span class="stat-amount">{{ getCurrencySymbol() }}{{ safeNumber(stats.montoPorVencer) | number:'1.2-2' }}</span>
           </div>
@@ -115,16 +115,20 @@
 
           <div class="estado-chips">
             <span class="filter-label">Estado:</span>
-            <mat-chip-set>
-              <mat-chip [class.selected]="getFiltroEstado(i) === null"
-                (click)="filtrarPorEstado(null, i)">Todos</mat-chip>
-              <mat-chip [class.selected]="getFiltroEstado(i) === EstadoCobro.Pendiente"
-                (click)="filtrarPorEstado(EstadoCobro.Pendiente, i)">Pendientes</mat-chip>
-              <mat-chip [class.selected]="getFiltroEstado(i) === EstadoCobro.Cobrado"
-                (click)="filtrarPorEstado(EstadoCobro.Cobrado, i)">Cobrados</mat-chip>
-              <mat-chip [class.selected]="getFiltroEstado(i) === EstadoCobro.Vencido"
-                (click)="filtrarPorEstado(EstadoCobro.Vencido, i)">Vencidos</mat-chip>
-            </mat-chip-set>
+            <mat-chip-listbox hideSingleSelectionIndicator>
+              <mat-chip-option [class.selected]="getFiltroEstado(i) === null"
+                [selected]="getFiltroEstado(i) === null"
+                (click)="filtrarPorEstado(null, i)">Todos</mat-chip-option>
+              <mat-chip-option [class.selected]="getFiltroEstado(i) === EstadoCobro.Pendiente"
+                [selected]="getFiltroEstado(i) === EstadoCobro.Pendiente"
+                (click)="filtrarPorEstado(EstadoCobro.Pendiente, i)">Pendientes</mat-chip-option>
+              <mat-chip-option [class.selected]="getFiltroEstado(i) === EstadoCobro.Cobrado"
+                [selected]="getFiltroEstado(i) === EstadoCobro.Cobrado"
+                (click)="filtrarPorEstado(EstadoCobro.Cobrado, i)">Cobrados</mat-chip-option>
+              <mat-chip-option [class.selected]="getFiltroEstado(i) === EstadoCobro.Vencido"
+                [selected]="getFiltroEstado(i) === EstadoCobro.Vencido"
+                (click)="filtrarPorEstado(EstadoCobro.Vencido, i)">Vencidos</mat-chip-option>
+            </mat-chip-listbox>
           </div>
         </div>
 
@@ -138,10 +142,15 @@
         <div class="table-container" *ngIf="!tab.loading">
           <table mat-table [dataSource]="tab.dataSource" matSort class="cobros-table">
 
-            <!-- Número Recibo -->
-            <ng-container matColumnDef="numeroRecibo">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Recibo</th>
-              <td mat-cell *matCellDef="let cobro"><strong>{{ cobro.numeroRecibo }}</strong></td>
+            <!-- Semáforo -->
+            <ng-container matColumnDef="semaforo">
+              <th mat-header-cell *matHeaderCellDef class="col-semaforo"></th>
+              <td mat-cell *matCellDef="let cobro" class="col-semaforo">
+                <span class="semaforo-dot" [ngClass]="getSemaforoClass(cobro)"
+                      [matTooltip]="getSemaforoTooltip(cobro)"
+                      role="img"
+                      [attr.aria-label]="getSemaforoTooltip(cobro)"></span>
+              </td>
             </ng-container>
 
             <!-- Número Póliza -->
@@ -154,18 +163,6 @@
             <ng-container matColumnDef="cliente">
               <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
               <td mat-cell *matCellDef="let cobro">{{ cobro.clienteNombreCompleto }}</td>
-            </ng-container>
-
-            <!-- Correo Electrónico -->
-            <ng-container matColumnDef="correoElectronico">
-              <th mat-header-cell *matHeaderCellDef>Correo</th>
-              <td mat-cell *matCellDef="let cobro">
-                <span class="email-cell" *ngIf="cobro.correoElectronico">
-                  <mat-icon class="email-icon">email</mat-icon>
-                  {{ cobro.correoElectronico }}
-                </span>
-                <span class="no-email" *ngIf="!cobro.correoElectronico">—</span>
-              </td>
             </ng-container>
 
             <!-- Fecha Vencimiento -->
@@ -193,32 +190,11 @@
               </td>
             </ng-container>
 
-            <!-- Fecha Cobro -->
-            <ng-container matColumnDef="fechaCobro">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>F. Cobro</th>
-              <td mat-cell *matCellDef="let cobro">
-                {{ safeDate(cobro.fechaCobro) ? (safeDate(cobro.fechaCobro) | date:'dd/MM/yyyy') : '—' }}
-              </td>
-            </ng-container>
-
-            <!-- Método Pago -->
-            <ng-container matColumnDef="metodoPago">
-              <th mat-header-cell *matHeaderCellDef>Método</th>
-              <td mat-cell *matCellDef="let cobro">
-                {{ cobro.metodoPago !== null && cobro.metodoPago !== undefined ? getMetodoPagoLabel(cobro.metodoPago) : '—' }}
-              </td>
-            </ng-container>
-
             <!-- Acciones -->
-            <ng-container matColumnDef="acciones">
+            <ng-container matColumnDef="acciones" [sticky]="true">
               <th mat-header-cell *matHeaderCellDef>Acciones</th>
               <td mat-cell *matCellDef="let cobro">
                 <div class="row-actions">
-                  <button mat-icon-button color="primary"
-                    (click)="verDetalle(cobro)"
-                    matTooltip="Ver detalle">
-                    <mat-icon>visibility</mat-icon>
-                  </button>
 
                   <!-- Enviar Email -->
                   <button mat-icon-button
@@ -231,19 +207,38 @@
                     <mat-icon *ngIf="!isEmailSending(cobro.id)">send</mat-icon>
                   </button>
 
+                  <!-- Registrar pago: Pendiente o Vencido -->
                   <button mat-icon-button color="accent"
-                    *ngIf="cobro.estado === EstadoCobro.Pendiente"
+                    *ngIf="cobro.estado === EstadoCobro.Pendiente || cobro.estado === EstadoCobro.Vencido"
                     (click)="registrarCobro(cobro)"
                     matTooltip="Registrar pago">
                     <mat-icon>payment</mat-icon>
                   </button>
 
+                  <!-- Marcar vencido: solo Pendiente -->
+                  <button mat-icon-button class="btn-vencido"
+                    *ngIf="cobro.estado === EstadoCobro.Pendiente"
+                    (click)="cambiarEstado(cobro, EstadoCobro.Vencido)"
+                    matTooltip="Marcar como vencido">
+                    <mat-icon>warning</mat-icon>
+                  </button>
+
+                  <!-- Reactivar → Pendiente: Vencido o Cancelado -->
+                  <button mat-icon-button class="btn-reactivar"
+                    *ngIf="cobro.estado === EstadoCobro.Vencido || cobro.estado === EstadoCobro.Cancelado"
+                    (click)="cambiarEstado(cobro, EstadoCobro.Pendiente)"
+                    matTooltip="Reactivar (marcar como pendiente)">
+                    <mat-icon>restart_alt</mat-icon>
+                  </button>
+
+                  <!-- Cancelar: solo Pendiente -->
                   <button mat-icon-button color="warn"
                     *ngIf="cobro.estado === EstadoCobro.Pendiente"
                     (click)="cancelarCobro(cobro)"
                     matTooltip="Cancelar cobro">
                     <mat-icon>cancel</mat-icon>
                   </button>
+
                 </div>
               </td>
             </ng-container>

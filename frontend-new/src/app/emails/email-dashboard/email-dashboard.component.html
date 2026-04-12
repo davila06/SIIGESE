@@ -1,6 +1,9 @@
 <div class="email-dashboard">
   <div class="header">
-    <h1>📧 Sistema de Notificaciones</h1>
+    <h1>
+      <mat-icon aria-hidden="true">email</mat-icon>
+      Sistema de Notificaciones
+    </h1>
     <p>Gestión y envío de notificaciones automáticas y manuales</p>
   </div>
 
@@ -46,6 +49,7 @@
     </mat-card>
   </div>
 
+  <!-- Loading skeleton only — no duplicate text spinner -->
   <div class="stats-cards stats-skeleton" *ngIf="loading">
     <mat-card class="stat-card" *ngFor="let i of [1,2,3,4]">
       <mat-card-content>
@@ -54,10 +58,6 @@
         <div class="skeleton skeleton-label"></div>
       </mat-card-content>
     </mat-card>
-  </div>
-
-  <div class="loading-container" *ngIf="loading">
-    <p class="loading-text">Cargando información...</p>
   </div>
 
   <div class="action-cards">

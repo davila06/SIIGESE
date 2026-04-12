@@ -1,0 +1,86 @@
+<div class="reportes-page">
+  <div class="header">
+    <div>
+      <h1>Modulo 8 - Reportes Exportables</h1>
+      <p>Generacion bajo demanda y automatizacion mensual para direccion y aseguradoras.</p>
+    </div>
+  </div>
+
+  <div class="filtro-aseguradora">
+    <mat-form-field appearance="outline">
+      <mat-label>Aseguradora (opcional)</mat-label>
+      <mat-select [(ngModel)]="aseguradora">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let a of aseguradoras" [value]="a">{{ a }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="cards-grid">
+    <mat-card class="report-card">
+      <mat-card-title>8.1 Cartera por Aseguradora</mat-card-title>
+      <mat-card-content>
+        <p>Incluye polizas, estado de cobro, reclamos pendientes y tasa de cobro.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="downloadCarteraExcel()" [disabled]="isBusy('carteraExcel')">
+          <mat-icon>table_view</mat-icon> Excel
+        </button>
+        <button mat-stroked-button (click)="downloadCarteraPdf()" [disabled]="isBusy('carteraPdf')">
+          <mat-icon>picture_as_pdf</mat-icon> PDF
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="report-card">
+      <mat-card-title>8.2 Morosidad</mat-card-title>
+      <mat-card-content>
+        <p>Cobros vencidos con aging, contacto del cliente e historial de cobros.</p>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Destinatarios gerencia cobros (CSV opcional)</mat-label>
+          <input matInput [(ngModel)]="recipientsCsv" placeholder="gerencia@empresa.com,cobros@empresa.com" />
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="downloadMorosidadExcel()" [disabled]="isBusy('morosidadExcel')">
+          <mat-icon>download</mat-icon> Excel
+        </button>
+        <button mat-stroked-button (click)="sendMorosidadEmail()" [disabled]="isBusy('morosidadEmail')">
+          <mat-icon>mail</mat-icon> Enviar Email
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="report-card">
+      <mat-card-title>8.3 Reclamos (SLA Compliance)</mat-card-title>
+      <mat-card-content>
+        <p>PDF ejecutivo con reclamos por estado, cumplimiento SLA y montos aprobados.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="downloadReclamosSlaPdf()" [disabled]="isBusy('reclamosSlaPdf')">
+          <mat-icon>picture_as_pdf</mat-icon> PDF Ejecutivo
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="report-card">
+      <mat-card-title>8.4 Estado del Portafolio</mat-card-title>
+      <mat-card-content>
+        <p>PDF de 1 pagina con KPIs del modulo 0. Programado automatico el dia 1 de cada mes para admins.</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="downloadEstadoPortafolioPdf()" [disabled]="isBusy('estadoPortafolioPdf')">
+          <mat-icon>picture_as_pdf</mat-icon> PDF
+        </button>
+        <button mat-stroked-button (click)="sendEstadoPortafolioAdmins()" [disabled]="isBusy('estadoPortafolioEmail')">
+          <mat-icon>admin_panel_settings</mat-icon> Enviar a Admins
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="status" *ngIf="statusMessage">
+    <mat-icon>info</mat-icon>
+    <span>{{ statusMessage }}</span>
+  </div>
+</div>

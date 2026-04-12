@@ -1,0 +1,351 @@
+﻿<div class="reclamos-analytics">
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">troubleshoot</mat-icon>
+      <div>
+        <h1 class="page-header__title">MÃ³dulo 3 - AnalÃ­tica de Reclamos</h1>
+        <span class="page-header__subtitle">Funnel, SLA, loss ratio, tiempos de resoluciÃ³n y performance operativo</span>
+      </div>
+    </div>
+    <div class="page-header__actions">
+      <button mat-stroked-button (click)="load()" [disabled]="loading">
+        <mat-icon>refresh</mat-icon>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  <div class="filters-row" *ngIf="!loading">
+    <mat-form-field appearance="outline">
+      <mat-label>Ventana temporal</mat-label>
+      <mat-select [(ngModel)]="months" (selectionChange)="load()">
+        <mat-option [value]="3">3 meses</mat-option>
+        <mat-option [value]="6">6 meses</mat-option>
+        <mat-option [value]="12">12 meses</mat-option>
+        <mat-option [value]="24">24 meses</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="advanced?.agentesDisponibles?.length">
+      <mat-label>Agente</mat-label>
+      <mat-select [ngModel]="selectedAgenteId" (ngModelChange)="onAgenteChange($event); load()">
+        <mat-option [value]="null">Todos</mat-option>
+        <mat-option *ngFor="let a of advanced?.agentesDisponibles" [value]="a.id">{{ a.nombre }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" *ngIf="advanced?.aseguradorasDisponibles?.length">
+      <mat-label>Aseguradora</mat-label>
+      <mat-select [(ngModel)]="selectedAseguradora" (selectionChange)="load()">
+        <mat-option value="">Todas</mat-option>
+        <mat-option *ngFor="let a of advanced?.aseguradorasDisponibles" [value]="a">{{ a }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+    <div class="kpi-row" *ngIf="sla && funnel && advanced">
+      <div class="kpi-card" [class]="slaClass(sla.porcentajeGlobalDentroSLA)">
+        <mat-icon>timer</mat-icon>
+        <span class="kpi-card__value">{{ sla.porcentajeGlobalDentroSLA | number:'1.1-1' }}%</span>
+        <span class="kpi-card__label">SLA Global</span>
+      </div>
+
+      <div class="kpi-card kpi-card--info">
+        <mat-icon>warning</mat-icon>
+        <span class="kpi-card__value">{{ sla.proximosVencer.length }}</span>
+        <span class="kpi-card__label">PrÃ³ximos a vencer</span>
+      </div>
+
+      <div class="kpi-card kpi-card--neutral">
+        <mat-icon>attach_money</mat-icon>
+        <span class="kpi-card__value">{{ funnel.lossRatioGlobal | number:'1.1-1' }}%</span>
+        <span class="kpi-card__label">Loss ratio global</span>
+      </div>
+
+      <div class="kpi-card kpi-card--neutral">
+        <mat-icon>assignment_turned_in</mat-icon>
+        <span class="kpi-card__value">{{ totalReclamosAnalizados() }}</span>
+        <span class="kpi-card__label">Reclamos analizados</span>
+      </div>
+    </div>
+
+    <mat-tab-group>
+      <mat-tab label="3.1 Funnel y SLA">
+        <div class="grid-2col">
+          <app-chart-card title="Funnel de Reclamos" icon="filter_alt" subtitle="Embudo operativo por etapa de gestiÃ³n">
+            <div class="funnel-visual" *ngIf="funnel">
+              <div
+                *ngFor="let etapa of funnel.etapas; let i = index"
+                class="funnel-step"
+                [style.width]="etapaWidth(etapa)"
+                [style.opacity]="1 - i * 0.05">
+                <span class="funnel-step__name">{{ etapa.nombre }}</span>
+                <span class="funnel-step__count">{{ etapa.cantidad }}</span>
+                <span class="funnel-step__pct">{{ etapa.porcentajeDel100 | number:'1.1-1' }}%</span>
+              </div>
+            </div>
+          </app-chart-card>
+
+          <app-chart-card title="DistribuciÃ³n por Estado" icon="donut_large">
+            <ngx-charts-pie-chart [animations]="false"
+              [results]="funnelChart"
+              [scheme]="funnelColors"
+              [legend]="true"
+              [legendPosition]="legendBelow"
+              [labels]="false">
+            </ngx-charts-pie-chart>
+          </app-chart-card>
+        </div>
+
+        <div class="grid-2col">
+          <app-chart-card title="SLA por Tipo" icon="category">
+            <ngx-charts-bar-vertical-stacked [animations]="false"
+              [results]="tipoBarChart"
+              [scheme]="colorSla"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true"
+              [legend]="true"
+              [legendPosition]="legendBelow">
+            </ngx-charts-bar-vertical-stacked>
+          </app-chart-card>
+
+          <app-chart-card title="SLA por Prioridad" icon="low_priority">
+            <ngx-charts-bar-horizontal [animations]="false"
+              [results]="prioridadChart"
+              [scheme]="colorSla"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true">
+            </ngx-charts-bar-horizontal>
+          </app-chart-card>
+        </div>
+
+        <app-chart-card title="Indicador SLA Global" icon="speed">
+          <ngx-charts-gauge [animations]="false"
+            [results]="gaugeValue()"
+            [min]="0"
+            [max]="100"
+            [showAxis]="true"
+            [angleSpan]="240"
+            [startAngle]="-120"
+            [scheme]="colorSla">
+          </ngx-charts-gauge>
+        </app-chart-card>
+      </mat-tab>
+
+      <mat-tab label="3.2 Loss Ratio">
+        <div class="grid-2col">
+          <app-chart-card title="Loss Ratio por Aseguradora" icon="business">
+            <ngx-charts-bar-vertical [animations]="false"
+              [results]="lossRatioAsegChart"
+              [scheme]="lossRatioColors"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true">
+            </ngx-charts-bar-vertical>
+          </app-chart-card>
+
+          <app-chart-card title="Loss Ratio por Tipo de PÃ³liza" icon="policy">
+            <ngx-charts-bar-horizontal [animations]="false"
+              [results]="lossRatioTipoChart"
+              [scheme]="lossRatioColors"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true">
+            </ngx-charts-bar-horizontal>
+          </app-chart-card>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="3.3 Tiempos">
+        <div class="grid-2col">
+          <app-chart-card title="ResoluciÃ³n por Tipo" icon="category">
+            <ngx-charts-bar-vertical [animations]="false"
+              [results]="resolucionTipoChart"
+              [scheme]="resolucionColors"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true"
+              [yAxisTickFormatting]="xAxisDays">
+            </ngx-charts-bar-vertical>
+          </app-chart-card>
+
+          <app-chart-card title="ResoluciÃ³n por Prioridad" icon="flag">
+            <ngx-charts-bar-horizontal [animations]="false"
+              [results]="resolucionPrioridadChart"
+              [scheme]="resolucionColors"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true"
+              [xAxisTickFormatting]="xAxisDays">
+            </ngx-charts-bar-horizontal>
+          </app-chart-card>
+        </div>
+
+        <div class="grid-2col">
+          <app-chart-card title="ResoluciÃ³n por Agente" icon="person_search">
+            <ngx-charts-bar-vertical [animations]="false"
+              [results]="resolucionAgenteChart"
+              [scheme]="resolucionColors"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true"
+              [yAxisTickFormatting]="xAxisDays">
+            </ngx-charts-bar-vertical>
+          </app-chart-card>
+
+          <app-chart-card title="ResoluciÃ³n por Aseguradora" icon="domain">
+            <ngx-charts-bar-horizontal [animations]="false"
+              [results]="resolucionAseguradoraChart"
+              [scheme]="resolucionColors"
+              [xAxis]="true"
+              [yAxis]="true"
+              [showGridLines]="true"
+              [xAxisTickFormatting]="xAxisDays">
+            </ngx-charts-bar-horizontal>
+          </app-chart-card>
+        </div>
+      </mat-tab>
+
+      <mat-tab label="3.4 Monto vs Aprobado">
+        <app-chart-card title="DispersiÃ³n Monto Reclamado vs Aprobado" icon="scatter_plot" subtitle="El radio de cada burbuja representa duraciÃ³n en dÃ­as">
+          <ngx-charts-bubble-chart [animations]="false"
+            [results]="scatterChart"
+            [scheme]="scatterColors"
+            [xAxis]="true"
+            [yAxis]="true"
+            [showGridLines]="true"
+            [xAxisLabel]="'Monto reclamado'"
+            [yAxisLabel]="'Monto aprobado'"
+            [xAxisTickFormatting]="yAxisCurrency"
+            [yAxisTickFormatting]="yAxisCurrency"
+            [legend]="true"
+            [legendPosition]="legendBelow">
+          </ngx-charts-bubble-chart>
+        </app-chart-card>
+      </mat-tab>
+
+      <mat-tab label="3.5 Heatmap">
+        <app-chart-card title="Heatmap Mes vs Tipo de Reclamo" icon="calendar_view_month">
+          <div class="heatmap-wrapper" *ngIf="heatmapMeses.length && heatmapTipos.length">
+            <table class="heatmap-table">
+              <thead>
+                <tr>
+                  <th scope="col">Tipo \/ Mes</th>
+                  <th scope="col" *ngFor="let mes of heatmapMeses">{{ monthLabel(mes) }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let tipo of heatmapTipos">
+                  <th scope="row">{{ tipo }}</th>
+                  <td
+                    *ngFor="let mes of heatmapMeses"
+                    [style.background]="getHeatmapColor(tipo, mes)">
+                    {{ getHeatmapValue(tipo, mes) }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </app-chart-card>
+      </mat-tab>
+
+      <mat-tab label="3.6 Rendimiento">
+        <app-chart-card title="Rendimiento de Agentes" icon="groups" subtitle="Comportamiento de cierre y cumplimiento en el tiempo">
+          <table mat-table [dataSource]="advanced?.rendimientoAgentes ?? []" class="agente-table">
+            <ng-container matColumnDef="agente">
+              <th mat-header-cell *matHeaderCellDef>Agente</th>
+              <td mat-cell *matCellDef="let row"><strong>{{ row.agente }}</strong></td>
+            </ng-container>
+
+            <ng-container matColumnDef="cerrados">
+              <th mat-header-cell *matHeaderCellDef>Cerrados</th>
+              <td mat-cell *matCellDef="let row">{{ row.reclamosCerrados }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="tiempo">
+              <th mat-header-cell *matHeaderCellDef>Tiempo Promedio</th>
+              <td mat-cell *matCellDef="let row">{{ row.tiempoPromedioDias | number:'1.1-1' }} d</td>
+            </ng-container>
+
+            <ng-container matColumnDef="sla">
+              <th mat-header-cell *matHeaderCellDef>% SLA</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="chip" [class]="performanceClass(row.porcentajeDentroSla)">
+                  {{ row.porcentajeDentroSla | number:'1.1-1' }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ratio">
+              <th mat-header-cell *matHeaderCellDef>Loss Ratio</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="chip" [class]="ratioClass(row.ratioAprobadoVsReclamado)">
+                  {{ row.ratioAprobadoVsReclamado | number:'1.1-1' }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sparkline">
+              <th mat-header-cell *matHeaderCellDef>Tendencia</th>
+              <td mat-cell *matCellDef="let row" class="sparkline-cell">
+                <ngx-charts-line-chart
+                  [results]="sparklineSeries(row)"
+                  [xAxis]="false"
+                  [yAxis]="false"
+                  [legend]="false"
+                  [showGridLines]="false"
+                  [timeline]="false"
+                  [scheme]="scatterColors"
+                  [autoScale]="true"
+                  [animations]="false">
+                </ngx-charts-line-chart>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="rendimientoColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: rendimientoColumns"></tr>
+          </table>
+        </app-chart-card>
+      </mat-tab>
+
+      <mat-tab label="3.7 Alertas">
+        <app-chart-card
+          title="Alertas SLA - PrÃ³ximos a Vencer"
+          icon="alarm"
+          [badge]="sla ? sla.proximosVencer.length.toString() : '0'"
+          [badgeType]="sla && sla.proximosVencer.length > 0 ? 'danger' : 'success'">
+          <div class="sla-alerts" *ngIf="sla?.proximosVencer?.length; else noAlerts">
+            <div *ngFor="let v of sla?.proximosVencer" class="sla-alert-row">
+              <mat-icon class="sla-alert-row__icon">alarm_on</mat-icon>
+              <div class="sla-alert-row__body">
+                <span class="sla-alert-row__reclamo">{{ v.numeroReclamo }}</span>
+                <span class="sla-alert-row__cliente">{{ v.clienteNombre }}</span>
+              </div>
+              <span class="chip chip--danger">{{ v.horasRestantes }}h</span>
+              <a mat-icon-button [routerLink]="['/reclamos', v.id]" matTooltip="Ver reclamo">
+                <mat-icon>open_in_new</mat-icon>
+              </a>
+            </div>
+          </div>
+          <ng-template #noAlerts>
+            <div class="no-alerts">Sin alertas activas en la ventana actual.</div>
+          </ng-template>
+        </app-chart-card>
+      </mat-tab>
+    </mat-tab-group>
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+</div>
+

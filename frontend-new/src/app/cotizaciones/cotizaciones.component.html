@@ -50,9 +50,14 @@
               Gestión de cotizaciones de seguros
             </mat-card-subtitle>
           </mat-card-header>
+          <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
           <mat-card-content>
             <div class="table-container">
-              <table mat-table [dataSource]="cotizacionesDataSource" matSort>
+              <div class="table-loading-state" *ngIf="isLoading">
+                <div class="table-skeleton-row" *ngFor="let _ of [1,2,3,4,5,6]"></div>
+              </div>
+
+              <table mat-table [dataSource]="cotizacionesDataSource" matSort *ngIf="!isLoading">
                 
                 <!-- Número de Cotización -->
                 <ng-container matColumnDef="numeroCotizacion">
@@ -168,7 +173,7 @@
               </table>
 
               <!-- Mensaje cuando no hay datos -->
-              <div class="no-data" *ngIf="cotizacionesDataSource.data.length === 0">
+              <div class="no-data" *ngIf="!isLoading && cotizacionesDataSource.data.length === 0">
                 <mat-icon class="no-data-icon">request_quote</mat-icon>
                 <h3 class="no-data-title">No hay cotizaciones disponibles</h3>
                 <p class="no-data-text">No se encontraron cotizaciones en la base de datos.</p>
@@ -176,7 +181,7 @@
               </div>
 
               <mat-paginator [pageSizeOptions]="[5, 10, 20, 50]" 
-                             *ngIf="cotizacionesDataSource.data.length > 0"
+                             *ngIf="!isLoading && cotizacionesDataSource.data.length > 0"
                              showFirstLastButtons>
               </mat-paginator>
             </div>

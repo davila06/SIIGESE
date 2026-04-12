@@ -10,7 +10,9 @@ import {
   FiltroReclamos,
   TipoReclamo,
   EstadoReclamo,
-  PrioridadReclamo
+  PrioridadReclamo,
+  ReclamoHistorialEntry,
+  ReclamoDocumento
 } from '../interfaces/reclamo.interface';
 import { PagedResult } from '../../interfaces/user.interface';
 
@@ -93,6 +95,32 @@ export class ReclamosService {
   // Obtener reclamos por usuario
   getReclamosByUsuario(usuarioId: number): Observable<Reclamo[]> {
     return this.http.get<Reclamo[]>(`${this.apiUrl}/usuario/${usuarioId}`);
+  }
+
+  // ── Historial ───────────────────────────────────────────────────────────────
+
+  getHistorial(reclamoId: number): Observable<ReclamoHistorialEntry[]> {
+    return this.http.get<ReclamoHistorialEntry[]>(`${this.apiUrl}/${reclamoId}/historial`);
+  }
+
+  // ── Documentos ──────────────────────────────────────────────────────────────
+
+  getDocumentos(reclamoId: number): Observable<ReclamoDocumento[]> {
+    return this.http.get<ReclamoDocumento[]>(`${this.apiUrl}/${reclamoId}/documentos`);
+  }
+
+  uploadDocumento(reclamoId: number, archivo: File): Observable<ReclamoDocumento> {
+    const formData = new FormData();
+    formData.append('archivo', archivo, archivo.name);
+    return this.http.post<ReclamoDocumento>(`${this.apiUrl}/${reclamoId}/documentos`, formData);
+  }
+
+  downloadDocumentoUrl(reclamoId: number, docId: string): string {
+    return `${this.apiUrl}/${reclamoId}/documentos/${docId}`;
+  }
+
+  deleteDocumento(reclamoId: number, docId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${reclamoId}/documentos/${docId}`);
   }
 
   // Helper methods para obtener labels

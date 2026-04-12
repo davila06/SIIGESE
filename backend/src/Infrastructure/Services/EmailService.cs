@@ -96,6 +96,16 @@ namespace Infrastructure.Services
 
         private async Task SendEmailAsync(string to, string subject, string body)
         {
+            await SendEmailInternalAsync(to, subject, body, null);
+        }
+
+        public async Task SendGenericEmailWithAttachmentsAsync(string toEmail, string subject, string body, IEnumerable<EmailAttachmentDto> attachments)
+        {
+            await SendEmailInternalAsync(toEmail, subject, body, attachments);
+        }
+
+        private async Task SendEmailInternalAsync(string to, string subject, string body, IEnumerable<EmailAttachmentDto>? attachments)
+        {
             try
             {
                 // Verificar configuración
@@ -125,6 +135,16 @@ namespace Infrastructure.Services
                 };
 
                 message.To.Add(to);
+
+                if (attachments != null)
+                {
+                    foreach (var attachment in attachments.Where(a => a.Content.Length > 0))
+                    {
+                        var stream = new MemoryStream(attachment.Content);
+                        var mailAttachment = new Attachment(stream, attachment.FileName, attachment.ContentType);
+                        message.Attachments.Add(mailAttachment);
+                    }
+                }
 
                 await client.SendMailAsync(message);
                 _logger.LogInformation("Email enviado exitosamente a {Email}", to);

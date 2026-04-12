@@ -100,6 +100,10 @@ namespace Application.Services
             if (poliza == null)
                 throw new KeyNotFoundException("Póliza no encontrada");
 
+            // Capturar el número de póliza actual antes de que el mapper lo sobreescriba.
+            // Necesario para localizar reclamos que referencian la póliza por NumeroPoliza.
+            var oldNumeroPoliza = poliza.NumeroPoliza ?? string.Empty;
+
             _mapper.Map(dto, poliza);
             poliza.UpdatedAt = DateTime.UtcNow;
 
@@ -107,6 +111,45 @@ namespace Application.Services
                 poliza.NumeroPoliza, poliza.NombreAsegurado, poliza.Prima, poliza.Frecuencia, poliza.Aseguradora, poliza.FechaVigencia.ToString("dd-MM-yyyy"));
 
             await _unitOfWork.Polizas.UpdateAsync(poliza);
+
+            // Sincronizar cobros pendientes con los datos actualizados de la póliza.
+            // Los cobros almacenan copias desnormalizadas (NumeroPoliza, ClienteNombreCompleto,
+            // CorreoElectronico, MontoTotal, Moneda). Se actualizan los cobros que aún no
+            // han sido pagados ni cancelados para reflejar los cambios.
+            var cobrosPendientes = (await _unitOfWork.Cobros.GetCobrosByPolizaIdAsync(poliza.Id))
+                .Where(c => c.Estado != Domain.Entities.EstadoCobro.Pagado &&
+                            c.Estado != Domain.Entities.EstadoCobro.Cancelado);
+
+            foreach (var cobro in cobrosPendientes)
+            {
+                cobro.NumeroPoliza            = poliza.NumeroPoliza ?? string.Empty;
+                cobro.ClienteNombreCompleto   = poliza.NombreAsegurado ?? string.Empty;
+                cobro.CorreoElectronico       = poliza.Correo;
+                cobro.MontoTotal              = poliza.Prima;
+                cobro.Moneda                  = poliza.Moneda ?? "CRC";
+                cobro.UpdatedAt               = DateTime.UtcNow;
+                await _unitOfWork.Cobros.UpdateAsync(cobro);
+            }
+
+            // Sincronizar reclamos activos con los datos actualizados de la póliza.
+            // Los reclamos almacenan copias desnormalizadas de NumeroPoliza, NombreAsegurado
+            // y ClienteNombreCompleto. Se usan el oldNumeroPoliza para localizar los reclamos
+            // existentes en caso de que el número de póliza también haya cambiado.
+            // Solo se sincronizan reclamos no finalizados (Resuelto/Rechazado/Cerrado quedan intactos).
+            var reclamosActivos = (await _unitOfWork.Reclamos.GetReclamosByPolizaIdAsync(oldNumeroPoliza))
+                .Where(r => r.Estado != Domain.Entities.EstadoReclamo.Resuelto &&
+                            r.Estado != Domain.Entities.EstadoReclamo.Rechazado &&
+                            r.Estado != Domain.Entities.EstadoReclamo.Cerrado);
+
+            foreach (var reclamo in reclamosActivos)
+            {
+                reclamo.NumeroPoliza          = poliza.NumeroPoliza ?? string.Empty;
+                reclamo.NombreAsegurado       = poliza.NombreAsegurado ?? string.Empty;
+                reclamo.ClienteNombreCompleto = poliza.NombreAsegurado ?? string.Empty;
+                reclamo.UpdatedAt             = DateTime.UtcNow;
+                await _unitOfWork.Reclamos.UpdateAsync(reclamo);
+            }
+
             await _unitOfWork.SaveChangesAsync();
 
             return _mapper.Map<PolizaDto>(poliza);

@@ -73,7 +73,7 @@ mat-card-actions {
 // Estilos para validación
 mat-form-field.ng-invalid.ng-touched {
   .mat-form-field-outline-thick {
-    color: #f44336;
+    color: var(--color-error, #ef5350);
   }
 }
 

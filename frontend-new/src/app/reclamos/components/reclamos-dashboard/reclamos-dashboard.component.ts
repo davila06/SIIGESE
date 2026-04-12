@@ -30,6 +30,7 @@ import { ExportService, ExportColumn } from '../../../shared/services/export.ser
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 import { parseBackendDate } from '../../../shared/constants/currency.constants';
 import { LoggingService } from '../../../services/logging.service';
+import { CountUpDirective } from '../../../shared/directives/count-up.directive';
 
 @Component({
   selector: 'app-reclamos-dashboard',
@@ -54,6 +55,7 @@ import { LoggingService } from '../../../services/logging.service';
     MatMenuModule,
     MatBadgeModule,
     MatDialogModule,
+    CountUpDirective,
     DatePipe,
     DecimalPipe
   ],

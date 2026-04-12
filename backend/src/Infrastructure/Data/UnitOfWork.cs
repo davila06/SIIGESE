@@ -24,6 +24,7 @@ namespace Infrastructure.Data
             Cobros = new CobroRepository(_context);
             Reclamos = new ReclamoRepository(_context);
             Cotizaciones = new CotizacionRepository(_context);
+            EmailLogs = new EmailLogRepository(_context);
         }
 
         public IUserRepository Users { get; }
@@ -35,6 +36,7 @@ namespace Infrastructure.Data
         public ICobroRepository Cobros { get; }
         public IReclamoRepository Reclamos { get; }
         public ICotizacionRepository Cotizaciones { get; }
+        public IEmailLogRepository EmailLogs { get; }
 
         public async Task<int> SaveChangesAsync()
         {

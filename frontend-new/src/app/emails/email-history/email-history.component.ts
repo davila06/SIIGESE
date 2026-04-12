@@ -10,9 +10,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { EmailService, EmailHistoryResponse } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoggingService } from '../../services/logging.service';
+import { EmailPreviewDialogComponent } from '../../shared/components/email-preview-dialog/email-preview-dialog.component';
 
 @Component({
   selector: 'app-email-history',
@@ -57,7 +59,8 @@ export class EmailHistoryComponent implements OnInit {
 
   constructor(
     private emailService: EmailService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -124,11 +127,36 @@ export class EmailHistoryComponent implements OnInit {
   }
 
   viewEmailDetails(email: EmailHistoryResponse): void {
-    // Implementar modal para ver detalles del email
+    this.dialog.open(EmailPreviewDialogComponent, {
+      data: {
+        mode: 'details',
+        subject: email.subject,
+        toEmail: email.toEmail,
+        toName: email.toName,
+        sentAt: email.sentAt,
+        emailType: email.emailType,
+        isSuccess: email.isSuccess,
+        errorMessage: email.errorMessage,
+      },
+      width: '560px',
+      maxWidth: '95vw',
+      panelClass: 'epd-dialog-panel',
+      autoFocus: false,
+    });
   }
 
   resendEmail(email: EmailHistoryResponse): void {
-    // Implementar reenvío de email
-    this.snackBar.open('Funcionalidad de reenvío en desarrollo', 'Cerrar', { duration: 3000 });
+    this.emailService.resendEmail(email.id).subscribe({
+      next: (response) => {
+        if (response.isSuccess) {
+          this.snackBar.open(`Email reenviado a ${email.toEmail}`, 'Cerrar', { duration: 3000 });
+        } else {
+          this.snackBar.open(`Error: ${response.message}`, 'Cerrar', { duration: 5000 });
+        }
+      },
+      error: () => {
+        this.snackBar.open('Error al reenviar el email. Intente nuevamente.', 'Cerrar', { duration: 4000 });
+      },
+    });
   }
 }

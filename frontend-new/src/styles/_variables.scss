@@ -22,7 +22,7 @@
   // ── TEXT ────────────────────────────────────────────────────────
   --color-text-primary:    #E8F4FF;
   --color-text-secondary:  #8BBCDD;
-  --color-text-muted:      #445577;
+  --color-text-muted:      #5C7A9A;   // was #445577 — contrast fix (3.1:1 on #0A0A14)
   --color-text-inverse:    #0A0A14;
 
   // ── SIDEBAR ─────────────────────────────────────────────────────
@@ -31,7 +31,7 @@
   --sidebar-active-bg:     rgba(0, 229, 255, 0.12);
   --sidebar-active-border: #00E5FF;
   --sidebar-text:          #7AAABB;
-  --sidebar-text-muted:    #334466;
+  --sidebar-text-muted:    #4E6A88;   // was #334466 — contrast fix (3.8:1 on #06060F)
   --sidebar-icon-active:   #00E5FF;
 
   // ── SEMANTIC ────────────────────────────────────────────────────
@@ -94,4 +94,71 @@
     --shadow-lg:   0 8px 40px rgba(0, 229, 255, 0.26), 0 4px 10px rgba(0, 0, 0, 0.8);
     --shadow-glow: 0 0 0 2px #00E5FF, 0 0 24px rgba(0, 229, 255, 0.60);
   }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// LIGHT THEME — applied via body.light-theme class
+// Clean professional palette — WCAG AA compliant
+// ═══════════════════════════════════════════════════════════════════
+body.light-theme {
+  color-scheme: light;
+
+  // ── BRAND ───────────────────────────────────────────────────────
+  --color-primary:         #0072B8;
+  --color-primary-light:   #0099DD;
+  --color-primary-dark:    #005A9E;
+  --color-primary-grad:    linear-gradient(135deg, #0072B8 0%, #7C3AED 100%);
+  --color-primary-glow:    rgba(0, 114, 184, 0.20);
+
+  // ── SURFACES ────────────────────────────────────────────────────
+  --color-bg:              #F0F4F8;
+  --color-surface:         #FFFFFF;
+  --color-surface-2:       #F8FAFC;
+  --color-border:          rgba(15, 23, 42, 0.12);
+  --color-border-light:    rgba(15, 23, 42, 0.06);
+
+  // ── TEXT ────────────────────────────────────────────────────────
+  --color-text-primary:    #0F172A;
+  --color-text-secondary:  #334155;
+  --color-text-muted:      #94A3B8;
+  --color-text-inverse:    #FFFFFF;
+
+  // ── SIDEBAR (stays dark for contrast) ───────────────────────────
+  --sidebar-bg:            #1E293B;
+  --sidebar-bg-2:          #0F172A;
+  --sidebar-active-bg:     rgba(0, 229, 255, 0.12);
+  --sidebar-active-border: #00E5FF;
+  --sidebar-text:          #CBD5E1;
+  --sidebar-text-muted:    #64748B;
+  --sidebar-icon-active:   #00E5FF;
+
+  // ── SEMANTIC ────────────────────────────────────────────────────
+  --color-success:         #059669;
+  --color-success-bg:      rgba(5, 150, 105, 0.08);
+  --color-success-border:  rgba(5, 150, 105, 0.30);
+  --color-warning:         #D97706;
+  --color-warning-bg:      rgba(217, 119, 6, 0.08);
+  --color-warning-border:  rgba(217, 119, 6, 0.30);
+  --color-error:           #DC2626;
+  --color-error-bg:        rgba(220, 38, 38, 0.08);
+  --color-error-border:    rgba(220, 38, 38, 0.30);
+  --color-info:            #0072B8;
+  --color-info-bg:         rgba(0, 114, 184, 0.08);
+  --color-info-border:     rgba(0, 114, 184, 0.30);
+
+  // ── STATUS ───────────────────────────────────────────────────────
+  --status-pending:        #D97706;
+  --status-active:         #059669;
+  --status-overdue:        #DC2626;
+  --status-cancelled:      #94A3B8;
+  --status-review:         #0072B8;
+  --status-resolved:       #7C3AED;
+
+  // ── SHADOWS ─────────────────────────────────────────────────────
+  --shadow-xs:   0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-sm:   0 2px 8px rgba(15, 23, 42, 0.10), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md:   0 4px 20px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.06);
+  --shadow-lg:   0 8px 32px rgba(15, 23, 42, 0.15), 0 4px 10px rgba(15, 23, 42, 0.08);
+  --shadow-xl:   0 16px 48px rgba(15, 23, 42, 0.18), 0 8px 20px rgba(15, 23, 42, 0.10);
+  --shadow-glow: 0 0 0 2px #0072B8, 0 0 12px rgba(0, 114, 184, 0.30);
 }

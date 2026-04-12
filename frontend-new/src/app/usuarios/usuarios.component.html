@@ -1,6 +1,6 @@
 <div class="usuarios-container">
   <div class="content-wrapper">
-    <h2 class="page-heading">Gestión de Usuarios</h2>
+    <h1 class="page-heading">Gestión de Usuarios</h1>
 
     <!-- Mensaje informativo para no administradores -->
     <mat-card *ngIf="!isAdmin()" class="info-card">
@@ -25,7 +25,7 @@
       <mat-card-content>
         <form [formGroup]="userForm" (ngSubmit)="onSubmit()" autocomplete="off">
           <div class="form-row">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Nombre de Usuario</mat-label>
               <input matInput 
                      formControlName="userName" 
@@ -39,7 +39,7 @@
               </mat-error>
             </mat-form-field>
             
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
               <input matInput 
                      type="email" 
@@ -59,7 +59,7 @@
           </div>
 
           <div class="form-row">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Nombre</mat-label>
               <input matInput 
                      formControlName="firstName" 
@@ -73,7 +73,7 @@
               </mat-error>
             </mat-form-field>
             
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Apellido</mat-label>
               <input matInput 
                      formControlName="lastName" 
@@ -89,16 +89,23 @@
           </div>
 
           <div class="form-row" *ngIf="!isEditMode">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Contraseña</mat-label>
               <input matInput 
-                     type="password" 
+                     [type]="hidePassword ? 'password' : 'text'" 
                      formControlName="password" 
                      required
                      autocomplete="new-password"
                      placeholder="Mínimo 6 caracteres"
                      title="Contraseña"
                      spellcheck="false">
+              <button mat-icon-button matSuffix type="button"
+                      (click)="hidePassword = !hidePassword"
+                      tabindex="0"
+                      [attr.aria-label]="hidePassword ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+                      [attr.aria-pressed]="!hidePassword">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
               <mat-error *ngIf="userForm.get('password')?.hasError('required')">
                 Contraseña es requerida
               </mat-error>
@@ -107,16 +114,23 @@
               </mat-error>
             </mat-form-field>
             
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Confirmar Contraseña</mat-label>
               <input matInput 
-                     type="password" 
+                     [type]="hideConfirmPassword ? 'password' : 'text'" 
                      formControlName="confirmPassword" 
                      required
                      autocomplete="new-password"
                      placeholder="Repite la contraseña"
                      title="Confirmar contraseña"
                      spellcheck="false">
+              <button mat-icon-button matSuffix type="button"
+                      (click)="hideConfirmPassword = !hideConfirmPassword"
+                      tabindex="0"
+                      [attr.aria-label]="hideConfirmPassword ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+                      [attr.aria-pressed]="!hideConfirmPassword">
+                <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
               <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('required')">
                 Confirmación de contraseña es requerida
               </mat-error>
@@ -127,7 +141,7 @@
           </div>
 
           <div class="form-row">
-            <mat-form-field>
+            <mat-form-field appearance="outline">
               <mat-label>Roles</mat-label>
               <mat-select formControlName="roleIds" multiple>
                 <mat-option *ngFor="let role of availableRoles" [value]="role.id">
@@ -168,7 +182,7 @@
     <mat-card class="toolbar-section">
       <mat-card-content>
         <div class="toolbar">
-          <mat-form-field class="search-field">
+          <mat-form-field class="search-field" appearance="outline">
             <mat-label>Buscar usuarios...</mat-label>
             <input matInput [(ngModel)]="searchTerm" (input)="applyFilter()" placeholder="Nombre, email o usuario">
             <mat-icon matSuffix>search</mat-icon>
@@ -272,7 +286,8 @@
                 [class.selected]="selectedUser?.id === row.id"
                 tabindex="0"
                 (click)="selectUser(row)"
-                (keydown.enter)="selectUser(row)"></tr>
+                (keydown.enter)="selectUser(row)"
+                (keydown.space)="selectUser(row)"></tr>
           </table>
 
           <!-- Mensaje cuando no hay datos -->

@@ -145,18 +145,18 @@
             }
 
             .success-text {
-              color: #4caf50;
+              color: var(--color-success);
               font-weight: 500;
             }
 
             .error-text {
-              color: #f44336;
+              color: var(--color-error, #ef5350);
               font-weight: 500;
             }
 
             .error-message {
               font-size: 0.7rem;
-              color: #f44336;
+              color: var(--color-error, #ef5350);
               max-width: 100px;
               overflow: hidden;
               text-overflow: ellipsis;

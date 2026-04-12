@@ -1,0 +1,232 @@
+﻿<div class="sales-funnel">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">trending_up</mat-icon>
+      <div>
+        <h1 class="page-header__title">Analítica de Cotizaciones</h1>
+        <span class="page-header__subtitle">Pipeline, conversión, velocidad y ticket promedio</span>
+      </div>
+    </div>
+    <button mat-stroked-button (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon> Actualizar
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <ng-container *ngIf="!loading && !error && data">
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <span class="kpi-card__label">Total Cotizaciones</span>
+        <span class="kpi-card__value">{{ data.total | number }}</span>
+      </div>
+      <div class="kpi-card kpi-card--success">
+        <span class="kpi-card__label">Tasa Aprobación</span>
+        <span class="kpi-card__value">{{ data.tasaAprobacion | number:'1.1-1' }}%</span>
+      </div>
+      <div class="kpi-card" [class.kpi-card--success]="data.tasaConversion >= 20" [class.kpi-card--warn]="data.tasaConversion < 20">
+        <span class="kpi-card__label">Tasa Conversión</span>
+        <span class="kpi-card__value">{{ data.tasaConversion | number:'1.1-1' }}%</span>
+      </div>
+      <div class="kpi-card kpi-card--info">
+        <span class="kpi-card__label">Velocidad Prom.</span>
+        <span class="kpi-card__value">
+          <span class="chip" [class]="velocidadClass(data.velocidadPromedioDias)">{{ data.velocidadPromedioDias | number:'1.0-1' }}d</span>
+        </span>
+      </div>
+      <div class="kpi-card kpi-card--danger">
+        <span class="kpi-card__label">Rechazadas</span>
+        <span class="kpi-card__value danger-text">{{ data.rechazadas | number }}</span>
+      </div>
+    </div>
+
+    <!-- Row 1: 4.1 Funnel de Conversión + 4.4 Cotizaciones Perdidas -->
+    <div class="grid-2col grid-row">
+
+      <!-- 4.1 Funnel -->
+      <app-chart-card title="Funnel de Conversión" icon="filter_alt"
+        subtitle="Distribución de cotizaciones por etapa">
+        <div class="funnel-visual">
+          <div class="funnel-stage" *ngFor="let s of funnelStages; let i = index">
+            <div class="funnel-bar-wrap">
+              <div class="funnel-bar" [style.width.%]="s.pct" [style.background]="s.color"></div>
+            </div>
+            <div class="funnel-meta">
+              <span class="funnel-meta__label">{{ s.label }}</span>
+              <span class="funnel-meta__count">{{ s.count | number }}</span>
+              <span class="funnel-meta__pct" [style.color]="s.color">{{ s.pct }}%</span>
+            </div>
+            <div class="funnel-arrow" *ngIf="i < funnelStages.length - 1">
+              <mat-icon>arrow_downward</mat-icon>
+              <span *ngIf="i > 0">{{ conversionRate(funnelStages[i].count, funnelStages[i-1].count) }}% continúan</span>
+            </div>
+          </div>
+        </div>
+        <div class="tipo-chart-wrap">
+          <div class="chart-label">Convertidas por tipo de seguro</div>
+          <div class="chart-wrap chart-wrap--sm" *ngIf="tipoChart.length; else noTipo">
+            <ngx-charts-bar-horizontal [animations]="false" [results]="tipoChart" [scheme]="colorScheme"
+              [xAxis]="true" [yAxis]="true" [showDataLabel]="true"
+              [showGridLines]="true">
+            </ngx-charts-bar-horizontal>
+          </div>
+          <ng-template #noTipo>
+            <div class="no-data"><mat-icon>bar_chart</mat-icon><span>Sin datos</span></div>
+          </ng-template>
+        </div>
+      </app-chart-card>
+
+      <!-- 4.4 Perdidas -->
+      <app-chart-card title="Cotizaciones Perdidas (Rechazadas)" icon="cancel"
+        [badge]="data.rechazadas.toString()" [badgeType]="'danger'"
+        tooltip="Distribución de rechazos por aseguradora">
+        <ng-container *ngIf="perdidasChart.length; else noPerdidas">
+          <div class="chart-wrap chart-wrap--pie">
+            <ngx-charts-pie-chart [animations]="false" [results]="perdidasChart" [scheme]="perdidasColors"
+              [legend]="true" [legendPosition]="legendBelow"
+              [labels]="true" [doughnut]="true">
+            </ngx-charts-pie-chart>
+          </div>
+        </ng-container>
+        <ng-template #noPerdidas>
+          <div class="no-data"><mat-icon>check_circle</mat-icon><span>Sin rechazos registrados.</span></div>
+        </ng-template>
+        <div class="perdidas-kpi" *ngIf="data.rechazadas > 0">
+          <span class="perdidas-kpi__label">Tasa de rechazo:</span>
+          <span class="chip chip--danger">{{ (data.rechazadas / data.total * 100) | number:'1.1-1' }}%</span>
+        </div>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Row 2: 4.2 Velocidad de Conversión + Métricas de conversión por tipo -->
+    <div class="grid-2col grid-row">
+
+      <!-- 4.2 Velocidad histogram -->
+      <app-chart-card title="Velocidad de Conversión" icon="speed"
+        [badge]="formatVelocidadBadge(data.velocidadPromedioDias)"
+        tooltip="Distribución de días desde cotización hasta conversión (CONVERTIDA)">
+        <ng-container *ngIf="velocidadChart.length && velocidadChart[0].value > 0; else noVelocidad">
+          <div class="chart-wrap">
+            <ngx-charts-bar-vertical [animations]="false" [results]="velocidadChart" [scheme]="velocidadColors"
+              [xAxis]="true" [yAxis]="true" [showGridLines]="true"
+              [showDataLabel]="true">
+            </ngx-charts-bar-vertical>
+          </div>
+        </ng-container>
+        <ng-template #noVelocidad>
+          <div class="no-data"><mat-icon>timelapse</mat-icon><span>Sin datos de conversión cronometrados.</span></div>
+        </ng-template>
+        <div class="velocidad-legend">
+          <span class="chip chip--success">≤7d: Excelente</span>
+          <span class="chip chip--info">8-15d: Bueno</span>
+          <span class="chip chip--warning">16-30d: Normal</span>
+          <span class="chip chip--danger">+30d: Lento</span>
+        </div>
+      </app-chart-card>
+
+      <!-- Métricas de conversión por tipo -->
+      <app-chart-card title="Conversiones por Tipo de Seguro" icon="category"
+        subtitle="Cotizaciones CONVERTIDAS por tipo">
+        <ng-container *ngIf="tipoChart.length; else noTipo2">
+          <div class="tipo-stats">
+            <div class="tipo-row" *ngFor="let t of data.porTipoSeguro">
+              <span class="tipo-row__name">{{ t.name }}</span>
+              <div class="tipo-row__bar-wrap">
+                <div class="tipo-row__bar" [style.width.%]="conversionRate(t.value, data.total)"></div>
+              </div>
+              <span class="tipo-row__count">{{ t.value | number }}</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noTipo2>
+          <div class="no-data"><mat-icon>bar_chart</mat-icon><span>Sin datos por tipo.</span></div>
+        </ng-template>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Row 3: 4.3 Pipeline de Valor Mensual -->
+    <div class="grid-row">
+      <app-chart-card title="Pipeline de Valor Mensual" icon="waterfall_chart"
+        subtitle="Prima cotizada por estado y mes (Pendiente · Aprobado · Convertido)"
+        tooltip="Valor anual proyectado: prima × factor de frecuencia por cotización">
+        <ng-container *ngIf="pipelineChart.length; else noPipeline">
+          <div class="chart-wrap chart-wrap--pipeline">
+            <ngx-charts-area-chart-stacked [animations]="false" [results]="pipelineChart" [scheme]="pipelineColors"
+              [xAxis]="true" [yAxis]="true" [showGridLines]="true"
+              [legend]="true" [legendPosition]="legendBelow"
+              [yAxisTickFormatting]="yAxisFmt">
+            </ngx-charts-area-chart-stacked>
+          </div>
+          <div class="pipeline-summary">
+            <div class="pipeline-kpi" *ngFor="let p of data.pipelineValor | slice:0:3">
+              <span class="pipeline-kpi__mes">{{ p.mes }}</span>
+              <span class="pipeline-kpi__pendiente">Pend: {{ formatCurrency(p.valorPendiente) }}</span>
+              <span class="pipeline-kpi__convertido">Conv: {{ formatCurrency(p.valorConvertido) }}</span>
+              <span class="pipeline-kpi__anual chip chip--info">Anual proy: {{ formatCurrency(p.valorAnualProyectado) }}</span>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noPipeline>
+          <div class="no-data"><mat-icon>waterfall_chart</mat-icon><span>Sin datos de pipeline.</span></div>
+        </ng-template>
+      </app-chart-card>
+    </div>
+
+    <!-- Row 4: 4.5 Ticket Promedio por Segmento -->
+    <div class="grid-2col grid-row">
+
+      <app-chart-card title="Ticket Promedio por Tipo y Modalidad" icon="confirmation_number"
+        subtitle="Prima promedio cotizada — Tipo de seguro × Modalidad">
+        <ng-container *ngIf="ticketBarChart.length; else noTicket">
+          <div class="chart-wrap chart-wrap--ticket">
+            <ngx-charts-bar-vertical-2d [animations]="false" [results]="ticketBarChart" [scheme]="ticketColors"
+              [xAxis]="true" [yAxis]="true" [showGridLines]="true"
+              [legend]="true" [legendPosition]="legendBelow"
+              [yAxisTickFormatting]="yAxisFmt">
+            </ngx-charts-bar-vertical-2d>
+          </div>
+        </ng-container>
+        <ng-template #noTicket>
+          <div class="no-data"><mat-icon>confirmation_number</mat-icon><span>Sin datos de ticket.</span></div>
+        </ng-template>
+      </app-chart-card>
+
+      <app-chart-card title="Detalle Ticket Promedio" icon="table_chart">
+        <table mat-table [dataSource]="data.ticketPromedio" class="ticket-table">
+          <ng-container matColumnDef="tipoSeguro">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let t"><strong>{{ t.tipoSeguro }}</strong></td>
+          </ng-container>
+          <ng-container matColumnDef="modalidad">
+            <th mat-header-cell *matHeaderCellDef>Modalidad</th>
+            <td mat-cell *matCellDef="let t">{{ t.modalidad }}</td>
+          </ng-container>
+          <ng-container matColumnDef="primaPromedio">
+            <th mat-header-cell *matHeaderCellDef>Prima Prom.</th>
+            <td mat-cell *matCellDef="let t" class="valor-cell">{{ formatCurrency(t.primaPromedio) }}</td>
+          </ng-container>
+          <ng-container matColumnDef="cantidad">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let t">{{ t.cantidad | number }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="ticketColumns"></tr>
+          <tr mat-row *matRowDef="let r; columns: ticketColumns;"></tr>
+        </table>
+      </app-chart-card>
+
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon><p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+
+</div>
+

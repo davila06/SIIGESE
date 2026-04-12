@@ -6,5 +6,7 @@ export const environment = {
   production: false,
   version: '1.0.0',
   apiUrl: '/api',
-  useMockApi: false
+  useMockApi: false,
+  /** Leave empty in development — Application Insights only activates in production. */
+  appInsightsConnectionString: ''
 };

@@ -6,7 +6,7 @@
         <mat-icon>arrow_back</mat-icon>
       </button>
       <div class="header-text">
-        <h1>📊 Subir Pólizas Excel</h1>
+        <h1><mat-icon aria-hidden="true">upload_file</mat-icon> Subir Pólizas Excel</h1>
         <p>Carga masiva de pólizas desde archivo Excel</p>
       </div>
     </div>
@@ -79,22 +79,12 @@
         </button>
 
         <button mat-stroked-button
-                (click)="downloadTemplate()"
+                (click)="downloadDemo()"
                 class="template-button"
-                matTooltip="Formato vacío para rellenar con tus datos. Se genera desde el servidor con las columnas requeridas."
+                matTooltip="Descarga una plantilla de ejemplo con 10 registros pre-cargados para entender el formato esperado."
                 matTooltipPosition="above">
           <mat-icon>download</mat-icon>
           Descargar Template
-        </button>
-
-        <button mat-stroked-button
-                color="accent"
-                (click)="downloadDemo()"
-                class="demo-button"
-                matTooltip="Archivo de ejemplo con 10 registros pre-cargados para entender el formato esperado."
-                matTooltipPosition="above">
-          <mat-icon>filter_10</mat-icon>
-          Descargar DEMO
         </button>
 
         <button mat-button

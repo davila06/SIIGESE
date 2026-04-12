@@ -1,4 +1,4 @@
-.email-config-list-container {
+﻿.email-config-list-container {
   padding: 24px;
   min-height: calc(100vh - 200px);
 }
@@ -17,19 +17,19 @@
       margin: 0 0 8px 0;
       font-size: 24px;
       font-weight: 500;
-      color: #333;
+      color: var(--color-text-primary);
       
       mat-icon {
         font-size: 28px;
         width: 28px;
         height: 28px;
-        color: #1976d2;
+        color: var(--color-primary);
       }
     }
     
     p {
       margin: 0;
-      color: #666;
+      color: var(--color-text-secondary);
       font-size: 16px;
     }
   }
@@ -55,13 +55,13 @@
   
   p {
     margin-top: 16px;
-    color: #666;
+    color: var(--color-text-secondary);
     font-size: 16px;
   }
 }
 
 .list-card {
-  background: white;
+  background: var(--color-surface);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   
@@ -78,20 +78,20 @@
     font-size: 64px;
     width: 64px;
     height: 64px;
-    color: #ccc;
+    color: var(--color-border);
     margin-bottom: 16px;
   }
   
   h3 {
     margin: 0 0 8px 0;
-    color: #333;
+    color: var(--color-text-primary);
     font-size: 20px;
     font-weight: 500;
   }
   
   p {
     margin: 0 0 24px 0;
-    color: #666;
+    color: var(--color-text-secondary);
     font-size: 16px;
   }
   
@@ -112,26 +112,26 @@
   
   th {
     font-weight: 600;
-    color: #333;
-    background-color: #fafafa;
-    border-bottom: 2px solid #e0e0e0;
+    color: var(--color-text-primary);
+    background-color: var(--color-surface-2);
+    border-bottom: 2px solid var(--color-border);
     padding: 16px;
   }
   
   td {
     padding: 16px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-border);
   }
   
   tr:hover {
-    background-color: #f9f9f9;
+    background-color: var(--color-surface-2);
   }
 }
 
 .config-name {
   strong {
     display: block;
-    color: #333;
+    color: var(--color-text-primary);
     font-size: 14px;
     margin-bottom: 4px;
   }
@@ -150,9 +150,9 @@
       font-weight: 500;
       
       &.default {
-        background: #fff3e0;
-        color: #ef6c00;
-        border: 1px solid #ffcc02;
+        background: var(--color-warning-bg);
+        color: var(--color-warning);
+        border: 1px solid var(--color-warning-border);
         
         mat-icon {
           font-size: 14px;
@@ -166,7 +166,7 @@
 
 .server-info {
   font-weight: 500;
-  color: #333;
+  color: var(--color-text-primary);
   
   .security-info {
     display: flex;
@@ -175,8 +175,8 @@
     
     .security-badge {
       padding: 2px 6px;
-      background: #e3f2fd;
-      color: #1976d2;
+      background: var(--color-info-bg);
+      color: var(--color-primary);
       border-radius: 4px;
       font-size: 10px;
       font-weight: 600;
@@ -187,7 +187,7 @@
 .email-info {
   .from-name {
     font-size: 12px;
-    color: #666;
+    color: var(--color-text-secondary);
     margin-top: 2px;
   }
 }
@@ -198,11 +198,11 @@
   font-weight: 500;
   
   &.active {
-    color: #4caf50;
+    color: var(--color-success);
   }
   
   &.inactive {
-    color: #f44336;
+    color: var(--color-error);
   }
 }
 
@@ -233,17 +233,17 @@
     min-height: 44px;
     
     mat-icon {
-      color: #666;
+      color: var(--color-text-secondary);
       font-size: 18px;
       width: 18px;
       height: 18px;
     }
     
     &.delete-action {
-      color: #f44336;
+      color: var(--color-error);
       
       mat-icon {
-        color: #f44336;
+        color: var(--color-error);
       }
     }
   }
@@ -252,27 +252,27 @@
 // Slide Toggle Styling
 ::ng-deep .mat-mdc-slide-toggle {
   .mdc-switch--selected .mdc-switch__track {
-    background-color: #1976d2 !important;
+    background-color: var(--color-primary) !important;
   }
   
   .mdc-switch--selected .mdc-switch__handle::after {
-    background-color: #1976d2 !important;
+    background-color: var(--color-primary) !important;
   }
 }
 
 // Snackbar Styling
 .success-snackbar {
-  background-color: #4caf50 !important;
+  background-color: var(--color-success) !important;
   color: white !important;
 }
 
 .error-snackbar {
-  background-color: #f44336 !important;
+  background-color: var(--color-error) !important;
   color: white !important;
 }
 
 .info-snackbar {
-  background-color: #2196f3 !important;
+  background-color: var(--color-info) !important;
   color: white !important;
 }
 
@@ -330,3 +330,4 @@
 .list-card {
   animation: fadeIn 0.3s ease-out;
 }
+

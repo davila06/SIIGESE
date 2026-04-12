@@ -12,8 +12,8 @@
           <mat-icon>smart_toy</mat-icon>
         </div>
         <div class="brand-text">
-          <span class="brand-name">SIIGESE Chat</span>
-          <span class="brand-sub">Asistente Inteligente</span>
+          <span class="brand-name">IADS</span>
+          <span class="brand-sub">IAsistente Digital de Servicios</span>
         </div>
       </div>
       <button mat-icon-button class="new-chat-btn"
@@ -114,7 +114,10 @@
 
       <div class="topbar-title topbar-empty" *ngIf="!activeSession">
         <mat-icon>chat</mat-icon>
-        <span>SIIGESE Assistant</span>
+        <div class="topbar-empty-text">
+          <span class="topbar-empty-kicker">IADS</span>
+          <span class="topbar-empty-brand">IAsistente Digital de Servicios</span>
+        </div>
       </div>
 
       <div class="topbar-actions">
@@ -129,12 +132,18 @@
 
       <!-- Empty state (no session) -->
       <div class="chat-welcome" *ngIf="!activeSession && !isLoadingSessions">
+        <div class="welcome-orbit" aria-hidden="true"></div>
+        <div class="welcome-kicker">
+          <span class="welcome-kicker-chip">AI</span>
+          <span class="welcome-kicker-chip">Insurance Ops</span>
+          <span class="welcome-kicker-chip">Creative-Tech</span>
+        </div>
         <div class="welcome-icon">
           <mat-icon>smart_toy</mat-icon>
         </div>
-        <h2 class="welcome-title">¡Hola! Soy SIIGESE Assistant</h2>
+        <h2 class="welcome-title">¡Hola! Soy IADS</h2>
         <p class="welcome-sub">
-          Tu asistente inteligente para gestión de seguros. Pregúntame sobre pólizas,
+          <strong>IAsistente Digital de Servicios</strong>, tu copiloto inteligente para gestión de seguros. Pregúntame sobre pólizas,
           cobros, reclamos o estadísticas del sistema.
         </p>
         <div class="welcome-chips">
@@ -335,7 +344,7 @@
         </ng-container>
 
         <!-- Typing indicator -->
-        <div class="message-row bot-row typing-row" *ngIf="isTyping || isSendingMessage">
+        <div class="message-row bot-row typing-row" *ngIf="isTyping">
           <div class="message-avatar bot-avatar">
             <mat-icon>smart_toy</mat-icon>
           </div>
@@ -378,7 +387,7 @@
         </div>
       </div>
       <div class="input-hint">
-        Pregunta sobre pólizas, cobros, reclamos o estadísticas — SIIGESE Assistant está listo para ayudarte.
+        Pregunta sobre pólizas, cobros, reclamos o estadísticas — IADS IAsistente Digital de Servicios está listo para ayudarte.
       </div>
     </footer>
 
@@ -392,3 +401,4 @@
 
   </main>
 </div>
+

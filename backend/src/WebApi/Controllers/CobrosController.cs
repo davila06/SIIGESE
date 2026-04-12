@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Data.SqlClient;
 using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
@@ -213,6 +214,16 @@ namespace WebApi.Controllers
             {
                 var stats = await _cobrosService.GetCobrosStatsAsync();
                 return Ok(stats);
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogWarning(ex, "SQL error obteniendo estadísticas de cobros; devolviendo valores por defecto");
+                return Ok(new CobroStatsDto());
+            }
+            catch (TimeoutException ex)
+            {
+                _logger.LogWarning(ex, "Timeout obteniendo estadísticas de cobros; devolviendo valores por defecto");
+                return Ok(new CobroStatsDto());
             }
             catch (Exception ex)
             {

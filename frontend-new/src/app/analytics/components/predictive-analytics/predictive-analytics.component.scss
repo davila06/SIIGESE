@@ -1,0 +1,168 @@
+.predictive-analytics {
+  padding: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  @media (max-width: 768px) { padding: 16px; }
+}
+
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.grid-stats-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.section-gap-sm {
+  margin-bottom: 16px;
+}
+
+.section-gap-md {
+  margin-bottom: 20px;
+}
+
+.chart-card-block {
+  display: block;
+}
+
+// ── KPI strip ──────────────────────────────────────────────────────────────
+.kpi-row { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.kpi-mini {
+  flex: 1;
+  min-width: 160px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; }
+  &__value {
+    font-size: 20px; font-weight: 700; color: var(--text-primary);
+    &--compact { font-size: 14px; }
+    &--success { color: #10b981; }
+    &--warn    { color: #f59e0b; }
+    &--danger  { color: #ef4444; }
+  }
+  &--success { border-left: 4px solid #10b981; }
+  &--warning { border-left: 4px solid #f59e0b; }
+  &--danger  { border-left: 4px solid #ef4444; }
+}
+
+// ── Section header ──────────────────────────────────────────────────────────
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  margin-top: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+
+  mat-icon { color: #00e5ff; font-size: 20px; width: 20px; height: 20px; }
+
+  &__subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-left: 4px;
+    display: none;
+    @media (min-width: 768px) { display: inline; }
+  }
+}
+
+// ── Chips ────────────────────────────────────────────────────────────────── 
+.chip {
+  display: inline-flex; align-items: center; padding: 3px 10px;
+  border-radius: 12px; font-size: 12px; font-weight: 500; white-space: nowrap;
+  &--success { background: rgba(16,185,129,.18);  color: #065f46; }
+  &--warning { background: rgba(245,158,11,.2);   color: #92400e; }
+  &--danger  { background: rgba(239,68,68,.18);   color: #b91c1c; }
+  &--info    { background: rgba(59,130,246,.18);  color: #1d4ed8; }
+  &--neutral { background: rgba(107,114,128,.18); color: #475569; }
+}
+
+// ── Tables ──────────────────────────────────────────────────────────────────
+.pred-table {
+  width: 100%;
+  font-size: 13px;
+
+  th { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
+
+  &.lead-table th, &.lead-table td { padding: 6px 8px; }
+}
+
+// ── Score progress bar ──────────────────────────────────────────────────────
+.score-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+}
+
+.score-bar {
+  height: 8px;
+  border-radius: 4px;
+  transition: width .3s ease;
+
+  &--verde    { background: #10b981; }
+  &--amarillo { background: #f59e0b; }
+  &--rojo     { background: #ef4444; }
+  &--lead     { background: #00e5ff; }
+}
+
+.score-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  min-width: 24px;
+}
+
+// ── Factor chips inline ──────────────────────────────────────────────────────
+.factor-chip {
+  display: inline-block;
+  background: rgba(59, 130, 246, .16);
+  color: #1d4ed8;
+  border-radius: 8px;
+  padding: 2px 7px;
+  font-size: 10px;
+  margin: 1px 2px;
+  white-space: nowrap;
+}
+
+// ── Empty state ──────────────────────────────────────────────────────────────
+.empty-state {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 24px;
+  color: var(--text-secondary);
+  font-size: 14px;
+
+  mat-icon { color: #10b981; }
+}
+
+// ── Forecast legend ──────────────────────────────────────────────────────────
+.forecast-legend {
+  display: flex;
+  gap: 24px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding-top: 8px;
+  border-top: 1px solid var(--border-color);
+
+  &__item {
+    &--historic { color: #00e5ff; }
+    &--future   { color: #10b981; }
+  }
+}

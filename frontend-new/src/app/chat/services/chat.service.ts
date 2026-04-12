@@ -106,11 +106,10 @@ export class ChatService implements OnDestroy {
     await this.disconnect();
     this.currentSessionId = sessionId;
 
-    const token = localStorage.getItem('token') ?? sessionStorage.getItem('token') ?? '';
-
     this.hubConnection = new signalR.HubConnectionBuilder()
       .withUrl(this.hubUrl, {
-        accessTokenFactory: () => token,
+        // Read the latest token at negotiation/reconnect time.
+        accessTokenFactory: () => this.getAuthToken(),
         skipNegotiation: false,
         transport: signalR.HttpTransportType.WebSockets | signalR.HttpTransportType.LongPolling
       })
@@ -196,6 +195,15 @@ export class ChatService implements OnDestroy {
     }
     // Proxy-based: relative URL
     return '/hubs/chat';
+  }
+
+  private getAuthToken(): string {
+    return sessionStorage.getItem('authToken')
+      ?? localStorage.getItem('authToken')
+      // Backward compatibility with legacy keys
+      ?? sessionStorage.getItem('token')
+      ?? localStorage.getItem('token')
+      ?? '';
   }
 
   ngOnDestroy(): void {

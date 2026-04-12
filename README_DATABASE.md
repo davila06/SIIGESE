@@ -1,92 +1,92 @@
-# 🗄️ CONFIGURACIÓN DE BASE DE DATOS LOCAL - SIIGESE
+﻿# ðŸ—„ï¸ CONFIGURACIÃ“N DE BASE DE DATOS LOCAL - OmnIA
 
-## 📊 Opciones de Base de Datos Local
+## ðŸ“Š Opciones de Base de Datos Local
 
-### 🐳 Opción 1: Docker SQL Server (RECOMENDADO)
+### ðŸ³ OpciÃ³n 1: Docker SQL Server (RECOMENDADO)
 
-#### 🚀 Inicio Rápido con Docker
+#### ðŸš€ Inicio RÃ¡pido con Docker
 ```bash
 # Iniciar contenedor de SQL Server
 docker-compose up db -d
 
-# Verificar que esté funcionando
+# Verificar que estÃ© funcionando
 docker ps
 ```
 
-#### 📋 Configuración Docker
+#### ðŸ“‹ ConfiguraciÃ³n Docker
 - **Servidor**: `localhost,1433`
 - **Usuario**: `sa`
-- **Contraseña**: `DevPassword123!`
-- **Base de Datos**: `MiAppDb` (se crea automáticamente)
+- **ContraseÃ±a**: `DevPassword123!`
+- **Base de Datos**: `MiAppDb` (se crea automÃ¡ticamente)
 
-#### 🔗 Connection String
+#### ðŸ”— Connection String
 ```
 Server=localhost,1433;Database=MiAppDb;User Id=sa;Password=DevPassword123!;TrustServerCertificate=true;
 ```
 
-### 🖥️ Opción 2: SQL Server Express Local
+### ðŸ–¥ï¸ OpciÃ³n 2: SQL Server Express Local
 
-#### 📋 Configuración SQL Express
+#### ðŸ“‹ ConfiguraciÃ³n SQL Express
 - **Servidor**: `(local)\SQLEXPRESS`
 - **Base de Datos**: `SinsegAppDb`
-- **Autenticación**: Windows Authentication (Trusted_Connection=True)
+- **AutenticaciÃ³n**: Windows Authentication (Trusted_Connection=True)
 
-#### 🔗 Connection String
+#### ðŸ”— Connection String
 ```
 Server=(local)\SQLEXPRESS;Database=SinsegAppDb;Trusted_Connection=True;
 ```
 
-#### 🛠️ Setup Manual
+#### ðŸ› ï¸ Setup Manual
 1. **Instalar SQL Server Express** desde Microsoft
-2. **Ejecutar script de creación**:
+2. **Ejecutar script de creaciÃ³n**:
    ```sql
    -- Ejecutar EJECUTAR_COMPLETO.sql en SSMS
    ```
 
-### ☁️ Opción 3: Azure SQL (Existente)
+### â˜ï¸ OpciÃ³n 3: Azure SQL (Existente)
 
-#### 📋 Configuración Azure
+#### ðŸ“‹ ConfiguraciÃ³n Azure
 - **Servidor**: `siinadseg-sqlserver-1019.database.windows.net`
 - **Base de Datos**: `SiinadsegDB`
 - **Usuario**: `siinadseg_admin`
-- **Contraseña**: `P@ssw0rd123!`
+- **ContraseÃ±a**: `P@ssw0rd123!`
 
 ## Estructura de la Base de Datos
 
 ### Tablas Principales:
 - **Users**: Usuarios del sistema
 - **Roles**: Roles de usuario (Admin, DataLoader, User)
-- **UserRoles**: Relación usuarios-roles
-- **Polizas**: Pólizas de seguros con campos específicos para Excel
-- **Clientes**: Información de clientes
+- **UserRoles**: RelaciÃ³n usuarios-roles
+- **Polizas**: PÃ³lizas de seguros con campos especÃ­ficos para Excel
+- **Clientes**: InformaciÃ³n de clientes
 - **DataRecords**: Registro de cargas de archivos
 
-### Campos de Pólizas (Correspondientes a columnas de Excel):
-- **POLIZA** → NumeroPoliza
-- **MOD** → Modalidad  
-- **NOMBRE** → NombreAsegurado
-- **PRIMA** → Prima
-- **MONEDA** → Moneda
-- **FECHA** → FechaVigencia
-- **FRECUENCIA** → Frecuencia
-- **ASEGURADORA** → Aseguradora
-- **PLACA** → Placa
-- **MARCA** → Marca
-- **MODELO** → Modelo
+### Campos de PÃ³lizas (Correspondientes a columnas de Excel):
+- **POLIZA** â†’ NumeroPoliza
+- **MOD** â†’ Modalidad  
+- **NOMBRE** â†’ NombreAsegurado
+- **PRIMA** â†’ Prima
+- **MONEDA** â†’ Moneda
+- **FECHA** â†’ FechaVigencia
+- **FRECUENCIA** â†’ Frecuencia
+- **ASEGURADORA** â†’ Aseguradora
+- **PLACA** â†’ Placa
+- **MARCA** â†’ Marca
+- **MODELO** â†’ Modelo
 
 ## Archivos Disponibles
 
-### Opción 1: Script Completo (Recomendado)
+### OpciÃ³n 1: Script Completo (Recomendado)
 - **`EJECUTAR_COMPLETO.sql`** - Ejecuta todo en un solo script
 
-### Opción 2: Scripts Separados
+### OpciÃ³n 2: Scripts Separados
 1. **`01_CreateDatabase.sql`** - Crear base de datos
 2. **`02_CreateTables.sql`** - Crear todas las tablas
-3. **`03_CreateIndexes.sql`** - Crear índices para optimización
+3. **`03_CreateIndexes.sql`** - Crear Ã­ndices para optimizaciÃ³n
 4. **`04_CreateForeignKeys.sql`** - Crear relaciones entre tablas
 5. **`05_InsertInitialData.sql`** - Insertar datos iniciales
 
-## Instrucciones de Instalación
+## Instrucciones de InstalaciÃ³n
 
 ### Para SQL Server Express:
 
@@ -102,7 +102,7 @@ Server=(local)\SQLEXPRESS;Database=SinsegAppDb;Trusted_Connection=True;
 - **Password**: `password123`
 - **Rol**: Administrador
 
-## Cadena de Conexión para la Aplicación
+## Cadena de ConexiÃ³n para la AplicaciÃ³n
 
 Actualiza tu `appsettings.json` con:
 
@@ -115,7 +115,7 @@ Actualiza tu `appsettings.json` con:
 }
 ```
 
-## Verificación de la Instalación
+## VerificaciÃ³n de la InstalaciÃ³n
 
 Ejecuta estas consultas para verificar:
 
@@ -129,7 +129,7 @@ SELECT * FROM Users WHERE Email = 'admin@sinseg.com';
 -- Verificar roles
 SELECT * FROM Roles;
 
--- Verificar asignación de roles
+-- Verificar asignaciÃ³n de roles
 SELECT u.Email, r.Name 
 FROM Users u 
 INNER JOIN UserRoles ur ON u.Id = ur.UserId 
@@ -138,19 +138,19 @@ INNER JOIN Roles r ON ur.RoleId = r.Id;
 
 ## Notas Importantes
 
-1. **Compatibilidad**: Scripts diseñados específicamente para SQL Server Express
-2. **Seguridad**: El hash de contraseña usa BCrypt para máxima seguridad
-3. **Índices**: Incluye índices optimizados para consultas frecuentes
+1. **Compatibilidad**: Scripts diseÃ±ados especÃ­ficamente para SQL Server Express
+2. **Seguridad**: El hash de contraseÃ±a usa BCrypt para mÃ¡xima seguridad
+3. **Ãndices**: Incluye Ã­ndices optimizados para consultas frecuentes
 4. **Integridad**: Foreign keys para mantener integridad referencial
-5. **Migración**: Compatible con Entity Framework Core
+5. **MigraciÃ³n**: Compatible con Entity Framework Core
 
-## Solución de Problemas
+## SoluciÃ³n de Problemas
 
 ### Si ya existe la base de datos:
-Los scripts verifican la existencia antes de crear, es seguro ejecutarlos múltiples veces.
+Los scripts verifican la existencia antes de crear, es seguro ejecutarlos mÃºltiples veces.
 
 ### Si hay errores de permisos:
-Asegúrate de ejecutar SSMS como administrador y tener permisos para crear bases de datos.
+AsegÃºrate de ejecutar SSMS como administrador y tener permisos para crear bases de datos.
 
-### Para conectarse desde la aplicación:
-Verifica que SQL Server Express esté ejecutándose y acepte conexiones TCP/IP.
+### Para conectarse desde la aplicaciÃ³n:
+Verifica que SQL Server Express estÃ© ejecutÃ¡ndose y acepte conexiones TCP/IP.

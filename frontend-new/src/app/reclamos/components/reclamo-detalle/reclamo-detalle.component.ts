@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, inject } from '@angular/core';
+﻿import { Component, OnInit, ElementRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +10,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { ReclamosService } from '../../services/reclamos.service';
 import { 
@@ -19,7 +21,9 @@ import {
   PrioridadReclamo,
   getTipoReclamoLabel,
   getEstadoReclamoLabel,
-  getPrioridadReclamoLabel
+  getPrioridadReclamoLabel,
+  ReclamoHistorialEntry,
+  ReclamoDocumento
 } from '../../interfaces/reclamo.interface';
 import { LoggingService } from '../../../services/logging.service';
 
@@ -36,7 +40,9 @@ import { LoggingService } from '../../../services/logging.service';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTabsModule,
-    MatListModule
+    MatListModule,
+    MatTooltipModule,
+    MatProgressBarModule
   ],
   templateUrl: './reclamo-detalle.component.html',
   styleUrls: ['./reclamo-detalle.component.scss']
@@ -45,6 +51,19 @@ export class ReclamoDetalleComponent implements OnInit {
   reclamo: Reclamo | null = null;
   loading = true;
   reclamoId: number = 0;
+
+  // ── Historial ───────────────────────────────────────────────────────────
+  historialEntries: ReclamoHistorialEntry[] = [];
+  loadingHistorial = false;
+  historialLoaded  = false;
+
+  // ── Documentos ──────────────────────────────────────────────────────────
+  documentos: ReclamoDocumento[] = [];
+  loadingDocumentos    = false;
+  documentosLoaded     = false;
+  uploadingDocumento   = false;
+
+  @ViewChild('fileInputRef') fileInputRef!: ElementRef<HTMLInputElement>;
 
   // Enums para el template
   TipoReclamo = TipoReclamo;
@@ -94,6 +113,148 @@ export class ReclamoDetalleComponent implements OnInit {
 
   onBack(): void {
     this.router.navigate(['/reclamos']);
+  }
+
+  // ── Tab change handler ───────────────────────────────────────────────────
+
+  onTabChange(index: number): void {
+    if (index === 1 && !this.historialLoaded)  this.cargarHistorial();
+    if (index === 2 && !this.documentosLoaded) this.cargarDocumentos();
+  }
+
+  // ── Historial ─────────────────────────────────────────────────────────────
+
+  cargarHistorial(): void {
+    this.loadingHistorial = true;
+    this.reclamosService.getHistorial(this.reclamoId).subscribe({
+      next: (entries) => {
+        this.historialEntries = entries;
+        this.historialLoaded  = true;
+        this.loadingHistorial = false;
+      },
+      error: (err) => {
+        this.logger.error('Error cargando historial:', err);
+        this.loadingHistorial = false;
+        this.showMessage('Error al cargar el historial', 'error');
+      }
+    });
+  }
+
+  getHistorialIcon(tipoEvento: string): string {
+    switch (tipoEvento) {
+      case 'Creacion':          return 'add_circle';
+      case 'CambioEstado':      return 'swap_horiz';
+      case 'Asignacion':        return 'person';
+      case 'Resolucion':        return 'check_circle';
+      case 'Actualizacion':     return 'edit';
+      case 'DocumentoAgregado': return 'upload_file';
+      case 'DocumentoEliminado': return 'delete_outline';
+      default:                  return 'info';
+    }
+  }
+
+  getHistorialColor(tipoEvento: string): string {
+    switch (tipoEvento) {
+      case 'Creacion':           return '#4caf50';
+      case 'CambioEstado':       return '#2196f3';
+      case 'Asignacion':         return '#9c27b0';
+      case 'Resolucion':         return '#4caf50';
+      case 'Actualizacion':      return '#ff9800';
+      case 'DocumentoAgregado':  return '#00bcd4';
+      case 'DocumentoEliminado': return '#f44336';
+      default:                   return '#9e9e9e';
+    }
+  }
+
+  // ── Documentos ────────────────────────────────────────────────────────────
+
+  cargarDocumentos(): void {
+    this.loadingDocumentos = true;
+    this.reclamosService.getDocumentos(this.reclamoId).subscribe({
+      next: (docs) => {
+        this.documentos        = docs;
+        this.documentosLoaded  = true;
+        this.loadingDocumentos = false;
+      },
+      error: (err) => {
+        this.logger.error('Error cargando documentos:', err);
+        this.loadingDocumentos = false;
+        this.showMessage('Error al cargar los documentos', 'error');
+      }
+    });
+  }
+
+  triggerFileUpload(): void {
+    this.fileInputRef?.nativeElement.click();
+  }
+
+  onFileSelected(event: Event): void {
+    const input   = event.target as HTMLInputElement;
+    const archivo = input?.files?.[0];
+    if (!archivo) return;
+    input.value = ''; // reset so the same file can be re-selected
+    this.subirDocumento(archivo);
+  }
+
+  private subirDocumento(archivo: File): void {
+    const MAX_MB = 20;
+    if (archivo.size > MAX_MB * 1024 * 1024) {
+      this.showMessage(`El archivo supera el límite de ${MAX_MB} MB.`, 'error');
+      return;
+    }
+    this.uploadingDocumento = true;
+    this.reclamosService.uploadDocumento(this.reclamoId, archivo).subscribe({
+      next: (doc) => {
+        this.documentos = [doc, ...this.documentos];
+        this.uploadingDocumento = false;
+        this.showMessage(`"${doc.nombre}" adjuntado correctamente.`, 'success');
+      },
+      error: (err) => {
+        this.logger.error('Error subiendo documento:', err);
+        this.uploadingDocumento = false;
+        this.showMessage('Error al subir el archivo. Verifica el tamaño y formato.', 'error');
+      }
+    });
+  }
+
+  descargarDocumento(doc: ReclamoDocumento): void {
+    const url = this.reclamosService.downloadDocumentoUrl(this.reclamoId, doc.id);
+    const a   = document.createElement('a');
+    a.href    = url;
+    a.download = doc.nombre;
+    a.target  = '_blank';
+    a.rel     = 'noopener noreferrer';
+    a.click();
+  }
+
+  eliminarDocumento(doc: ReclamoDocumento): void {
+    if (!confirm(`¿Eliminar el archivo "${doc.nombre}"?`)) return;
+    this.reclamosService.deleteDocumento(this.reclamoId, doc.id).subscribe({
+      next: () => {
+        this.documentos = this.documentos.filter(d => d.id !== doc.id);
+        this.showMessage(`"${doc.nombre}" eliminado.`, 'info');
+      },
+      error: (err) => {
+        this.logger.error('Error eliminando documento:', err);
+        this.showMessage('Error al eliminar el documento.', 'error');
+      }
+    });
+  }
+
+  formatFileSize(bytes: number): string {
+    if (bytes < 1024)       return `${bytes} B`;
+    if (bytes < 1048576)    return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / 1048576).toFixed(1)} MB`;
+  }
+
+  getDocumentoIcon(tipoContenido: string): string {
+    if (tipoContenido.startsWith('image/'))           return 'image';
+    if (tipoContenido === 'application/pdf')           return 'picture_as_pdf';
+    if (tipoContenido.includes('word'))                return 'description';
+    if (tipoContenido.includes('excel') || tipoContenido.includes('spreadsheet'))
+                                                       return 'table_chart';
+    if (tipoContenido.startsWith('video/'))            return 'video_file';
+    return 'insert_drive_file';
   }
 
   getEstadoColor(estado: EstadoReclamo): string {

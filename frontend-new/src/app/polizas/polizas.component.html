@@ -1,493 +1,470 @@
-<div class="polizas-container">
+﻿<div class="polizas-container">
   <div class="content-wrapper">
-    <!-- Header con navegación -->
-    <div class="header-section">
-      <h2 style="color: white; text-align: center; margin-bottom: 30px; font-size: 28px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Gestión de Pólizas de Seguros</h2>
-    </div>
 
-    <!-- Formulario para nueva/editar póliza -->
-    <mat-card class="form-section" #formSection [class.is-edit-mode]="isEditMode">
+    <mat-tab-group #tabGroup class="polizas-tabs" animationDuration="200ms"
+                   (selectedIndexChange)="onTabChange($event)">
 
-      <!-- Header: modo nuevo -->
-      <mat-card-header *ngIf="!isEditMode" class="form-header-new">
-        <mat-card-title>
-          <mat-icon>add_circle</mat-icon>
-          Agregar Nueva Póliza
-        </mat-card-title>
-      </mat-card-header>
+      <!-- â•â•â• Tab 0 â€” Lista de PÃ³lizas â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+      <mat-tab label="Pólizas">
+        <div class="tab-content">
 
-      <!-- Header: context ribbon modo edición -->
-      <div *ngIf="isEditMode && selectedPoliza" class="form-header-edit"
-           [class.form-header-skeleton]="formLoadingState === 'loading'">
-        <div class="edit-avatar">
-          {{selectedPoliza.nombreAsegurado.charAt(0).toUpperCase() || '?'}}
-        </div>
-        <div class="edit-meta">
-          <div class="edit-poliza-number">
-            <mat-icon class="meta-icon">policy</mat-icon>
-            <span class="poliza-num-label">{{selectedPoliza.numeroPoliza}}</span>
-          </div>
-          <div class="edit-asegurado">{{selectedPoliza.nombreAsegurado}}</div>
-          <div class="edit-chips">
-            <span class="edit-chip chip-aseg">
-              <mat-icon>shield</mat-icon>{{selectedPoliza.aseguradora}}
-            </span>
-            <span class="edit-chip chip-freq">
-              <mat-icon>repeat</mat-icon>{{selectedPoliza.frecuencia}}
-            </span>
-            <span class="edit-chip chip-moneda" [class.chip-usd]="selectedPoliza.moneda==='USD'" [class.chip-eur]="selectedPoliza.moneda==='EUR'">
-              <mat-icon>payments</mat-icon>{{selectedPoliza.moneda}}
-            </span>
-          </div>
-        </div>
-        <button mat-icon-button class="edit-close-btn" type="button" (click)="resetForm()" matTooltip="Cancelar edición">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
+          <!-- Barra de herramientas -->
+          <div class="list-toolbar">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Buscar pólizas</mat-label>
+              <input matInput
+                     placeholder="Número, nombre, aseguradora, cédula, placa..."
+                     [(ngModel)]="searchTerm"
+                     (input)="onSearch($event)">
+              <button matSuffix mat-icon-button *ngIf="searchTerm"
+                      (click)="clearSearch()" matTooltip="Limpiar búsqueda">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-icon matSuffix *ngIf="!searchTerm">search</mat-icon>
+              <mat-hint *ngIf="searchTerm">
+                {{filteredPolizasCount}} de {{polizas.length}} pólizas encontradas
+              </mat-hint>
+              <mat-hint *ngIf="!searchTerm" class="search-hint">
+                Busca por nombre, número, aseguradora, cédula o placa
+              </mat-hint>
+            </mat-form-field>
 
-      <mat-card-content>
-        <!-- Skeleton overlay while loading -->
-        <div class="form-skeleton-rows" *ngIf="formLoadingState === 'loading'">
-          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div></div>
-          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div></div>
-          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div><div class="skel-field"></div></div>
-          <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div><div class="skel-field"></div></div>
-          <div class="skel-row"><div class="skel-field skel-wide"></div></div>
-        </div>
+            <div class="toolbar-right">
+              <mat-button-toggle-group #viewToggle="matButtonToggleGroup"
+                                       [value]="currentView"
+                                       (change)="onViewChange($event.value)">
+                <mat-button-toggle value="cards">
+                  <mat-icon>view_module</mat-icon>
+                  Tarjetas
+                </mat-button-toggle>
+                <mat-button-toggle value="table">
+                  <mat-icon>view_list</mat-icon>
+                  Tabla
+                </mat-button-toggle>
+              </mat-button-toggle-group>
 
-        <form [formGroup]="polizaForm" (ngSubmit)="onSubmit()"
-              [class.form-fields-hidden]="formLoadingState === 'loading'"
-              [class.form-fields-reveal]="formLoadingState === 'loaded'">
-
-          <div class="form-row form-row-1">
-            <mat-form-field appearance="outline">
-              <mat-label>Número de Póliza</mat-label>
-              <input matInput formControlName="numeroPoliza" required placeholder="Ingrese el número de póliza" title="Número de Póliza">
-              <mat-error *ngIf="polizaForm.get('numeroPoliza')?.hasError('required')">
-                Número de póliza es requerido
-              </mat-error>
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Modalidad (Opcional)</mat-label>
-              <input matInput formControlName="modalidad" placeholder="Ingrese la modalidad" title="Modalidad">
-            </mat-form-field>
-          </div>
-
-          <div class="form-row form-row-2">
-            <mat-form-field appearance="outline">
-              <mat-label>Nombre Asegurado</mat-label>
-              <input matInput formControlName="nombreAsegurado" required placeholder="Ingrese el nombre del asegurado" title="Nombre Asegurado">
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Número de Cédula (Opcional)</mat-label>
-              <input matInput formControlName="numeroCedula" placeholder="Ingrese el número de cédula" title="Número de Cédula">
-            </mat-form-field>
-          </div>
-
-          <div class="form-row form-row-3">
-            <mat-form-field appearance="outline">
-              <mat-label>Prima</mat-label>
-              <input matInput type="number" formControlName="prima" required placeholder="Ingrese la prima" title="Prima">
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Moneda</mat-label>
-              <mat-select formControlName="moneda" required>
-                <mat-option value="CRC">CRC</mat-option>
-                <mat-option value="USD">USD</mat-option>
-                <mat-option value="EUR">EUR</mat-option>
-              </mat-select>
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Fecha de Vigencia</mat-label>
-              <input matInput type="date" formControlName="fechaVigencia" required placeholder="Seleccione la fecha de vigencia" title="Fecha de Vigencia">
-            </mat-form-field>
-          </div>
-
-          <div class="form-row form-row-4">
-            <mat-form-field appearance="outline">
-              <mat-label>Frecuencia</mat-label>
-              <mat-select formControlName="frecuencia" required>
-                <mat-option value="Mensual">Mensual</mat-option>
-                <mat-option value="Trimestral">Trimestral</mat-option>
-                <mat-option value="Semestral">Semestral</mat-option>
-                <mat-option value="Anual">Anual</mat-option>
-              </mat-select>
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Aseguradora</mat-label>
-              <mat-select formControlName="aseguradora" required>
-                <mat-option *ngFor="let aseguradora of aseguradorasSistema" [value]="aseguradora.value">
-                  {{aseguradora.label}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Placa (Opcional)</mat-label>
-              <input matInput formControlName="placa" placeholder="Ingrese la placa" title="Placa">
-            </mat-form-field>
-          </div>
-
-          <div class="form-row form-row-5">
-            <mat-form-field appearance="outline">
-              <mat-label>Marca (Opcional)</mat-label>
-              <input matInput formControlName="marca" placeholder="Ingrese la marca" title="Marca">
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Modelo (Opcional)</mat-label>
-              <input matInput formControlName="modelo" placeholder="Ingrese el modelo" title="Modelo">
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Año (Opcional)</mat-label>
-              <input matInput formControlName="año" maxlength="4" placeholder="Ingrese el año" title="Año">
-            </mat-form-field>
-          </div>
-
-          <div class="form-row form-row-6">
-            <mat-form-field appearance="outline">
-              <mat-label>Correo Electrónico (Opcional)</mat-label>
-              <input matInput type="email" formControlName="correo" placeholder="Ingrese el correo electrónico" title="Correo Electrónico">
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline">
-              <mat-label>Número de Teléfono (Opcional)</mat-label>
-              <input matInput formControlName="numeroTelefono" placeholder="Ingrese el número de teléfono" title="Número de Teléfono">
-            </mat-form-field>
-          </div>
-
-          <div class="form-row form-row-7">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Observaciones (Opcional)</mat-label>
-              <textarea matInput formControlName="observaciones" rows="3" 
-                        placeholder="Notas, comentarios o información adicional sobre la póliza"></textarea>
-            </mat-form-field>
-          </div>
-
-          <div class="form-actions form-row-8">
-            <button mat-raised-button 
-                    color="primary" 
-                    type="submit" 
-                    [disabled]="isLoading">
-              <mat-icon>{{isEditMode ? 'update' : 'save'}}</mat-icon>
-              {{submitButtonText}}
-            </button>
-            
-            <button mat-stroked-button 
-                    type="button" 
-                    (click)="resetForm()">
-              <mat-icon>{{isEditMode ? 'cancel' : 'clear'}}</mat-icon>
-              {{isEditMode ? 'Cancelar Edición' : 'Limpiar Formulario'}}
-            </button>
-          </div>
-        </form>
-      </mat-card-content>
-    </mat-card>
-
-  <mat-divider></mat-divider>
-
-    <!-- Grid moderno de pólizas -->
-    <div class="polizas-grid-section">
-      <div class="section-header">
-        <div class="header-left">
-          <h3 class="section-title">
-            <mat-icon class="title-icon">assignment</mat-icon>
-            Lista de Pólizas
-            <span class="polizas-count" *ngIf="filteredPolizasCount > 0">({{filteredPolizasCount}})</span>
-          </h3>
-        </div>
-        
-        <div class="header-center">
-          <mat-form-field appearance="outline" class="search-field">
-            <mat-label>Buscar pólizas</mat-label>
-            <input matInput 
-                   placeholder="Ej: Juan Pérez, POL-001, SJJ-123, perez juan..."
-                   [(ngModel)]="searchTerm"
-                   (input)="onSearch($event)">
-            <mat-icon matSuffix>search</mat-icon>
-            <mat-hint *ngIf="searchTerm">
-              {{filteredPolizasCount}} de {{polizas.length}} pólizas encontradas
-            </mat-hint>
-            <mat-hint *ngIf="!searchTerm" class="search-hint">
-              Busca por nombre (en cualquier orden), número de póliza o placa
-            </mat-hint>
-          </mat-form-field>
-        </div>
-        
-        <div class="header-right">
-          <div class="view-controls">
-          <mat-button-toggle-group #viewToggle="matButtonToggleGroup" value="cards">
-            <mat-button-toggle value="cards">
-              <mat-icon>view_module</mat-icon>
-              Tarjetas
-            </mat-button-toggle>
-            <mat-button-toggle value="table">
-              <mat-icon>view_list</mat-icon>
-              Tabla
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-        </div>
-      </div>
-
-        <!-- Vista de tarjetas (por defecto) -->
-    <div class="polizas-cards" *ngIf="!isLoading && polizas.length > 0 && viewToggle.value === 'cards'">
-      <div class="poliza-card" 
-           *ngFor="let poliza of paginatedPolizas; trackBy: trackByPoliza"
-           [class.selected]="selectedPoliza?.id === poliza.id"
-           (click)="openPolizaDetail(poliza)">
-        <div class="card-header">
-          <div class="poliza-number">
-            <mat-icon class="poliza-icon">description</mat-icon>
-            <span class="number">{{poliza.numeroPoliza}}</span>
-          </div>
-          <div class="poliza-actions">
-            <button mat-icon-button 
-                    class="action-btn edit-btn"
-                    matTooltip="Ver detalle"
-                    color="primary" 
-                    (click)="$event.stopPropagation(); openPolizaDetail(poliza)"
-                    [disabled]="isLoading">
-              <mat-icon>open_in_new</mat-icon>
-            </button>
-            <button mat-icon-button 
-                    class="action-btn delete-btn"
-                    matTooltip="Eliminar póliza"
-                    color="warn" 
-                    (click)="deletePoliza(poliza); $event.stopPropagation()"
-                    [disabled]="isLoading">
-              <mat-icon>delete_sweep</mat-icon>
-            </button>
-          </div>
-        </div>
-        
-        <div class="card-content">
-          <div class="primary-info">
-            <h4 class="asegurado-name">{{poliza.nombreAsegurado}}</h4>
-            <div class="prima-info">
-              <span class="prima-amount">{{formatCurrency(poliza.prima)}}</span>
-              <span class="moneda-badge" [class]="'moneda-' + poliza.moneda.toLowerCase()">{{poliza.moneda}}</span>
+              <button mat-raised-button color="primary" class="btn-nueva-poliza"
+                      (click)="goToNewForm()">
+                <mat-icon>add_circle</mat-icon>
+                Nueva Póliza
+              </button>
             </div>
           </div>
-          
-          <div class="secondary-info">
-            <div class="info-row">
-              <div class="info-item">
-                <mat-icon class="info-icon">business</mat-icon>
-                <span class="info-label">Aseguradora:</span>
-                <span class="info-value">{{poliza.aseguradora}}</span>
+
+          <!-- Vista tarjetas -->
+          <div class="polizas-cards"
+               *ngIf="!isLoading && polizas.length > 0 && viewToggle.value === 'cards'">
+            <div class="poliza-card"
+              *ngFor="let poliza of paginatedPolizas; let i = index; trackBy: trackByPoliza"
+              [style.--stagger-index]="i"
+                 [class.selected]="selectedPoliza?.id === poliza.id"
+                 (click)="openPolizaDetail(poliza)">
+              <div class="card-header">
+                <div class="poliza-number">
+                  <mat-icon class="poliza-icon">description</mat-icon>
+                  <span class="number">{{poliza.numeroPoliza}}</span>
+                </div>
+                <div class="poliza-actions">
+                  <button mat-icon-button class="action-btn edit-btn"
+                          matTooltip="Ver detalle" color="primary"
+                          (click)="$event.stopPropagation(); openPolizaDetail(poliza)"
+                          [disabled]="isLoading">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                  <button mat-icon-button class="action-btn delete-btn"
+                          matTooltip="Eliminar póliza" color="warn"
+                          (click)="deletePoliza(poliza); $event.stopPropagation()"
+                          [disabled]="isLoading">
+                    <mat-icon>delete_sweep</mat-icon>
+                  </button>
+                </div>
               </div>
-            </div>
-            
-            <div class="info-row">
-              <div class="info-item">
-                <mat-icon class="info-icon">event</mat-icon>
-                <span class="info-label">Vigencia:</span>
-                <span class="info-value">{{formatDate(poliza.fechaVigencia)}}</span>
+              <div class="card-content">
+                <div class="primary-info">
+                  <h4 class="asegurado-name">{{poliza.nombreAsegurado}}</h4>
+                  <div class="prima-info">
+                    <span class="prima-amount">{{formatCurrency(poliza.prima)}}</span>
+                    <span class="moneda-badge" [class]="'moneda-' + poliza.moneda.toLowerCase()">{{poliza.moneda}}</span>
+                  </div>
+                </div>
+                <div class="secondary-info">
+                  <div class="info-row">
+                    <div class="info-item">
+                      <mat-icon class="info-icon">business</mat-icon>
+                      <span class="info-label">Aseguradora:</span>
+                      <span class="info-value">{{poliza.aseguradora}}</span>
+                    </div>
+                  </div>
+                  <div class="info-row">
+                    <div class="info-item">
+                      <mat-icon class="info-icon">event</mat-icon>
+                      <span class="info-label">Vigencia:</span>
+                      <span class="info-value">{{formatDate(poliza.fechaVigencia)}}</span>
+                    </div>
+                  </div>
+                  <div class="info-row" *ngIf="poliza.placa">
+                    <div class="info-item">
+                      <mat-icon class="info-icon">directions_car</mat-icon>
+                      <span class="info-label">Vehículo:</span>
+                      <span class="info-value">{{poliza.placa}} - {{poliza.marca || 'N/A'}} {{poliza.modelo || ''}}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            
-            <div class="info-row" *ngIf="poliza.placa">
-              <div class="info-item">
-                <mat-icon class="info-icon">directions_car</mat-icon>
-                <span class="info-label">Vehículo:</span>
-                <span class="info-value">{{poliza.placa}} - {{poliza.marca || 'N/A'}} {{poliza.modelo || ''}}</span>
+              <div class="card-footer">
+                <div class="status-indicators">
+                  <span class="frecuencia-badge">{{poliza.frecuencia}}</span>
+                  <span class="status-badge"
+                        [class.active]="getPolizaStatus(poliza) === 'active'"
+                        [class.warning]="getPolizaStatus(poliza) === 'warning'"
+                        [class.expired]="getPolizaStatus(poliza) === 'expired'">
+                    <mat-icon class="status-icon">
+                      {{ getPolizaStatus(poliza) === 'expired' ? 'event_busy'
+                       : getPolizaStatus(poliza) === 'warning' ? 'schedule'
+                       : 'check_circle' }}
+                    </mat-icon>
+                    {{getPolizaStatusLabel(poliza)}}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
-        <div class="card-footer">
-          <div class="status-indicators">
-            <span class="frecuencia-badge">{{poliza.frecuencia}}</span>
-            <span class="status-badge active">Activa</span>
+
+          <!-- Paginador tarjetas -->
+          <mat-paginator
+            *ngIf="!isLoading && polizas.length > 0 && viewToggle.value === 'cards'"
+            [length]="totalPolizas" [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions" [pageIndex]="currentPage"
+            (page)="onPageChange($event)" showFirstLastButtons class="cards-paginator">
+          </mat-paginator>
+
+          <!-- Vista tabla -->
+          <div class="table-container"
+               *ngIf="!isLoading && polizas.length > 0 && viewToggle.value === 'table'">
+            <table mat-table [dataSource]="polizasDataSource" class="modern-table">
+
+              <ng-container matColumnDef="numeroPoliza">
+                <th mat-header-cell *matHeaderCellDef (click)="sortData('numeroPoliza')"
+                    class="sortable-header" [class.sort-active]="currentSortColumn === 'numeroPoliza'">
+                  Número
+                  <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'numeroPoliza'">
+                    {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
+                  </mat-icon>
+                </th>
+                <td mat-cell *matCellDef="let poliza">
+                  <div class="cell-with-icon"><mat-icon class="table-icon">description</mat-icon>{{poliza.numeroPoliza}}</div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="nombreAsegurado">
+                <th mat-header-cell *matHeaderCellDef (click)="sortData('nombreAsegurado')"
+                    class="sortable-header" [class.sort-active]="currentSortColumn === 'nombreAsegurado'">
+                  Nombre
+                  <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'nombreAsegurado'">
+                    {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
+                  </mat-icon>
+                </th>
+                <td mat-cell *matCellDef="let poliza">
+                  <div class="cell-with-icon"><mat-icon class="table-icon">person</mat-icon>{{poliza.nombreAsegurado}}</div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="frecuencia">
+                <th mat-header-cell *matHeaderCellDef (click)="sortData('frecuencia')"
+                    class="sortable-header" [class.sort-active]="currentSortColumn === 'frecuencia'">
+                  Frecuencia
+                  <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'frecuencia'">
+                    {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
+                  </mat-icon>
+                </th>
+                <td mat-cell *matCellDef="let poliza">
+                  <div class="cell-with-icon"><mat-icon class="table-icon">schedule</mat-icon><span class="frecuencia-badge">{{poliza.frecuencia}}</span></div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="aseguradora">
+                <th mat-header-cell *matHeaderCellDef (click)="sortData('aseguradora')"
+                    class="sortable-header" [class.sort-active]="currentSortColumn === 'aseguradora'">
+                  Aseguradora
+                  <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'aseguradora'">
+                    {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
+                  </mat-icon>
+                </th>
+                <td mat-cell *matCellDef="let poliza">
+                  <div class="cell-with-icon"><mat-icon class="table-icon">business</mat-icon>{{poliza.aseguradora}}</div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="fechaVigencia">
+                <th mat-header-cell *matHeaderCellDef (click)="sortData('fechaVigencia')"
+                    class="sortable-header" [class.sort-active]="currentSortColumn === 'fechaVigencia'">
+                  Fecha
+                  <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'fechaVigencia'">
+                    {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
+                  </mat-icon>
+                </th>
+                <td mat-cell *matCellDef="let poliza">
+                  <div class="cell-with-icon"><mat-icon class="table-icon">event</mat-icon>{{formatDate(poliza.fechaVigencia)}}</div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="observaciones">
+                <th mat-header-cell *matHeaderCellDef (click)="sortData('observaciones')"
+                    class="sortable-header" [class.sort-active]="currentSortColumn === 'observaciones'">
+                  Observaciones
+                  <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'observaciones'">
+                    {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
+                  </mat-icon>
+                </th>
+                <td mat-cell *matCellDef="let poliza">
+                  <div class="cell-with-icon">
+                    <mat-icon class="table-icon">notes</mat-icon>
+                    <span class="observaciones-text">{{poliza.observaciones || '-'}}</span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Acciones</th>
+                <td mat-cell *matCellDef="let poliza">
+                  <button mat-icon-button class="action-button edit-button"
+                          matTooltip="Ver detalle" color="primary"
+                          (click)="$event.stopPropagation(); openPolizaDetail(poliza)"
+                          [disabled]="isLoading">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
+                  <button mat-icon-button class="action-button delete-button"
+                          matTooltip="Eliminar póliza" color="warn"
+                          (click)="deletePoliza(poliza); $event.stopPropagation()"
+                          [disabled]="isLoading">
+                    <mat-icon>delete_sweep</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                  class="table-row" [class.selected]="selectedPoliza?.id === row.id"
+                  (click)="openPolizaDetail(row)"></tr>
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="7">
+                  <div class="empty-state no-search-results">
+                    <mat-icon>search_off</mat-icon>
+                    <span class="empty-title">Sin resultados</span>
+                    <span class="empty-message">No se encontraron pólizas con ese criterio de búsqueda.</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator #paginator [pageSizeOptions]="pageSizeOptions"
+                           [pageSize]="pageSize" showFirstLastButtons class="table-paginator">
+            </mat-paginator>
           </div>
+
+          <div class="loading" *ngIf="isLoading">
+            <mat-spinner></mat-spinner>
+            <p>Cargando pólizas...</p>
+          </div>
+
+          <div class="no-data" *ngIf="!isLoading && polizas.length === 0">
+            <mat-icon>description</mat-icon>
+            <p>No hay pólizas registradas</p>
+            <p>Haz clic en <strong>Nueva Póliza</strong> para comenzar</p>
+          </div>
+
         </div>
-      </div>
-    </div>
+      </mat-tab>
 
-    <!-- Paginador para vista de tarjetas -->
-    <mat-paginator 
-      *ngIf="!isLoading && polizas.length > 0 && viewToggle.value === 'cards'"
-      [length]="totalPolizas"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="pageSizeOptions"
-      [pageIndex]="currentPage"
-      (page)="onPageChange($event)"
-      showFirstLastButtons
-      class="cards-paginator">
-    </mat-paginator>
+      <!-- â•â•â• Tab 1 â€” Nueva / Editar PÃ³liza â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+      <mat-tab [label]="formTabLabel">
+        <div class="tab-content">
 
-    <!-- Vista de tabla -->
-    <div class="table-container" *ngIf="!isLoading && polizas.length > 0 && viewToggle.value === 'table'">
-      <table mat-table 
-             [dataSource]="polizasDataSource" 
-             class="modern-table">
-        
-        <ng-container matColumnDef="numeroPoliza">
-          <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('numeroPoliza')"
-              class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'numeroPoliza'">
-            Número
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'numeroPoliza'">
-              {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
-            </mat-icon>
-          </th>
-          <td mat-cell *matCellDef="let poliza">
-            <div class="cell-with-icon">
-              <mat-icon class="table-icon">description</mat-icon>
-              {{poliza.numeroPoliza}}
+          <mat-card class="form-section" #formSection [class.is-edit-mode]="isEditMode">
+
+            <!-- Ribbon ediciÃ³n -->
+            <div *ngIf="isEditMode && selectedPoliza" class="form-header-edit"
+                 [class.form-header-skeleton]="formLoadingState === 'loading'">
+              <div class="edit-avatar">
+                {{selectedPoliza.nombreAsegurado.charAt(0).toUpperCase() || '?'}}
+              </div>
+              <div class="edit-meta">
+                <div class="edit-poliza-number">
+                  <mat-icon class="meta-icon">policy</mat-icon>
+                  <span class="poliza-num-label">{{selectedPoliza.numeroPoliza}}</span>
+                </div>
+                <div class="edit-asegurado">{{selectedPoliza.nombreAsegurado}}</div>
+                <div class="edit-chips">
+                  <span class="edit-chip chip-aseg"><mat-icon>shield</mat-icon>{{selectedPoliza.aseguradora}}</span>
+                  <span class="edit-chip chip-freq"><mat-icon>repeat</mat-icon>{{selectedPoliza.frecuencia}}</span>
+                  <span class="edit-chip chip-moneda"
+                        [class.chip-usd]="selectedPoliza.moneda==='USD'"
+                        [class.chip-eur]="selectedPoliza.moneda==='EUR'">
+                    <mat-icon>payments</mat-icon>{{selectedPoliza.moneda}}
+                  </span>
+                </div>
+              </div>
+              <button mat-icon-button class="edit-close-btn" type="button"
+                      (click)="resetForm()" matTooltip="Cancelar edición"
+                      aria-label="Cancelar edición">
+                <mat-icon aria-hidden="true">close</mat-icon>
+              </button>
             </div>
-          </td>
-        </ng-container>
 
-        <ng-container matColumnDef="nombreAsegurado">
-          <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('nombreAsegurado')"
-              class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'nombreAsegurado'">
-            Nombre
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'nombreAsegurado'">
-              {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
-            </mat-icon>
-          </th>
-          <td mat-cell *matCellDef="let poliza">
-            <div class="cell-with-icon">
-              <mat-icon class="table-icon">person</mat-icon>
-              {{poliza.nombreAsegurado}}
-            </div>
-          </td>
-        </ng-container>
+            <!-- Header nuevo -->
+            <mat-card-header *ngIf="!isEditMode" class="form-header-new">
+              <mat-card-title>
+                <mat-icon>add_circle</mat-icon>
+                Nueva Póliza
+              </mat-card-title>
+            </mat-card-header>
 
-        <ng-container matColumnDef="frecuencia">
-          <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('frecuencia')"
-              class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'frecuencia'">
-            Frecuencia
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'frecuencia'">
-              {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
-            </mat-icon>
-          </th>
-          <td mat-cell *matCellDef="let poliza">
-            <div class="cell-with-icon">
-              <mat-icon class="table-icon">schedule</mat-icon>
-              <span class="frecuencia-badge">{{poliza.frecuencia}}</span>
-            </div>
-          </td>
-        </ng-container>
+            <mat-card-content [class.edit-mode-content]="isEditMode">
 
-        <ng-container matColumnDef="aseguradora">
-          <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('aseguradora')"
-              class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'aseguradora'">
-            Aseguradora
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'aseguradora'">
-              {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
-            </mat-icon>
-          </th>
-          <td mat-cell *matCellDef="let poliza">
-            <div class="cell-with-icon">
-              <mat-icon class="table-icon">business</mat-icon>
-              {{poliza.aseguradora}}
-            </div>
-          </td>
-        </ng-container>
+              <!-- Skeleton -->
+              <div class="form-skeleton-rows" *ngIf="formLoadingState === 'loading'">
+                <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div></div>
+                <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div></div>
+                <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div><div class="skel-field"></div></div>
+                <div class="skel-row"><div class="skel-field"></div><div class="skel-field"></div><div class="skel-field"></div></div>
+                <div class="skel-row"><div class="skel-field skel-wide"></div></div>
+              </div>
 
-        <ng-container matColumnDef="fechaVigencia">
-          <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('fechaVigencia')"
-              class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'fechaVigencia'">
-            Fecha
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'fechaVigencia'">
-              {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
-            </mat-icon>
-          </th>
-          <td mat-cell *matCellDef="let poliza">
-            <div class="cell-with-icon">
-              <mat-icon class="table-icon">event</mat-icon>
-              {{formatDate(poliza.fechaVigencia)}}
-            </div>
-          </td>
-        </ng-container>
+              <form [formGroup]="polizaForm" (ngSubmit)="onSubmit()"
+                    [class.form-fields-hidden]="formLoadingState === 'loading'"
+                    [class.form-fields-reveal]="formLoadingState === 'loaded'">
 
-        <ng-container matColumnDef="observaciones">
-          <th mat-header-cell *matHeaderCellDef 
-              (click)="sortData('observaciones')"
-              class="sortable-header"
-              [class.sort-active]="currentSortColumn === 'observaciones'">
-            Observaciones
-            <mat-icon class="sort-icon" *ngIf="currentSortColumn === 'observaciones'">
-              {{currentSortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward'}}
-            </mat-icon>
-          </th>
-          <td mat-cell *matCellDef="let poliza">
-            <div class="cell-with-icon">
-              <mat-icon class="table-icon">notes</mat-icon>
-              <span class="observaciones-text">{{poliza.observaciones || '-'}}</span>
-            </div>
-          </td>
-        </ng-container>
+                <div class="form-section-label form-row-0">
+                  <mat-icon>policy</mat-icon><span>Datos Principales</span>
+                </div>
 
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>Acciones</th>
-          <td mat-cell *matCellDef="let poliza">
-            <button mat-icon-button 
-                    class="action-button edit-button"
-                    matTooltip="Ver detalle"
-                    color="primary" 
-                    (click)="$event.stopPropagation(); openPolizaDetail(poliza)"
-                    [disabled]="isLoading">
-              <mat-icon>open_in_new</mat-icon>
-            </button>
-            <button mat-icon-button 
-                    class="action-button delete-button"
-                    matTooltip="Eliminar póliza"
-                    color="warn" 
-                    (click)="deletePoliza(poliza); $event.stopPropagation()"
-                    [disabled]="isLoading">
-              <mat-icon>delete_sweep</mat-icon>
-            </button>
-          </td>
-        </ng-container>
+                <div class="form-row form-row-1">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Número de Póliza</mat-label>
+                    <input matInput formControlName="numeroPoliza" required placeholder="Ingrese el número de póliza">
+                    <mat-error *ngIf="polizaForm.get('numeroPoliza')?.hasError('required')">Número de póliza es requerido</mat-error>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Modalidad (Opcional)</mat-label>
+                    <input matInput formControlName="modalidad" placeholder="Ingrese la modalidad">
+                  </mat-form-field>
+                </div>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row 
-            *matRowDef="let row; columns: displayedColumns;" 
-            class="table-row"
-            [class.selected]="selectedPoliza?.id === row.id"
-            (click)="openPolizaDetail(row)"></tr>
-      </table>
-      
-      <!-- Paginador para vista de tabla -->
-      <mat-paginator 
-        #paginator
-        [pageSizeOptions]="pageSizeOptions"
-        [pageSize]="pageSize"
-        showFirstLastButtons
-        class="table-paginator">
-      </mat-paginator>
-    </div>
+                <div class="form-row form-row-2">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Nombre Asegurado</mat-label>
+                    <input matInput formControlName="nombreAsegurado" required placeholder="Ingrese el nombre del asegurado">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Número de Cédula (Opcional)</mat-label>
+                    <input matInput formControlName="numeroCedula" placeholder="Ingrese el número de cédula">
+                  </mat-form-field>
+                </div>
 
-    <div class="loading" *ngIf="isLoading">
-      <mat-spinner></mat-spinner>
-      <p>Cargando pólizas...</p>
-    </div>
+                <div class="form-row form-row-3">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Prima</mat-label>
+                    <span matPrefix class="currency-prefix">{{ currencyPrefix }}&nbsp;</span>
+                    <input matInput type="number" formControlName="prima" required placeholder="0.00">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Moneda</mat-label>
+                    <mat-select formControlName="moneda" required>
+                      <mat-option value="CRC">CRC</mat-option>
+                      <mat-option value="USD">USD</mat-option>
+                      <mat-option value="EUR">EUR</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Fecha de Vigencia</mat-label>
+                    <input matInput type="date" formControlName="fechaVigencia" required>
+                  </mat-form-field>
+                </div>
 
-    <div class="no-data" *ngIf="!isLoading && polizas.length === 0">
-      <mat-icon>description</mat-icon>
-      <p>No hay pólizas registradas</p>
-      <p>Agregue una nueva póliza para comenzar</p>
-    </div>
-    </div>
+                <div class="form-row form-row-4">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Frecuencia</mat-label>
+                    <mat-select formControlName="frecuencia" required>
+                      <mat-option value="Mensual">Mensual</mat-option>
+                      <mat-option value="Trimestral">Trimestral</mat-option>
+                      <mat-option value="Semestral">Semestral</mat-option>
+                      <mat-option value="Anual">Anual</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Aseguradora</mat-label>
+                    <mat-select formControlName="aseguradora" required>
+                      <mat-option *ngFor="let a of aseguradorasSistema" [value]="a.value">{{a.label}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Placa (Opcional)</mat-label>
+                    <input matInput formControlName="placa" placeholder="Ingrese la placa">
+                  </mat-form-field>
+                </div>
+
+                <div class="form-section-label form-row-4b">
+                  <mat-icon>directions_car</mat-icon>
+                  <span>Vehículo <span class="label-optional">(Opcional)</span></span>
+                </div>
+                <div class="form-row form-row-5">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Marca (Opcional)</mat-label>
+                    <input matInput formControlName="marca" placeholder="Ingrese la marca">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Modelo (Opcional)</mat-label>
+                    <input matInput formControlName="modelo" placeholder="Ingrese el modelo">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Año (Opcional)</mat-label>
+                    <input matInput formControlName="año" maxlength="4" placeholder="Ingrese el año">
+                  </mat-form-field>
+                </div>
+
+                <div class="form-section-label form-row-5b">
+                  <mat-icon>contact_phone</mat-icon>
+                  <span>Contacto <span class="label-optional">(Opcional)</span></span>
+                </div>
+                <div class="form-row form-row-6">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Correo Electrónico (Opcional)</mat-label>
+                    <input matInput type="email" formControlName="correo" placeholder="Ingrese el correo electrónico">
+                  </mat-form-field>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Número de Teléfono (Opcional)</mat-label>
+                    <input matInput formControlName="numeroTelefono" placeholder="Ingrese el número de teléfono">
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row form-row-7">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Observaciones (Opcional)</mat-label>
+                    <textarea matInput formControlName="observaciones" rows="3"
+                              placeholder="Notas, comentarios o información adicional sobre la póliza"></textarea>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-actions form-row-8">
+                  <button mat-raised-button color="primary" type="submit" [disabled]="isLoading || polizaForm.invalid">
+                    <mat-icon>{{isEditMode ? 'update' : 'save'}}</mat-icon>
+                    {{submitButtonText}}
+                  </button>
+                  <button mat-stroked-button type="button" (click)="resetForm()">
+                    <mat-icon>{{isEditMode ? 'cancel' : 'clear'}}</mat-icon>
+                    {{isEditMode ? 'Cancelar EdiciÃ³n' : 'Limpiar Formulario'}}
+                  </button>
+                </div>
+
+              </form>
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
   </div>
 </div>
+

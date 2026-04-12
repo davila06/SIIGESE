@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Upload Access - SIIGESE</title>
+    <title>Test Upload Access - OmnIA</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -90,87 +90,87 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧪 Test de Acceso al Módulo de Carga</h1>
+        <h1>ðŸ§ª Test de Acceso al MÃ³dulo de Carga</h1>
         
         <div class="test-section">
-            <h3>🔍 Paso 1: Verificar la aplicación</h3>
+            <h3>ðŸ” Paso 1: Verificar la aplicaciÃ³n</h3>
             <div class="step">
                 <div class="step-number">1</div>
                 <div>
                     <button class="test-button" onclick="openApp()">
-                        🌐 Abrir Aplicación Principal
+                        ðŸŒ Abrir AplicaciÃ³n Principal
                     </button>
-                    <span>← Verifica que la app carga correctamente</span>
+                    <span>â† Verifica que la app carga correctamente</span>
                 </div>
             </div>
         </div>
 
         <div class="test-section info">
-            <h3>🔐 Paso 2: Login y navegación</h3>
+            <h3>ðŸ” Paso 2: Login y navegaciÃ³n</h3>
             <div class="step">
                 <div class="step-number">2</div>
                 <div>
                     <button class="test-button" onclick="openLogin()">
-                        🔑 Ir a Login
+                        ðŸ”‘ Ir a Login
                     </button>
-                    <span>← Inicia sesión con: admin@siigese.com / password123</span>
+                    <span>â† Inicia sesiÃ³n con: admin@omnia.com / password123</span>
                 </div>
             </div>
             <div class="step">
                 <div class="step-number">3</div>
                 <div>
                     <button class="test-button" onclick="openDashboard()">
-                        📊 Ir al Dashboard
+                        ðŸ“Š Ir al Dashboard
                     </button>
-                    <span>← Después del login, ir al dashboard</span>
+                    <span>â† DespuÃ©s del login, ir al dashboard</span>
                 </div>
             </div>
         </div>
 
         <div class="test-section danger">
-            <h3>📤 Paso 3: Acceso al módulo de carga</h3>
+            <h3>ðŸ“¤ Paso 3: Acceso al mÃ³dulo de carga</h3>
             <div class="step">
                 <div class="step-number">4</div>
                 <div>
                     <button class="test-button" onclick="openUploadDirect()">
-                        🎯 Acceso Directo al Módulo
+                        ðŸŽ¯ Acceso Directo al MÃ³dulo
                     </button>
-                    <span>← Prueba directa (debería funcionar si estás logueado)</span>
+                    <span>â† Prueba directa (deberÃ­a funcionar si estÃ¡s logueado)</span>
                 </div>
             </div>
             <div class="step">
                 <div class="step-number">5</div>
                 <div>
                     <button class="test-button" onclick="openUploadFromMenu()">
-                        📋 Simular Click del Menú
+                        ðŸ“‹ Simular Click del MenÃº
                     </button>
-                    <span>← Simula el comportamiento del menú</span>
+                    <span>â† Simula el comportamiento del menÃº</span>
                 </div>
             </div>
         </div>
 
         <div class="test-section">
-            <h3>🛠️ Herramientas de diagnóstico</h3>
+            <h3>ðŸ› ï¸ Herramientas de diagnÃ³stico</h3>
             <button class="test-button" onclick="checkLocalStorage()">
-                💾 Ver LocalStorage
+                ðŸ’¾ Ver LocalStorage
             </button>
             <button class="test-button" onclick="checkConsole()">
-                📝 Abrir Consola del Navegador
+                ðŸ“ Abrir Consola del Navegador
             </button>
             <button class="test-button" onclick="clearLogs()">
-                🧹 Limpiar Logs
+                ðŸ§¹ Limpiar Logs
             </button>
         </div>
 
         <div class="logs" id="logs"></div>
 
         <div class="test-section info">
-            <h3>🔍 Qué buscar en los logs:</h3>
+            <h3>ðŸ” QuÃ© buscar en los logs:</h3>
             <ul>
-                <li><strong>✅ Upload component - Access granted:</strong> Todo OK</li>
-                <li><strong>❌ DataLoaderGuard - Access denied:</strong> Problema de permisos</li>
-                <li><strong>🔄 Redirecting to /polizas:</strong> Guard rechazando acceso</li>
-                <li><strong>Error de JavaScript:</strong> Problema técnico en el componente</li>
+                <li><strong>âœ… Upload component - Access granted:</strong> Todo OK</li>
+                <li><strong>âŒ DataLoaderGuard - Access denied:</strong> Problema de permisos</li>
+                <li><strong>ðŸ”„ Redirecting to /polizas:</strong> Guard rechazando acceso</li>
+                <li><strong>Error de JavaScript:</strong> Problema tÃ©cnico en el componente</li>
             </ul>
         </div>
     </div>
@@ -186,31 +186,31 @@
         }
 
         function openApp() {
-            log('🌐 Abriendo aplicación principal...');
+            log('ðŸŒ Abriendo aplicaciÃ³n principal...');
             window.open(APP_URL, '_blank');
         }
 
         function openLogin() {
-            log('🔑 Abriendo página de login...');
+            log('ðŸ”‘ Abriendo pÃ¡gina de login...');
             window.open(`${APP_URL}/auth/login`, '_blank');
         }
 
         function openDashboard() {
-            log('📊 Abriendo dashboard...');
+            log('ðŸ“Š Abriendo dashboard...');
             window.open(`${APP_URL}/dashboard`, '_blank');
         }
 
         function openUploadDirect() {
-            log('🎯 Acceso directo al módulo de carga...');
-            log('   → URL: /polizas/upload');
-            log('   → Debe funcionar si ya estás autenticado');
+            log('ðŸŽ¯ Acceso directo al mÃ³dulo de carga...');
+            log('   â†’ URL: /polizas/upload');
+            log('   â†’ Debe funcionar si ya estÃ¡s autenticado');
             window.open(`${APP_URL}/polizas/upload`, '_blank');
         }
 
         function openUploadFromMenu() {
-            log('📋 Simulando navegación desde menú...');
-            log('   → Primero ir a /polizas');
-            log('   → Luego navegar a /polizas/upload');
+            log('ðŸ“‹ Simulando navegaciÃ³n desde menÃº...');
+            log('   â†’ Primero ir a /polizas');
+            log('   â†’ Luego navegar a /polizas/upload');
             window.open(`${APP_URL}/polizas`, '_blank');
             setTimeout(() => {
                 window.open(`${APP_URL}/polizas/upload`, '_blank');
@@ -218,30 +218,30 @@
         }
 
         function checkLocalStorage() {
-            log('💾 Verificando LocalStorage...');
-            log('   → Abre las herramientas de desarrollador');
-            log('   → Ve a Application > LocalStorage');
-            log('   → Busca: token, user, currentUser');
+            log('ðŸ’¾ Verificando LocalStorage...');
+            log('   â†’ Abre las herramientas de desarrollador');
+            log('   â†’ Ve a Application > LocalStorage');
+            log('   â†’ Busca: token, user, currentUser');
             alert('Abre las herramientas de desarrollador (F12) y ve a Application > LocalStorage para ver los datos almacenados');
         }
 
         function checkConsole() {
-            log('📝 Abriendo consola del navegador...');
-            log('   → Presiona F12 para abrir DevTools');
-            log('   → Ve a la pestaña Console');
-            log('   → Busca los logs del DataLoaderGuard y UploadComponent');
-            alert('Presiona F12 para abrir las herramientas de desarrollador y ve a la pestaña Console');
+            log('ðŸ“ Abriendo consola del navegador...');
+            log('   â†’ Presiona F12 para abrir DevTools');
+            log('   â†’ Ve a la pestaÃ±a Console');
+            log('   â†’ Busca los logs del DataLoaderGuard y UploadComponent');
+            alert('Presiona F12 para abrir las herramientas de desarrollador y ve a la pestaÃ±a Console');
         }
 
         function clearLogs() {
             document.getElementById('logs').innerHTML = '';
-            log('🧹 Logs limpiados');
+            log('ðŸ§¹ Logs limpiados');
         }
 
         // Log inicial
-        log('🧪 Sistema de pruebas iniciado');
-        log('📱 App URL: ' + APP_URL);
-        log('🎯 Target: Módulo de carga de pólizas');
+        log('ðŸ§ª Sistema de pruebas iniciado');
+        log('ðŸ“± App URL: ' + APP_URL);
+        log('ðŸŽ¯ Target: MÃ³dulo de carga de pÃ³lizas');
     </script>
 </body>
 </html>

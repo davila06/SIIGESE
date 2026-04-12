@@ -10,19 +10,16 @@ namespace Application.Services
     public class EmailDashboardService : IEmailDashboardService
     {
         private readonly IEmailService _emailService;
-        private readonly ICobroRepository _cobroRepository;
-        private readonly IPolizaRepository _polizaRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<EmailDashboardService> _logger;
 
         public EmailDashboardService(
             IEmailService emailService,
-            ICobroRepository cobroRepository,
-            IPolizaRepository polizaRepository,
+            IUnitOfWork unitOfWork,
             ILogger<EmailDashboardService> logger)
         {
             _emailService = emailService;
-            _cobroRepository = cobroRepository;
-            _polizaRepository = polizaRepository;
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -30,18 +27,21 @@ namespace Application.Services
         {
             try
             {
-                var pendingCobros = await _cobroRepository.GetCobrosVencidosCountAsync();
+                var pendingCobros = await _unitOfWork.Cobros.GetCobrosVencidosCountAsync();
 
-                var polizasActivas = await _polizaRepository.GetActivasAsync();
+                var polizasActivas = await _unitOfWork.Polizas.GetActivasAsync();
                 var today = DateTime.Today;
                 var in30Days = today.AddDays(30);
                 var polizasPorVencer = polizasActivas
                     .Count(p => p.FechaVigencia >= today && p.FechaVigencia <= in30Days);
 
+                var totalSent = await _unitOfWork.EmailLogs.GetSuccessCountAsync();
+                var totalFailed = await _unitOfWork.EmailLogs.GetFailedCountAsync();
+
                 var stats = new EmailStats
                 {
-                    TotalSent = 0,
-                    TotalFailed = 0,
+                    TotalSent = totalSent,
+                    TotalFailed = totalFailed,
                     PendingCobros = pendingCobros,
                     PolizasPorVencer = polizasPorVencer
                 };
@@ -60,19 +60,48 @@ namespace Application.Services
             try
             {
                 await _emailService.SendGenericEmailAsync(request.ToEmail, request.Subject, request.Body);
+
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.ToEmail,
+                    ToName = request.ToName,
+                    Subject = request.Subject,
+                    Body = request.Body,
+                    EmailType = string.IsNullOrWhiteSpace(request.EmailType) ? "Generic" : request.EmailType,
+                    IsSuccess = true,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = true,
-                    Message = $"Email enviado exitosamente a {request.ToEmail}"
+                    Message = $"Email enviado exitosamente a {request.ToEmail}",
+                    EmailLogId = logId
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error enviando email a {Email}", request.ToEmail);
+
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.ToEmail,
+                    ToName = request.ToName,
+                    Subject = request.Subject,
+                    Body = request.Body,
+                    EmailType = string.IsNullOrWhiteSpace(request.EmailType) ? "Generic" : request.EmailType,
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = false,
-                    Message = $"Error enviando email: {ex.Message}"
+                    Message = $"Error enviando email: {ex.Message}",
+                    EmailLogId = logId
                 });
             }
         }
@@ -86,12 +115,37 @@ namespace Application.Services
                 try
                 {
                     await _emailService.SendGenericEmailAsync(email.ToEmail, email.Subject, email.Body);
-                    results.Add(new EmailResponseDto { IsSuccess = true, Message = $"Enviado a {email.ToEmail}" });
+                    var logId = await PersistEmailLogAsync(new EmailLog
+                    {
+                        ToEmail = email.ToEmail,
+                        ToName = email.ToName,
+                        Subject = email.Subject,
+                        Body = email.Body,
+                        EmailType = string.IsNullOrWhiteSpace(email.EmailType) ? "Bulk" : email.EmailType,
+                        IsSuccess = true,
+                        SentAt = DateTime.UtcNow,
+                        SenderName = "SINSEG"
+                    });
+
+                    results.Add(new EmailResponseDto { IsSuccess = true, Message = $"Enviado a {email.ToEmail}", EmailLogId = logId });
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error enviando email masivo a {Email}", email.ToEmail);
-                    results.Add(new EmailResponseDto { IsSuccess = false, Message = $"Error: {ex.Message}" });
+                    var logId = await PersistEmailLogAsync(new EmailLog
+                    {
+                        ToEmail = email.ToEmail,
+                        ToName = email.ToName,
+                        Subject = email.Subject,
+                        Body = email.Body,
+                        EmailType = string.IsNullOrWhiteSpace(email.EmailType) ? "Bulk" : email.EmailType,
+                        IsSuccess = false,
+                        ErrorMessage = ex.Message,
+                        SentAt = DateTime.UtcNow,
+                        SenderName = "SINSEG"
+                    });
+
+                    results.Add(new EmailResponseDto { IsSuccess = false, Message = $"Error: {ex.Message}", EmailLogId = logId });
                 }
             }
 
@@ -114,19 +168,47 @@ namespace Application.Services
 
                 await _emailService.SendCobroVencidoNotificationAsync(dto);
 
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.ClienteEmail,
+                    ToName = request.ClienteNombre,
+                    Subject = $"SINSEG - Cobro Vencido: Póliza {request.NumeroPoliza}",
+                    Body = string.Empty,
+                    EmailType = "CobroVencido",
+                    IsSuccess = true,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = true,
-                    Message = $"Notificación de cobro vencido enviada a {request.ClienteEmail}"
+                    Message = $"Notificación de cobro vencido enviada a {request.ClienteEmail}",
+                    EmailLogId = logId
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error enviando notificación de cobro vencido");
+
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.ClienteEmail,
+                    ToName = request.ClienteNombre,
+                    Subject = $"SINSEG - Cobro Vencido: Póliza {request.NumeroPoliza}",
+                    Body = string.Empty,
+                    EmailType = "CobroVencido",
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = false,
-                    Message = $"Error: {ex.Message}"
+                    Message = $"Error: {ex.Message}",
+                    EmailLogId = logId
                 });
             }
         }
@@ -139,19 +221,47 @@ namespace Application.Services
                 var body = GenerateReclamoRecibidoEmailBody(request);
                 await _emailService.SendGenericEmailAsync(request.ClienteEmail, subject, body);
 
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.ClienteEmail,
+                    ToName = request.ClienteNombre,
+                    Subject = subject,
+                    Body = body,
+                    EmailType = "ReclamoRecibido",
+                    IsSuccess = true,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = true,
-                    Message = $"Notificación de reclamo enviada a {request.ClienteEmail}"
+                    Message = $"Notificación de reclamo enviada a {request.ClienteEmail}",
+                    EmailLogId = logId
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error enviando notificación de reclamo recibido");
+
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.ClienteEmail,
+                    ToName = request.ClienteNombre,
+                    Subject = $"SINSEG - Reclamo Recibido: {request.NumeroReclamo}",
+                    Body = string.Empty,
+                    EmailType = "ReclamoRecibido",
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = false,
-                    Message = $"Error: {ex.Message}"
+                    Message = $"Error: {ex.Message}",
+                    EmailLogId = logId
                 });
             }
         }
@@ -162,28 +272,154 @@ namespace Application.Services
             {
                 await _emailService.SendWelcomeEmailAsync(request.Email, request.NombreUsuario, request.TemporalPassword);
 
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.Email,
+                    ToName = request.NombreUsuario,
+                    Subject = "SINSEG - Bienvenido al Sistema",
+                    Body = string.Empty,
+                    EmailType = "Bienvenida",
+                    IsSuccess = true,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = true,
-                    Message = $"Email de bienvenida enviado a {request.Email}"
+                    Message = $"Email de bienvenida enviado a {request.Email}",
+                    EmailLogId = logId
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error enviando email de bienvenida");
+
+                var logId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = request.Email,
+                    ToName = request.NombreUsuario,
+                    Subject = "SINSEG - Bienvenido al Sistema",
+                    Body = string.Empty,
+                    EmailType = "Bienvenida",
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
                 return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
                 {
                     IsSuccess = false,
-                    Message = $"Error: {ex.Message}"
+                    Message = $"Error: {ex.Message}",
+                    EmailLogId = logId
                 });
             }
         }
 
-        public Task<ApiResponse<List<EmailHistoryResponseDto>>> GetEmailHistoryAsync(int pageNumber, int pageSize)
+        public async Task<ApiResponse<List<EmailHistoryResponseDto>>> GetEmailHistoryAsync(int pageNumber, int pageSize)
         {
-            // No hay tabla de historial de emails todavía; retorna lista vacía
-            var history = new List<EmailHistoryResponseDto>();
-            return Task.FromResult(ApiResponse<List<EmailHistoryResponseDto>>.CreateSuccess(history, "Sin historial almacenado"));
+            try
+            {
+                var logs = await _unitOfWork.EmailLogs.GetPagedAsync(pageNumber, pageSize);
+                var history = logs.Select(log => new EmailHistoryResponseDto
+                {
+                    Id = log.Id,
+                    ToEmail = log.ToEmail,
+                    ToName = log.ToName,
+                    Subject = log.Subject,
+                    EmailType = log.EmailType,
+                    SentAt = log.SentAt,
+                    IsSuccess = log.IsSuccess,
+                    ErrorMessage = log.ErrorMessage,
+                    SenderName = log.SenderName
+                }).ToList();
+
+                return ApiResponse<List<EmailHistoryResponseDto>>.CreateSuccess(history);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo historial de emails");
+                return ApiResponse<List<EmailHistoryResponseDto>>.CreateError("No se pudo obtener el historial de emails");
+            }
+        }
+
+        public async Task<ApiResponse<EmailResponseDto>> ResendEmailAsync(int id)
+        {
+            if (id <= 0)
+            {
+                return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
+                {
+                    IsSuccess = false,
+                    Message = "El id del email a reenviar no es válido."
+                });
+            }
+
+            try
+            {
+                var emailLog = await _unitOfWork.EmailLogs.GetByIdAsync(id);
+                if (emailLog == null)
+                {
+                    return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = $"No existe registro de email para id {id}."
+                    });
+                }
+
+                if (string.IsNullOrWhiteSpace(emailLog.Body))
+                {
+                    return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
+                    {
+                        IsSuccess = false,
+                        Message = "El email original no contiene cuerpo para reenvío."
+                    });
+                }
+
+                await _emailService.SendGenericEmailAsync(emailLog.ToEmail, emailLog.Subject, emailLog.Body);
+
+                var resendLogId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = emailLog.ToEmail,
+                    ToName = emailLog.ToName,
+                    Subject = emailLog.Subject,
+                    Body = emailLog.Body,
+                    EmailType = string.IsNullOrWhiteSpace(emailLog.EmailType) ? "Resend" : $"Resend-{emailLog.EmailType}",
+                    IsSuccess = true,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = emailLog.SenderName
+                });
+
+                return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
+                {
+                    IsSuccess = true,
+                    Message = $"Email reenviado exitosamente a {emailLog.ToEmail}.",
+                    EmailLogId = resendLogId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error reenviando email con id {EmailLogId}", id);
+
+                var failedResendLogId = await PersistEmailLogAsync(new EmailLog
+                {
+                    ToEmail = string.Empty,
+                    Subject = $"Resend-{id}",
+                    Body = string.Empty,
+                    EmailType = "Resend",
+                    IsSuccess = false,
+                    ErrorMessage = ex.Message,
+                    SentAt = DateTime.UtcNow,
+                    SenderName = "SINSEG"
+                });
+
+                return ApiResponse<EmailResponseDto>.CreateSuccess(new EmailResponseDto
+                {
+                    IsSuccess = false,
+                    Message = $"No se pudo reenviar el email con id {id}: {ex.Message}",
+                    EmailLogId = failedResendLogId
+                });
+            }
         }
 
         public async Task<ApiResponse<List<EmailResponseDto>>> SendAutomaticCobroVencidoNotificationsAsync()
@@ -192,7 +428,7 @@ namespace Application.Services
 
             try
             {
-                var cobrosVencidos = await _cobroRepository.GetCobrosVencidosAsync();
+                var cobrosVencidos = await _unitOfWork.Cobros.GetCobrosVencidosAsync();
 
                 foreach (var cobro in cobrosVencidos)
                 {
@@ -245,7 +481,7 @@ namespace Application.Services
 
             try
             {
-                var polizasActivas = await _polizaRepository.GetActivasAsync();
+                var polizasActivas = await _unitOfWork.Polizas.GetActivasAsync();
                 var today = DateTime.Today;
                 var in30Days = today.AddDays(30);
 
@@ -322,6 +558,23 @@ namespace Application.Services
   </div>
   <div class='footer'><p>© 2025 SINSEG - Sistema Integral de Administración de Seguros</p></div>
 </div></body></html>";
+        }
+
+        private async Task<int?> PersistEmailLogAsync(EmailLog log)
+        {
+            try
+            {
+                log.CreatedAt = DateTime.UtcNow;
+                log.CreatedBy = "EmailDashboardService";
+                await _unitOfWork.EmailLogs.AddAsync(log);
+                await _unitOfWork.SaveChangesAsync();
+                return log.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "No se pudo persistir el email log para destinatario {ToEmail}", log.ToEmail);
+                return null;
+            }
         }
     }
 }

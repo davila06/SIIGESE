@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using AutoMapper;
 using Domain.Entities;
 using Domain.Interfaces;
@@ -13,14 +14,22 @@ namespace Application.Services
     public class ReclamoService : IReclamoService
     {
         private readonly IReclamoRepository _reclamoRepository;
+        private readonly IReclamoHistorialRepository _historialRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ReclamoService(IReclamoRepository reclamoRepository, IUnitOfWork unitOfWork, IMapper mapper)
+        private static readonly JsonSerializerOptions _jsonOptions = new(JsonSerializerDefaults.Web);
+
+        public ReclamoService(
+            IReclamoRepository reclamoRepository,
+            IReclamoHistorialRepository historialRepository,
+            IUnitOfWork unitOfWork,
+            IMapper mapper)
         {
-            _reclamoRepository = reclamoRepository;
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _reclamoRepository  = reclamoRepository;
+            _historialRepository = historialRepository;
+            _unitOfWork          = unitOfWork;
+            _mapper              = mapper;
         }
 
         public async Task<IEnumerable<ReclamoDto>> GetAllReclamosAsync()
@@ -113,44 +122,47 @@ namespace Application.Services
             return await _reclamoRepository.GenerateNumeroReclamoAsync();
         }
 
-        public async Task<ReclamoDto> CreateReclamoAsync(CreateReclamoDto request)
+        public async Task<ReclamoDto> CreateReclamoAsync(CreateReclamoDto request, string usuario = "Sistema")
         {
-            // Buscar la póliza si se proporcionó numeroPoliza
             Poliza? poliza = null;
             if (!string.IsNullOrEmpty(request.NumeroPoliza))
-            {
                 poliza = await _unitOfWork.Polizas.GetByNumeroPolizaAsync(request.NumeroPoliza);
-            }
 
             var reclamo = _mapper.Map<Reclamo>(request);
-            
-            // Si encontramos la póliza, usar sus datos
+
             if (poliza != null)
             {
-                reclamo.NombreAsegurado = poliza.NombreAsegurado ?? string.Empty;
-                reclamo.ClienteNombreCompleto = poliza.NombreAsegurado ?? string.Empty;
-                reclamo.NumeroPoliza = poliza.NumeroPoliza ?? string.Empty;
+                reclamo.NombreAsegurado        = poliza.NombreAsegurado ?? string.Empty;
+                reclamo.ClienteNombreCompleto  = poliza.NombreAsegurado ?? string.Empty;
+                reclamo.NumeroPoliza           = poliza.NumeroPoliza    ?? string.Empty;
             }
             else if (string.IsNullOrEmpty(reclamo.ClienteNombreCompleto))
             {
-                // Si no hay póliza ni nombre completo, usar el del request
                 reclamo.ClienteNombreCompleto = request.NombreAsegurado;
             }
-            
+
             if (string.IsNullOrEmpty(reclamo.NumeroReclamo))
-            {
                 reclamo.NumeroReclamo = await GenerateNumeroReclamoAsync();
-            }
 
             reclamo.FechaReclamo = DateTime.UtcNow;
-            reclamo.CreatedAt = DateTime.UtcNow;
-            reclamo.CreatedBy = "Sistema";
+            reclamo.CreatedAt    = DateTime.UtcNow;
+            reclamo.CreatedBy    = usuario;
 
-            var createdReclamo = await _reclamoRepository.AddAsync(reclamo);
-            return _mapper.Map<ReclamoDto>(createdReclamo);
+            await _reclamoRepository.AddAsync(reclamo);
+            await _unitOfWork.SaveChangesAsync();
+
+            // Audit: creation event
+            await RegistrarEventoHistorialAsync(
+                reclamo.Id, "Creacion",
+                $"Reclamo {reclamo.NumeroReclamo} creado.",
+                valorNuevo: reclamo.Estado.ToString(),
+                usuario: usuario);
+            await _unitOfWork.SaveChangesAsync();
+
+            return _mapper.Map<ReclamoDto>(reclamo);
         }
 
-        public async Task<ReclamoDto> UpdateReclamoAsync(int id, UpdateReclamoDto request)
+        public async Task<ReclamoDto> UpdateReclamoAsync(int id, UpdateReclamoDto request, string usuario = "Sistema")
         {
             var reclamo = await _reclamoRepository.GetByIdAsync(id);
             if (reclamo == null)
@@ -158,60 +170,253 @@ namespace Application.Services
 
             _mapper.Map(request, reclamo);
             reclamo.UpdatedAt = DateTime.UtcNow;
-            reclamo.UpdatedBy = "Sistema";
+            reclamo.UpdatedBy = usuario;
 
             await _reclamoRepository.UpdateAsync(reclamo);
+
+            // Audit: generic update
+            await RegistrarEventoHistorialAsync(
+                id, "Actualizacion",
+                "Información del reclamo actualizada.",
+                usuario: usuario);
+
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<ReclamoDto>(reclamo);
         }
 
-        public async Task<ReclamoDto> AsignarUsuarioAsync(int reclamoId, int usuarioId)
+        public async Task<ReclamoDto> AsignarUsuarioAsync(int reclamoId, int usuarioId, string usuario = "Sistema")
         {
             var reclamo = await _reclamoRepository.GetByIdAsync(reclamoId);
             if (reclamo == null)
                 throw new ArgumentException($"Reclamo con ID {reclamoId} no encontrado");
 
+            var anteriorId = reclamo.UsuarioAsignadoId?.ToString() ?? "Sin asignar";
             reclamo.UsuarioAsignadoId = usuarioId;
-            reclamo.UpdatedAt = DateTime.UtcNow;
-            reclamo.UpdatedBy = "Sistema";
+            reclamo.UpdatedAt         = DateTime.UtcNow;
+            reclamo.UpdatedBy         = usuario;
 
             await _reclamoRepository.UpdateAsync(reclamo);
+
+            await RegistrarEventoHistorialAsync(
+                reclamoId, "Asignacion",
+                $"Reclamo asignado al usuario #{usuarioId}.",
+                valorAnterior: anteriorId,
+                valorNuevo:    usuarioId.ToString(),
+                usuario:       usuario);
+
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<ReclamoDto>(reclamo);
         }
 
-        public async Task<ReclamoDto> CambiarEstadoAsync(int reclamoId, EstadoReclamo nuevoEstado)
+        public async Task<ReclamoDto> CambiarEstadoAsync(int reclamoId, EstadoReclamo nuevoEstado, string usuario = "Sistema")
         {
             var reclamo = await _reclamoRepository.GetByIdAsync(reclamoId);
             if (reclamo == null)
                 throw new ArgumentException($"Reclamo con ID {reclamoId} no encontrado");
 
-            reclamo.Estado = nuevoEstado;
-            reclamo.UpdatedAt = DateTime.UtcNow;
-            reclamo.UpdatedBy = "Sistema";
+            var estadoAnterior = reclamo.Estado;
+            reclamo.Estado     = nuevoEstado;
+            reclamo.UpdatedAt  = DateTime.UtcNow;
+            reclamo.UpdatedBy  = usuario;
 
             await _reclamoRepository.UpdateAsync(reclamo);
+
+            await RegistrarEventoHistorialAsync(
+                reclamoId, "CambioEstado",
+                $"Estado cambiado de {estadoAnterior} a {nuevoEstado}.",
+                valorAnterior: estadoAnterior.ToString(),
+                valorNuevo:    nuevoEstado.ToString(),
+                usuario:       usuario);
+
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<ReclamoDto>(reclamo);
         }
 
-        public async Task<ReclamoDto> ResolverReclamoAsync(int reclamoId, decimal? montoAprobado, string observaciones)
+        public async Task<ReclamoDto> ResolverReclamoAsync(int reclamoId, decimal? montoAprobado, string observaciones, string usuario = "Sistema")
         {
             var reclamo = await _reclamoRepository.GetByIdAsync(reclamoId);
             if (reclamo == null)
                 throw new ArgumentException($"Reclamo con ID {reclamoId} no encontrado");
 
-            reclamo.Estado = EstadoReclamo.Resuelto;
-            reclamo.MontoAprobado = montoAprobado;
+            var estadoAnterior      = reclamo.Estado;
+            reclamo.Estado          = EstadoReclamo.Resuelto;
+            reclamo.MontoAprobado   = montoAprobado;
             reclamo.FechaResolucion = DateTime.UtcNow;
-            reclamo.Observaciones = observaciones ?? reclamo.Observaciones;
-            reclamo.UpdatedAt = DateTime.UtcNow;
-            reclamo.UpdatedBy = "Sistema";
+            reclamo.Observaciones   = observaciones ?? reclamo.Observaciones;
+            reclamo.UpdatedAt       = DateTime.UtcNow;
+            reclamo.UpdatedBy       = usuario;
 
             await _reclamoRepository.UpdateAsync(reclamo);
+
+            await RegistrarEventoHistorialAsync(
+                reclamoId, "Resolucion",
+                $"Reclamo resuelto. Monto aprobado: {montoAprobado?.ToString("C") ?? "N/A"}.",
+                valorAnterior: estadoAnterior.ToString(),
+                valorNuevo:    EstadoReclamo.Resuelto.ToString(),
+                usuario:       usuario);
+
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<ReclamoDto>(reclamo);
         }
 
         public async Task DeleteReclamoAsync(int id)
         {
             await _reclamoRepository.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        // ── Historial ─────────────────────────────────────────────────────────
+
+        public async Task<IEnumerable<ReclamoHistorialEntryDto>> GetHistorialAsync(int reclamoId)
+        {
+            var entries = await _historialRepository.GetByReclamoIdAsync(reclamoId);
+            return entries.Select(e => new ReclamoHistorialEntryDto
+            {
+                Id            = e.Id,
+                ReclamoId     = e.ReclamoId,
+                TipoEvento    = e.TipoEvento,
+                ValorAnterior = e.ValorAnterior,
+                ValorNuevo    = e.ValorNuevo,
+                Descripcion   = e.Descripcion,
+                Usuario       = e.Usuario,
+                FechaEvento   = e.CreatedAt
+            });
+        }
+
+        // ── Documentos ────────────────────────────────────────────────────────
+
+        public async Task<IEnumerable<ReclamoDocumentoDto>> GetDocumentosAsync(int reclamoId)
+        {
+            var reclamo = await _reclamoRepository.GetByIdAsync(reclamoId);
+            if (reclamo == null || string.IsNullOrWhiteSpace(reclamo.DocumentosAdjuntos))
+                return Enumerable.Empty<ReclamoDocumentoDto>();
+
+            var metadata = ParseDocumentosJson(reclamo.DocumentosAdjuntos);
+            // Strip physical path from public DTO
+            return metadata.Select(m => (ReclamoDocumentoDto)m);
+        }
+
+        public async Task<ReclamoDocumentoDto> AddDocumentoMetadataAsync(
+            int    reclamoId,
+            string docId,
+            string nombre,
+            long   tamano,
+            string tipoContenido,
+            string ruta,
+            string usuario)
+        {
+            var reclamo = await _reclamoRepository.GetByIdAsync(reclamoId)
+                ?? throw new ArgumentException($"Reclamo con ID {reclamoId} no encontrado");
+
+            var metadata = ParseDocumentosJson(reclamo.DocumentosAdjuntos);
+
+            var nuevo = new ReclamoDocumentoMetadata
+            {
+                Id            = docId,
+                Nombre        = nombre,
+                Tamano        = tamano,
+                TipoContenido = tipoContenido,
+                FechaSubida   = DateTime.UtcNow,
+                SubidoPor     = usuario,
+                Ruta          = ruta
+            };
+            metadata.Add(nuevo);
+
+            reclamo.DocumentosAdjuntos = JsonSerializer.Serialize(metadata, _jsonOptions);
+            reclamo.UpdatedAt          = DateTime.UtcNow;
+            reclamo.UpdatedBy          = usuario;
+
+            await _reclamoRepository.UpdateAsync(reclamo);
+
+            await RegistrarEventoHistorialAsync(
+                reclamoId, "DocumentoAgregado",
+                $"Documento adjuntado: {nombre}.",
+                valorNuevo: nombre,
+                usuario:    usuario);
+
+            await _unitOfWork.SaveChangesAsync();
+            return nuevo;
+        }
+
+        public async Task<string?> RemoveDocumentoAsync(int reclamoId, string docId, string usuario = "Sistema")
+        {
+            var reclamo = await _reclamoRepository.GetByIdAsync(reclamoId);
+            if (reclamo == null) return null;
+
+            var metadata = ParseDocumentosJson(reclamo.DocumentosAdjuntos);
+            var target   = metadata.FirstOrDefault(d => d.Id == docId);
+            if (target == null) return null;
+
+            metadata.Remove(target);
+            reclamo.DocumentosAdjuntos = metadata.Count > 0
+                ? JsonSerializer.Serialize(metadata, _jsonOptions)
+                : string.Empty;
+            reclamo.UpdatedAt = DateTime.UtcNow;
+            reclamo.UpdatedBy = usuario;
+
+            await _reclamoRepository.UpdateAsync(reclamo);
+
+            await RegistrarEventoHistorialAsync(
+                reclamoId, "DocumentoEliminado",
+                $"Documento eliminado: {target.Nombre}.",
+                valorAnterior: target.Nombre,
+                usuario:       usuario);
+
+            await _unitOfWork.SaveChangesAsync();
+            return target.Ruta;
+        }
+
+        public async Task<ReclamoDocumentoMetadata?> GetDocumentoMetadataAsync(int reclamoId, string docId)
+        {
+            var reclamo = await _reclamoRepository.GetByIdAsync(reclamoId);
+            if (reclamo == null || string.IsNullOrWhiteSpace(reclamo.DocumentosAdjuntos))
+                return null;
+
+            return ParseDocumentosJson(reclamo.DocumentosAdjuntos)
+                .FirstOrDefault(d => d.Id == docId);
+        }
+
+        // ── Private helpers ───────────────────────────────────────────────────
+
+        /// <summary>
+        /// Persists one immutable audit-trail entry.  Caller must call SaveChanges afterwards.
+        /// </summary>
+        private async Task RegistrarEventoHistorialAsync(
+            int     reclamoId,
+            string  tipoEvento,
+            string  descripcion,
+            string? valorAnterior = null,
+            string? valorNuevo    = null,
+            string  usuario       = "Sistema")
+        {
+            var entry = new ReclamoHistorial
+            {
+                ReclamoId     = reclamoId,
+                TipoEvento    = tipoEvento,
+                Descripcion   = descripcion,
+                ValorAnterior = valorAnterior,
+                ValorNuevo    = valorNuevo,
+                Usuario       = usuario,
+                CreatedAt     = DateTime.UtcNow,
+                CreatedBy     = usuario
+            };
+            await _historialRepository.AddAsync(entry);
+        }
+
+        private static List<ReclamoDocumentoMetadata> ParseDocumentosJson(string? json)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+                return new List<ReclamoDocumentoMetadata>();
+
+            try
+            {
+                return JsonSerializer.Deserialize<List<ReclamoDocumentoMetadata>>(json, _jsonOptions)
+                       ?? new List<ReclamoDocumentoMetadata>();
+            }
+            catch
+            {
+                return new List<ReclamoDocumentoMetadata>();
+            }
         }
     }
 }

@@ -4,10 +4,13 @@
   <div class="brand-panel">
     <div class="brand-content">
       <div class="brand-logo">
-        <mat-icon>shield</mat-icon>
+        <span class="brand-logo-grid" aria-hidden="true"></span>
+        <span class="brand-logo-stem" aria-hidden="true"></span>
+        <span class="brand-logo-bar" aria-hidden="true"></span>
+        <span class="brand-logo-beam" aria-hidden="true"></span>
       </div>
-      <h1 class="brand-name">SINSEG</h1>
-      <p class="brand-tagline">Sistema Integral de Seguros</p>
+      <h1 class="brand-name">IADS</h1>
+      <p class="brand-tagline">IAsistente Digital de Servicios</p>
 
       <div class="brand-features">
         <div class="feature-item">
@@ -24,7 +27,7 @@
         </div>
       </div>
     </div>
-    <p class="brand-copyright">© 2025 SINSEG · Todos los derechos reservados</p>
+    <p class="brand-copyright">&copy; {{ currentYear }} IADS &middot; Todos los derechos reservados</p>
   </div>
 
   <!-- Panel derecho: formulario -->
@@ -44,37 +47,58 @@
       <!-- Formulario de Login -->
       <form *ngIf="!showResetForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
 
+        <div class="auth-alert" *ngIf="loginError" role="alert">
+          <mat-icon aria-hidden="true">error_outline</mat-icon>
+          <span>{{ loginError }}</span>
+        </div>
+
+        <div class="auth-hint" *ngIf="isDevelopment">
+          <mat-icon aria-hidden="true">info</mat-icon>
+          <span>Local: admin@iads.com / password123</span>
+        </div>
+
         <div class="field-group">
-          <label class="field-label">Correo electrónico</label>
+          <label class="field-label" for="login-email">Correo electrónico</label>
           <div class="field-input-wrap" [class.has-error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-            <mat-icon class="field-icon-left">mail_outline</mat-icon>
+            <mat-icon class="field-icon-left" aria-hidden="true">mail_outline</mat-icon>
             <input
+              id="login-email"
               type="email"
               formControlName="email"
               placeholder="usuario@empresa.com"
               autocomplete="email"
-              class="field-input">
+              class="field-input"
+              aria-describedby="login-email-error"
+              [attr.aria-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched ? 'true' : null">
           </div>
-          <span class="field-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span id="login-email-error" class="field-error" role="alert"
+                *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
             {{ getErrorMessage('email') }}
           </span>
         </div>
 
         <div class="field-group">
-          <label class="field-label">Contraseña</label>
+          <label class="field-label" for="login-password">Contraseña</label>
           <div class="field-input-wrap" [class.has-error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
-            <mat-icon class="field-icon-left">lock_outline</mat-icon>
+            <mat-icon class="field-icon-left" aria-hidden="true">lock_outline</mat-icon>
             <input
+              id="login-password"
               [type]="hidePassword ? 'password' : 'text'"
               formControlName="password"
               placeholder="••••••••"
               autocomplete="current-password"
-              class="field-input">
-            <button type="button" class="toggle-password" (click)="hidePassword = !hidePassword" tabindex="-1">
-              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              class="field-input"
+              aria-describedby="login-password-error"
+              [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched ? 'true' : null">
+            <button type="button" class="toggle-password"
+              (click)="hidePassword = !hidePassword"
+              [attr.aria-label]="hidePassword ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+              [attr.aria-pressed]="!hidePassword">
+              <mat-icon aria-hidden="true">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
           </div>
-          <span class="field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span id="login-password-error" class="field-error" role="alert"
+                *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             {{ getErrorMessage('password') }}
           </span>
         </div>
@@ -96,17 +120,21 @@
       <form *ngIf="showResetForm" [formGroup]="resetPasswordForm" (ngSubmit)="onResetPassword()" class="auth-form" novalidate>
 
         <div class="field-group">
-          <label class="field-label">Correo electrónico</label>
+          <label class="field-label" for="reset-email">Correo electrónico</label>
           <div class="field-input-wrap" [class.has-error]="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
-            <mat-icon class="field-icon-left">mail_outline</mat-icon>
+            <mat-icon class="field-icon-left" aria-hidden="true">mail_outline</mat-icon>
             <input
+              id="reset-email"
               type="email"
               formControlName="email"
               placeholder="usuario@empresa.com"
               autocomplete="email"
-              class="field-input">
+              class="field-input"
+              aria-describedby="reset-email-error"
+              [attr.aria-invalid]="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched ? 'true' : null">
           </div>
-          <span class="field-error" *ngIf="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
+          <span id="reset-email-error" class="field-error" role="alert"
+                *ngIf="resetPasswordForm.get('email')?.invalid && resetPasswordForm.get('email')?.touched">
             {{ getErrorMessage('email') }}
           </span>
         </div>

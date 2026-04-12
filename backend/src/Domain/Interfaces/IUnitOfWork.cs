@@ -13,6 +13,7 @@ namespace Domain.Interfaces
         ICobroRepository Cobros { get; }
         IReclamoRepository Reclamos { get; }
         ICotizacionRepository Cotizaciones { get; }
+        IEmailLogRepository EmailLogs { get; }
 
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();

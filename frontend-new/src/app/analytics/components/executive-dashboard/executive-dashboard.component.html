@@ -1,0 +1,457 @@
+﻿<div class="exec-dashboard">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">dashboard</mat-icon>
+      <div>
+        <h1 class="page-header__title">Dashboard Ejecutivo</h1>
+        <span class="page-header__subtitle">VisiÃ³n consolidada del negocio en tiempo real</span>
+      </div>
+    </div>
+    <button mat-stroked-button (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon> Actualizar
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading && data">
+
+    <!-- KPI Cards Row -->
+    <div class="kpi-grid">
+
+      <div class="kpi-card kpi-card--primary">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Cartera Activa</span>
+          <mat-icon class="kpi-card__icon">shield</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.carteraActiva | number }}</div>
+        <div class="kpi-card__sub">pÃ³lizas vigentes</div>
+      </div>
+
+      <div class="kpi-card kpi-card--success">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Prima Mensual</span>
+          <mat-icon class="kpi-card__icon">attach_money</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ formatCurrency(data.primaMensualBruta) }}</div>
+        <div class="kpi-card__sub">portafolio normalizado</div>
+      </div>
+
+      <div class="kpi-card" [class.kpi-card--success]="data.tasaCobro >= 85" [class.kpi-card--warning]="data.tasaCobro >= 60 && data.tasaCobro < 85" [class.kpi-card--danger]="data.tasaCobro < 60">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Tasa de Cobro</span>
+          <mat-icon class="kpi-card__icon">percent</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.tasaCobro.toFixed(1) }}%</div>
+        <div class="kpi-card__sub">
+          <span [class]="data.tasaCobroTrend >= 0 ? 'trend--up' : 'trend--down'">
+            <mat-icon>{{ data.tasaCobroTrend >= 0 ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+            {{ data.tasaCobroTrend >= 0 ? '+' : '' }}{{ data.tasaCobroTrend.toFixed(1) }}% vs mes ant.
+          </span>
+        </div>
+        <ngx-charts-area-chart [animations]="false" *ngIf="sparklineTasoCobroChart.length"
+          class="kpi-card__sparkline"
+          [view]="sparklineView"
+          [results]="sparklineTasoCobroChart"
+          [scheme]="sparklineScheme"
+          [xAxis]="false" [yAxis]="false"
+          [showGridLines]="false" [gradient]="true"
+          [autoScale]="true" [timeline]="false">
+        </ngx-charts-area-chart>
+      </div>
+
+      <div class="kpi-card kpi-card--danger">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Monto en Riesgo</span>
+          <mat-icon class="kpi-card__icon">warning</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ formatCurrency(data.montoEnRiesgo) }}</div>
+        <div class="kpi-card__sub">cobros pendientes + vencidos</div>
+        <ngx-charts-area-chart [animations]="false" *ngIf="sparklineRiesgoChart.length"
+          class="kpi-card__sparkline"
+          [view]="sparklineView"
+          [results]="sparklineRiesgoChart"
+          [scheme]="sparklineRiesgoScheme"
+          [xAxis]="false" [yAxis]="false"
+          [showGridLines]="false" [gradient]="true"
+          [autoScale]="true" [timeline]="false">
+        </ngx-charts-area-chart>
+      </div>
+
+      <div class="kpi-card" [class.kpi-card--danger]="data.reclamosActivos > 20" [class.kpi-card--warning]="data.reclamosActivos > 5 && data.reclamosActivos <= 20" [class.kpi-card--success]="data.reclamosActivos <= 5">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Reclamos Activos</span>
+          <mat-icon class="kpi-card__icon">report_problem</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.reclamosActivos | number }}</div>
+        <div class="kpi-card__sub">en proceso de gestiÃ³n</div>
+      </div>
+
+      <div class="kpi-card" [class.kpi-card--success]="data.tasaConversion >= 30" [class.kpi-card--warning]="data.tasaConversion >= 15 && data.tasaConversion < 30" [class.kpi-card--danger]="data.tasaConversion < 15">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Tasa ConversiÃ³n</span>
+          <mat-icon class="kpi-card__icon">moving</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.tasaConversion.toFixed(1) }}%</div>
+        <div class="kpi-card__sub">cotizaciones â†’ pÃ³lizas (mes)</div>
+      </div>
+
+      <div class="kpi-card" [class.kpi-card--success]="data.tasaEmailExito >= 95" [class.kpi-card--warning]="data.tasaEmailExito >= 80 && data.tasaEmailExito < 95" [class.kpi-card--danger]="data.tasaEmailExito < 80">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Emails Exitosos</span>
+          <mat-icon class="kpi-card__icon">mark_email_read</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.tasaEmailExito.toFixed(1) }}%</div>
+        <div class="kpi-card__sub">tasa entrega (mes)</div>
+      </div>
+
+      <div class="kpi-card" [class.kpi-card--success]="data.slaReclamos >= 90" [class.kpi-card--warning]="data.slaReclamos >= 70 && data.slaReclamos < 90" [class.kpi-card--danger]="data.slaReclamos < 70">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">SLA Reclamos</span>
+          <mat-icon class="kpi-card__icon">timer</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.slaReclamos.toFixed(1) }}%</div>
+        <div class="kpi-card__sub">dentro del tiempo lÃ­mite</div>
+      </div>
+
+      <!-- KPI: PÃ³lizas por renovar 30d -->
+      <div class="kpi-card"
+           [class.kpi-card--danger]="data.polizasPorRenovar30d > 20"
+           [class.kpi-card--warning]="data.polizasPorRenovar30d > 5 && data.polizasPorRenovar30d <= 20"
+           [class.kpi-card--success]="data.polizasPorRenovar30d <= 5">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Por Renovar 30d</span>
+          <mat-icon class="kpi-card__icon">autorenew</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.polizasPorRenovar30d | number }}</div>
+        <div class="kpi-card__sub">pÃ³lizas vencen prÃ³x. 30 dÃ­as</div>
+      </div>
+
+      <!-- KPI: Reclamos sin asignar -->
+      <div class="kpi-card"
+           [class.kpi-card--danger]="data.reclamosSinAsignar > 5"
+           [class.kpi-card--warning]="data.reclamosSinAsignar > 0 && data.reclamosSinAsignar <= 5"
+           [class.kpi-card--success]="data.reclamosSinAsignar === 0">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Sin Asignar</span>
+          <mat-icon class="kpi-card__icon">person_off</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.reclamosSinAsignar | number }}</div>
+        <div class="kpi-card__sub">reclamos activos sin agente</div>
+      </div>
+
+      <!-- KPI: Tiempo promedio resoluciÃ³n -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.tiempoPromedioResolucionDias <= 5"
+           [class.kpi-card--warning]="data.tiempoPromedioResolucionDias > 5 && data.tiempoPromedioResolucionDias <= 15"
+           [class.kpi-card--danger]="data.tiempoPromedioResolucionDias > 15">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">ResoluciÃ³n Prom.</span>
+          <mat-icon class="kpi-card__icon">schedule</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.tiempoPromedioResolucionDias.toFixed(1) }}<small> d</small></div>
+        <div class="kpi-card__sub">dÃ­as promedio por reclamo</div>
+      </div>
+
+      <!-- KPI: Tasa de morosidad -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.tasaMorosidad <= 5"
+           [class.kpi-card--warning]="data.tasaMorosidad > 5 && data.tasaMorosidad <= 15"
+           [class.kpi-card--danger]="data.tasaMorosidad > 15">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Tasa Morosidad</span>
+          <mat-icon class="kpi-card__icon">money_off</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.tasaMorosidad.toFixed(1) }}%</div>
+        <div class="kpi-card__sub">
+          <span [class]="data.tasaMorosidadTrend <= 0 ? 'trend--up' : 'trend--down'">
+            <mat-icon>{{ data.tasaMorosidadTrend <= 0 ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
+            {{ data.tasaMorosidadTrend >= 0 ? '+' : '' }}{{ data.tasaMorosidadTrend.toFixed(1) }}% vs 30d ant.
+          </span>
+        </div>
+      </div>
+
+      <!-- KPI: Ratio de pÃ©rdidas -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.ratioPerdidas <= 40"
+           [class.kpi-card--warning]="data.ratioPerdidas > 40 && data.ratioPerdidas <= 70"
+           [class.kpi-card--danger]="data.ratioPerdidas > 70">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Ratio PÃ©rdidas</span>
+          <mat-icon class="kpi-card__icon">show_chart</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.ratioPerdidas.toFixed(1) }}%</div>
+        <div class="kpi-card__sub">monto aprobado / reclamado</div>
+      </div>
+
+      <!-- KPI: Ticket promedio cobro -->
+      <div class="kpi-card kpi-card--primary">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Ticket Promedio</span>
+          <mat-icon class="kpi-card__icon">receipt_long</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ formatCurrency(data.ticketPromedioCobro) }}</div>
+        <div class="kpi-card__sub">
+          <span [class]="data.ticketPromedioCobroTrend >= 0 ? 'trend--up' : 'trend--down'">
+            <mat-icon>{{ data.ticketPromedioCobroTrend >= 0 ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+            {{ formatCurrency(data.ticketPromedioCobroTrend) }} vs mes ant.
+          </span>
+        </div>
+      </div>
+
+      <!-- KPI: Tasa de reclamos -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.tasaReclamos <= 2"
+           [class.kpi-card--warning]="data.tasaReclamos > 2 && data.tasaReclamos <= 5"
+           [class.kpi-card--danger]="data.tasaReclamos > 5">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Tasa Reclamos</span>
+          <mat-icon class="kpi-card__icon">gavel</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.tasaReclamos.toFixed(2) }}%</div>
+        <div class="kpi-card__sub">reclamos / cartera activa</div>
+      </div>
+
+      <!-- KPI: PÃ³lizas nuevas este mes -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.polizasNuevasMesTrend > 0"
+           [class.kpi-card--warning]="data.polizasNuevasMesTrend === 0"
+           [class.kpi-card--danger]="data.polizasNuevasMesTrend < 0">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">PÃ³lizas Nuevas</span>
+          <mat-icon class="kpi-card__icon">add_circle_outline</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.polizasNuevasMes | number }}</div>
+        <div class="kpi-card__sub">
+          <span [class]="data.polizasNuevasMesTrend >= 0 ? 'trend--up' : 'trend--down'">
+            <mat-icon>{{ data.polizasNuevasMesTrend >= 0 ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+            {{ data.polizasNuevasMesTrend >= 0 ? '+' : '' }}{{ data.polizasNuevasMesTrend }} vs mes ant.
+          </span>
+        </div>
+      </div>
+
+      <!-- KPI: Prima promedio por pÃ³liza -->
+      <div class="kpi-card kpi-card--primary">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Prima Promedio</span>
+          <mat-icon class="kpi-card__icon">functions</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ formatCurrency(data.primaPromedioPorPoliza) }}</div>
+        <div class="kpi-card__sub">prima mensual / pÃ³liza activa</div>
+      </div>
+
+      <!-- KPI: Cobros cancelados este mes -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.cobrosCanceladosMes === 0"
+           [class.kpi-card--warning]="data.cobrosCanceladosMes > 0 && data.cobrosCanceladosMes <= 5"
+           [class.kpi-card--danger]="data.cobrosCanceladosMes > 5">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Cobros Cancelados</span>
+          <mat-icon class="kpi-card__icon">cancel</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.cobrosCanceladosMes | number }}</div>
+        <div class="kpi-card__sub">cancelados este mes</div>
+      </div>
+
+      <!-- KPI: % Cobros en USD -->
+      <div class="kpi-card kpi-card--primary">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Cobros en USD</span>
+          <mat-icon class="kpi-card__icon">attach_money</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.porcentajeCobroUsd.toFixed(1) }}%</div>
+        <div class="kpi-card__sub">del historial de cobros</div>
+      </div>
+
+      <!-- KPI: Reclamos fuera de SLA -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.reclamosFueraDeSla === 0"
+           [class.kpi-card--warning]="data.reclamosFueraDeSla > 0 && data.reclamosFueraDeSla <= 3"
+           [class.kpi-card--danger]="data.reclamosFueraDeSla > 3">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Fuera de SLA</span>
+          <mat-icon class="kpi-card__icon">timer_off</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.reclamosFueraDeSla | number }}</div>
+        <div class="kpi-card__sub">reclamos activos vencidos</div>
+      </div>
+
+      <!-- KPI: Pipeline de cotizaciones -->
+      <div class="kpi-card kpi-card--success">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Pipeline</span>
+          <mat-icon class="kpi-card__icon">pipeline</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.cotizacionesEnPipeline | number }}</div>
+        <div class="kpi-card__sub">{{ formatCurrency(data.valorPipelineCotizaciones) }} en cotizaciones</div>
+      </div>
+
+      <!-- KPI: Tiempo promedio conversiÃ³n -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.tiempoPromedioConversion <= 3"
+           [class.kpi-card--warning]="data.tiempoPromedioConversion > 3 && data.tiempoPromedioConversion <= 10"
+           [class.kpi-card--danger]="data.tiempoPromedioConversion > 10">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Tiempo ConversiÃ³n</span>
+          <mat-icon class="kpi-card__icon">swap_horiz</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.tiempoPromedioConversion.toFixed(1) }}<small> d</small></div>
+        <div class="kpi-card__sub">dÃ­as cotizaciÃ³n â†’ pÃ³liza</div>
+      </div>
+
+      <!-- KPI: PÃ³lizas inactivas (churn) -->
+      <div class="kpi-card"
+           [class.kpi-card--success]="data.polizasInactivasMes === 0"
+           [class.kpi-card--warning]="data.polizasInactivasMes > 0 && data.polizasInactivasMes <= 5"
+           [class.kpi-card--danger]="data.polizasInactivasMes > 5">
+        <div class="kpi-card__header">
+          <span class="kpi-card__label">Churn Mes</span>
+          <mat-icon class="kpi-card__icon">person_remove</mat-icon>
+        </div>
+        <div class="kpi-card__value">{{ data.polizasInactivasMes | number }}</div>
+        <div class="kpi-card__sub">pÃ³lizas dadas de baja</div>
+      </div>
+
+    </div>
+
+    <!-- Charts + Alertas -->
+    <div class="dashboard-grid">
+
+      <!-- LÃ­nea Cobrado vs Esperado (Ãºltimos 12 meses) -->
+      <app-chart-card class="dashboard-grid__cobros"
+        title="Cobrado vs Esperado" icon="show_chart"
+        subtitle="Ãšltimos 12 meses â€” tendencia mensual"
+        tooltip="ComparaciÃ³n entre monto cobrado efectivamente y monto total esperado">
+        <ngx-charts-line-chart [animations]="false"
+          [results]="data.cobrosMensuales"
+          [scheme]="cobrosLineScheme"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [autoScale]="true"
+          [yAxisTickFormatting]="yAxisFormat"
+          [legend]="true" [legendPosition]="legendBelow">
+        </ngx-charts-line-chart>
+      </app-chart-card>
+
+      <!-- Gauge: Tasa de Cobro del Mes -->
+      <app-chart-card class="dashboard-grid__gauge"
+        title="Tasa de Cobro" icon="speed"
+        subtitle="Mes actual"
+        tooltip="Porcentaje del monto esperado efectivamente cobrado este mes">
+        <ngx-charts-gauge [animations]="false"
+          [results]="gaugeData"
+          [scheme]="gaugeScheme"
+          [min]="0" [max]="100"
+          [showAxis]="true"
+          [angleSpan]="240" [startAngle]="-120"
+          [valueFormatting]="percentFormat">
+        </ngx-charts-gauge>
+      </app-chart-card>
+
+      <!-- Stacked bar: Cobros por estado (Ãºltimos 6 meses) -->
+      <app-chart-card class="dashboard-grid__estado"
+        title="Cobros por Estado" icon="stacked_bar_chart"
+        subtitle="Ãšltimos 6 meses â€” composiciÃ³n por estado"
+        tooltip="DistribuciÃ³n del monto de cobros por estado (Cobrado, Pendiente, Vencido, Cancelado)">
+        <ngx-charts-bar-vertical-stacked [animations]="false"
+          [results]="data.cobrosEstadoMensual"
+          [scheme]="estadoScheme"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [yAxisTickFormatting]="yAxisFormat"
+          [legend]="true" [legendPosition]="legendBelow">
+        </ngx-charts-bar-vertical-stacked>
+      </app-chart-card>
+
+      <!-- Donut: DistribuciÃ³n por Aseguradora -->
+      <app-chart-card class="dashboard-grid__aseg"
+        title="Prima por Aseguradora" icon="pie_chart"
+        subtitle="Prima mensual normalizada"
+        tooltip="DistribuciÃ³n de la prima mensual bruta por aseguradora">
+        <ngx-charts-pie-chart [animations]="false"
+          [results]="data.distribucionAseguradoras"
+          [scheme]="asegColorScheme"
+          [legend]="true" [legendPosition]="legendBelow"
+          [labels]="false">
+        </ngx-charts-pie-chart>
+      </app-chart-card>
+
+      <!-- Alertas -->
+      <app-chart-card class="dashboard-grid__alertas"
+        title="Alertas del Sistema" icon="notifications_active"
+        [badge]="data.alertas.length.toString()"
+        [badgeType]="hasCriticoAlert ? 'danger' : 'warning'">
+        <div class="alertas-list" *ngIf="data.alertas.length; else noAlertas">
+          <div *ngFor="let alerta of data.alertas"
+               class="alerta-item" [class]="alertaClass(alerta.tipo)"
+               (click)="navigate(alerta.rutaAccion)" role="button"
+               [attr.aria-label]="alerta.mensaje">
+            <mat-icon class="alerta-item__icon">{{ alerta.icono }}</mat-icon>
+            <div class="alerta-item__body">
+              <span class="alerta-item__tag">{{ alerta.tipo }}</span>
+              <p class="alerta-item__msg">{{ alerta.mensaje }}</p>
+            </div>
+            <mat-icon class="alerta-item__arrow">chevron_right</mat-icon>
+          </div>
+        </div>
+        <ng-template #noAlertas>
+          <div class="no-alertas">
+            <mat-icon>check_circle</mat-icon>
+            <span>Sin alertas activas</span>
+          </div>
+        </ng-template>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Quick Navigation -->
+    <div class="quick-nav">
+      <h2 class="quick-nav__title">AnÃ¡lisis Detallado</h2>
+      <div class="quick-nav__grid">
+        <a class="quick-nav__item" routerLink="/analytics/cobros">
+          <mat-icon>payments</mat-icon>
+          <span>Cobros & Cashflow</span>
+          <mat-icon class="quick-nav__arrow">arrow_forward</mat-icon>
+        </a>
+        <a class="quick-nav__item" routerLink="/analytics/portfolio">
+          <mat-icon>folder_open</mat-icon>
+          <span>Portfolio de PÃ³lizas</span>
+          <mat-icon class="quick-nav__arrow">arrow_forward</mat-icon>
+        </a>
+        <a class="quick-nav__item" routerLink="/analytics/reclamos">
+          <mat-icon>support</mat-icon>
+          <span>Reclamos & SLA</span>
+          <mat-icon class="quick-nav__arrow">arrow_forward</mat-icon>
+        </a>
+        <a class="quick-nav__item" routerLink="/analytics/ventas">
+          <mat-icon>trending_up</mat-icon>
+          <span>Funnel de Ventas</span>
+          <mat-icon class="quick-nav__arrow">arrow_forward</mat-icon>
+        </a>
+        <a class="quick-nav__item" routerLink="/analytics/emails">
+          <mat-icon>email</mat-icon>
+          <span>AnalÃ­tica de Emails</span>
+          <mat-icon class="quick-nav__arrow">arrow_forward</mat-icon>
+        </a>
+        <a class="quick-nav__item" routerLink="/analytics/operacional">
+          <mat-icon>people</mat-icon>
+          <span>Dashboard Operacional</span>
+          <mat-icon class="quick-nav__arrow">arrow_forward</mat-icon>
+        </a>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+
+</div>
+

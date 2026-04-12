@@ -22,8 +22,10 @@
       </div>
     </div>
 
-    <button mat-icon-button class="pd-close-btn" (click)="close()" matTooltip="Cerrar">
-      <mat-icon>close</mat-icon>
+    <button mat-icon-button class="pd-close-btn" (click)="close()"
+            matTooltip="Cerrar"
+            aria-label="Cerrar diálogo">
+      <mat-icon aria-hidden="true">close</mat-icon>
     </button>
   </div>
 
@@ -81,7 +83,7 @@
         <div class="pd-info-icon-wrap pd-icon-email"><mat-icon>email</mat-icon></div>
         <div class="pd-info-text">
           <span class="pd-info-label">Correo</span>
-          <span class="pd-info-value">{{ poliza.correo }}</span>
+          <a href="mailto:{{ poliza.correo }}" class="pd-info-value pd-info-link">{{ poliza.correo }}</a>
         </div>
       </div>
 
@@ -89,7 +91,7 @@
         <div class="pd-info-icon-wrap pd-icon-phone"><mat-icon>phone</mat-icon></div>
         <div class="pd-info-text">
           <span class="pd-info-label">Teléfono</span>
-          <span class="pd-info-value">{{ poliza.numeroTelefono }}</span>
+          <a href="tel:{{ poliza.numeroTelefono }}" class="pd-info-value pd-info-link">{{ poliza.numeroTelefono }}</a>
         </div>
       </div>
 

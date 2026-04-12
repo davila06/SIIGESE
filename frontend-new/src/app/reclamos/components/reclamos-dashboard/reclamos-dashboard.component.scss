@@ -52,20 +52,20 @@
     margin-bottom: 24px;
 
     .stat-card {
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        box-shadow: var(--shadow-md);
       }
 
       &.pending {
         border-left: 4px solid var(--status-pending);
         
         .stat-icon {
-          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          background: linear-gradient(135deg, var(--status-pending) 0%, var(--color-warning) 100%);
           color: white;
         }
       }
@@ -74,7 +74,7 @@
         border-left: 4px solid var(--status-review);
         
         .stat-icon {
-          background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+          background: linear-gradient(135deg, var(--color-info) 0%, var(--status-review) 100%);
           color: white;
         }
       }
@@ -83,7 +83,7 @@
         border-left: 4px solid var(--status-active);
         
         .stat-icon {
-          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          background: linear-gradient(135deg, var(--status-active) 0%, var(--color-success) 100%);
           color: white;
         }
       }
@@ -92,7 +92,7 @@
         border-left: 4px solid var(--status-resolved);
         
         .stat-icon {
-          background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+          background: linear-gradient(135deg, var(--status-resolved) 0%, var(--color-primary) 100%);
           color: white;
         }
       }
@@ -141,13 +141,13 @@
             .stat-amount {
               font-size: 16px;
               font-weight: 600;
-              color: #4CAF50;
+              color: var(--color-success);
             }
 
             .stat-time {
               font-size: 14px;
               font-weight: 500;
-              color: #9C27B0;
+              color: var(--status-resolved);
             }
           }
         }
@@ -186,8 +186,8 @@
   // Filtros
   .filters-card {
     margin-bottom: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 
     .filters-container {
       display: flex;
@@ -248,8 +248,8 @@
 
   // Tabla
   .table-card {
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 
     .table-container {
       .loading-container {

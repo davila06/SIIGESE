@@ -17,6 +17,7 @@ using Domain.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.Repositories;
 using Infrastructure.Services;
+using WebApi.Services;
 using WebApi.Converters;
 using WebApi.Hubs;
 
@@ -79,6 +80,21 @@ builder.Services.AddAuthentication(x =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         ClockSkew = TimeSpan.Zero
     };
+    x.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // SignalR WebSocket transport sends JWT via query string.
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/chat"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 
 // Authorization
@@ -111,8 +127,10 @@ builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepo
 builder.Services.AddScoped<IPolizaRepository, PolizaRepository>();
 builder.Services.AddScoped<ICobroRepository, CobroRepository>();
 builder.Services.AddScoped<IReclamoRepository, ReclamoRepository>();
+builder.Services.AddScoped<IReclamoHistorialRepository, ReclamoHistorialRepository>();
 builder.Services.AddScoped<ICotizacionRepository, CotizacionRepository>();
 builder.Services.AddScoped<IEmailConfigRepository, EmailConfigRepository>();
+builder.Services.AddScoped<IEmailLogRepository, EmailLogRepository>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -126,9 +144,16 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IEmailConfigService, EmailConfigService>();
 builder.Services.AddScoped<IEmailDashboardService, EmailDashboardService>();
 builder.Services.AddScoped<INotificationService, Infrastructure.Services.NotificationService>();
+builder.Services.AddScoped<IAnalyticsReportsService, AnalyticsReportsService>();
+builder.Services.AddScoped<IAnalyticsDashboardDomainService, AnalyticsDashboardDomainService>();
+builder.Services.AddScoped<IAnalyticsPortfolioDomainService, AnalyticsPortfolioDomainService>();
+builder.Services.AddScoped<IAnalyticsReclamosDomainService, AnalyticsReclamosDomainService>();
+builder.Services.AddSingleton<IEndpointPerformanceStore, EndpointPerformanceStore>();
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddSingleton<IChatHubNotifier, ChatHubNotifier>();
+builder.Services.AddHostedService<MonthlyReportsHostedService>();
+builder.Services.AddScoped<IBlobStorageService, AzureBlobStorageService>();
 
 // SignalR (real-time chat)
 builder.Services.AddSignalR(options =>
@@ -232,6 +257,16 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseHttpsRedirection();
+
+app.Use(async (context, next) =>
+{
+    var sw = System.Diagnostics.Stopwatch.StartNew();
+    await next();
+    sw.Stop();
+
+    var store = context.RequestServices.GetService<IEndpointPerformanceStore>();
+    store?.Track(context.Request.Path.Value ?? "unknown", sw.Elapsed.TotalMilliseconds);
+});
 
 // Security Headers
 app.Use(async (context, next) =>

@@ -1,0 +1,58 @@
+.reportes-page {
+  padding: 20px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.header p {
+  margin: 8px 0 16px;
+  color: #6b7280;
+}
+
+.filtro-aseguradora {
+  margin-bottom: 16px;
+  max-width: 360px;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.report-card {
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  background: linear-gradient(180deg, rgba(0, 229, 255, 0.05), rgba(0, 0, 0, 0));
+}
+
+.report-card mat-card-title {
+  font-size: 1.1rem;
+}
+
+.report-card p {
+  color: #374151;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.status {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.12);
+  color: #065f46;
+}
+
+@media (max-width: 768px) {
+  .reportes-page {
+    padding: 12px;
+  }
+}

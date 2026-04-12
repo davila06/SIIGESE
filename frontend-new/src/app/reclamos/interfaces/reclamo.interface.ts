@@ -158,3 +158,31 @@ export function getPrioridadReclamoLabel(prioridad: PrioridadReclamo): string {
     default: return 'Desconocido';
   }
 }
+
+// ── Historial ─────────────────────────────────────────────────────────────────
+
+export interface ReclamoHistorialEntry {
+  id: number;
+  reclamoId: number;
+  /**
+   * "Creacion" | "CambioEstado" | "Asignacion" | "Resolucion" |
+   * "Actualizacion" | "DocumentoAgregado" | "DocumentoEliminado"
+   */
+  tipoEvento: string;
+  valorAnterior?: string;
+  valorNuevo?: string;
+  descripcion: string;
+  usuario: string;
+  fechaEvento: string;
+}
+
+// ── Documentos ────────────────────────────────────────────────────────────────
+
+export interface ReclamoDocumento {
+  id: string;
+  nombre: string;
+  tamano: number;
+  tipoContenido: string;
+  fechaSubida: string;
+  subidoPor: string;
+}

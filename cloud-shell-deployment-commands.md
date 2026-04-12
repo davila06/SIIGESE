@@ -1,10 +1,10 @@
-# 🚀 SIINADSEG - Comandos para Azure Cloud Shell Deployment
+﻿# ðŸš€ SIINADSEG - Comandos para Azure Cloud Shell Deployment
 
 ## Paso 1: Clonar el repositorio
 ```bash
 # Clonar tu repositorio
-git clone https://github.com/davila06/SIIGESE.git
-cd SIIGESE
+git clone https://github.com/davila06/OmnIA.git
+cd OmnIA
 
 # Cambiar a la rama V1
 git checkout V1
@@ -45,11 +45,11 @@ BACKEND_URL=$(az containerapp show --name app-siinadseg-backend --resource-group
 # Probar health endpoint
 curl https://$BACKEND_URL/health
 
-# Probar swagger (si está habilitado)
+# Probar swagger (si estÃ¡ habilitado)
 curl https://$BACKEND_URL/swagger
 ```
 
-## 🔧 Si hay errores, comandos de diagnóstico:
+## ðŸ”§ Si hay errores, comandos de diagnÃ³stico:
 
 ### Ver logs del Container App
 ```bash
@@ -69,28 +69,28 @@ az containerapp show \
 
 ### Reiniciar si es necesario
 ```bash
-# Obtener el nombre de la revisión actual
+# Obtener el nombre de la revisiÃ³n actual
 REVISION=$(az containerapp revision list --name app-siinadseg-backend --resource-group rg-siinadseg --query "[0].name" --output tsv)
 
-# Reiniciar la revisión
+# Reiniciar la revisiÃ³n
 az containerapp revision restart \
   --name app-siinadseg-backend \
   --resource-group rg-siinadseg \
   --revision $REVISION
 ```
 
-## 📋 URLs importantes después del deployment:
+## ðŸ“‹ URLs importantes despuÃ©s del deployment:
 - **Backend API**: https://app-siinadseg-backend.yellowrock-611c8f36.eastus.azurecontainerapps.io
 - **Frontend**: https://gentle-dune-0a2edab0f.3.azurestaticapps.net
 - **Health Check**: https://app-siinadseg-backend.yellowrock-611c8f36.eastus.azurecontainerapps.io/health
 
-## ⚠️ Notas importantes:
+## âš ï¸ Notas importantes:
 1. Cloud Shell tiene Docker y todas las herramientas necesarias preinstaladas
-2. El comando `az containerapp up` automáticamente detecta el Dockerfile y hace el build
+2. El comando `az containerapp up` automÃ¡ticamente detecta el Dockerfile y hace el build
 3. Si el deployment falla por ACR Tasks, intenta eliminar el Container App actual primero:
    ```bash
    az containerapp delete --name app-siinadseg-backend --resource-group rg-siinadseg --yes
    ```
 
-## 🎉 Una vez completado:
-Tu backend estará desplegado y funcionando. Después puedes actualizar el frontend para que apunte a la nueva URL del backend.
+## ðŸŽ‰ Una vez completado:
+Tu backend estarÃ¡ desplegado y funcionando. DespuÃ©s puedes actualizar el frontend para que apunte a la nueva URL del backend.

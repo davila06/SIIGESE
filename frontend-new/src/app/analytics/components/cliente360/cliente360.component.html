@@ -1,0 +1,493 @@
+﻿<div class="c360-page">
+
+  <!-- â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <div class="page-header">
+    <div class="page-title">
+      <mat-icon>manage_accounts</mat-icon>
+      <div>
+        <h1>Cliente 360Â°</h1>
+        <p class="page-subtitle">Vista unificada de cliente: pÃ³lizas, cobros, reclamos y valor de vida</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ BARRA DE BÃšSQUEDA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <mat-card class="search-card" *ngIf="!cliente">
+    <mat-card-content>
+      <div class="search-wrap">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Buscar por nombre o cÃ©dula</mat-label>
+          <mat-icon matPrefix>search</mat-icon>
+          <input matInput
+                 [(ngModel)]="searchQuery"
+                 placeholder="Ej: Juan PÃ©rez o 1-0234-5678"
+                 (input)="onSearch()"
+                 (keydown.enter)="onSearch()" />
+          <mat-hint>Ingrese al menos 2 caracteres</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- Buscando indicator -->
+      <div class="search-spinner" *ngIf="searching">
+        <mat-spinner diameter="24"></mat-spinner>
+        <span>Buscando clientes...</span>
+      </div>
+
+      <!-- Error de bÃºsqueda -->
+      <div class="search-error" *ngIf="searchError">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ searchError }}</span>
+      </div>
+
+      <!-- Resultados de bÃºsqueda -->
+      <div class="search-results" *ngIf="searchResults.length > 0">
+        <p class="results-label">{{ searchResults.length }} resultado(s) encontrado(s)</p>
+        <div class="result-item"
+             *ngFor="let r of searchResults; trackBy: trackByResult"
+             (click)="onSelectCliente(r.cedula)"
+             role="button"
+             tabindex="0"
+             (keydown.enter)="onSelectCliente(r.cedula)">
+          <div class="result-avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div class="result-info">
+            <span class="result-nombre">{{ r.nombreCompleto }}</span>
+            <span class="result-meta">
+              CÃ©dula: {{ r.cedula }}
+              &nbsp;Â·&nbsp;
+              {{ r.numeroPolizas }} pÃ³liza(s)
+              &nbsp;Â·&nbsp;
+              Prima mensual: {{ formatCRC(r.primaMensual) }}
+            </span>
+          </div>
+          <mat-icon class="result-arrow">chevron_right</mat-icon>
+        </div>
+      </div>
+
+      <!-- Sin resultados -->
+      <div class="no-results" *ngIf="!searching && searchQuery.length >= 2 && searchResults.length === 0 && !searchError">
+        <mat-icon>search_off</mat-icon>
+        <p>No se encontraron clientes con ese criterio.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- â”€â”€ LOADING SPINNER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <div class="full-loader" *ngIf="loading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Cargando informaciÃ³n del cliente...</p>
+  </div>
+
+  <!-- â”€â”€ ERROR DE CARGA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <mat-card class="error-card" *ngIf="loadError && !loading">
+    <mat-card-content>
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ loadError }}</p>
+      <button mat-stroked-button (click)="clearCliente()">
+        <mat-icon>arrow_back</mat-icon> Volver a buscar
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- â”€â”€ VISTA COMPLETA DEL CLIENTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+  <ng-container *ngIf="cliente && !loading">
+
+    <!-- BotÃ³n volver -->
+    <button mat-stroked-button class="back-btn" (click)="clearCliente()">
+      <mat-icon>arrow_back</mat-icon>
+      Buscar otro cliente
+    </button>
+
+    <!-- â”€â”€ HEADER DE CLIENTE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <mat-card class="cliente-header-card">
+      <mat-card-content>
+        <div class="cliente-header">
+          <div class="cliente-avatar">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+          <div class="cliente-identidad">
+            <h2 class="cliente-nombre">{{ cliente.nombreCompleto }}</h2>
+            <div class="cliente-meta">
+              <span><mat-icon>badge</mat-icon> {{ cliente.cedula }}</span>
+              <span *ngIf="cliente.email"><mat-icon>email</mat-icon> {{ cliente.email }}</span>
+              <span *ngIf="cliente.telefono"><mat-icon>phone</mat-icon> {{ cliente.telefono }}</span>
+            </div>
+          </div>
+          <div class="categoria-badge" [ngClass]="getRiesgoClass(cliente.categoriaRiesgo)">
+            <mat-icon>{{ cliente.categoriaRiesgo === 'Rojo' ? 'warning' : cliente.categoriaRiesgo === 'Amarillo' ? 'info' : 'check_circle' }}</mat-icon>
+            Riesgo {{ cliente.categoriaRiesgo }}
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- â”€â”€ KPI STRIP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <div class="kpi-strip">
+
+      <div class="kpi-card">
+        <span class="kpi-icon kpi-icon--ltv"><mat-icon>trending_up</mat-icon></span>
+        <div class="kpi-data">
+          <span class="kpi-value" [class.kpi-value--neg]="cliente.ltv < 0">{{ formatCRC(cliente.ltv) }}</span>
+          <span class="kpi-label">Valor de Vida (LTV)</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-icon kpi-icon--prima"><mat-icon>payments</mat-icon></span>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ formatCRC(cliente.primaMensualActiva) }}</span>
+          <span class="kpi-label">Prima Mensual Activa</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-icon kpi-icon--meses"><mat-icon>calendar_month</mat-icon></span>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ cliente.mesesComoCliente }}</span>
+          <span class="kpi-label">Meses como Cliente</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-icon kpi-icon--lealtad"><mat-icon>loyalty</mat-icon></span>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ cliente.scoreLealtad }}/100</span>
+          <span class="kpi-label">Score Lealtad</span>
+          <div class="score-bar-wrap">
+            <div class="score-bar"
+                 [ngClass]="getScoreLealtadClass(cliente.scoreLealtad)"
+                 [style.width.%]="cliente.scoreLealtad"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-icon kpi-icon--riesgo"><mat-icon>gpp_maybe</mat-icon></span>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ cliente.scoreRiesgo }}/100</span>
+          <span class="kpi-label">Score Riesgo</span>
+          <div class="score-bar-wrap">
+            <div class="score-bar"
+                 [ngClass]="getScoreRiesgoClass(cliente.scoreRiesgo)"
+                 [style.width.%]="cliente.scoreRiesgo"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-icon kpi-icon--cobrado"><mat-icon>account_balance_wallet</mat-icon></span>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ formatCRC(cliente.totalCobrado) }}</span>
+          <span class="kpi-label">Total Cobrado</span>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <span class="kpi-icon kpi-icon--reclamado"><mat-icon>gavel</mat-icon></span>
+        <div class="kpi-data">
+          <span class="kpi-value">{{ formatCRC(cliente.totalReclamado) }}</span>
+          <span class="kpi-label">Total Reclamado</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- â”€â”€ TABS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+    <mat-tab-group animationDuration="200ms" class="c360-tabs">
+
+      <!-- â”€â”€ TAB: RESUMEN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">dashboard</mat-icon>
+          Resumen
+        </ng-template>
+        <div class="tab-content">
+
+          <!-- LTV Timeline Chart -->
+          <mat-card class="chart-card" *ngIf="hasLtvData">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>show_chart</mat-icon>
+                HistÃ³rico de Prima Cobrada (CRC)
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content class="chart-body">
+              <ngx-charts-area-chart [animations]="false"
+                [results]="ltvChartData"
+                [scheme]="colorScheme"
+                [xAxis]="true"
+                [yAxis]="true"
+                [legend]="false"
+                [showXAxisLabel]="false"
+                [showYAxisLabel]="true"
+                yAxisLabel="Monto (CRC)"
+                [gradient]="true"
+                [curve]="ltvCurve"
+                [autoScale]="true"
+                class="ltv-chart">
+              </ngx-charts-area-chart>
+            </mat-card-content>
+          </mat-card>
+
+          <div class="no-chart-msg" *ngIf="!hasLtvData">
+            <mat-icon>bar_chart</mat-icon>
+            <p>Sin historial de cobros registrado.</p>
+          </div>
+
+          <!-- Score breakdown -->
+          <mat-card class="scores-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>analytics</mat-icon>
+                AnÃ¡lisis de Scores
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="score-breakdown">
+                <div class="score-row">
+                  <span class="score-label">
+                    <mat-icon>loyalty</mat-icon>
+                    Score Lealtad
+                  </span>
+                  <div class="score-bar-wrap score-bar-wrap--big">
+                    <div class="score-bar" [ngClass]="getScoreLealtadClass(cliente.scoreLealtad)"
+                         [style.width.%]="cliente.scoreLealtad"></div>
+                  </div>
+                  <span class="score-num">{{ cliente.scoreLealtad }}/100</span>
+                </div>
+                <div class="score-row">
+                  <span class="score-label">
+                    <mat-icon>gpp_maybe</mat-icon>
+                    Score Riesgo
+                  </span>
+                  <div class="score-bar-wrap score-bar-wrap--big">
+                    <div class="score-bar" [ngClass]="getScoreRiesgoClass(cliente.scoreRiesgo)"
+                         [style.width.%]="cliente.scoreRiesgo"></div>
+                  </div>
+                  <span class="score-num">{{ cliente.scoreRiesgo }}/100</span>
+                </div>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="categoria-summary">
+                <span>CategorÃ­a de Riesgo:</span>
+                <span class="categoria-badge-inline" [ngClass]="getRiesgoClass(cliente.categoriaRiesgo)">
+                  {{ cliente.categoriaRiesgo }}
+                </span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- â”€â”€ TAB: PÃ“LIZAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">policy</mat-icon>
+          PÃ³lizas ({{ cliente.polizas.length }})
+        </ng-template>
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-content class="table-container">
+              <table mat-table [dataSource]="cliente.polizas" [trackBy]="trackByPoliza" class="data-table">
+
+                <ng-container matColumnDef="tipo">
+                  <th mat-header-cell *matHeaderCellDef>Tipo / PÃ³liza</th>
+                  <td mat-cell *matCellDef="let p">
+                    <div class="cell-main">{{ p.tipoSeguro }}</div>
+                    <div class="cell-sub">{{ p.numeroPoliza }}</div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="aseguradora">
+                  <th mat-header-cell *matHeaderCellDef>Aseguradora</th>
+                  <td mat-cell *matCellDef="let p">{{ p.aseguradora }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="prima">
+                  <th mat-header-cell *matHeaderCellDef>Prima/Mes</th>
+                  <td mat-cell *matCellDef="let p">
+                    <span class="monto">{{ formatCRC(p.prima) }}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="frecuencia">
+                  <th mat-header-cell *matHeaderCellDef>Frecuencia</th>
+                  <td mat-cell *matCellDef="let p">{{ p.frecuencia }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="vigencia">
+                  <th mat-header-cell *matHeaderCellDef>Vencimiento</th>
+                  <td mat-cell *matCellDef="let p">
+                    <div class="cell-main">{{ formatFecha(p.fechaVigencia) }}</div>
+                    <div class="cell-sub" *ngIf="p.esActiva && p.diasParaVencer >= 0 && p.diasParaVencer <= 30">
+                      âš  Vence en {{ p.diasParaVencer }}d
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef>Estado</th>
+                  <td mat-cell *matCellDef="let p">
+                    <span class="badge-estado" [ngClass]="getPolizaEstadoClass(p)">
+                      {{ getPolizaEstadoLabel(p) }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="polizasColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: polizasColumns;"></tr>
+              </table>
+
+              <div class="empty-table" *ngIf="cliente.polizas.length === 0">
+                <mat-icon>policy</mat-icon>
+                <p>Sin pÃ³lizas registradas.</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- â”€â”€ TAB: COBROS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">receipt_long</mat-icon>
+          Cobros ({{ cliente.cobros.length }})
+        </ng-template>
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-content class="table-container">
+              <table mat-table [dataSource]="cliente.cobros" [trackBy]="trackByCobro" class="data-table">
+
+                <ng-container matColumnDef="recibo">
+                  <th mat-header-cell *matHeaderCellDef>Recibo</th>
+                  <td mat-cell *matCellDef="let c">{{ c.numeroRecibo }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef>Estado</th>
+                  <td mat-cell *matCellDef="let c">
+                    <span class="badge-estado" [ngClass]="getEstadoCobroClass(c.estado)">
+                      {{ c.estado }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="monto">
+                  <th mat-header-cell *matHeaderCellDef>Monto</th>
+                  <td mat-cell *matCellDef="let c">
+                    <span class="monto">{{ formatCRC(c.montoTotal) }}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="vencimiento">
+                  <th mat-header-cell *matHeaderCellDef>Vencimiento</th>
+                  <td mat-cell *matCellDef="let c">{{ formatFecha(c.fechaVencimiento) }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="diasVencido">
+                  <th mat-header-cell *matHeaderCellDef>DÃ­as</th>
+                  <td mat-cell *matCellDef="let c">
+                    <span class="days-chip" [ngClass]="getDiasVencidoClass(c.diasVencido)">
+                      {{ getDiasVencidoLabel(c.diasVencido) }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="cobrosColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: cobrosColumns;"></tr>
+              </table>
+
+              <div class="empty-table" *ngIf="cliente.cobros.length === 0">
+                <mat-icon>receipt_long</mat-icon>
+                <p>Sin cobros registrados.</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- â”€â”€ TAB: RECLAMOS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">gavel</mat-icon>
+          Reclamos ({{ cliente.reclamos.length }})
+        </ng-template>
+        <div class="tab-content">
+          <mat-card>
+            <mat-card-content class="table-container">
+              <table mat-table [dataSource]="cliente.reclamos" [trackBy]="trackByReclamo" class="data-table">
+
+                <ng-container matColumnDef="numero">
+                  <th mat-header-cell *matHeaderCellDef>Reclamo</th>
+                  <td mat-cell *matCellDef="let r">
+                    <div class="cell-main">{{ r.numeroReclamo }}</div>
+                    <div class="cell-sub">{{ r.tipoReclamo }}</div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tipo">
+                  <th mat-header-cell *matHeaderCellDef>Tipo</th>
+                  <td mat-cell *matCellDef="let r">{{ r.tipoReclamo }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="estado">
+                  <th mat-header-cell *matHeaderCellDef>Estado</th>
+                  <td mat-cell *matCellDef="let r">
+                    <span class="badge-estado" [ngClass]="getEstadoReclamoClass(r.estado)">
+                      {{ r.estado }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="prioridad">
+                  <th mat-header-cell *matHeaderCellDef>Prioridad</th>
+                  <td mat-cell *matCellDef="let r">
+                    <span class="prioridad-badge" [ngClass]="getPrioridadClass(r.prioridad)">
+                      {{ r.prioridad }}
+                    </span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="montoClamado">
+                  <th mat-header-cell *matHeaderCellDef>Monto Reclamado</th>
+                  <td mat-cell *matCellDef="let r">
+                    <span class="monto">{{ formatCRC(r.montoClamado) }}</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="montoAprobado">
+                  <th mat-header-cell *matHeaderCellDef>Monto Aprobado</th>
+                  <td mat-cell *matCellDef="let r">
+                    <span class="monto monto--aprobado" *ngIf="r.montoAprobado > 0">
+                      {{ formatCRC(r.montoAprobado) }}
+                    </span>
+                    <span class="muted" *ngIf="r.montoAprobado === 0">â€”</span>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="resolucion">
+                  <th mat-header-cell *matHeaderCellDef>ResoluciÃ³n</th>
+                  <td mat-cell *matCellDef="let r">{{ getResolucionLabel(r.diasResolucion) }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="reclamosColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: reclamosColumns;"></tr>
+              </table>
+
+              <div class="empty-table" *ngIf="cliente.reclamos.length === 0">
+                <mat-icon>gavel</mat-icon>
+                <p>Sin reclamos registrados.</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </ng-container>
+</div>
+

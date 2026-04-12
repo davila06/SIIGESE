@@ -9,9 +9,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
 import { EmailService, EmailRequest } from '../../services/email.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoggingService } from '../../services/logging.service';
+import { EmailPreviewDialogComponent } from '../../shared/components/email-preview-dialog/email-preview-dialog.component';
 
 @Component({
   selector: 'app-send-email',
@@ -89,7 +91,8 @@ export class SendEmailComponent implements OnInit {
     private fb: FormBuilder,
     private emailService: EmailService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) {
     this.emailForm = this.fb.group({
       toEmail: ['', [Validators.required, Validators.email]],
@@ -151,6 +154,16 @@ export class SendEmailComponent implements OnInit {
   }
 
   previewEmail(): void {
-    // Implementar preview del email
+    this.dialog.open(EmailPreviewDialogComponent, {
+      data: {
+        mode: 'preview',
+        subject: this.emailForm.value.subject || '(sin asunto)',
+        body: this.emailForm.value.body,
+      },
+      width: '720px',
+      maxWidth: '95vw',
+      panelClass: 'epd-dialog-panel',
+      autoFocus: false,
+    });
   }
 }

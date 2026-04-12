@@ -130,6 +130,13 @@ export class EmailService {
     });
   }
 
+  // Reenviar un email registrado en el historial por ID
+  resendEmail(id: number): Observable<EmailResponse> {
+    return this.http.post<EmailResponse>(`${this.apiUrl}/${id}/resend`, {}, {
+      headers: this.getHeaders()
+    });
+  }
+
   // Obtener estadísticas de emails
   getEmailStats(): Observable<EmailStats> {
     return this.http.get<EmailStats>(`${this.apiUrl}/stats`, {

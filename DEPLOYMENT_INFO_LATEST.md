@@ -1,41 +1,41 @@
-DEPLOYMENT AZURE COMPLETADO - SIINADSEG ACTUALIZADO
+﻿DEPLOYMENT AZURE COMPLETADO - SIINADSEG ACTUALIZADO
 =====================================================
 Fecha: October 24, 2025 - 00:45 UTC
 
-🎯 RECURSOS CREADOS EXITOSAMENTE:
-✅ Resource Group: rg-siinadseg
-✅ SQL Server: sql-siinadseg-7266.database.windows.net
-✅ Database: SiinadsegDB
-✅ Storage Account: stsiinadseg5629
-✅ Static Web App: swa-siinadseg-6333
+ðŸŽ¯ RECURSOS CREADOS EXITOSAMENTE:
+âœ… Resource Group: rg-siinadseg
+âœ… SQL Server: sql-siinadseg-7266.database.windows.net
+âœ… Database: SiinadsegDB
+âœ… Storage Account: stsiinadseg5629
+âœ… Static Web App: swa-siinadseg-6333
 
-🌐 URL DE LA APLICACIÓN:
+ðŸŒ URL DE LA APLICACIÃ“N:
 https://lemon-pebble-0348d540f.3.azurestaticapps.net
 
-🔐 CREDENCIALES DE BASE DE DATOS:
+ðŸ” CREDENCIALES DE BASE DE DATOS:
 Usuario: sqladmin
 Password: TempPassword123!
 
-📝 CONNECTION STRING:
+ðŸ“ CONNECTION STRING:
 Server=tcp:sql-siinadseg-7266.database.windows.net,1433;Initial Catalog=SiinadsegDB;Persist Security Info=False;User ID=sqladmin;Password=TempPassword123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
 
-📋 PRÓXIMOS PASOS:
+ðŸ“‹ PRÃ“XIMOS PASOS:
 
 1. CONECTAR REPOSITORIO GITHUB:
-   • Ir a Azure Portal > Static Web Apps > swa-siinadseg-6333
-   • Conectar con repositorio GitHub davila06/SIIGESE
-   • Configurar branch V1 como fuente
-   • Establecer app_location: "frontend-new"
-   • Establecer api_location: "backend"
+   â€¢ Ir a Azure Portal > Static Web Apps > swa-siinadseg-6333
+   â€¢ Conectar con repositorio GitHub davila06/OmnIA
+   â€¢ Configurar branch V1 como fuente
+   â€¢ Establecer app_location: "frontend-new"
+   â€¢ Establecer api_location: "backend"
 
 2. MIGRAR BASE DE DATOS:
-   • Actualizar connection string en backend/appsettings.json
-   • Ejecutar: dotnet ef database update
-   • Poblar datos iniciales
+   â€¢ Actualizar connection string en backend/appsettings.json
+   â€¢ Ejecutar: dotnet ef database update
+   â€¢ Poblar datos iniciales
 
-3. ACTUALIZAR CONFIGURACIÓN:
-   • Verificar CORS settings
-   • Configurar authentication
-   • Actualizar URLs de frontend
+3. ACTUALIZAR CONFIGURACIÃ“N:
+   â€¢ Verificar CORS settings
+   â€¢ Configurar authentication
+   â€¢ Actualizar URLs de frontend
 
-✅ DEPLOYMENT STATUS: INFRAESTRUCTURA LISTA - REQUIERE CONFIGURACIÓN DE CÓDIGO
+âœ… DEPLOYMENT STATUS: INFRAESTRUCTURA LISTA - REQUIERE CONFIGURACIÃ“N DE CÃ“DIGO

@@ -1,22 +1,22 @@
-# SIIGESE - Desarrollo Local
+﻿# OmnIA - Desarrollo Local
 
 ## Requisitos del Sistema
 
-Antes de ejecutar la aplicación localmente, asegúrate de tener instalado:
+Antes de ejecutar la aplicaciÃ³n localmente, asegÃºrate de tener instalado:
 
-1. **.NET 8 SDK** - [Descargar aquí](https://dotnet.microsoft.com/download/dotnet/8.0)
-2. **Node.js (versión 18 o superior)** - [Descargar aquí](https://nodejs.org/)
+1. **.NET 8 SDK** - [Descargar aquÃ­](https://dotnet.microsoft.com/download/dotnet/8.0)
+2. **Node.js (versiÃ³n 18 o superior)** - [Descargar aquÃ­](https://nodejs.org/)
 3. **SQL Server LocalDB** - Incluido con Visual Studio o [SQL Server Express](https://www.microsoft.com/sql-server/sql-server-downloads)
 
-## Inicio Rápido
+## Inicio RÃ¡pido
 
-### Opción 1: Script Automático (Recomendado)
-Ejecuta el archivo `start-local.bat` desde la raíz del proyecto. Este script:
-- Iniciará el backend en el puerto 5000
-- Iniciará el frontend en el puerto 4200
-- Abrirá automáticamente el navegador
+### OpciÃ³n 1: Script AutomÃ¡tico (Recomendado)
+Ejecuta el archivo `start-local.bat` desde la raÃ­z del proyecto. Este script:
+- IniciarÃ¡ el backend en el puerto 5000
+- IniciarÃ¡ el frontend en el puerto 4200
+- AbrirÃ¡ automÃ¡ticamente el navegador
 
-### Opción 2: Inicio Manual
+### OpciÃ³n 2: Inicio Manual
 
 #### 1. Backend (API)
 ```bash
@@ -32,15 +32,15 @@ npm install
 npm start
 ```
 
-## URLs de la Aplicación
+## URLs de la AplicaciÃ³n
 
 - **Frontend**: http://localhost:4200
 - **Backend API**: http://localhost:5000
 - **Swagger UI**: http://localhost:5000/swagger
 
-## Configuración de Base de Datos
+## ConfiguraciÃ³n de Base de Datos
 
-La aplicación usa SQL Server LocalDB por defecto. La cadena de conexión está configurada en:
+La aplicaciÃ³n usa SQL Server LocalDB por defecto. La cadena de conexiÃ³n estÃ¡ configurada en:
 ```
 backend/src/WebApi/appsettings.json
 ```
@@ -53,7 +53,7 @@ dotnet ef database update
 
 ## Usuarios de Prueba
 
-Después de ejecutar las migraciones, tendrás estos usuarios disponibles:
+DespuÃ©s de ejecutar las migraciones, tendrÃ¡s estos usuarios disponibles:
 - **Admin**: admin@sinseg.com / Admin123!
 - **Usuario**: user@sinseg.com / User123!
 
@@ -61,12 +61,12 @@ Después de ejecutar las migraciones, tendrás estos usuarios disponibles:
 
 ```
 enterprise-web-app/
-├── backend/              # API .NET 8
-│   └── src/WebApi/      # Proyecto principal
-├── frontend-new/        # Aplicación Angular
-├── start-local.bat     # Script de inicio automático
-├── start-backend.bat   # Script solo backend
-└── start-frontend.bat  # Script solo frontend
+â”œâ”€â”€ backend/              # API .NET 8
+â”‚   â””â”€â”€ src/WebApi/      # Proyecto principal
+â”œâ”€â”€ frontend-new/        # AplicaciÃ³n Angular
+â”œâ”€â”€ start-local.bat     # Script de inicio automÃ¡tico
+â”œâ”€â”€ start-backend.bat   # Script solo backend
+â””â”€â”€ start-frontend.bat  # Script solo frontend
 ```
 
 ## Puertos Utilizados
@@ -74,11 +74,11 @@ enterprise-web-app/
 - **5000**: Backend API
 - **4200**: Frontend Angular (desarrollo)
 
-## Resolución de Problemas
+## ResoluciÃ³n de Problemas
 
 ### Error de Base de Datos
 Si tienes problemas con la base de datos:
-1. Verifica que SQL Server LocalDB esté instalado
+1. Verifica que SQL Server LocalDB estÃ© instalado
 2. Ejecuta: `dotnet ef database update` desde `backend/src/WebApi`
 
 ### Error de Dependencias Frontend
@@ -87,7 +87,7 @@ Si hay problemas con las dependencias de Node:
 2. Ejecuta: `npm install`
 
 ### Error de CORS
-Si hay problemas de CORS, verifica que el frontend esté ejecutándose en el puerto 4200.
+Si hay problemas de CORS, verifica que el frontend estÃ© ejecutÃ¡ndose en el puerto 4200.
 
 ## Desarrollo
 
@@ -98,7 +98,7 @@ dotnet ef migrations add NombreDeLaMigracion
 dotnet ef database update
 ```
 
-### Build de Producción
+### Build de ProducciÃ³n
 ```bash
 cd frontend-new
 npm run build:prod

@@ -1,432 +1,269 @@
-# SIINSEG — Estrategia Comercial y Estructura de Precios
+﻿# IADS - Pricing y Control de Versiones (Single-Tenant)
 
-> **Sistema de Gestión de Seguros en la Nube — SaaS para Agencias y Corredores**
+## Objetivo
+Definir dos versiones del producto y una estrategia tecnica para controlar acceso por plan en una sola empresa (no multitenant).
 
----
-
-## Propuesta de Valor
-
-SIINSEG elimina el trabajo manual de gestionar pólizas, cotizaciones, cobros y reclamos. Una agencia promedio pierde 15–25 horas/mes en tareas administrativas que SIINSEG automatiza completamente.
-
-| Sin SIINSEG | Con SIINSEG |
-|---|---|
-| Hojas de Excel desactualizadas | Panel en tiempo real con todos los datos |
-| Cobros perdidos u olvidados | Generación automática de cobros por frecuencia |
-| Seguimiento manual de vencimientos | Alertas y estados automáticos (Pendiente → Vencido) |
-| Sin historial de comunicaciones | Chat integrado + historial de emails |
-| Recibos manuales | Numeración automática `REC-YYYYMM-NNNN` |
-| Sin control de equipo | Roles y permisos multi-usuario |
+- Lite/Normal: acceso a todo menos Analitica y Chatbot.
+- Premium/Completa: acceso total.
 
 ---
 
-## Mercado Objetivo
+## Pricing propuesto
 
-**Primario:** Agencias y corredores de seguros en Costa Rica (5–50 agentes)
-**Secundario:** Agentes independientes con cartera de clientes activa
-**Terciario:** Empresas que gestionan seguros corporativos propios
+## Plan Lite
+- Precio sugerido: USD 49/mes (o CRC equivalente).
+- Incluye: Polizas, Cobros, Reclamos, Cotizaciones, Emails/Notificaciones, Configuracion y Usuarios (segun rol).
+- No incluye: Analitica, Chatbot IA.
 
-**Problema que resuelven:** No existe un sistema asequible, en español, adaptado a la regulación y moneda local (₡), con cobros automáticos y multi-aseguradora.
+## Plan Premium
+- Precio sugerido: USD 99/mes (o CRC equivalente).
+- Incluye todo Lite + Analitica + Chatbot IA.
 
----
-
-## Planes y Precios
-
-### Plan BÁSICO — ₡25,000/mes (~$50 USD)
-Ideal para agentes independientes o agencias pequeñas.
-
-- ✅ Hasta **2 usuarios**
-- ✅ Hasta **100 pólizas activas**
-- ✅ Módulo de Cotizaciones (AUTO, VIDA, HOGAR, EMPRESARIAL)
-- ✅ Módulo de Pólizas
-- ✅ Generación automática de cobros
-- ✅ Registro de pagos
-- ✅ Módulo de Reclamos básico
-- ❌ Sin reportes avanzados
-- ❌ Sin plantillas de email personalizadas
-- ❌ Sin chat interno
-- ❌ Soporte solo por email (48h)
+## Politica comercial sugerida
+- Anual: 2 meses gratis.
+- Upgrade inmediato prorrateado.
+- Downgrade al siguiente ciclo.
 
 ---
 
-### Plan PLUS — ₡55,000/mes (~$110 USD)
-Para agencias en crecimiento.
+## Decision de arquitectura (tu enfoque)
+No usar multitenancy.
+Usar una tabla Company unica para:
+- metadata de empresa (branding y personalizacion futura)
+- plan actual (Lite/Premium)
+- estado comercial basico (activo/suspendido)
 
-- ✅ Hasta **5 usuarios**
-- ✅ Hasta **500 pólizas activas**
-- ✅ Todo lo del plan Básico
-- ✅ Plantillas de email personalizables
-- ✅ Historial de emails enviados
-- ✅ Chat interno del equipo
-- ✅ Reportes y estadísticas de cobros
-- ✅ Multi-moneda (₡ CRC + $ USD + € EUR)
-- ✅ Soporte por email (24h)
-- ❌ Sin integración API externa
-- ❌ Sin onboarding dedicado
+Esto encaja bien con la estructura actual.
 
 ---
 
-### Plan PREMIUM — ₡110,000/mes (~$220 USD)
-Para agencias medianas con equipo establecido.
+## Estado actual del sistema (relevante)
 
-- ✅ Hasta **15 usuarios**
-- ✅ **Pólizas ilimitadas**
-- ✅ Todo lo del plan Plus
-- ✅ Dashboard ejecutivo con KPIs
-- ✅ Exportación de reportes (Excel/PDF)
-- ✅ Gestión avanzada de reclamos con seguimiento
-- ✅ Configuración de roles y permisos por usuario
-- ✅ Soporte prioritario por WhatsApp (12h)
-- ✅ Sesión de onboarding incluida (2h)
-- ❌ Sin SLA garantizado
-- ❌ Sin instancia dedicada
+## Frontend
+- Ruteo en frontend-new/src/app/app-routing.module.ts.
+- Analitica y chat hoy solo exigen autenticacion (authGuard), no plan.
+- Menu en frontend-new/src/app/app.component.ts y frontend-new/src/app/app.component.html.
+- Chatbot flotante en frontend-new/src/app/app.component.html.
+
+## Backend
+- AnalyticsController y ChatController tienen [Authorize], pero no policy por plan.
+- Program.cs ya tiene JWT y politicas por rol, se puede extender a politicas por feature.
+- No existe entidad de plan/suscripcion actualmente.
 
 ---
 
-### Plan TOTAL (Enterprise) — Precio a negociar
-Para corredoras grandes, aseguradoras o grupos corporativos.
+## Modelo recomendado (single-tenant)
 
-- ✅ **Usuarios ilimitados**
-- ✅ **Pólizas ilimitadas**
-- ✅ Todo lo del plan Premium
-- ✅ SLA garantizado (99.9% uptime)
-- ✅ Instancia dedicada en Azure
-- ✅ Branding personalizado (logo, colores)
-- ✅ Integración API con sistemas externos
-- ✅ Migración de datos asistida
-- ✅ Soporte dedicado 24/7
-- ✅ Capacitación completa del equipo
-- ✅ Actualizaciones y mejoras bajo demanda
+## Tabla Company
+Una sola fila activa para toda la app.
 
----
+Campos minimos sugeridos:
+- Id (int, PK)
+- Name (nvarchar(200))
+- LegalName (nvarchar(200), null)
+- TaxId (nvarchar(50), null)
+- LogoUrl (nvarchar(500), null)
+- PrimaryColor (nvarchar(20), null)
+- SecondaryColor (nvarchar(20), null)
+- PlanCode (nvarchar(20))  // LITE | PREMIUM
+- IsPlanActive (bit)       // true/false
+- PlanUpdatedAt (datetime2)
+- CreatedAt / UpdatedAt / IsDeleted
 
-## Estructura de Precios Opcional: Por Volumen de Pólizas
-
-Para clientes que prefieren pagar según su cartera real:
-
-| Rango de pólizas activas | Precio/mes |
-|---|---|
-| 1 – 50 | ₡20,000 |
-| 51 – 150 | ₡40,000 |
-| 151 – 400 | ₡70,000 |
-| 401 – 800 | ₡100,000 |
-| 800+ | Negociable |
+Recomendacion:
+- Constraint para PlanCode in ('LITE','PREMIUM').
+- Seed inicial: una company por defecto en plan PREMIUM para no romper ambientes actuales.
 
 ---
 
-## Argumentos de Venta (Cierre)
+## Entitlements (features)
+No depender solo del string del plan en frontend. Resolver features en backend:
 
-### ROI Inmediato
-> "Si su agencia tiene 200 pólizas y cobra mensualmente, el sistema genera y rastrea 200 cobros automáticos. Si antes perdía aunque sea 5 cobros al mes por olvido, a ₡50,000 de prima promedio son **₡250,000 en ingresos recuperados** — vs. ₡55,000/mes del plan Plus."
+- analytics.access
+- chatbot.access
 
-### Tiempo Ahorrado
-> "El módulo de cotizaciones tarda 3 minutos en generar una propuesta formal con número de cotización, datos del cliente y condiciones. Antes tomaba 20–30 minutos en Word o Excel."
-
-### Seguridad y Confiabilidad
-> "Sus datos viven en Microsoft Azure — la misma infraestructura que usa el Banco Nacional y empresas Fortune 500. Backups automáticos diarios, acceso desde cualquier dispositivo con internet."
-
-### Sin Instalación
-> "No necesita técnicos, no necesita servidor, no necesita mantenimiento. El sistema está disponible desde el navegador en su computadora, tablet o celular."
+Mapa:
+- LITE: analytics=false, chatbot=false
+- PREMIUM: analytics=true, chatbot=true
 
 ---
 
-## Comparativa vs. Alternativas
+## Implementacion con la estructura actual
 
-| Característica | SIINSEG | Excel/manual | ERP genérico |
-|---|---|---|---|
-| Costo mensual | ₡25K–₡110K | ₡0 (pero caro en tiempo) | $500–$2,000 USD |
-| Adaptado a seguros CR | ✅ | ❌ | ❌ |
-| Cobros automáticos | ✅ | ❌ | Parcial |
-| Multi-aseguradora (INS, ASSA, MAPFRE…) | ✅ | Manual | Requiere config |
-| En español y con CRC | ✅ | ✅ | Parcial |
-| Tiempo de implementación | 1 día | Ya tienen | 3–6 meses |
-| Soporte local | ✅ | ❌ | ❌ |
+## 1) Backend - entidad y DbContext
+- Crear Domain/Entities/Company.cs.
+- Agregar DbSet<Company> en Infrastructure/Data/ApplicationDbContext.cs.
+- Configurar Company en OnModelCreating.
+- Crear migracion.
+
+## 2) Backend - resolver plan en login/refresh
+En Application/Services/AuthService.cs:
+- leer Company (fila unica)
+- agregar claims al JWT:
+  - plan = LITE|PREMIUM
+  - feature_analytics = true/false
+  - feature_chatbot = true/false
+
+## 3) Backend - policies por feature
+En backend/src/WebApi/Program.cs agregar:
+- policy AnalyticsAccess => claim feature_analytics=true
+- policy ChatbotAccess => claim feature_chatbot=true
+
+Aplicar:
+- WebApi/Controllers/AnalyticsController.cs -> [Authorize(Policy = "AnalyticsAccess")]
+- WebApi/Controllers/ChatController.cs -> [Authorize(Policy = "ChatbotAccess")]
+- ChatHub si corresponde -> misma policy.
+
+Resultado: usuario Lite no puede acceder aunque manipule URL/UI.
+
+## 4) Frontend - guard por feature
+Crear feature guard en frontend:
+- feature.guard.ts
+
+Rutas en app-routing.module.ts:
+- analytics -> [authGuard, featureGuard] con data.feature='analytics'
+- chat -> [authGuard, featureGuard] con data.feature='chatbot'
+
+Fallback:
+- redirigir a /polizas
+- mostrar mensaje de upgrade.
+
+## 5) Frontend - menu y chatbot segun plan
+En app.component.ts/html:
+- ocultar bloque Analitica cuando feature_analytics=false
+- ocultar boton/chat dialog cuando feature_chatbot=false
+- filtrar quick access para no incluir rutas bloqueadas.
+
+## 6) Endpoint de capacidades (recomendado)
+Agregar:
+- GET /api/auth/capabilities
+Retorna:
+- company
+- plan
+- features
+
+Ventaja:
+- refresco de permisos sin relogin.
+- soporte para cambio de plan en caliente.
 
 ---
 
-## Proceso de Venta Recomendado
+## Matriz de acceso final
 
-1. **Demo de 30 minutos** — mostrar flujo completo: cotización → póliza → cobros automáticos
-2. **Prueba gratuita 14 días** — plan Plus sin tarjeta de crédito
-3. **Migración asistida** — ofrecer importar su cartera actual desde Excel (diferenciador clave)
-4. **Cierre con descuento anual** — 2 meses gratis al pagar anual (equivalente a 17% descuento)
-
----
-
-## Precios Anuales (con descuento)
-
-| Plan | Mensual | Anual (ahorro 2 meses) |
+| Modulo | Lite | Premium |
 |---|---|---|
-| BÁSICO | ₡25,000 | ₡250,000/año |
-| PLUS | ₡55,000 | ₡550,000/año |
-| PREMIUM | ₡110,000 | ₡1,100,000/año |
+| Polizas | Si | Si |
+| Cobros | Si | Si |
+| Reclamos | Si | Si |
+| Cotizaciones | Si | Si |
+| Emails/Notificaciones | Si | Si |
+| Configuracion (rol) | Si | Si |
+| Usuarios (rol) | Si | Si |
+| Analitica | No | Si |
+| Chatbot IA | No | Si |
+
+## Matriz final por modulo, version y rol
+
+Convenciones:
+- Si = acceso permitido.
+- No = acceso denegado.
+- Parcial = acceso segun permisos internos del modulo.
+
+| Modulo | Lite Admin | Lite DataLoader | Lite User | Premium Admin | Premium DataLoader | Premium User |
+|---|---|---|---|---|---|---|
+| Polizas | Si | Si | Si | Si | Si | Si |
+| Subir Polizas Excel | Si | Si | No | Si | Si | No |
+| Cobros | Si | Si | Si | Si | Si | Si |
+| Reclamos | Si | Si | Si | Si | Si | Si |
+| Cotizaciones | Si | Si | Si | Si | Si | Si |
+| Emails/Notificaciones | Si | Si | Si | Si | Si | Si |
+| Configuracion | Si | No | No | Si | No | No |
+| Usuarios | Si | No | No | Si | No | No |
+| Analitica (feature global) | No | No | No | Si | Si | Si |
+| Chatbot IA | No | No | No | Si | Si | Si |
+
+Notas tecnicas:
+- Configuracion y Usuarios mantienen control por rol (admin guard).
+- Subir Polizas Excel mantiene control por rol (Admin o DataLoader).
+- Analitica y Chatbot deben bloquearse por plan (Lite = No) en frontend y backend.
+
+## Matriz profunda por submodulo de Analitica (version + rol)
+
+Analisis aplicado sobre los submodulos reales del modulo de Analitica.
+
+Convenciones:
+- Si = acceso completo del submodulo.
+- No = acceso denegado.
+- Parcial = acceso permitido con restricciones de accion (por ejemplo: sin enviar emails, sin exportaciones sensibles o sin datos de usuarios).
+
+| Submodulo Analitica | Lite Admin | Lite DataLoader | Lite User | Premium Admin | Premium DataLoader | Premium User |
+|---|---|---|---|---|---|---|
+| 0. Dashboard Ejecutivo | No | No | No | Si | Si | Si |
+| 1. Cobros Analytics | No | No | No | Si | Si | Si |
+| 2. Portfolio Analytics | No | No | No | Si | Si | Si |
+| 3. Reclamos Analytics | No | No | No | Si | Si | Si |
+| 4. Sales Funnel | No | No | No | Si | Si | Si |
+| 5. Email Analytics | No | No | No | Si | Si | Si |
+| 6. Dashboard Operacional | No | No | No | Si | Parcial | No |
+| 7. Predictive Analytics | No | No | No | Si | Si | Parcial |
+| 8. Agenda Inteligente | No | No | No | Si | Si | Si |
+| 9. Cliente360 | No | No | No | Si | Si | No |
+| 10. Reportes Exportables | No | No | No | Si | Parcial | No |
+
+Notas de criterio por submodulo:
+- Dashboard Operacional (6): contiene carga por agente, actividad de usuarios y rendimiento tecnico; por sensibilidad operativa se recomienda dejar completo en Admin, lectura acotada en DataLoader y cerrado para User.
+- Predictive Analytics (7): permite decisiones de priorizacion/riesgo; User debe quedar en lectura limitada (sin indicadores avanzados o sin vistas de riesgo detalladas).
+- Cliente360 (9): concentra datos de cliente y contexto 360, por privacidad se recomienda Admin/DataLoader y bloquear User.
+- Reportes Exportables (10): es el mas sensible porque ejecuta descargas y envio por email; User debe estar bloqueado y DataLoader solo con descargas controladas (sin envio a admins/gerencia).
+
+## Reglas tecnicas recomendadas por accion (Premium)
+
+Para implementar la matriz anterior sin ambiguedad:
+
+- `analytics.access`:
+  habilita entrada al modulo de Analitica por plan (solo Premium).
+- `analytics.operational.read`:
+  Admin completo, DataLoader lectura restringida, User denegado.
+- `analytics.predictive.read`:
+  Admin/DataLoader completo, User lectura limitada.
+- `analytics.cliente360.read`:
+  Admin/DataLoader permitido, User denegado.
+- `analytics.reports.download`:
+  Admin y DataLoader permitido.
+- `analytics.reports.email`:
+  solo Admin permitido.
+
+Esto evita que un usuario Premium con rol bajo obtenga acceso a acciones sensibles solo por tener plan Premium.
 
 ---
 
-## Objeciones Comunes y Respuestas
+## Plan de ejecucion recomendado
 
-**"Ya uso Excel y funciona"**
-> "Excel no le avisa cuando un cobro vence, no genera recibos automáticos y no tiene historial auditado. Con SIINSEG, todo queda registrado y trazado."
+## Sprint 1 (enforcement real)
+1. Crear Company + migracion.
+2. Claims de plan/features en login/refresh.
+3. Policies y proteccion de Analytics/Chat.
+4. Feature guard y ocultamiento UI en frontend.
 
-**"¿Y si la empresa cierra o el sistema falla?"**
-> "Sus datos se exportan en cualquier momento. Están en Azure con backups diarios. No están atrapados en ningún contrato."
-
-**"Es caro para el tamaño de mi agencia"**
-> "El plan Básico son ₡833 al día — menos que un café. Y recupera ese costo con el primer cobro que el sistema le recuerde que estaba olvidado."
-
-**"¿Puedo probarlo antes?"**
-> "Sí, 14 días gratis con todos los módulos del plan Plus. Sin tarjeta. Sin compromiso."
-
----
-
-## Canales de Venta
-
-- **Directo:** Demo personalizada + propuesta por email
-- **Colegios y asociaciones:** Alianza con ACOAS (Asociación Costarricense de Agentes de Seguros)
-- **Referidos:** Comisión del 10% del primer año por agente referido
-- **Redes sociales:** LinkedIn (B2B) + Facebook (agentes independientes)
+## Sprint 2 (comercial y UX)
+1. Endpoint capabilities.
+2. Pantalla/Modal upgrade a Premium.
+3. Configuracion branding basica desde Company.
 
 ---
 
----
+## Riesgos y mitigacion
+- Riesgo: ocultar solo UI.
+  - Mitigacion: policies backend obligatorias.
 
-## Arquitectura Interna (Para Demos Técnicas)
+- Riesgo: claim desactualizado tras cambio de plan.
+  - Mitigacion: endpoint capabilities y refresh controlado.
 
-### Filosofía General
-
-El sistema **NO tiene un motor de cálculo de primas**. El pricing es **manual**: los agentes/administradores ingresan directamente el valor de la `Prima` al crear o editar una Póliza. El sistema actúa como plataforma de **facturación y seguimiento de cobros**, no como plataforma de suscripción actuarial.
-
----
-
-## Entidades y Campos Monetarios
-
-### `Poliza` — Póliza de Seguro
-| Campo | Tipo SQL | Descripción |
-|---|---|---|
-| `Prima` | `decimal(18,2)` | Prima del seguro — valor ingresado manualmente |
-| `Moneda` | `nvarchar` | Moneda de la prima (CRC / USD / EUR) |
-| `Frecuencia` | `nvarchar` | Frecuencia de cobro |
-| `FechaVigencia` | `datetime2` | Fecha de inicio de vigencia (base para calcular fechas de vencimiento) |
-| `MontoAsegurado` | `decimal` | Valor asegurado del bien/persona |
-
-### `Cobro` — Cobro/Recibo generado
-| Campo | Tipo SQL | Descripción |
-|---|---|---|
-| `MontoTotal` | `decimal(18,2)` | = `poliza.Prima` (copia directa, sin cálculo adicional) |
-| `MontoCobrado` | `decimal(18,2)` | Monto efectivamente recaudado |
-| `Estado` | `EstadoCobro` | Estado actual del cobro (ver abajo) |
-| `MetodoPago` | `MetodoPago` | Método de pago utilizado |
-| `FechaVencimiento` | `datetime2` | Calculada según frecuencia de la póliza |
-| `NumeroRecibo` | `nvarchar` | Formato: `REC-{YYYYMM}-{NNNN}` |
-| `FechaPago` | `datetime2?` | Fecha en que se registró el pago |
-
-### `Cotizacion` — Cotización/Propuesta comercial
-| Campo | Tipo SQL | Requerido | Descripción |
-|---|---|---|---|
-| `MontoAsegurado` | `decimal` | ✅ (> 0) | Valor del bien/persona a asegurar |
-| `PrimaCotizada` | `decimal?` | ❌ (≥ 0) | Prima propuesta por el agente (opcional) |
-| `TipoSeguro` | `nvarchar` | ✅ | AUTO / VIDA / HOGAR / EMPRESARIAL |
-| `Modalidad` | `nvarchar` | ✅ | BASICO / PLUS / PREMIUM / TOTAL |
-| `Moneda` | `nvarchar` | ✅ | Moneda de la cotización |
-| `Frecuencia` | `nvarchar` | ✅ | Frecuencia de cobro propuesta |
-| `Estado` | `nvarchar` | — | Estado del ciclo de vida de la cotización |
-| `NumeroCotizacion` | `nvarchar` | auto | Formato: `COT-{YYYY}-{NNN}` |
-
-**Regla clave:** Cuando una cotización es CONVERTIDA a póliza, el campo `PrimaCotizada` pasa a ser la `Prima` de la póliza resultante.
+- Riesgo: ambientes viejos sin registro Company.
+  - Mitigacion: seed inicial y fallback a PREMIUM temporal.
 
 ---
 
-## Motor de Generación Automática de Cobros
-
-**Clase:** `CobrosService.GenerarCobrosAutomaticosAsync()` — `backend/src/Application/Services/CobrosService.cs`
-
-### Flujo de ejecución
-```
-1. Obtener todas las pólizas con EsActivo = true
-2. Para cada póliza:
-   a. Si Prima <= 0 → SALTAR (pólizas sin prima activa se omiten)
-   b. Obtener cobros existentes → construir HashSet de fechas de vencimiento ya creadas
-   c. Calcular fechas futuras: CalcularFechasVencimiento(FechaVigencia, Frecuencia, mesesAdelante)
-   d. Para cada fecha calculada NO presente en el HashSet:
-      → Crear nuevo Cobro con MontoTotal = poliza.Prima
-      → Estado inicial = Pendiente
-      → Asignar NumeroRecibo en formato REC-{YYYYMM}-{NNNN}
-3. Guardar todos los cobros nuevos en batch
-```
-
-### Regla fundamental de pricing en cobros
-```
-cobro.MontoTotal = poliza.Prima
-```
-No hay markup, descuento, interés, impuesto ni ningún ajuste calculado automáticamente.
-
----
-
-## Motor de Frecuencias de Cobro
-
-### Ventana de generación adaptativa
-Para garantizar que siempre se genere al menos un cobro por póliza, la ventana mínima se ajusta según la frecuencia:
-
-| Frecuencia | Ventana mínima garantizada |
-|---|---|
-| ANUAL | 13 meses |
-| SEMESTRAL | 7 meses |
-| CUATRIMESTRAL | 5 meses |
-| TRIMESTRAL | 4 meses |
-| BIMESTRAL | 3 meses |
-| MENSUAL / DM | Parámetro `mesesAdelante` (default: 3) |
-
-### Mapeo de períodos — `AgregarPeriodo(fecha, frecuencia)`
-
-| Valores aceptados (insensible a mayúsculas) | Período sumado |
-|---|---|
-| `DM`, `DEBITO MENSUAL`, `MENSUAL`, `MONTHLY`, `MES`, `MONTH` | +1 mes |
-| `BIMESTRAL`, `BIMONTHLY`, `2 MESES` | +2 meses |
-| `TRIMESTRAL`, `QUARTERLY`, `3 MESES`, `QUARTER` | +3 meses |
-| `CUATRIMESTRAL`, `4 MESES` | +4 meses |
-| `SEMESTRAL`, `SEMIANNUAL`, `6 MESES`, `SEMESTER` | +6 meses |
-| `ANUAL`, `ANNUAL`, `YEARLY`, `AÑO`, `YEAR`, `ANO` | +1 año |
-| `QUINCENAL`, `BIWEEKLY`, `15 DIAS` | +15 días |
-| `SEMANAL`, `WEEKLY`, `WEEK`, `SEMANA` | +7 días |
-| *(cualquier otro valor)* | +1 mes (default) |
-
----
-
-## Monedas Soportadas
-
-| Código | Nombre | Símbolo | Locale |
-|---|---|---|---|
-| `CRC` | Colones Costarricenses | ₡ | `es-CR` |
-| `USD` | Dólares Americanos | $ | `en-US` |
-| `EUR` | Euros | € | `es-ES` |
-
-**Moneda por defecto:** `CRC`  
-**Locale por defecto:** `es-CR`
-
-La moneda se almacena como string en la BD y se formatea en frontend con `Intl.NumberFormat` usando el locale correspondiente (`formatCurrencyByCode()`).
-
----
-
-## Aseguradoras Registradas
-
-| Código | Nombre |
-|---|---|
-| `INS` | Instituto Nacional de Seguros (INS) |
-| `SAGICOR` | Sagicor Seguros |
-| `ASSA` | ASSA Compañía de Seguros |
-| `BCR_SEGUROS` | BCR Seguros |
-| `MAPFRE` | MAPFRE Seguros Costa Rica |
-| `OTROS` | Otras Aseguradoras |
-
----
-
-## Tipos de Seguro y Campos Específicos
-
-| Tipo | Código | Campos específicos de cotización |
-|---|---|---|
-| Automóvil | `AUTO` | `Placa`, `Marca`, `Modelo`, `Año`, `Cilindraje` |
-| Vida | `VIDA` | `FechaNacimiento`, `Genero`, `Ocupacion` |
-| Hogar | `HOGAR` | `DireccionInmueble`, `TipoInmueble`, `ValorInmueble` |
-| Empresarial | `EMPRESARIAL` | *(sin campos adicionales)* |
-
-> **Nota:** Estos campos son **informativos**. No alimentan ningún algoritmo de cálculo de precio. El agente los usa como contexto para definir la prima manualmente.
-
----
-
-## Modalidades / Planes
-
-| Código | Descripción |
-|---|---|
-| `BASICO` | Plan Básico |
-| `PLUS` | Plan Plus |
-| `PREMIUM` | Plan Premium |
-| `TOTAL` | Plan Total |
-
-Las modalidades son **etiquetas de clasificación**. No existen multiplicadores de precio asociados automáticamente.
-
----
-
-## Ciclos de Vida
-
-### Cotización
-```
-PENDIENTE ──→ APROBADA ──→ CONVERTIDA  (crea una Póliza)
-     └──────→ RECHAZADA
-```
-
-### Cobro
-```
-Pendiente ──→ Pagado     (vía RegistrarCobroAsync)
-    ├──────→ Cobrado
-    ├──────→ Vencido     (automático al superar FechaVencimiento)
-    └──────→ Cancelado
-```
-
----
-
-## Métodos de Pago (`MetodoPago` enum)
-
-| Valor | Descripción |
-|---|---|
-| `NoDefinido` | Sin método asignado (default al crear) |
-| `Efectivo` | Pago en efectivo |
-| `Tarjeta` | Tarjeta de crédito/débito |
-| `Transferencia` | Transferencia bancaria |
-| `Cheque` | Cheque |
-| `Otros` | Otros métodos |
-
----
-
-## Formatos de Numeración
-
-| Entidad | Formato | Ejemplo |
-|---|---|---|
-| Recibo de Cobro | `REC-{YYYYMM}-{NNNN}` | `REC-202603-0042` |
-| Cotización | `COT-{YYYY}-{NNN}` | `COT-2026-001` |
-
-El número de recibo es **secuencial por mes** (`NNNN` se reinicia cada mes).  
-El número de cotización es **secuencial por año**.
-
----
-
-## Reglas de Validación
-
-Definidas en `backend/src/Application/Validators/DtoValidators.cs`:
-
-| Campo | Regla |
-|---|---|
-| `Prima` | `>= 0` (no negativo) |
-| `MontoAsegurado` | `> 0` (debe ser positivo) |
-| `PrimaCotizada` | `>= 0` si se provee (opcional) |
-| `ValorInmueble` | `>= 0` si se provee (opcional) |
-| `MontoTotal` en cobro | `>= 0` |
-
----
-
-## Estadísticas de Cobros (`GetCobrosStatsAsync`)
-
-```
-TotalCobros          = COUNT(cobros)
-CobrosPendientes     = COUNT WHERE Estado = Pendiente
-CobrosPagados        = TotalCobros - CobrosPendientes
-PorcentajeCobrado    = (TotalCobros - CobrosPendientes) / TotalCobros × 100
-MontoTotalPendiente  = SUM(MontoTotal) WHERE Estado = Pendiente
-MontoTotalCobrado    = SUM(MontoCobrado) WHERE Estado = Pagado
-```
-
----
-
-## Archivos Fuente Relevantes
-
-| Archivo | Rol |
-|---|---|
-| `backend/src/Application/Services/CobrosService.cs` | **Motor de facturación** — generación y registro de cobros |
-| `backend/src/Infrastructure/Services/CotizacionService.cs` | CRUD de cotizaciones — sin lógica de pricing |
-| `backend/src/Domain/Entities/Poliza.cs` | Entidad póliza con Prima y Frecuencia |
-| `backend/src/Domain/Entities/Cobro.cs` | Entidad cobro con MontoTotal y Estado |
-| `backend/src/Domain/Entities/Cotizacion.cs` | Entidad cotización con MontoAsegurado y PrimaCotizada |
-| `backend/src/Domain/Entities/Enums.cs` | `EstadoCobro` y `MetodoPago` enums |
-| `backend/src/Application/DTOs/CotizacionDto.cs` | DTOs con anotaciones de validación |
-| `frontend-new/src/app/models/cotizacion.model.ts` | Interfaces y constantes del frontend |
-| `frontend-new/src/app/shared/constants/currency.constants.ts` | MONEDAS_SISTEMA, ASEGURADORAS_SISTEMA, utilidades de formato |
-| `02_CreateTables.sql` | Definición de esquema con tipos decimales |
-| `06_CreateCobrosTable.sql` | Migración que crea la tabla de cobros |
+## Decision recomendada
+Tu enfoque es correcto para este producto: Company unica + plan flag.
+Permite lanzar rapido Lite/Premium sin complejidad multitenant, y deja lista la base para branding y personalizacion futura.

@@ -1,4 +1,4 @@
-Ôªøimport { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -79,7 +79,7 @@ export class EmailConfigForm implements OnInit {
     if (this.isEditMode) {
       this.loadEmailConfig();
     } else {
-      // Asegurar que el formulario est√© limpio para nuevas configuraciones
+      // Asegurar que el formulario estÈ limpio para nuevas configuraciones
       this.resetForm();
     }
   }
@@ -92,15 +92,15 @@ export class EmailConfigForm implements OnInit {
       smtpPort: 587,
       useSSL: false,
       useTLS: true,
-      fromName: 'SIIGESE Sistema',
-      companyName: 'SIIGESE',
+      fromName: 'IADS IAsistente Digital de Servicios Sistema',
+      companyName: 'IADS IAsistente Digital de Servicios',
       timeoutSeconds: 30,
       maxRetries: 3,
       isActive: true,
       isDefault: false
     });
     
-    // Limpiar completamente los estados de validaci√≥n
+    // Limpiar completamente los estados de validaciÛn
     Object.keys(this.emailConfigForm.controls).forEach(key => {
       const control = this.emailConfigForm.get(key);
       if (control) {
@@ -114,26 +114,26 @@ export class EmailConfigForm implements OnInit {
 
   private createForm(): FormGroup {
     return this.fb.group({
-      // Informaci√≥n b√°sica
+      // InformaciÛn b·sica
       configName: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       
-      // Configuraci√≥n SMTP
+      // ConfiguraciÛn SMTP
       smtpServer: ['', [Validators.required]],
       smtpPort: [587, [Validators.required, Validators.min(1), Validators.max(65535)]],
       useSSL: [false],
       useTLS: [true],
       
-      // Autenticaci√≥n
+      // AutenticaciÛn
       username: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       
       // Remitente
       fromEmail: ['', [Validators.required, Validators.email]],
-      fromName: ['SIIGESE Sistema', [Validators.required]],
+      fromName: ['IADS IAsistente Digital de Servicios Sistema', [Validators.required]],
       
-      // Configuraci√≥n de empresa
-      companyName: ['SIIGESE'],
+      // ConfiguraciÛn de empresa
+      companyName: ['IADS IAsistente Digital de Servicios'],
       companyAddress: [''],
       companyPhone: [''],
       companyWebsite: [''],
@@ -158,7 +158,7 @@ export class EmailConfigForm implements OnInit {
     });
     
     // Show a message
-    this.showMessage(`Configuraci√≥n ${config.name} aplicada`, 'info');
+    this.showMessage(`ConfiguraciÛn ${config.name} aplicada`, 'info');
   }
 
   private loadEmailConfig(): void {
@@ -193,7 +193,7 @@ export class EmailConfigForm implements OnInit {
       },
       error: (error: any) => {
         this.logger.error('Error loading email config:', error);
-        this.showMessage('Error al cargar la configuraci√≥n', 'error');
+        this.showMessage('Error al cargar la configuraciÛn', 'error');
         this.loading = false;
       }
     });
@@ -237,15 +237,15 @@ export class EmailConfigForm implements OnInit {
         const response = result.data;
         if (!response) return;
         if (response.success) {
-          this.showMessage('‚úÖ Conexi√≥n SMTP exitosa', 'success');
+          this.showMessage('? ConexiÛn SMTP exitosa', 'success');
         } else {
-          this.showMessage(`‚ùå Error en la conexi√≥n: ${response.errorDetails ?? response.message}`, 'error');
+          this.showMessage(`? Error en la conexiÛn: ${response.errorDetails ?? response.message}`, 'error');
         }
         this.testing = false;
       },
       error: (error: any) => {
         this.logger.error('Error testing email config:', error);
-        this.showMessage('Error al probar la conexi√≥n', 'error');
+        this.showMessage('Error al probar la conexiÛn', 'error');
         this.testing = false;
       }
     });
@@ -268,14 +268,14 @@ export class EmailConfigForm implements OnInit {
     request.subscribe({
       next: (response) => {
         const message = this.isEditMode 
-          ? 'Configuraci√≥n actualizada exitosamente'
-          : 'Configuraci√≥n creada exitosamente';
+          ? 'ConfiguraciÛn actualizada exitosamente'
+          : 'ConfiguraciÛn creada exitosamente';
         this.showMessage(message, 'success');
         this.router.navigate(['/configuracion/email']);
       },
       error: (error) => {
         this.logger.error('Error saving email config:', error);
-        this.showMessage('Error al guardar la configuraci√≥n', 'error');
+        this.showMessage('Error al guardar la configuraciÛn', 'error');
         this.loading = false;
       }
     });
@@ -301,32 +301,33 @@ export class EmailConfigForm implements OnInit {
       return `${this.getFieldLabel(fieldName)} es requerido`;
     }
     if (control?.hasError('email')) {
-      return 'Ingrese un email v√°lido';
+      return 'Ingrese un email v·lido';
     }
     if (control?.hasError('minlength')) {
-      return `M√≠nimo ${control.errors?.['minlength'].requiredLength} caracteres`;
+      return `MÌnimo ${control.errors?.['minlength'].requiredLength} caracteres`;
     }
     if (control?.hasError('min')) {
-      return `Valor m√≠nimo: ${control.errors?.['min'].min}`;
+      return `Valor mÌnimo: ${control.errors?.['min'].min}`;
     }
     if (control?.hasError('max')) {
-      return `Valor m√°ximo: ${control.errors?.['max'].max}`;
+      return `Valor m·ximo: ${control.errors?.['max'].max}`;
     }
     return '';
   }
 
   private getFieldLabel(fieldName: string): string {
     const labels: { [key: string]: string } = {
-      configName: 'Nombre de configuraci√≥n',
+      configName: 'Nombre de configuraciÛn',
       smtpServer: 'Servidor SMTP',
       smtpPort: 'Puerto SMTP',
       username: 'Usuario',
-      password: 'Contrase√±a',
+      password: 'ContraseÒa',
       fromEmail: 'Email remitente',
       fromName: 'Nombre remitente',
       timeoutSeconds: 'Timeout',
-      maxRetries: 'M√°x. reintentos'
+      maxRetries: 'M·x. reintentos'
     };
     return labels[fieldName] || fieldName;
   }
 }
+

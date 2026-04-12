@@ -1,0 +1,101 @@
+.operational-analytics {
+  padding: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  @media (max-width: 768px) { padding: 16px; }
+}
+
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  @media (max-width: 900px) { grid-template-columns: 1fr; }
+}
+
+.section-gap {
+  margin-bottom: 20px;
+}
+
+.kpi-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.alert-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.alert-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.1);
+  color: #92400e;
+  font-size: 12px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+.kpi-mini {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+
+  mat-icon { font-size: 28px; color: var(--text-secondary); }
+
+  &__value { display: block; font-size: 22px; font-weight: 700; color: var(--text-primary); }
+  &__label { display: block; font-size: 11px; color: var(--text-secondary); }
+
+  &--primary { border-left: 4px solid var(--color-primary); mat-icon { color: var(--color-primary); } }
+  &--success  { border-left: 4px solid #10b981; mat-icon { color: #10b981; } }
+  &--warning  { border-left: 4px solid #f59e0b; mat-icon { color: #f59e0b; } }
+}
+
+.chip {
+  display: inline-flex; align-items: center; padding: 3px 10px;
+  border-radius: 12px; font-size: 12px; font-weight: 500;
+  &--success { background: rgba(16,185,129,.14); color: #047857; }
+  &--warning  { background: rgba(245,158,11,.16); color: #92400e; }
+  &--danger   { background: rgba(239,68,68,.16); color: #b91c1c; }
+}
+
+.agente-table {
+  width: 100%;
+  font-size: 13px;
+  th { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+}
+
+.heatmap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+
+  th, td {
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    text-align: center;
+  }
+
+  th:first-child,
+  td:first-child {
+    text-align: left;
+    min-width: 180px;
+  }
+}
+
+.muted {
+  color: var(--text-secondary);
+  margin: 0;
+}

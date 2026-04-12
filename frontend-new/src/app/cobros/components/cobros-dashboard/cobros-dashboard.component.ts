@@ -30,6 +30,7 @@ import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode, parseBackend
 import { ExportService, ExportColumn } from '../../../shared/services/export.service';
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 import { LoggingService } from '../../../services/logging.service';
+import { CountUpDirective } from '../../../shared/directives/count-up.directive';
 
 export interface PeriodicidadTab {
   label: string;
@@ -59,7 +60,8 @@ export interface PeriodicidadTab {
     MatProgressSpinnerModule,
     MatTooltipModule,
     MatTabsModule,
-    MatBadgeModule
+    MatBadgeModule,
+    CountUpDirective
   ],
   templateUrl: './cobros-dashboard.component.html',
   styleUrls: ['./cobros-dashboard.component.scss']
@@ -69,16 +71,13 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   @ViewChildren(MatSort) sorts!: QueryList<MatSort>;
 
   displayedColumns: string[] = [
-    'numeroRecibo',
+    'semaforo',
+    'acciones',
     'numeroPoliza',
     'cliente',
-    'correoElectronico',
     'fechaVencimiento',
     'montoTotal',
-    'estado',
-    'fechaCobro',
-    'metodoPago',
-    'acciones'
+    'estado'
   ];
 
   // ─── Tabs de periodicidad ───────────────────────────────────────────────────
@@ -287,6 +286,47 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
 
   verDetalle(cobro: Cobro): void {
     this.router.navigate(['/cobros/detalle', cobro.id]);
+  }
+
+  cambiarEstado(cobro: Cobro, nuevoEstado: EstadoCobro): void {
+    this.cobrosService.cambiarEstadoCobro(cobro.id, nuevoEstado).subscribe({
+      next: () => {
+        this.showMessage('Estado actualizado correctamente');
+        this.reloadCurrentTab();
+        this.loadStats();
+      },
+      error: (err) => {
+        this.showMessage('Error al cambiar estado: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+      }
+    });
+  }
+
+  getSemaforoClass(cobro: Cobro): string {
+    if (cobro.estado === EstadoCobro.Cobrado || cobro.estado === EstadoCobro.Cancelado) {
+      return 'semaforo-gris';
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const venc = this.safeDate(cobro.fechaVencimiento);
+    if (!venc) return 'semaforo-gris';
+    const diff = Math.floor((venc.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    if (diff < 0) return 'semaforo-rojo';
+    if (diff <= 7) return 'semaforo-amarillo';
+    return 'semaforo-verde';
+  }
+
+  getSemaforoTooltip(cobro: Cobro): string {
+    if (cobro.estado === EstadoCobro.Cobrado) return 'Cobrado';
+    if (cobro.estado === EstadoCobro.Cancelado) return 'Cancelado';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const venc = this.safeDate(cobro.fechaVencimiento);
+    if (!venc) return 'Sin fecha';
+    const diff = Math.floor((venc.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    if (diff < 0) return `Vencido hace ${Math.abs(diff)} día${Math.abs(diff) !== 1 ? 's' : ''}`;
+    if (diff === 0) return 'Vence hoy';
+    if (diff <= 7) return `Vence en ${diff} día${diff !== 1 ? 's' : ''}`;
+    return `Vence en ${diff} días`;
   }
 
   enviarEmail(cobro: Cobro): void {

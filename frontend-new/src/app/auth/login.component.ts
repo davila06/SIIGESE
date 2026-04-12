@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { LoggingService } from '../services/logging.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,9 @@ export class LoginComponent implements OnInit {
   isResettingPassword = false;
   hidePassword = true;
   showResetForm = false;
+  loginError = '';
+  readonly isDevelopment = !environment.production;
+  readonly currentYear = new Date().getFullYear();
 
   private readonly logger = inject(LoggingService);
 
@@ -45,6 +49,7 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
+      this.loginError = '';
       const { email, password } = this.loginForm.value;
       
       this.authService.login(email, password).subscribe({
@@ -54,6 +59,7 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           this.logger.error('âŒ Error en login:', error);
+          this.loginError = error?.error?.message || 'No se pudo iniciar sesión. Verifica tus credenciales.';
           this.isLoading = false;
         }
       });

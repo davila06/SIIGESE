@@ -2,9 +2,6 @@
 -- Fecha: 2025-12-17
 -- Descripción: Permite almacenar notas y observaciones sobre cada póliza
 
-USE SiinadsegDB;
-GO
-
 -- Verificar si la columna ya existe
 IF NOT EXISTS (
     SELECT * FROM sys.columns 

@@ -123,4 +123,9 @@ export class CobrosService {
   enviarEmailCobro(id: number): Observable<{ message: string }> {
     return this.http.post<{ message: string }>(`${this.apiUrl}/${id}/enviar-email`, {});
   }
+
+  // Cambiar estado de un cobro directamente
+  cambiarEstadoCobro(id: number, estado: EstadoCobro): Observable<Cobro> {
+    return this.http.put<Cobro>(`${this.apiUrl}/${id}`, { id, estado });
+  }
 }

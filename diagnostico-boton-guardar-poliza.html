@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔧 Diagnóstico: Botón Guardar Póliza Deshabilitado</title>
+    <title>ðŸ”§ DiagnÃ³stico: BotÃ³n Guardar PÃ³liza Deshabilitado</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -157,18 +157,18 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔧 Diagnóstico: Botón Guardar Póliza Deshabilitado</h1>
-            <p>Herramienta de diagnóstico para identificar por qué el botón "Guardar Póliza" está siempre deshabilitado</p>
+            <h1>ðŸ”§ DiagnÃ³stico: BotÃ³n Guardar PÃ³liza Deshabilitado</h1>
+            <p>Herramienta de diagnÃ³stico para identificar por quÃ© el botÃ³n "Guardar PÃ³liza" estÃ¡ siempre deshabilitado</p>
         </div>
 
         <div class="diagnostic-section">
-            <h2>🔍 Problema Identificado</h2>
+            <h2>ðŸ” Problema Identificado</h2>
             <div class="warning">
-                <strong>⚠️ Síntoma:</strong> El botón "Guardar Póliza" aparece siempre deshabilitado (gris) y no permite hacer click, 
-                independientemente de si los campos están llenos o no.
+                <strong>âš ï¸ SÃ­ntoma:</strong> El botÃ³n "Guardar PÃ³liza" aparece siempre deshabilitado (gris) y no permite hacer click, 
+                independientemente de si los campos estÃ¡n llenos o no.
             </div>
             
-            <h3>📋 Código Actual del Botón</h3>
+            <h3>ðŸ“‹ CÃ³digo Actual del BotÃ³n</h3>
             <div class="code-block">
 &lt;button mat-raised-button 
         color="primary" 
@@ -180,15 +180,15 @@
             </div>
 
             <div class="info">
-                <strong>🎯 Análisis:</strong> El botón se deshabilita cuando <code>polizaForm.invalid</code> es <code>true</code> 
+                <strong>ðŸŽ¯ AnÃ¡lisis:</strong> El botÃ³n se deshabilita cuando <code>polizaForm.invalid</code> es <code>true</code> 
                 o cuando <code>isLoading</code> es <code>true</code>.
             </div>
         </div>
 
         <div class="problem-section">
-            <h2>🚨 Posibles Causas del Problema</h2>
+            <h2>ðŸš¨ Posibles Causas del Problema</h2>
             
-            <h3>1. 📝 Validaciones de Campos Requeridos</h3>
+            <h3>1. ðŸ“ Validaciones de Campos Requeridos</h3>
             <div class="field-check">
                 <span><strong>numeroPoliza:</strong> required, maxLength(50)</span>
                 <span class="field-status required">REQUERIDO</span>
@@ -218,76 +218,76 @@
                 <span class="field-status required">REQUERIDO</span>
             </div>
 
-            <h3>2. 🔄 Estado de Carga (isLoading)</h3>
+            <h3>2. ðŸ”„ Estado de Carga (isLoading)</h3>
             <div class="info">
-                Si <code>isLoading</code> está en <code>true</code>, el botón se mantiene deshabilitado.
+                Si <code>isLoading</code> estÃ¡ en <code>true</code>, el botÃ³n se mantiene deshabilitado.
             </div>
 
-            <h3>3. 📅 Problema con Campo de Fecha</h3>
+            <h3>3. ðŸ“… Problema con Campo de Fecha</h3>
             <div class="warning">
-                <strong>Sospecha Principal:</strong> El campo <code>fechaVigencia</code> podría tener problemas de formato 
-                o inicialización que mantienen el formulario inválido.
+                <strong>Sospecha Principal:</strong> El campo <code>fechaVigencia</code> podrÃ­a tener problemas de formato 
+                o inicializaciÃ³n que mantienen el formulario invÃ¡lido.
             </div>
         </div>
 
         <div class="solution-section">
-            <h2>🔧 Plan de Diagnóstico</h2>
+            <h2>ðŸ”§ Plan de DiagnÃ³stico</h2>
             
             <ol class="step-list">
                 <li>
                     <span class="step-number">1</span>
                     <div>
-                        <strong>Abrir Aplicación y Consola de Desarrollador</strong>
+                        <strong>Abrir AplicaciÃ³n y Consola de Desarrollador</strong>
                         <br>
-                        <button class="test-button" onclick="openApp()">🌐 Abrir SIIGESE</button>
-                        <button class="test-button" onclick="openConsole()">🔧 Abrir DevTools (F12)</button>
+                        <button class="test-button" onclick="openApp()">ðŸŒ Abrir OmnIA</button>
+                        <button class="test-button" onclick="openConsole()">ðŸ”§ Abrir DevTools (F12)</button>
                     </div>
                 </li>
                 
                 <li>
                     <span class="step-number">2</span>
                     <div>
-                        <strong>Ir a Módulo de Pólizas</strong>
+                        <strong>Ir a MÃ³dulo de PÃ³lizas</strong>
                         <br>
-                        <button class="test-button" onclick="openPolizas()">📄 Ir a Pólizas</button>
+                        <button class="test-button" onclick="openPolizas()">ðŸ“„ Ir a PÃ³lizas</button>
                     </div>
                 </li>
                 
                 <li>
                     <span class="step-number">3</span>
                     <div>
-                        <strong>Ejecutar Comandos de Diagnóstico en Consola</strong>
+                        <strong>Ejecutar Comandos de DiagnÃ³stico en Consola</strong>
                         <br>
-                        <button class="test-button" onclick="copyDiagnosticCode()">📋 Copiar Código Diagnóstico</button>
+                        <button class="test-button" onclick="copyDiagnosticCode()">ðŸ“‹ Copiar CÃ³digo DiagnÃ³stico</button>
                     </div>
                 </li>
             </ol>
         </div>
 
         <div class="diagnostic-section">
-            <h2>🧪 Código de Diagnóstico para Consola</h2>
-            <p>Copia y pega este código en la consola del navegador (F12) cuando estés en la página de pólizas:</p>
+            <h2>ðŸ§ª CÃ³digo de DiagnÃ³stico para Consola</h2>
+            <p>Copia y pega este cÃ³digo en la consola del navegador (F12) cuando estÃ©s en la pÃ¡gina de pÃ³lizas:</p>
             
             <div class="code-block" id="diagnosticCode">
-// 🔍 DIAGNÓSTICO COMPLETO DEL FORMULARIO DE PÓLIZAS
-console.log('🔧 === DIAGNÓSTICO DEL BOTÓN GUARDAR PÓLIZA ===');
+// ðŸ” DIAGNÃ“STICO COMPLETO DEL FORMULARIO DE PÃ“LIZAS
+console.log('ðŸ”§ === DIAGNÃ“STICO DEL BOTÃ“N GUARDAR PÃ“LIZA ===');
 
-// Buscar el componente de pólizas
+// Buscar el componente de pÃ³lizas
 const polizasComponent = ng.getOwningComponent(document.querySelector('app-polizas'));
 
 if (polizasComponent) {
-  console.log('✅ Componente encontrado:', polizasComponent);
+  console.log('âœ… Componente encontrado:', polizasComponent);
   
   // Verificar estado del formulario
   const form = polizasComponent.polizaForm;
-  console.log('📝 Estado del formulario:');
-  console.log('- Válido:', form.valid);
-  console.log('- Inválido:', form.invalid);
+  console.log('ðŸ“ Estado del formulario:');
+  console.log('- VÃ¡lido:', form.valid);
+  console.log('- InvÃ¡lido:', form.invalid);
   console.log('- Tocado:', form.touched);
   console.log('- Sucio:', form.dirty);
   
   // Verificar cada campo individual
-  console.log('\n📋 Estado de cada campo:');
+  console.log('\nðŸ“‹ Estado de cada campo:');
   Object.keys(form.controls).forEach(key => {
     const control = form.get(key);
     console.log(`${key}:`, {
@@ -301,36 +301,36 @@ if (polizasComponent) {
   });
   
   // Verificar estado de loading
-  console.log('\n🔄 Estado de carga:', polizasComponent.isLoading);
+  console.log('\nðŸ”„ Estado de carga:', polizasComponent.isLoading);
   
-  // Verificar modo de edición
-  console.log('✏️ Modo edición:', polizasComponent.isEditMode);
+  // Verificar modo de ediciÃ³n
+  console.log('âœï¸ Modo ediciÃ³n:', polizasComponent.isEditMode);
   
-  // Verificar botón específicamente
+  // Verificar botÃ³n especÃ­ficamente
   const submitButton = document.querySelector('button[type="submit"]');
   if (submitButton) {
-    console.log('\n🔘 Estado del botón:');
+    console.log('\nðŸ”˜ Estado del botÃ³n:');
     console.log('- Deshabilitado:', submitButton.disabled);
     console.log('- Clase disabled:', submitButton.classList.contains('mat-button-disabled'));
   }
   
   // Mostrar valores del formulario
-  console.log('\n📊 Valores actuales del formulario:', form.value);
+  console.log('\nðŸ“Š Valores actuales del formulario:', form.value);
   
 } else {
-  console.log('❌ No se encontró el componente de pólizas');
+  console.log('âŒ No se encontrÃ³ el componente de pÃ³lizas');
 }
             </div>
             
-            <button class="test-button" onclick="copyDiagnosticCode()">📋 Copiar Código Completo</button>
+            <button class="test-button" onclick="copyDiagnosticCode()">ðŸ“‹ Copiar CÃ³digo Completo</button>
         </div>
 
         <div class="solution-section">
-            <h2>🛠️ Posibles Soluciones</h2>
+            <h2>ðŸ› ï¸ Posibles Soluciones</h2>
             
-            <h3>Solución 1: 📅 Arreglar Inicialización de Fecha</h3>
+            <h3>SoluciÃ³n 1: ðŸ“… Arreglar InicializaciÃ³n de Fecha</h3>
             <div class="code-block">
-// En resetForm(), agregar inicialización de fecha
+// En resetForm(), agregar inicializaciÃ³n de fecha
 this.polizaForm.patchValue({
   perfilId: 1,
   moneda: CURRENCY_CONSTANTS.DEFAULT_CURRENCY,
@@ -339,9 +339,9 @@ this.polizaForm.patchValue({
 });
             </div>
 
-            <h3>Solución 2: 🔧 Validación Contextual Similar a Usuarios</h3>
+            <h3>SoluciÃ³n 2: ðŸ”§ ValidaciÃ³n Contextual Similar a Usuarios</h3>
             <div class="code-block">
-// Crear método similar al isFormValidForMode() de usuarios
+// Crear mÃ©todo similar al isFormValidForMode() de usuarios
 isFormValidForSubmission(): boolean {
   const requiredFields = ['numeroPoliza', 'modalidad', 'nombreAsegurado', 
                          'prima', 'fechaVigencia', 'frecuencia', 'aseguradora'];
@@ -352,19 +352,19 @@ isFormValidForSubmission(): boolean {
   });
 }
 
-// Y cambiar el botón a:
+// Y cambiar el botÃ³n a:
 [disabled]="!isFormValidForSubmission() || isLoading"
             </div>
 
-            <h3>Solución 3: 🎯 Debug en Tiempo Real</h3>
+            <h3>SoluciÃ³n 3: ðŸŽ¯ Debug en Tiempo Real</h3>
             <div class="code-block">
 // Agregar logging en tiempo real en el componente
 ngAfterViewInit(): void {
-  // ... código existente ...
+  // ... cÃ³digo existente ...
   
   // Debug del formulario
   this.polizaForm.valueChanges.subscribe(value => {
-    console.log('📝 Formulario cambió:', {
+    console.log('ðŸ“ Formulario cambiÃ³:', {
       valid: this.polizaForm.valid,
       invalid: this.polizaForm.invalid,
       value: value
@@ -388,34 +388,34 @@ ngAfterViewInit(): void {
         }
 
         function openApp() {
-            log('🌐 Abriendo SIIGESE...');
+            log('ðŸŒ Abriendo OmnIA...');
             window.open(APP_URL, '_blank');
         }
 
         function openConsole() {
-            log('🔧 Presiona F12 para abrir DevTools');
+            log('ðŸ”§ Presiona F12 para abrir DevTools');
             alert('Presiona F12 para abrir las Herramientas de Desarrollador');
         }
 
         function openPolizas() {
-            log('📄 Abriendo módulo de pólizas...');
+            log('ðŸ“„ Abriendo mÃ³dulo de pÃ³lizas...');
             window.open(APP_URL + '/polizas', '_blank');
         }
 
         function copyDiagnosticCode() {
             const code = document.getElementById('diagnosticCode').textContent;
             navigator.clipboard.writeText(code).then(() => {
-                log('📋 Código de diagnóstico copiado al portapapeles');
-                alert('✅ Código copiado! Pégalo en la consola del navegador (F12) cuando estés en la página de pólizas');
+                log('ðŸ“‹ CÃ³digo de diagnÃ³stico copiado al portapapeles');
+                alert('âœ… CÃ³digo copiado! PÃ©galo en la consola del navegador (F12) cuando estÃ©s en la pÃ¡gina de pÃ³lizas');
             }).catch(err => {
-                log('❌ Error al copiar: ' + err);
-                alert('❌ Error al copiar. Selecciona y copia manualmente el código.');
+                log('âŒ Error al copiar: ' + err);
+                alert('âŒ Error al copiar. Selecciona y copia manualmente el cÃ³digo.');
             });
         }
 
         // Log inicial
-        log('🔧 Herramienta de diagnóstico cargada');
-        log('📋 Sigue los pasos para diagnosticar el problema del botón');
+        log('ðŸ”§ Herramienta de diagnÃ³stico cargada');
+        log('ðŸ“‹ Sigue los pasos para diagnosticar el problema del botÃ³n');
     </script>
 </body>
 </html>

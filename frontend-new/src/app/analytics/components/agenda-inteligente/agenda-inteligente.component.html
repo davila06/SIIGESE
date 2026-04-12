@@ -1,0 +1,133 @@
+<div class="agenda-root">
+
+  <!-- ── Header ─────────────────────────────────────────────────────────── -->
+  <div class="agenda-header">
+    <div class="agenda-title-wrap">
+      <mat-icon class="header-icon">today</mat-icon>
+      <div>
+        <h2 class="agenda-title">Agenda Inteligente</h2>
+        <p class="agenda-subtitle" *ngIf="agenda">
+          {{ formatFecha(agenda.fechaGeneracion) }}
+        </p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <span class="last-update" *ngIf="lastUpdated">
+        Actualizado {{ lastUpdated | date:'HH:mm' }}
+      </span>
+      <button mat-stroked-button (click)="load()" [disabled]="loading" color="primary">
+        <mat-icon>refresh</mat-icon>
+        Actualizar
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Loading ────────────────────────────────────────────────────────── -->
+  <div class="loading-state" *ngIf="loading">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Cargando agenda…</p>
+  </div>
+
+  <!-- ── Error ──────────────────────────────────────────────────────────── -->
+  <div class="error-state" *ngIf="!loading && error">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-flat-button color="warn" (click)="load()">Reintentar</button>
+  </div>
+
+  <!-- ── Content ────────────────────────────────────────────────────────── -->
+  <ng-container *ngIf="!loading && !error && agenda">
+
+    <!-- KPI Badge strip -->
+    <div class="kpi-strip">
+      <div class="kpi-badge" [class]="agenda.totalAcciones > 0 ? 'kpi-badge--active' : 'kpi-badge--clear'">
+        <mat-icon>{{ agenda.totalAcciones > 0 ? 'notifications_active' : 'check_circle' }}</mat-icon>
+        <span class="kpi-num">{{ agenda.totalAcciones }}</span>
+        <span class="kpi-label">{{ agenda.totalAcciones === 1 ? 'acción pendiente' : 'acciones pendientes' }}</span>
+      </div>
+
+      <ng-container *ngFor="let s of agenda.secciones; trackBy: trackBySeccion">
+        <div class="kpi-mini" [class]="getNivelClass(s.nivel)">
+          <mat-icon>{{ s.icono }}</mat-icon>
+          <span class="kpi-mini-num">{{ s.total }}</span>
+          <span class="kpi-mini-label">{{ s.titulo }}</span>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- ── Empty state ────────────────────────────────────────────────── -->
+    <div class="empty-state" *ngIf="agenda.totalAcciones === 0">
+      <mat-icon class="empty-icon">check_circle</mat-icon>
+      <h3>Todo en orden</h3>
+      <p>No hay acciones pendientes para hoy.</p>
+    </div>
+
+    <!-- ── Secciones ──────────────────────────────────────────────────── -->
+    <div class="secciones-wrap" *ngIf="agenda.totalAcciones > 0">
+
+      <div class="seccion-card" *ngFor="let seccion of agenda.secciones; trackBy: trackBySeccion"
+           [class]="'seccion-card--' + seccion.nivel">
+
+        <!-- Seccion header -->
+        <div class="seccion-header" [class]="'seccion-header--' + seccion.nivel">
+          <mat-icon class="seccion-icon">{{ seccion.icono }}</mat-icon>
+          <span class="seccion-titulo">{{ seccion.titulo }}</span>
+          <span class="seccion-badge">{{ seccion.total }}</span>
+        </div>
+
+        <!-- Items list -->
+        <div class="items-list">
+          <div class="agenda-item" *ngFor="let item of seccion.items; trackBy: trackByTitulo"
+               [class]="'agenda-item--' + item.nivel">
+
+            <div class="item-icon-wrap" [class]="'item-icon--' + item.nivel">
+              <mat-icon>{{ getTipoIcon(item.tipo) }}</mat-icon>
+            </div>
+
+            <div class="item-body">
+              <div class="item-header-row">
+                <span class="item-titulo">{{ item.titulo }}</span>
+                <div class="item-chips">
+                  <!-- Score chip for leads -->
+                  <span class="chip chip--lead" *ngIf="item.score != null">
+                    <mat-icon>trending_up</mat-icon>
+                    Score {{ item.score }}
+                  </span>
+                  <!-- Days chip -->
+                  <span class="chip" *ngIf="item.diasVencido != null && item.diasVencido > 0"
+                        [class.chip--danger]="item.diasVencido > 30"
+                        [class.chip--warning]="item.diasVencido > 0 && item.diasVencido <= 30">
+                    <mat-icon>schedule</mat-icon>
+                    {{ item.diasVencido }} día{{ item.diasVencido !== 1 ? 's' : '' }} vencido
+                  </span>
+                  <!-- Días para vencer (negative = not yet expired) -->
+                  <span class="chip chip--aviso" *ngIf="item.diasVencido != null && item.diasVencido <= 0 && item.diasVencido > -8">
+                    <mat-icon>event_upcoming</mat-icon>
+                    {{ item.diasVencido === 0 ? 'HOY' : 'en ' + (-item.diasVencido) + ' día(s)' }}
+                  </span>
+                  <!-- Monto chip -->
+                  <span class="chip chip--info" *ngIf="item.monto != null">
+                    {{ formatCRC(item.monto) }}
+                  </span>
+                </div>
+              </div>
+              <p class="item-desc">{{ item.descripcion }}</p>
+            </div>
+
+            <div class="item-actions">
+              <a mat-icon-button [routerLink]="item.navLink" *ngIf="item.navLink"
+                 [matTooltip]="'Ir a ' + item.tipo" color="primary">
+                <mat-icon>arrow_forward</mat-icon>
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

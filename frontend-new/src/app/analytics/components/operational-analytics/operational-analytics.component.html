@@ -1,0 +1,210 @@
+﻿<div class="operational-analytics">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">people</mat-icon>
+      <div>
+        <h1 class="page-header__title">Dashboard Operacional</h1>
+        <span class="page-header__subtitle">Carga de agentes, actividad de usuarios y mÃ©tricas de IA Chat</span>
+      </div>
+    </div>
+    <button mat-stroked-button (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon> Actualizar
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <ng-container *ngIf="!loading && !error && data">
+
+    <div class="alert-row" *ngIf="data.alertas.length > 0">
+      <div class="alert-chip" *ngFor="let alerta of data.alertas">
+        <mat-icon>warning</mat-icon>
+        <span>{{ alerta }}</span>
+      </div>
+    </div>
+
+    <!-- Chat IA KPIs -->
+    <div class="kpi-row section-gap">
+      <div class="kpi-mini kpi-mini--primary">
+        <mat-icon>smart_toy</mat-icon>
+        <div>
+          <span class="kpi-mini__value">{{ data.chatIA.totalSesiones | number }}</span>
+          <span class="kpi-mini__label">Sesiones IA</span>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <mat-icon>pending</mat-icon>
+        <div>
+          <span class="kpi-mini__value">{{ data.chatIA.sesionesActivas | number }}</span>
+          <span class="kpi-mini__label">Sesiones activas</span>
+        </div>
+      </div>
+      <div class="kpi-mini">
+        <mat-icon>chat</mat-icon>
+        <div>
+          <span class="kpi-mini__value">{{ data.chatIA.mensajesPorSesionPromedio | number:'1.1-1' }}</span>
+          <span class="kpi-mini__label">Mensajes / sesion</span>
+        </div>
+      </div>
+      <div class="kpi-mini kpi-mini--success">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <span class="kpi-mini__value">{{ data.chatIA.tasaSatisfaccion | number:'1.1-1' }}%</span>
+          <span class="kpi-mini__label">Satisfaccion chat</span>
+        </div>
+      </div>
+      <div class="kpi-mini kpi-mini--warning">
+        <mat-icon>timer</mat-icon>
+        <div>
+          <span class="kpi-mini__value">{{ data.chatIA.tiempoProcesPromedioMs | number:'1.0-0' }} ms</span>
+          <span class="kpi-mini__label">Tiempo IA promedio</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carga por agente -->
+    <div class="grid-2col section-gap">
+
+      <app-chart-card title="Carga de Trabajo por Agente" icon="assignment_ind"
+        subtitle="Reclamos activos vs criticos">
+        <ngx-charts-bar-vertical-2d [animations]="false"
+          [results]="cargaChart"
+          [scheme]="colorScheme"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [legend]="true" [legendPosition]="legendBelow"
+          >
+        </ngx-charts-bar-vertical-2d>
+      </app-chart-card>
+
+      <app-chart-card title="Score SLA por Agente" icon="grade"
+        tooltip="Porcentaje de reclamos dentro del tiempo lÃ­mite SLA por agente">
+        <ngx-charts-bar-horizontal [animations]="false"
+          [results]="slaAgenteChart"
+          [scheme]="slaColors"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          >
+        </ngx-charts-bar-horizontal>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Tabla agentes detalle -->
+    <app-chart-card title="Detalle de Carga por Agente" icon="table_rows"
+      class="section-gap">
+      <table mat-table [dataSource]="data.cargaReclamos" class="agente-table">
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Agente</th>
+          <td mat-cell *matCellDef="let a"><strong>{{ a.nombreAgente }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="reclamos">
+          <th mat-header-cell *matHeaderCellDef>Reclamos</th>
+          <td mat-cell *matCellDef="let a">{{ a.reclamosActivos }}</td>
+        </ng-container>
+        <ng-container matColumnDef="alta">
+          <th mat-header-cell *matHeaderCellDef>Alta</th>
+          <td mat-cell *matCellDef="let a">{{ a.reclamosAltaPrioridad }}</td>
+        </ng-container>
+        <ng-container matColumnDef="criticos">
+          <th mat-header-cell *matHeaderCellDef>Criticos</th>
+          <td mat-cell *matCellDef="let a">{{ a.reclamosCriticos }}</td>
+        </ng-container>
+        <ng-container matColumnDef="acciones12w">
+          <th mat-header-cell *matHeaderCellDef>Acciones 12W</th>
+          <td mat-cell *matCellDef="let a">{{ a.totalAccionesUltimas12Semanas }}</td>
+        </ng-container>
+        <ng-container matColumnDef="sla">
+          <th mat-header-cell *matHeaderCellDef>SLA Score</th>
+          <td mat-cell *matCellDef="let a">
+            <span class="chip" [class]="slaClass(a.porcentajeSla)">{{ a.porcentajeSla | number:'1.1-1' }}%</span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['nombre','reclamos','alta','criticos','acciones12w','sla']"></tr>
+        <tr mat-row *matRowDef="let r; columns: ['nombre','reclamos','alta','criticos','acciones12w','sla'];"></tr>
+      </table>
+    </app-chart-card>
+
+    <div class="grid-2col section-gap">
+      <app-chart-card title="Chat IA por Semana" icon="timeline"
+        subtitle="Sesiones activas vs cerradas (8 semanas)">
+        <ngx-charts-line-chart [animations]="false"
+          [results]="chatWeeklyChart"
+          [scheme]="colorScheme"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [legend]="true" [legendPosition]="legendBelow"
+          [autoScale]="true">
+        </ngx-charts-line-chart>
+      </app-chart-card>
+
+      <app-chart-card title="Rendimiento de Endpoints" icon="speed"
+        subtitle="Top endpoints por latencia p90 (ms)">
+        <ngx-charts-bar-horizontal [animations]="false"
+          [results]="endpointP90Chart"
+          [scheme]="slaColors"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true">
+        </ngx-charts-bar-horizontal>
+      </app-chart-card>
+    </div>
+
+    <app-chart-card title="Heatmap de Actividad por Agente" icon="calendar_view_week"
+      class="section-gap">
+      <table class="heatmap-table" *ngIf="heatmapColumns.length > 0">
+        <thead>
+          <tr>
+            <th>Agente</th>
+            <th *ngFor="let col of heatmapColumns">{{ col }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of data.actividadHeatmapPorAgente">
+            <td><strong>{{ row.nombreAgente }}</strong></td>
+            <td *ngFor="let cell of row.semanas">{{ cell.acciones }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted" *ngIf="heatmapColumns.length === 0">Sin actividad suficiente para construir heatmap.</p>
+    </app-chart-card>
+
+    <!-- Actividad de Usuarios -->
+    <app-chart-card title="Actividad Reciente de Usuarios" icon="manage_accounts">
+      <table mat-table [dataSource]="data.ultimoAcceso" class="agente-table">
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef>Usuario</th>
+          <td mat-cell *matCellDef="let u"><strong>{{ u.nombreUsuario }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="rol">
+          <th mat-header-cell *matHeaderCellDef>Rol</th>
+          <td mat-cell *matCellDef="let u">{{ u.rol }}</td>
+        </ng-container>
+        <ng-container matColumnDef="accionesAyer">
+          <th mat-header-cell *matHeaderCellDef>Acciones ayer</th>
+          <td mat-cell *matCellDef="let u">{{ u.accionesAyer | number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="ultimo">
+          <th mat-header-cell *matHeaderCellDef>Ultimo login</th>
+          <td mat-cell *matCellDef="let u">{{ u.ultimoLogin ? (u.ultimoLogin | date:'dd/MM/yyyy HH:mm') : 'Sin registro' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="dias">
+          <th mat-header-cell *matHeaderCellDef>Dias sin acceso</th>
+          <td mat-cell *matCellDef="let u">
+            <span class="chip" [class]="accesoClass(u.diasSinAcceso)">{{ u.diasSinAcceso }}</span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="['nombre','rol','accionesAyer','ultimo','dias']"></tr>
+        <tr mat-row *matRowDef="let r; columns: ['nombre','rol','accionesAyer','ultimo','dias'];"></tr>
+      </table>
+    </app-chart-card>
+
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon><p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+
+</div>
+

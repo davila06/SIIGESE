@@ -12,6 +12,7 @@ namespace Application.Interfaces
         Task<ApiResponse<EmailResponseDto>> SendReclamoRecibidoEmailAsync(ReclamoRecibidoEmailRequestDto request);
         Task<ApiResponse<EmailResponseDto>> SendBienvenidaEmailAsync(BienvenidaEmailRequestDto request);
         Task<ApiResponse<List<EmailHistoryResponseDto>>> GetEmailHistoryAsync(int pageNumber, int pageSize);
+        Task<ApiResponse<EmailResponseDto>> ResendEmailAsync(int id);
         Task<ApiResponse<List<EmailResponseDto>>> SendAutomaticCobroVencidoNotificationsAsync();
         Task<ApiResponse<List<EmailResponseDto>>> SendAutomaticPolizasPorVencerNotificationsAsync();
     }

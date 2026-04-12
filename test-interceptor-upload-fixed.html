@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test: Interceptor Upload Corregido - SIIGESE</title>
+    <title>Test: Interceptor Upload Corregido - OmnIA</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -94,79 +94,79 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔧 Test: Mock Interceptor Corregido</h1>
+        <h1>ðŸ”§ Test: Mock Interceptor Corregido</h1>
         
         <div class="test-section error-section">
-            <h3>❌ Problema Detectado en Logs</h3>
-            <p>En los logs anteriores se observó:</p>
+            <h3>âŒ Problema Detectado en Logs</h3>
+            <p>En los logs anteriores se observÃ³:</p>
             <div class="code">
-🔄 Mock API Interceptor: POST http://siinadseg-backend-1019.eastus.azurecontainer.io/api/polizas/upload<br>
-✅ Mock Poliza created: POL-1761155588179
+ðŸ”„ Mock API Interceptor: POST http://siinadseg-backend-1019.eastus.azurecontainer.io/api/polizas/upload<br>
+âœ… Mock Poliza created: POL-1761155588179
             </div>
             <div class="feature-list">
                 <div class="feature-item">
-                    <span class="feature-icon error">❌</span>
+                    <span class="feature-icon error">âŒ</span>
                     <span><strong>Interceptor no detectaba /upload:</strong> Ejecutaba CREATE en lugar de UPLOAD</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon error">❌</span>
-                    <span><strong>Lógica de condiciones incorrecta:</strong> /polizas/upload dentro de /polizas genérico</span>
+                    <span class="feature-icon error">âŒ</span>
+                    <span><strong>LÃ³gica de condiciones incorrecta:</strong> /polizas/upload dentro de /polizas genÃ©rico</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon error">❌</span>
-                    <span><strong>Resultado:</strong> Backend real ejecutándose → PascalCase → undefined</span>
+                    <span class="feature-icon error">âŒ</span>
+                    <span><strong>Resultado:</strong> Backend real ejecutÃ¡ndose â†’ PascalCase â†’ undefined</span>
                 </div>
             </div>
         </div>
 
         <div class="test-section">
-            <h3>🛠️ Correcciones Aplicadas</h3>
+            <h3>ðŸ› ï¸ Correcciones Aplicadas</h3>
             <div class="feature-list">
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
-                    <span><strong>Orden de condiciones corregido:</strong> Upload PRIMERO, luego /polizas genérico</span>
+                    <span class="feature-icon success">âœ…</span>
+                    <span><strong>Orden de condiciones corregido:</strong> Upload PRIMERO, luego /polizas genÃ©rico</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
-                    <span><strong>Detección mejorada:</strong> Busca tanto /polizas/upload como /api/polizas/upload</span>
+                    <span class="feature-icon success">âœ…</span>
+                    <span><strong>DetecciÃ³n mejorada:</strong> Busca tanto /polizas/upload como /api/polizas/upload</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
-                    <span><strong>Logging detallado:</strong> Debug específico para condiciones</span>
+                    <span class="feature-icon success">âœ…</span>
+                    <span><strong>Logging detallado:</strong> Debug especÃ­fico para condiciones</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
+                    <span class="feature-icon success">âœ…</span>
                     <span><strong>Response Mapper:</strong> Backup para manejo de ambos formatos</span>
                 </div>
             </div>
         </div>
 
         <div class="test-section warning-section">
-            <h3>🎯 Nueva Secuencia Esperada</h3>
+            <h3>ðŸŽ¯ Nueva Secuencia Esperada</h3>
             <p>Con las correcciones, los logs deben mostrar:</p>
             <div class="code">
-🔍 Mock Interceptor - URL: http://...polizas/upload Method: POST<br>
-🔍 URL includes /polizas/upload: true<br>
-🔍 URL includes /api/polizas/upload: true<br>
-🔍 Method is POST: true<br>
-📤 Mock handling upload - URL: http://...polizas/upload<br>
-📤 Upload condition matched!<br>
-📤 Mock Excel Upload iniciado<br>
-✅ Mock Excel Upload completado: {errorRecords: 2, ...}
+ðŸ” Mock Interceptor - URL: http://...polizas/upload Method: POST<br>
+ðŸ” URL includes /polizas/upload: true<br>
+ðŸ” URL includes /api/polizas/upload: true<br>
+ðŸ” Method is POST: true<br>
+ðŸ“¤ Mock handling upload - URL: http://...polizas/upload<br>
+ðŸ“¤ Upload condition matched!<br>
+ðŸ“¤ Mock Excel Upload iniciado<br>
+âœ… Mock Excel Upload completado: {errorRecords: 2, ...}
             </div>
         </div>
 
         <div class="test-section">
-            <h3>🚀 Probar la Corrección</h3>
+            <h3>ðŸš€ Probar la CorrecciÃ³n</h3>
             <div style="text-align: center; margin: 20px 0;">
                 <button class="test-button" onclick="openApp()" style="font-size: 18px; padding: 15px 30px;">
-                    🧪 PROBAR UPLOAD CORREGIDO
+                    ðŸ§ª PROBAR UPLOAD CORREGIDO
                 </button>
             </div>
             <p><strong>Pasos:</strong></p>
             <ol>
-                <li>Hacer login con admin@siigese.com / password123</li>
-                <li>Ir al módulo de carga de pólizas</li>
+                <li>Hacer login con admin@omnia.com / password123</li>
+                <li>Ir al mÃ³dulo de carga de pÃ³lizas</li>
                 <li>Abrir consola (F12)</li>
                 <li>Seleccionar y subir cualquier archivo Excel</li>
                 <li>Observar los nuevos logs detallados</li>
@@ -174,52 +174,52 @@
         </div>
 
         <div class="test-section">
-            <h3>✅ Indicadores de Éxito</h3>
+            <h3>âœ… Indicadores de Ã‰xito</h3>
             <div class="feature-list">
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
-                    <span><strong>Log de intercepción:</strong> "📤 Upload condition matched!"</span>
+                    <span class="feature-icon success">âœ…</span>
+                    <span><strong>Log de intercepciÃ³n:</strong> "ðŸ“¤ Upload condition matched!"</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
-                    <span><strong>Log de procesamiento:</strong> "📤 Mock Excel Upload iniciado"</span>
+                    <span class="feature-icon success">âœ…</span>
+                    <span><strong>Log de procesamiento:</strong> "ðŸ“¤ Mock Excel Upload iniciado"</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
+                    <span class="feature-icon success">âœ…</span>
                     <span><strong>Mensaje correcto:</strong> "Error en el procesamiento. 2 errores encontrados"</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon success">✅</span>
-                    <span><strong>NO debe aparecer:</strong> "✅ Mock Poliza created" (ese es CREATE, no UPLOAD)</span>
+                    <span class="feature-icon success">âœ…</span>
+                    <span><strong>NO debe aparecer:</strong> "âœ… Mock Poliza created" (ese es CREATE, no UPLOAD)</span>
                 </div>
             </div>
         </div>
 
         <div class="test-section error-section">
-            <h3>❌ Si Sigue Fallando</h3>
+            <h3>âŒ Si Sigue Fallando</h3>
             <div class="feature-list">
                 <div class="feature-item">
-                    <span class="feature-icon warning">⚠️</span>
-                    <span><strong>Logs que NO queremos ver:</strong> "✅ Mock Poliza created" durante upload</span>
+                    <span class="feature-icon warning">âš ï¸</span>
+                    <span><strong>Logs que NO queremos ver:</strong> "âœ… Mock Poliza created" durante upload</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon error">❌</span>
+                    <span class="feature-icon error">âŒ</span>
                     <span><strong>Error persistente:</strong> "undefined errores encontrados"</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon info">🔧</span>
-                    <span><strong>Solución alternativa:</strong> Response Mapper activado como backup</span>
+                    <span class="feature-icon info">ðŸ”§</span>
+                    <span><strong>SoluciÃ³n alternativa:</strong> Response Mapper activado como backup</span>
                 </div>
             </div>
         </div>
 
         <div class="test-section">
-            <h3>🛠️ Debug Tools</h3>
+            <h3>ðŸ› ï¸ Debug Tools</h3>
             <button class="test-button" onclick="openConsole()">
-                📊 Abrir Consola (F12)
+                ðŸ“Š Abrir Consola (F12)
             </button>
             <button class="test-button" onclick="clearLogs()">
-                🧹 Limpiar Logs
+                ðŸ§¹ Limpiar Logs
             </button>
         </div>
 
@@ -237,26 +237,26 @@
         }
 
         function openApp() {
-            log('🧪 Abriendo SIIGESE para probar upload corregido...');
-            log('🎯 Esperando logs: "📤 Upload condition matched!"');
+            log('ðŸ§ª Abriendo OmnIA para probar upload corregido...');
+            log('ðŸŽ¯ Esperando logs: "ðŸ“¤ Upload condition matched!"');
             window.open(APP_URL, '_blank');
         }
 
         function openConsole() {
-            log('📊 Instrucciones para debugging...');
-            alert('Presiona F12 → Console. Busca logs que empiecen con 📤 y verifica que NO aparezca "Mock Poliza created" durante upload');
+            log('ðŸ“Š Instrucciones para debugging...');
+            alert('Presiona F12 â†’ Console. Busca logs que empiecen con ðŸ“¤ y verifica que NO aparezca "Mock Poliza created" durante upload');
         }
 
         function clearLogs() {
             document.getElementById('logs').innerHTML = '';
-            log('🧹 Logs limpiados - listo para nueva prueba');
+            log('ðŸ§¹ Logs limpiados - listo para nueva prueba');
         }
 
         // Log inicial
-        log('🔧 Sistema de verificación de interceptor iniciado');
-        log('🎯 Objetivo: Verificar que interceptor capture /upload correctamente');
-        log('📱 App URL: ' + APP_URL);
-        log('⚡ Correcciones: Orden de condiciones + detección mejorada');
+        log('ðŸ”§ Sistema de verificaciÃ³n de interceptor iniciado');
+        log('ðŸŽ¯ Objetivo: Verificar que interceptor capture /upload correctamente');
+        log('ðŸ“± App URL: ' + APP_URL);
+        log('âš¡ Correcciones: Orden de condiciones + detecciÃ³n mejorada');
     </script>
 </body>
 </html>

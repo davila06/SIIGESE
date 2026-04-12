@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { TokenService } from './token.service';
 import { User, LoginResponse, Role } from '../interfaces/user.interface';
 import { environment } from '../../environments/environment';
+import { AppInsightsService } from './app-insights.service';
 
 export interface ResetPasswordResponse {
   message: string;
@@ -15,6 +16,7 @@ export interface ResetPasswordResponse {
   providedIn: 'root'
 })
 export class AuthService {
+  private readonly appInsights = inject(AppInsightsService);
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -47,6 +49,8 @@ export class AuthService {
         this.currentUserSubject.next(response.user);
         sessionStorage.setItem('currentUser', JSON.stringify(response.user));
         sessionStorage.setItem('authToken', response.token);
+        // Associate telemetry with authenticated user (ID only — no email/name stored)
+        this.appInsights.setAuthenticatedUserContext(String(response.user.id));
       }),
       catchError(error => {
         throw error;
@@ -58,6 +62,7 @@ export class AuthService {
     this.currentUserSubject.next(null);
     sessionStorage.removeItem('currentUser');
     sessionStorage.removeItem('authToken');
+    this.appInsights.clearAuthenticatedUserContext();
   }
 
   resetPassword(email: string): Observable<ResetPasswordResponse> {

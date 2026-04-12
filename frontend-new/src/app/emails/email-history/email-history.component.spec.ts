@@ -16,7 +16,7 @@ const MOCK_HISTORY: EmailHistoryResponse[] = [
     isSuccess: true,
     errorMessage: '',
     sentAt: new Date(),
-    senderName: 'SIIGESE'
+    senderName: 'IADS IAsistente Digital de Servicios'
   }
 ];
 
@@ -75,3 +75,4 @@ describe('EmailHistoryComponent', () => {
     expect(snackBarSpy.open).toHaveBeenCalled();
   });
 });
+

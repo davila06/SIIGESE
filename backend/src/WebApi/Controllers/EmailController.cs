@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/email")]
+    [Route("api/emails")]
     [Authorize]
     public class EmailController : ControllerBase
     {
@@ -86,6 +87,16 @@ namespace WebApi.Controllers
             [FromQuery] int pageSize = 10)
         {
             var response = await _emailDashboardService.GetEmailHistoryAsync(pageNumber, pageSize);
+            return response.Success ? Ok(response) : BadRequest(response);
+        }
+
+        /// <summary>
+        /// Reenvía un email registrado en el historial
+        /// </summary>
+        [HttpPost("{id:int}/resend")]
+        public async Task<IActionResult> ResendEmail(int id)
+        {
+            var response = await _emailDashboardService.ResendEmailAsync(id);
             return response.Success ? Ok(response) : BadRequest(response);
         }
 

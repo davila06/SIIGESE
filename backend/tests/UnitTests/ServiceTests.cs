@@ -352,6 +352,7 @@ namespace UnitTests.Services
     public class ReclamoServiceTests
     {
         private readonly Mock<IReclamoRepository> _mockReclamoRepo;
+        private readonly Mock<IReclamoHistorialRepository> _mockHistorialRepo;
         private readonly Mock<IUnitOfWork>         _mockUow;
         private readonly Mock<IPolizaRepository>   _mockPolizaRepo;
         private readonly IMapper                   _mapper;
@@ -360,6 +361,7 @@ namespace UnitTests.Services
         public ReclamoServiceTests()
         {
             _mockReclamoRepo = new Mock<IReclamoRepository>();
+            _mockHistorialRepo = new Mock<IReclamoHistorialRepository>();
             _mockUow         = new Mock<IUnitOfWork>();
             _mockPolizaRepo  = new Mock<IPolizaRepository>();
 
@@ -373,7 +375,7 @@ namespace UnitTests.Services
             _mapper = config.CreateMapper();
 
             _reclamoService = new ReclamoService(
-                _mockReclamoRepo.Object, _mockUow.Object, _mapper);
+                _mockReclamoRepo.Object, _mockHistorialRepo.Object, _mockUow.Object, _mapper);
         }
 
         private static Reclamo BuildReclamo(int id = 1, EstadoReclamo estado = EstadoReclamo.Pendiente) => new()

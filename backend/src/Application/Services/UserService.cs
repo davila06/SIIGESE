@@ -172,6 +172,9 @@ namespace Application.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 IsActive = user.IsActive,
+                LastLoginAt = user.LastLoginAt,
+                CreatedAt = user.CreatedAt,
+                UpdatedAt = user.UpdatedAt,
                 Roles = user.UserRoles?.Select(ur => new RoleDto
                 {
                     Id = ur.Role.Id,

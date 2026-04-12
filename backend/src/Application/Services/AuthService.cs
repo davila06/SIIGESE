@@ -67,6 +67,9 @@ namespace Application.Services
                     throw new UnauthorizedAccessException("Email o contraseña incorrectos");
                 }
 
+                user.LastLoginAt = DateTime.UtcNow;
+                await _userRepository.UpdateAsync(user);
+
                 // Obtener usuario con roles
                 var userWithRoles = await _userRepository.GetUserWithRolesAsync(user.Id);
                 var roleNames = userWithRoles?.UserRoles.Select(ur => ur.Role.Name).ToList() ?? new List<string>();
@@ -93,6 +96,9 @@ namespace Application.Services
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         IsActive = user.IsActive,
+                        LastLoginAt = user.LastLoginAt,
+                        CreatedAt = user.CreatedAt,
+                        UpdatedAt = user.UpdatedAt,
                         Roles = roleDtos
                     },
                     ExpiresAt = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:ExpirationHours"] ?? "8"))
@@ -328,6 +334,9 @@ namespace Application.Services
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         IsActive = user.IsActive,
+                        LastLoginAt = user.LastLoginAt,
+                        CreatedAt = user.CreatedAt,
+                        UpdatedAt = user.UpdatedAt,
                         Roles = roleDtos
                     },
                     ExpiresAt = DateTime.UtcNow.AddHours(int.Parse(_configuration["Jwt:ExpirationHours"] ?? "8"))
@@ -384,6 +393,17 @@ namespace Application.Services
 
         private static bool VerifyPassword(string password, string hash)
         {
+            if (string.IsNullOrWhiteSpace(hash))
+            {
+                return false;
+            }
+
+            // Legacy compatibility: some seeded users were stored with BCrypt hashes.
+            if (hash.StartsWith("$2"))
+            {
+                return BCrypt.Net.BCrypt.Verify(password, hash);
+            }
+
             var hashOfInput = HashPassword(password);
             return hashOfInput == hash;
         }

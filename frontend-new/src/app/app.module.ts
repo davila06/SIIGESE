@@ -1,4 +1,4 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ChatModule } from './chat/chat.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,6 +36,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatTabsModule } from '@angular/material/tabs';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -48,6 +49,7 @@ import { LoginComponent } from './auth/login.component';
 import { CotizacionesComponent } from './cotizaciones/cotizaciones.component';
 import { ChangePasswordComponent } from './auth/change-password/change-password.component';
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { GlobalErrorHandler } from './error-handler/global-error-handler';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 
 // Configurar locale español Costa Rica
@@ -108,6 +110,7 @@ export const CUSTOM_DATE_FORMATS = {
     MatListModule,
     MatProgressBarModule,
     MatExpansionModule,
+    MatTabsModule,
     MatDatepickerModule,
     MatNativeDateModule,
     
@@ -123,6 +126,7 @@ export const CUSTOM_DATE_FORMATS = {
       useClass: AuthInterceptor,
       multi: true
     },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     {
       provide: LOCALE_ID,
       useValue: 'es-CR'

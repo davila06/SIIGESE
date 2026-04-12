@@ -62,6 +62,8 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
   isEditMode = false;
   showForm = false;
   selectedUser: User | null = null;
+  hidePassword = true;
+  hideConfirmPassword = true;
   currentUserId: number | null = null;
   
   displayedColumns: string[] = ['userName', 'fullName', 'roles', 'isActive', 'lastLoginAt', 'actions'];

@@ -1,0 +1,180 @@
+﻿<div class="portfolio-analytics">
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">folder_open</mat-icon>
+      <div>
+        <h1 class="page-header__title">Portfolio de Polizas</h1>
+        <span class="page-header__subtitle">Distribucion, concentracion y riesgo de vencimiento</span>
+      </div>
+    </div>
+    <div class="toolbar-right">
+      <mat-form-field appearance="outline" class="w-metric">
+        <mat-label>Metrica de composicion</mat-label>
+        <mat-select [(ngModel)]="portfolioMetricMode" (ngModelChange)="onMetricModeChange()">
+          <mat-option value="prima">Prima mensual</mat-option>
+          <mat-option value="count">N de polizas</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="w-horizon">
+        <mat-label>Horizonte venc.</mat-label>
+        <mat-select [(ngModel)]="vencimientosMeses" (ngModelChange)="load()">
+          <mat-option [value]="6">6 meses</mat-option>
+          <mat-option [value]="12">12 meses</mat-option>
+          <mat-option [value]="24">24 meses</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-stroked-button (click)="load()" [disabled]="loading">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading && !error && portfolio">
+    <div class="kpi-row">
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Polizas activas</span>
+        <span class="kpi-mini__value">{{ portfolio.totalPolizasActivas | number }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Prima mensual total</span>
+        <span class="kpi-mini__value">{{ formatCurrency(portfolio.primaMensualTotal) }}</span>
+      </div>
+      <div class="kpi-mini" *ngIf="vencimientos">
+        <span class="kpi-mini__label">Vencen en {{ vencimientosMeses }} meses</span>
+        <span class="kpi-mini__value kpi-mini__value--warn">{{ vencimientos.totalPolizasProximasAnio | number }}</span>
+      </div>
+      <div class="kpi-mini" *ngIf="vencimientos">
+        <span class="kpi-mini__label">Prima en riesgo</span>
+        <span class="kpi-mini__value kpi-mini__value--danger">{{ formatCurrency(vencimientos.primaEnRiesgoAnio) }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Retencion promedio</span>
+        <span class="kpi-mini__value">{{ formatPercent(portfolio.retencion.tasaRetencionPromedio || 0) }}</span>
+      </div>
+    </div>
+
+    <mat-tab-group class="composicion-tabs" (selectedIndexChange)="onCompositionTabChange($event)">
+      <mat-tab label="Por Aseguradora">
+        <app-chart-card title="Composicion por Aseguradora" icon="business">
+          <ngx-charts-pie-chart [animations]="false" [results]="aseguradoraChart" [scheme]="colorScheme" [legend]="true" [legendPosition]="legendBelow" [labels]="true"></ngx-charts-pie-chart>
+        </app-chart-card>
+      </mat-tab>
+      <mat-tab label="Por Tipo Seguro">
+        <app-chart-card title="Composicion por Tipo de Seguro" icon="shield">
+          <ngx-charts-tree-map [animations]="false" [results]="tipoSeguroChart" [scheme]="colorScheme"></ngx-charts-tree-map>
+        </app-chart-card>
+      </mat-tab>
+      <mat-tab label="Por Modalidad">
+        <app-chart-card title="Composicion por Modalidad" icon="category">
+          <ngx-charts-bar-horizontal [animations]="false" [results]="modalidadChart" [scheme]="colorScheme" [xAxis]="true" [yAxis]="true" [showGridLines]="true"></ngx-charts-bar-horizontal>
+        </app-chart-card>
+      </mat-tab>
+      <mat-tab label="Por Frecuencia">
+        <app-chart-card title="Composicion por Frecuencia" icon="event_repeat">
+          <ngx-charts-pie-chart [animations]="false" [results]="frecuenciaChart" [scheme]="colorScheme" [legend]="true" [legendPosition]="legendBelow" [labels]="true"></ngx-charts-pie-chart>
+        </app-chart-card>
+      </mat-tab>
+    </mat-tab-group>
+
+    <app-chart-card title="Detalle de Composicion" icon="table_chart">
+      <table mat-table [dataSource]="composicionActiva" class="radar-table">
+        <ng-container matColumnDef="name"><th mat-header-cell *matHeaderCellDef>Segmento</th><td mat-cell *matCellDef="let r">{{ r.name }}</td></ng-container>
+        <ng-container matColumnDef="totalPolizas"><th mat-header-cell *matHeaderCellDef>N polizas</th><td mat-cell *matCellDef="let r">{{ r.totalPolizas | number }}</td></ng-container>
+        <ng-container matColumnDef="primaMensual"><th mat-header-cell *matHeaderCellDef>Prima mensual</th><td mat-cell *matCellDef="let r">{{ formatCurrency(r.primaMensual) }}</td></ng-container>
+        <ng-container matColumnDef="porcentajePolizas"><th mat-header-cell *matHeaderCellDef>% polizas</th><td mat-cell *matCellDef="let r">{{ formatPercent(r.porcentajePolizas) }}</td></ng-container>
+        <ng-container matColumnDef="porcentajePrima"><th mat-header-cell *matHeaderCellDef>% prima</th><td mat-cell *matCellDef="let r">{{ formatPercent(r.porcentajePrima) }}</td></ng-container>
+        <tr mat-header-row *matHeaderRowDef="composicionColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: composicionColumns;"></tr>
+      </table>
+    </app-chart-card>
+
+    <div class="grid-2col">
+      <app-chart-card title="2.2 Comparativa Multidimensional" icon="analytics">
+        <ngx-charts-bar-vertical-2d [animations]="false" [results]="radarMatrixChart" [scheme]="colorScheme" [xAxis]="true" [yAxis]="true" [legend]="true" [legendPosition]="legendBelow"></ngx-charts-bar-vertical-2d>
+      </app-chart-card>
+      <app-chart-card title="Resumen por Aseguradora" icon="fact_check">
+        <table mat-table [dataSource]="radarTableData" class="radar-table">
+          <ng-container matColumnDef="aseguradora"><th mat-header-cell *matHeaderCellDef>Aseguradora</th><td mat-cell *matCellDef="let r">{{ r.aseguradora }}</td></ng-container>
+          <ng-container matColumnDef="numPolizas"><th mat-header-cell *matHeaderCellDef>Polizas</th><td mat-cell *matCellDef="let r">{{ r.numPolizas | number }}</td></ng-container>
+          <ng-container matColumnDef="primaPromedio"><th mat-header-cell *matHeaderCellDef>Prima prom.</th><td mat-cell *matCellDef="let r">{{ formatCurrency(r.primaPromedio) }}</td></ng-container>
+          <ng-container matColumnDef="tasaReclamos"><th mat-header-cell *matHeaderCellDef>Tasa reclamos</th><td mat-cell *matCellDef="let r">{{ formatPercent(r.tasaReclamos) }}</td></ng-container>
+          <ng-container matColumnDef="tasaCobro"><th mat-header-cell *matHeaderCellDef>Tasa cobro</th><td mat-cell *matCellDef="let r">{{ formatPercent(r.tasaCobro) }}</td></ng-container>
+          <ng-container matColumnDef="antiguedadPromedioDias"><th mat-header-cell *matHeaderCellDef>Antiguedad</th><td mat-cell *matCellDef="let r">{{ r.antiguedadPromedioDias | number:'1.0-0' }} dias</td></ng-container>
+          <tr mat-header-row *matHeaderRowDef="radarColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: radarColumns;"></tr>
+        </table>
+      </app-chart-card>
+    </div>
+
+    <div class="grid-2col">
+      <app-chart-card title="2.3 Timeline de Vencimientos" icon="event">
+        <ngx-charts-bar-vertical-stacked [animations]="false" [results]="vencimientosStackedChart" [scheme]="vencColorScheme" [xAxis]="true" [yAxis]="true" [legend]="true" [legendPosition]="legendBelow" (select)="onTimelineSelect($event)"></ngx-charts-bar-vertical-stacked>
+      </app-chart-card>
+      <app-chart-card title="Prima acumulada en riesgo" icon="trending_up">
+        <ngx-charts-line-chart [animations]="false" [results]="vencimientosRiesgoLine" [scheme]="trendColorScheme" [xAxis]="true" [yAxis]="true" [autoScale]="true"></ngx-charts-line-chart>
+      </app-chart-card>
+    </div>
+
+    <app-chart-card title="Polizas a Contactar" icon="contact_phone">
+      <div *ngIf="detailLoading" class="small-loader"><mat-spinner diameter="28"></mat-spinner></div>
+      <table mat-table [dataSource]="vencimientoDetalle?.polizas || []" class="radar-table">
+        <ng-container matColumnDef="numeroPoliza"><th mat-header-cell *matHeaderCellDef>Numero</th><td mat-cell *matCellDef="let p">{{ p.numeroPoliza }}</td></ng-container>
+        <ng-container matColumnDef="clienteNombre"><th mat-header-cell *matHeaderCellDef>Cliente</th><td mat-cell *matCellDef="let p">{{ p.clienteNombre }}</td></ng-container>
+        <ng-container matColumnDef="aseguradora"><th mat-header-cell *matHeaderCellDef>Aseguradora</th><td mat-cell *matCellDef="let p">{{ p.aseguradora }}</td></ng-container>
+        <ng-container matColumnDef="tipoSeguro"><th mat-header-cell *matHeaderCellDef>Tipo</th><td mat-cell *matCellDef="let p">{{ p.tipoSeguro }}</td></ng-container>
+        <ng-container matColumnDef="fechaVigencia"><th mat-header-cell *matHeaderCellDef>Vence</th><td mat-cell *matCellDef="let p">{{ p.fechaVigencia | date:'dd/MM/yyyy' }}</td></ng-container>
+        <ng-container matColumnDef="primaMensualNormalizada"><th mat-header-cell *matHeaderCellDef>Prima</th><td mat-cell *matCellDef="let p">{{ formatCurrency(p.primaMensualNormalizada) }}</td></ng-container>
+        <tr mat-header-row *matHeaderRowDef="detalleColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: detalleColumns;"></tr>
+      </table>
+    </app-chart-card>
+
+    <div class="grid-2col">
+      <app-chart-card title="2.4 Funnel Retencion" icon="filter_alt">
+        <ngx-charts-bar-horizontal [animations]="false" [results]="retencionFunnelChart" [scheme]="retentionColorScheme" [xAxis]="true" [yAxis]="true" [showGridLines]="true"></ngx-charts-bar-horizontal>
+      </app-chart-card>
+      <app-chart-card title="Retencion mensual" icon="show_chart">
+        <ngx-charts-line-chart [animations]="false" [results]="retencionMensualLine" [scheme]="retentionColorScheme" [xAxis]="true" [yAxis]="true"></ngx-charts-line-chart>
+      </app-chart-card>
+    </div>
+
+    <div class="grid-2col">
+      <app-chart-card title="Retencion por tipo" icon="insights">
+        <ngx-charts-bar-vertical [animations]="false" [results]="retencionPorTipoChart" [scheme]="colorScheme" [xAxis]="true" [yAxis]="true"></ngx-charts-bar-vertical>
+      </app-chart-card>
+      <app-chart-card title="Churn por aseguradora" icon="warning">
+        <ngx-charts-bar-horizontal [animations]="false" [results]="churnAseguradoraChart" [scheme]="colorScheme" [xAxis]="true" [yAxis]="true"></ngx-charts-bar-horizontal>
+      </app-chart-card>
+    </div>
+
+    <div class="grid-2col">
+      <app-chart-card title="2.5 Histograma de Prima" icon="bar_chart">
+        <ngx-charts-bar-vertical [animations]="false" [results]="histogramaChart" [scheme]="colorScheme" [xAxis]="true" [yAxis]="true" [showGridLines]="true"></ngx-charts-bar-vertical>
+      </app-chart-card>
+      <app-chart-card title="2.6 Mapa de Concentracion" icon="scatter_plot">
+        <ngx-charts-bubble-chart [animations]="false" [results]="riesgoBubbleChart" [scheme]="colorScheme" [xAxis]="true" [yAxis]="true" [showGridLines]="true"></ngx-charts-bubble-chart>
+      </app-chart-card>
+    </div>
+
+    <app-chart-card title="Detalle de Concentracion" icon="table_rows">
+      <table mat-table [dataSource]="portfolio.mapaRiesgo || []" class="radar-table">
+        <ng-container matColumnDef="segmento"><th mat-header-cell *matHeaderCellDef>Segmento</th><td mat-cell *matCellDef="let r">{{ r.segmento }}</td></ng-container>
+        <ng-container matColumnDef="primaUnitariaPromedio"><th mat-header-cell *matHeaderCellDef>Prima unitaria</th><td mat-cell *matCellDef="let r">{{ formatCurrency(r.primaUnitariaPromedio) }}</td></ng-container>
+        <ng-container matColumnDef="montoAseguradoProxy"><th mat-header-cell *matHeaderCellDef>Monto proxy</th><td mat-cell *matCellDef="let r">{{ formatCurrency(r.montoAseguradoProxy) }}</td></ng-container>
+        <ng-container matColumnDef="numeroClientes"><th mat-header-cell *matHeaderCellDef>N clientes</th><td mat-cell *matCellDef="let r">{{ r.numeroClientes | number }}</td></ng-container>
+        <tr mat-header-row *matHeaderRowDef="riesgoColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: riesgoColumns;"></tr>
+      </table>
+    </app-chart-card>
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon><p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+</div>
+

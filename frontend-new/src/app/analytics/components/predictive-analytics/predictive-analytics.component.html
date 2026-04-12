@@ -1,0 +1,359 @@
+﻿<div class="predictive-analytics">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">auto_graph</mat-icon>
+      <div>
+        <h1 class="page-header__title">AnalÃ­tica Predictiva</h1>
+        <span class="page-header__subtitle">Machine Learning ligero â€” scoring, forecast y detecciÃ³n de anomalÃ­as</span>
+      </div>
+    </div>
+    <button mat-stroked-button (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <ng-container *ngIf="!loading && !error && data">
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         7.1 â€” Score de Riesgo de Morosidad
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="section-header">
+      <mat-icon>warning_amber</mat-icon>
+      <span>7.1 â€” Score de Riesgo de Morosidad por PÃ³liza</span>
+      <span class="section-header__subtitle">Scoring 0-100 basado en historial de pagos, frecuencia y tipo de seguro</span>
+    </div>
+
+    <div class="grid-2col section-gap-md">
+
+      <app-chart-card title="DistribuciÃ³n de Riesgo" icon="donut_large"
+        tooltip="ClasificaciÃ³n Verde / Amarillo / Rojo de las pÃ³lizas activas segÃºn su score de morosidad">
+        <ngx-charts-pie-chart [animations]="false"
+          [results]="riesgoDonutChart"
+          [scheme]="riesgoColors"
+          [legend]="true" [legendPosition]="legendBelow"
+          [labels]="true"
+          [doughnut]="true">
+        </ngx-charts-pie-chart>
+      </app-chart-card>
+
+      <app-chart-card title="Top 10 PÃ³lizas de Mayor Riesgo" icon="table_chart">
+        <table mat-table [dataSource]="data.scoreMorosidad.polizas.slice(0,10)" class="pred-table">
+          <ng-container matColumnDef="poliza">
+            <th mat-header-cell *matHeaderCellDef>PÃ³liza</th>
+            <td mat-cell *matCellDef="let r">{{ r.numeroPoliza }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Asegurado</th>
+            <td mat-cell *matCellDef="let r">{{ r.nombreAsegurado }}</td>
+          </ng-container>
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let r"><span class="chip chip--neutral">{{ r.tipoSeguro }}</span></td>
+          </ng-container>
+          <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef>Score</th>
+            <td mat-cell *matCellDef="let r">
+              <div class="score-bar-wrap">
+                <div class="score-bar" [style.width.%]="r.score"
+                  [class.score-bar--rojo]="r.categoria === 'Rojo'"
+                  [class.score-bar--amarillo]="r.categoria === 'Amarillo'"
+                  [class.score-bar--verde]="r.categoria === 'Verde'">
+                </div>
+                <span class="score-text">{{ r.score }}</span>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="categoria">
+            <th mat-header-cell *matHeaderCellDef>Cat.</th>
+            <td mat-cell *matCellDef="let r">
+              <span class="chip" [ngClass]="getRiskClass(r.categoria)">{{ r.categoria }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="tasaVencido">
+            <th mat-header-cell *matHeaderCellDef>% Vencido</th>
+            <td mat-cell *matCellDef="let r">{{ r.tasaVencido | number:'1.1-1' }}%</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="riesgoTableCols"></tr>
+          <tr mat-row *matRowDef="let r; columns: riesgoTableCols;"></tr>
+        </table>
+      </app-chart-card>
+
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         7.2 â€” PredicciÃ³n de Reclamos por Temporada
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="section-header">
+      <mat-icon>event_note</mat-icon>
+      <span>7.2 â€” PredicciÃ³n de Reclamos por Temporada</span>
+      <span class="section-header__subtitle">Promedio mÃ³vil YoY sobre 3 aÃ±os de historial</span>
+    </div>
+
+    <div class="grid-2col section-gap-md">
+
+      <app-chart-card title="Historial mensual de Reclamos (12m)" icon="bar_chart"
+        tooltip="Reclamos recibidos por mes en los Ãºltimos 12 meses">
+        <ngx-charts-bar-vertical-stacked [animations]="false"
+          [results]="historicoBarChart"
+          [scheme]="historicoColor"
+          [xAxis]="true" [yAxis]="true"
+          [showGridLines]="true"
+          [legend]="false">
+        </ngx-charts-bar-vertical-stacked>
+      </app-chart-card>
+
+      <app-chart-card title="Forecast PrÃ³ximos 3 Meses" icon="trending_up"
+        tooltip="ProyecciÃ³n de volumen de reclamos basada en el mismo mes de aÃ±os anteriores">
+        <table mat-table [dataSource]="data.reclamosTemporada.proximosMeses" class="pred-table">
+          <ng-container matColumnDef="mes">
+            <th mat-header-cell *matHeaderCellDef>Mes</th>
+            <td mat-cell *matCellDef="let r"><strong>{{ r.mesLabel }}</strong></td>
+          </ng-container>
+          <ng-container matColumnDef="esperado">
+            <th mat-header-cell *matHeaderCellDef>Esperado</th>
+            <td mat-cell *matCellDef="let r">{{ r.esperado | number }}</td>
+          </ng-container>
+          <ng-container matColumnDef="anioAnterior">
+            <th mat-header-cell *matHeaderCellDef>AÃ±o anterior</th>
+            <td mat-cell *matCellDef="let r">{{ r.anioAnterior | number }}</td>
+          </ng-container>
+          <ng-container matColumnDef="cambio">
+            <th mat-header-cell *matHeaderCellDef>Î”%</th>
+            <td mat-cell *matCellDef="let r">
+              <span class="chip"
+                [class.chip--danger]="r.cambioPorc > 10"
+                [class.chip--success]="r.cambioPorc <= 0"
+                [class.chip--warning]="r.cambioPorc > 0 && r.cambioPorc <= 10">
+                {{ r.cambioPorc > 0 ? '+' : '' }}{{ r.cambioPorc | number:'1.1-1' }}%
+              </span>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="prediccionTableCols"></tr>
+          <tr mat-row *matRowDef="let r; columns: prediccionTableCols;"></tr>
+        </table>
+      </app-chart-card>
+
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         7.3 â€” DetecciÃ³n de AnomalÃ­as en Cobros (Z-score)
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="section-header">
+      <mat-icon>search</mat-icon>
+      <span>7.3 â€” DetecciÃ³n de AnomalÃ­as en Cobros</span>
+      <span class="section-header__subtitle">Z-score â‰¥ 2.5Ïƒ â€” posibles errores de digitaciÃ³n o fraude</span>
+    </div>
+
+    <div class="grid-stats-row section-gap-sm" *ngIf="anomalias">
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Cobros analizados</span>
+        <span class="kpi-mini__value">{{ anomalias.totalAnalizados | number }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Media global</span>
+        <span class="kpi-mini__value">â‚¡{{ anomalias.mediaGlobal | number:'1.0-0' }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">DesviaciÃ³n estÃ¡ndar</span>
+        <span class="kpi-mini__value">â‚¡{{ anomalias.desviacionGlobal | number:'1.0-0' }}</span>
+      </div>
+      <div class="kpi-mini" [class.kpi-mini--danger]="anomalias.anomalias.length > 0">
+        <span class="kpi-mini__label">AnomalÃ­as detectadas</span>
+        <span class="kpi-mini__value kpi-mini__value--danger">{{ anomalias.anomalias.length | number }}</span>
+      </div>
+    </div>
+
+    <app-chart-card title="Cobros con Z-score AnÃ³malo" icon="manage_search"
+      tooltip="Cobros pendientes o vencidos cuyo monto se desvÃ­a â‰¥2.5Ïƒ de la media histÃ³rica del cliente"
+      class="chart-card-block section-gap-md">
+      <div *ngIf="!anomalias?.anomalias?.length" class="empty-state">
+        <mat-icon>check_circle</mat-icon>
+        <span>No se detectaron anomalÃ­as significativas</span>
+      </div>
+      <table mat-table [dataSource]="anomalias?.anomalias ?? []" class="pred-table" *ngIf="anomalias?.anomalias?.length">
+        <ng-container matColumnDef="recibo">
+          <th mat-header-cell *matHeaderCellDef>Recibo</th>
+          <td mat-cell *matCellDef="let r">{{ r.numeroRecibo }}</td>
+        </ng-container>
+        <ng-container matColumnDef="cliente">
+          <th mat-header-cell *matHeaderCellDef>Cliente</th>
+          <td mat-cell *matCellDef="let r">{{ r.clienteNombre }}</td>
+        </ng-container>
+        <ng-container matColumnDef="monto">
+          <th mat-header-cell *matHeaderCellDef>Monto</th>
+          <td mat-cell *matCellDef="let r"><strong>â‚¡{{ r.montoTotal | number:'1.0-0' }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="media">
+          <th mat-header-cell *matHeaderCellDef>Media cliente</th>
+          <td mat-cell *matCellDef="let r">â‚¡{{ r.mediaCliente | number:'1.0-0' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="zscore">
+          <th mat-header-cell *matHeaderCellDef>Z-score</th>
+          <td mat-cell *matCellDef="let r"><strong>{{ r.zScore | number:'1.1-2' }}Ïƒ</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <td mat-cell *matCellDef="let r">
+            <span class="chip" [ngClass]="getAnomaliaClass(r.tipoAnomalia)">{{ r.tipoAnomalia }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let r">
+            <span class="chip" [class.chip--warning]="r.estadoActual === 'Pendiente'"
+                               [class.chip--danger]="r.estadoActual === 'Vencido'">
+              {{ r.estadoActual }}
+            </span>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="anomaliasTableCols"></tr>
+        <tr mat-row *matRowDef="let r; columns: anomaliasTableCols;"></tr>
+      </table>
+    </app-chart-card>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         7.4 â€” RenovaciÃ³n Proactiva (Lead Scoring)
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="section-header">
+      <mat-icon>star</mat-icon>
+      <span>7.4 â€” RenovaciÃ³n Proactiva (Lead Scoring)</span>
+      <span class="section-header__subtitle">Top 20 pÃ³lizas por renovar en 60 dÃ­as, ordenadas por score de prioridad</span>
+    </div>
+
+    <div class="grid-stats-row section-gap-sm" *ngIf="renovacion">
+      <div class="kpi-mini kpi-mini--warning">
+        <span class="kpi-mini__label">PÃ³lizas por renovar (60d)</span>
+        <span class="kpi-mini__value">{{ renovacion.totalPolizasPorRenovar60d | number }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Score promedio</span>
+        <span class="kpi-mini__value">{{ renovacion.scorePromedio | number:'1.1-1' }} pts</span>
+      </div>
+    </div>
+
+    <div class="grid-2col section-gap-md">
+
+      <app-chart-card title="DistribuciÃ³n por Prioridad" icon="leaderboard"
+        tooltip="Alta (â‰¥75 pts) / Media (50-74) / Baja (<50)">
+        <ngx-charts-pie-chart [animations]="false"
+          [results]="leadDonutChart"
+          [scheme]="leadColors"
+          [legend]="true" [legendPosition]="legendBelow"
+          [labels]="true"
+          [doughnut]="true">
+        </ngx-charts-pie-chart>
+      </app-chart-card>
+
+      <app-chart-card title="Top 20 PÃ³lizas para RenovaciÃ³n Activa" icon="table_chart">
+        <table mat-table [dataSource]="renovacion?.topPolizas ?? []" class="pred-table lead-table">
+          <ng-container matColumnDef="poliza">
+            <th mat-header-cell *matHeaderCellDef>PÃ³liza</th>
+            <td mat-cell *matCellDef="let r">{{ r.numeroPoliza }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Asegurado</th>
+            <td mat-cell *matCellDef="let r">{{ r.nombreAsegurado }}</td>
+          </ng-container>
+          <ng-container matColumnDef="aseguradora">
+            <th mat-header-cell *matHeaderCellDef>Asegurador</th>
+            <td mat-cell *matCellDef="let r">{{ r.aseguradora }}</td>
+          </ng-container>
+          <ng-container matColumnDef="prima">
+            <th mat-header-cell *matHeaderCellDef>Prima/mes</th>
+            <td mat-cell *matCellDef="let r">â‚¡{{ r.primaMensual | number:'1.0-0' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="dias">
+            <th mat-header-cell *matHeaderCellDef>DÃ­as</th>
+            <td mat-cell *matCellDef="let r">
+              <span class="chip" [class.chip--danger]="r.diasParaVencer <= 15"
+                                 [class.chip--warning]="r.diasParaVencer > 15 && r.diasParaVencer <= 30"
+                                 [class.chip--neutral]="r.diasParaVencer > 30">
+                {{ r.diasParaVencer }}d
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="score">
+            <th mat-header-cell *matHeaderCellDef>Score</th>
+            <td mat-cell *matCellDef="let r">
+              <div class="score-bar-wrap">
+                <div class="score-bar score-bar--lead" [style.width.%]="r.score * 100 / 85"></div>
+                <span class="score-text">{{ r.score }}</span>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="factores">
+            <th mat-header-cell *matHeaderCellDef>Factores</th>
+            <td mat-cell *matCellDef="let r">
+              <span *ngFor="let f of r.factores" class="factor-chip">{{ f }}</span>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="leadTableCols"></tr>
+          <tr mat-row *matRowDef="let r; columns: leadTableCols;"></tr>
+        </table>
+      </app-chart-card>
+
+    </div>
+
+    <!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+         7.5 â€” Forecast de Prima Mensual Proyectada
+    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+    <div class="section-header">
+      <mat-icon>show_chart</mat-icon>
+      <span>7.5 â€” Forecast de Prima Mensual Proyectada</span>
+      <span class="section-header__subtitle">Suma de cobros programados Ã— tasa histÃ³rica de cobro (6 meses), IC 90%</span>
+    </div>
+
+    <div class="kpi-row section-gap-md" *ngIf="forecastPrima">
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Cobros programados (prÃ³x. mes)</span>
+        <span class="kpi-mini__value">â‚¡{{ forecastPrima.cobrosProgramadosProximoMes | number:'1.0-0' }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">Tasa histÃ³rica cobro (6m)</span>
+        <span class="kpi-mini__value" [class.kpi-mini__value--success]="forecastPrima.tasaHistoricaCobro6m >= 90">
+          {{ forecastPrima.tasaHistoricaCobro6m | number:'1.1-1' }}%
+        </span>
+      </div>
+      <div class="kpi-mini kpi-mini--success">
+        <span class="kpi-mini__label">Prima proyectada (prÃ³x. mes)</span>
+        <span class="kpi-mini__value kpi-mini__value--success">â‚¡{{ forecastPrima.primaProyectada | number:'1.0-0' }}</span>
+      </div>
+      <div class="kpi-mini">
+        <span class="kpi-mini__label">IC 90%</span>
+        <span class="kpi-mini__value kpi-mini__value--compact">
+          â‚¡{{ forecastPrima.icInferior | number:'1.0-0' }} â€” â‚¡{{ forecastPrima.icSuperior | number:'1.0-0' }}
+        </span>
+      </div>
+    </div>
+
+    <app-chart-card title="HistÃ³rico vs ProyecciÃ³n de Cobros" icon="area_chart"
+      tooltip="Ãšltimos 3 meses (Esperado/Real) y prÃ³ximos 3 meses proyectados segÃºn tasa histÃ³rica"
+      class="chart-card-block section-gap-md">
+      <ngx-charts-bar-vertical-2d [animations]="false"
+        [results]="forecastChart"
+        [scheme]="forecastColors"
+        [xAxis]="true" [yAxis]="true"
+        [showGridLines]="true"
+        [legend]="true" [legendPosition]="legendBelow"
+        [showDataLabel]="false"
+        [groupPadding]="8">
+      </ngx-charts-bar-vertical-2d>
+      <div class="forecast-legend" *ngIf="forecastPrima">
+        <span class="forecast-legend__item forecast-legend__item--historic">â–¬ HistÃ³rico (cobro real)</span>
+        <span class="forecast-legend__item forecast-legend__item--future">â–¬ ProyecciÃ³n (programado Ã— {{ forecastPrima.tasaHistoricaCobro6m | number:'1.1-1' }}%)</span>
+      </div>
+    </app-chart-card>
+
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon><p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+
+</div>
+

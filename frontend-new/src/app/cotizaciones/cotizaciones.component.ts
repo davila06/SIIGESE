@@ -18,6 +18,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule, MatTabGroup } from '@angular/material/tabs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { CotizacionService } from '../services/cotizacion.service';
 import { Cotizacion, CreateCotizacion, UpdateCotizacion, TIPOS_SEGURO, ESTADOS_COTIZACION, MONEDAS, GENEROS, TIPOS_INMUEBLE, MODALIDADES, FRECUENCIAS } from '../models/cotizacion.model';
@@ -47,7 +48,8 @@ import { LoggingService } from '../services/logging.service';
     MatChipsModule,
     MatMenuModule,
     MatTooltipModule,
-    MatTabsModule
+    MatTabsModule,
+    MatProgressBarModule
   ],
   templateUrl: './cotizaciones.component.html',
   styleUrl: './cotizaciones.component.scss'

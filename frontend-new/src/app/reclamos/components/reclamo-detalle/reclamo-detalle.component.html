@@ -19,7 +19,7 @@
         
         <div class="header-info">
           <h1>
-            <mat-icon [color]="getEstadoColor(reclamo.estado)">
+            <mat-icon [color]="getEstadoColor(reclamo.estado)" aria-hidden="true">
               {{ getEstadoIcon(reclamo.estado) }}
             </mat-icon>
             Reclamo {{ reclamo.numeroReclamo }}
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Main Content with Tabs -->
-    <mat-tab-group class="content-tabs">
+    <mat-tab-group class="content-tabs" (selectedIndexChange)="onTabChange($event)">
       
       <!-- Tab: Información General -->
       <mat-tab label="Información General">
@@ -216,42 +216,139 @@
       </mat-tab>
 
       <!-- Tab: Histórico -->
-      <mat-tab label="Histórico" disabled>
+      <mat-tab label="Histórico">
         <div class="tab-content">
-          <mat-card class="timeline-card">
-            <mat-card-header>
-              <mat-card-title>
-                <mat-icon>timeline</mat-icon>
-                Línea de Tiempo
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="timeline-placeholder">
-                <mat-icon>construction</mat-icon>
-                <p>Funcionalidad de histórico en desarrollo</p>
+
+          <!-- Loading -->
+          <div class="tab-loading" *ngIf="loadingHistorial">
+            <mat-spinner diameter="36"></mat-spinner>
+            <span>Cargando historial…</span>
+          </div>
+
+          <!-- Empty state -->
+          <div class="tab-empty" *ngIf="!loadingHistorial && historialLoaded && historialEntries.length === 0">
+            <mat-icon>history</mat-icon>
+            <p>No hay eventos registrados todavía.</p>
+          </div>
+
+          <!-- Timeline -->
+          <div class="timeline" *ngIf="!loadingHistorial && historialEntries.length > 0">
+            <div class="timeline-item" *ngFor="let entry of historialEntries; let last = last">
+              <!-- Connector line -->
+              <div class="timeline-connector">
+                <div class="timeline-dot" [style.background-color]="getHistorialColor(entry.tipoEvento)">
+                  <mat-icon>{{ getHistorialIcon(entry.tipoEvento) }}</mat-icon>
+                </div>
+                <div class="timeline-line" *ngIf="!last"></div>
               </div>
-            </mat-card-content>
-          </mat-card>
+
+              <!-- Content card -->
+              <mat-card class="timeline-card">
+                <div class="timeline-header">
+                  <span class="timeline-tipo" [style.color]="getHistorialColor(entry.tipoEvento)">
+                    {{ entry.tipoEvento | titlecase }}
+                  </span>
+                  <span class="timeline-fecha">{{ entry.fechaEvento | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+
+                <p class="timeline-descripcion">{{ entry.descripcion }}</p>
+
+                <div class="timeline-values" *ngIf="entry.valorAnterior || entry.valorNuevo">
+                  <span class="valor-anterior" *ngIf="entry.valorAnterior">
+                    <mat-icon>arrow_circle_left</mat-icon>{{ entry.valorAnterior }}
+                  </span>
+                  <mat-icon class="arrow-icon" *ngIf="entry.valorAnterior && entry.valorNuevo">arrow_forward</mat-icon>
+                  <span class="valor-nuevo" *ngIf="entry.valorNuevo">
+                    <mat-icon>arrow_circle_right</mat-icon>{{ entry.valorNuevo }}
+                  </span>
+                </div>
+
+                <div class="timeline-meta">
+                  <mat-icon>person_outline</mat-icon>
+                  <span>{{ entry.usuario }}</span>
+                </div>
+              </mat-card>
+            </div>
+          </div>
+
         </div>
       </mat-tab>
 
       <!-- Tab: Documentos -->
-      <mat-tab label="Documentos" disabled>
+      <mat-tab label="Documentos">
         <div class="tab-content">
-          <mat-card class="documents-card">
-            <mat-card-header>
-              <mat-card-title>
-                <mat-icon>attach_file</mat-icon>
-                Documentos Adjuntos
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="documents-placeholder">
-                <mat-icon>cloud_upload</mat-icon>
-                <p>Funcionalidad de documentos en desarrollo</p>
+
+          <!-- Hidden file input -->
+          <input #fileInputRef type="file" class="file-input-hidden"
+                 (change)="onFileSelected($event)"
+                 accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg,.gif,.zip" />
+
+          <!-- Upload progress bar -->
+          <mat-progress-bar mode="indeterminate" *ngIf="uploadingDocumento" class="upload-progress-bar"></mat-progress-bar>
+
+          <!-- Loading -->
+          <div class="tab-loading" *ngIf="loadingDocumentos">
+            <mat-spinner diameter="36"></mat-spinner>
+            <span>Cargando documentos…</span>
+          </div>
+
+          <!-- Toolbar -->
+          <div class="docs-toolbar" *ngIf="!loadingDocumentos">
+            <h3 class="docs-title">
+              <mat-icon>attach_file</mat-icon>
+              Documentos adjuntos
+              <span class="docs-count" *ngIf="documentos.length > 0">({{ documentos.length }})</span>
+            </h3>
+            <button mat-raised-button color="primary"
+                    (click)="triggerFileUpload()"
+                    [disabled]="uploadingDocumento"
+                    matTooltip="Subir un documento (máx. 20 MB)">
+              <mat-icon>cloud_upload</mat-icon>
+              Subir Documento
+            </button>
+          </div>
+
+          <!-- Empty state -->
+          <div class="tab-empty" *ngIf="!loadingDocumentos && documentosLoaded && documentos.length === 0">
+            <mat-icon>cloud_upload</mat-icon>
+            <p>No hay documentos adjuntos.</p>
+            <button mat-stroked-button color="primary" (click)="triggerFileUpload()">
+              <mat-icon>add</mat-icon>
+              Agregar primero
+            </button>
+          </div>
+
+          <!-- Document list -->
+          <div class="docs-list" *ngIf="!loadingDocumentos && documentos.length > 0">
+            <mat-card class="doc-item" *ngFor="let doc of documentos">
+              <div class="doc-item-content">
+                <div class="doc-icon">
+                  <mat-icon>{{ getDocumentoIcon(doc.tipoContenido) }}</mat-icon>
+                </div>
+                <div class="doc-info">
+                  <span class="doc-nombre">{{ doc.nombre }}</span>
+                  <span class="doc-meta">
+                    {{ formatFileSize(doc.tamano) }} &bull;
+                    Subido por {{ doc.subidoPor }} el {{ doc.fechaSubida | date:'dd/MM/yyyy' }}
+                  </span>
+                </div>
+                <div class="doc-actions">
+                  <button mat-icon-button
+                          (click)="descargarDocumento(doc)"
+                          matTooltip="Descargar">
+                    <mat-icon>download</mat-icon>
+                  </button>
+                  <button mat-icon-button
+                          color="warn"
+                          (click)="eliminarDocumento(doc)"
+                          matTooltip="Eliminar">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                </div>
               </div>
-            </mat-card-content>
-          </mat-card>
+            </mat-card>
+          </div>
+
         </div>
       </mat-tab>
     </mat-tab-group>

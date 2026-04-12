@@ -15,6 +15,7 @@ export class TitleService {
     '/reclamos': 'Gestión de Reclamos',
     '/cotizaciones': 'Gestión de Cotizaciones',
     '/emails': 'Notificaciones Email',
+    '/analytics/reportes': 'Reportes Exportables',
     '/usuarios': 'Gestión de Usuarios',
     '/configuracion': 'Configuración del Sistema',
     '/change-password': 'Cambiar Contraseña'
@@ -35,7 +36,7 @@ export class TitleService {
   updateTitle(url: string): void {
     // Obtener el módulo actual basado en la URL
     const moduleTitle = this.getModuleTitle(url);
-    const fullTitle = `${moduleTitle} - SIIGESE`;
+    const fullTitle = `${moduleTitle} - IADS IAsistente Digital de Servicios`;
     this.title.setTitle(fullTitle);
   }
 
@@ -53,7 +54,7 @@ export class TitleService {
     }
 
     // Título por defecto
-    return 'Sistema Integral de Gestión de Seguros';
+    return 'IADS IAsistente Digital de Servicios';
   }
 
   getCurrentModule(): string {
@@ -62,7 +63,8 @@ export class TitleService {
   }
 
   setCustomTitle(customTitle: string): void {
-    const fullTitle = `${customTitle} - SIIGESE`;
+    const fullTitle = `${customTitle} - IADS IAsistente Digital de Servicios`;
     this.title.setTitle(fullTitle);
   }
 }
+

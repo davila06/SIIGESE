@@ -47,13 +47,13 @@
     margin-bottom: 24px;
 
     .stat-card {
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        box-shadow: var(--shadow-md);
       }
 
       mat-card-content {
@@ -109,7 +109,7 @@
       &.stat-pending {
         border-left: 4px solid var(--status-pending);
         .stat-icon {
-          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          background: linear-gradient(135deg, var(--status-pending) 0%, var(--color-warning) 100%);
           color: white;
         }
       }
@@ -117,7 +117,7 @@
       &.stat-collected {
         border-left: 4px solid var(--status-active);
         .stat-icon {
-          background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+          background: linear-gradient(135deg, var(--status-active) 0%, var(--color-success) 100%);
           color: white;
         }
       }
@@ -125,7 +125,7 @@
       &.stat-overdue {
         border-left: 4px solid var(--status-overdue);
         .stat-icon {
-          background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+          background: linear-gradient(135deg, var(--status-overdue) 0%, var(--color-error) 100%);
           color: white;
         }
       }
@@ -134,8 +134,8 @@
 
   // ── Table card ──────────────────────────────────────────────────────────────
   .table-card {
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
   }
 
@@ -341,9 +341,9 @@
     }
 
     &.badge-cancelado {
-      background-color: rgba(191, 0, 255, 0.10);
-      color: #BF00FF;
-      border: 1px solid rgba(191, 0, 255, 0.35);
+      background-color: var(--color-surface-2);
+      color: var(--status-cancelled);
+      border: 1px solid var(--color-border);
     }
   }
 
@@ -364,6 +364,40 @@
     &[disabled] {
       opacity: 0.5;
     }
+  }
+
+  .btn-vencido {
+    color: var(--color-warning) !important;
+    &:hover { background-color: var(--color-warning-bg); }
+  }
+
+  .btn-reactivar {
+    color: var(--color-success) !important;
+    &:hover { background-color: var(--color-success-bg); }
+  }
+
+  // ── Semáforo column ───────────────────────────────────────────────────────────
+  .col-semaforo {
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    padding: 0 4px !important;
+    text-align: center;
+  }
+
+  .semaforo-dot {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    cursor: default;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+
+    &.semaforo-verde   { background-color: var(--status-active); box-shadow: 0 0 6px rgba(0,255,136,0.5); }
+    &.semaforo-amarillo { background-color: var(--status-pending); box-shadow: 0 0 6px rgba(255,230,0,0.5); }
+    &.semaforo-rojo    { background-color: var(--status-overdue); box-shadow: 0 0 6px rgba(255,32,96,0.5); }
+    &.semaforo-gris    { background-color: var(--status-cancelled); }
   }
 
   // ── No data row ──────────────────────────────────────────────────────────────

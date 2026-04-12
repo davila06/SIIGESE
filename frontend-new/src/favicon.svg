@@ -1,0 +1,27 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="iadsBg" x1="8" y1="6" x2="58" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0B1E46"/>
+      <stop offset="0.56" stop-color="#1D4ED8"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <radialGradient id="iadsGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(18 14) rotate(40) scale(36)">
+      <stop stop-color="#7DD3FC" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#7DD3FC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="4" y="4" width="56" height="56" rx="18" fill="url(#iadsBg)"/>
+  <rect x="4" y="4" width="56" height="56" rx="18" fill="url(#iadsGlow)"/>
+
+  <rect x="15" y="15" width="34" height="34" rx="11" fill="none" stroke="#BFD6FF" stroke-opacity="0.38"/>
+
+  <path d="M22.5 20.5V43.5" stroke="#FFFFFF" stroke-width="4.1" stroke-linecap="round"/>
+  <path d="M22.5 20.5H36.8" stroke="#FFFFFF" stroke-width="4.1" stroke-linecap="round"/>
+  <path d="M40.8 16.5H47.5V23.2" stroke="#EAF2FF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M16 27.5H48" stroke="#D6E6FF" stroke-opacity="0.2"/>
+  <path d="M16 35.5H48" stroke="#D6E6FF" stroke-opacity="0.2"/>
+  <path d="M27.5 16V48" stroke="#D6E6FF" stroke-opacity="0.2"/>
+  <path d="M35.5 16V48" stroke="#D6E6FF" stroke-opacity="0.2"/>
+</svg>

@@ -10,12 +10,23 @@
     h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
-      color: #333;
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: var(--color-primary);
+      }
     }
 
     p {
       font-size: 1.1rem;
-      color: #666;
+      color: var(--color-text-secondary);
       margin: 0;
     }
   }
@@ -56,15 +67,15 @@
       }
 
       &.success .stat-icon-box {
-        background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        background: linear-gradient(135deg, var(--status-active) 0%, var(--color-success) 100%);
       }
 
       &.error .stat-icon-box {
-        background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+        background: linear-gradient(135deg, var(--status-overdue) 0%, var(--color-error) 100%);
       }
 
       &.warning .stat-icon-box {
-        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        background: linear-gradient(135deg, var(--status-pending) 0%, var(--color-warning) 100%);
       }
 
       &.info .stat-icon-box {
@@ -113,7 +124,7 @@
     }
 
     p {
-      color: #666;
+      color: var(--color-text-secondary);
       font-size: 1.1rem;
     }
   }

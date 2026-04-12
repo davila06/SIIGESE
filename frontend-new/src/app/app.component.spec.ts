@@ -40,7 +40,7 @@ describe('AppComponent', () => {
   it('should have the correct application title', () => {
     const fixture   = TestBed.createComponent(AppComponent);
     const component = fixture.componentInstance;
-    expect(component.title).toContain('SIIGESE');
+    expect(component.title).toContain('IADS IAsistente Digital de Servicios');
   });
 
   it('should expose currentUser$ observable from AuthService', () => {
@@ -49,3 +49,4 @@ describe('AppComponent', () => {
     expect(component.currentUser$).toBeTruthy();
   });
 });
+

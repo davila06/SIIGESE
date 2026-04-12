@@ -1,0 +1,192 @@
+﻿<div class="cobros-analytics">
+
+  <div class="page-header">
+    <div class="page-header__left">
+      <mat-icon class="page-header__icon">payments</mat-icon>
+      <div>
+        <h1 class="page-header__title">Analitica de Cobros</h1>
+        <span class="page-header__subtitle">Tendencias, aging, cashflow y top deudores</span>
+      </div>
+    </div>
+    <button mat-stroked-button (click)="load()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon> Actualizar
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="page-spinner"><mat-spinner diameter="48"></mat-spinner></div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <!-- Row 1: Tendencia (1.1) + Aging (1.2) -->
+    <div class="grid-2col grid-row">
+
+      <app-chart-card title="Tendencia de Cobros" icon="show_chart" subtitle="Esperado vs cobrado vs vencido por mes">
+        <div class="filter-row filter-row--mb">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Meses</mat-label>
+            <mat-select [(ngModel)]="trendMonths" (ngModelChange)="load()">
+              <mat-option [value]="6">6 meses</mat-option>
+              <mat-option [value]="12">12 meses</mat-option>
+              <mat-option [value]="18">18 meses</mat-option>
+              <mat-option [value]="24">24 meses</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="chart-wrap">
+          <ngx-charts-line-chart [animations]="false" [results]="trendAreaChart" [scheme]="colorScheme"
+            [xAxis]="true" [yAxis]="true" [showGridLines]="true"
+            [legend]="true" [legendPosition]="legendBelow" [yAxisTickFormatting]="yAxisCurrency">
+          </ngx-charts-line-chart>
+        </div>
+      </app-chart-card>
+
+      <app-chart-card title="Aging de Cobros Vencidos" icon="hourglass_empty"
+        [badge]="aging ? formatCurrency(aging.totalVencido) : ''" [badgeType]="'danger'"
+        tooltip="Distribucion de cobros vencidos por antiguedad">
+        <div class="chart-wrap" *ngIf="aging">
+          <ngx-charts-bar-vertical [animations]="false" [results]="agingBarChart" [scheme]="agingColors"
+            [xAxis]="true" [yAxis]="true" [showGridLines]="true" [yAxisTickFormatting]="yAxisCurrency">
+          </ngx-charts-bar-vertical>
+        </div>
+        <div class="aging-summary" *ngIf="aging">
+          <span *ngFor="let b of aging.buckets" class="chip" [class]="agingClass(b)">
+            {{ b.rango }}: <strong>{{ b.cantidad }}</strong> <em>({{ b.porcentajeMonto | number:'1.0-1' }}%)</em>
+          </span>
+        </div>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Row 2: Metodos de pago (1.3) + Cashflow (1.4) -->
+    <div class="grid-2col grid-row">
+
+      <app-chart-card title="Distribucion Metodos de Pago" icon="credit_card" subtitle="Cobros confirmados por forma de pago">
+        <div class="chart-wrap">
+          <ngx-charts-pie-chart [animations]="false" [results]="metodosDonut" [scheme]="metodosColors"
+            [legend]="true" [legendPosition]="legendBelow" [labels]="true">
+          </ngx-charts-pie-chart>
+        </div>
+        <div class="metodos-table" *ngIf="metodos.length">
+          <div class="metodos-row" *ngFor="let m of metodos">
+            <span class="metodos-row__name">{{ m.metodoPago }}</span>
+            <span class="metodos-row__pct">{{ m.porcentaje | number:'1.1-1' }}%</span>
+            <span class="metodos-row__monto">{{ formatCurrency(m.monto) }}</span>
+          </div>
+        </div>
+      </app-chart-card>
+
+      <app-chart-card title="Proyeccion Cashflow" icon="waterfall_chart"
+        [badge]="cashflow ? 'Tasa hist. ' + cashflow.tasaHistorica.toFixed(1) + '%' : ''"
+        tooltip="Semanas futuras proyectadas con tasa historica de cobro">
+        <div class="filter-row filter-row--mb">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Semanas</mat-label>
+            <mat-select [(ngModel)]="cashflowWeeks" (ngModelChange)="load()">
+              <mat-option [value]="4">4 semanas</mat-option>
+              <mat-option [value]="8">8 semanas</mat-option>
+              <mat-option [value]="12">12 semanas</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="chart-wrap">
+          <ngx-charts-bar-vertical-2d [animations]="false" [results]="cashflowBarChart" [scheme]="colorScheme"
+            [xAxis]="true" [yAxis]="true" [showGridLines]="true"
+            [legend]="true" [legendPosition]="legendBelow" [yAxisTickFormatting]="yAxisCurrency">
+          </ngx-charts-bar-vertical-2d>
+        </div>
+      </app-chart-card>
+
+    </div>
+
+    <!-- Row 3: Top Deudores (1.6) -->
+    <div class="grid-row">
+      <app-chart-card title="Top Deudores" icon="person_off"
+        [badge]="deudores.length.toString()" [badgeType]="'danger'"
+        subtitle="Clientes con mayor monto vencido acumulado">
+        <table mat-table [dataSource]="deudores" class="deudores-table">
+          <ng-container matColumnDef="clienteNombre">
+            <th mat-header-cell *matHeaderCellDef>Cliente</th>
+            <td mat-cell *matCellDef="let d">{{ d.clienteNombre }}</td>
+          </ng-container>
+          <ng-container matColumnDef="montoVencidoTotal">
+            <th mat-header-cell *matHeaderCellDef>Monto Vencido</th>
+            <td mat-cell *matCellDef="let d" class="monto-cell danger">{{ formatCurrency(d.montoVencidoTotal) }}</td>
+          </ng-container>
+          <ng-container matColumnDef="antiguedadMaxDias">
+            <th mat-header-cell *matHeaderCellDef>Antiguedad</th>
+            <td mat-cell *matCellDef="let d">
+              <span class="chip" [class]="getAntiguedad(d) > 90 ? 'chip--critico' : getAntiguedad(d) > 30 ? 'chip--danger' : 'chip--warning'">
+                {{ getAntiguedad(d) }} dias
+              </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="numeroPolizas">
+            <th mat-header-cell *matHeaderCellDef>Polizas</th>
+            <td mat-cell *matCellDef="let d">{{ d.numeroPolizas }}</td>
+          </ng-container>
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let d">
+              <a mat-icon-button [routerLink]="['/cobros/detalle', d.cobroId]" matTooltip="Ver cobro">
+                <mat-icon>open_in_new</mat-icon>
+              </a>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsDeudores"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsDeudores;"></tr>
+        </table>
+      </app-chart-card>
+    </div>
+
+    <!-- Row 4: Heatmap (1.5) + Por Agente (1.7) -->
+    <div class="grid-2col grid-row">
+
+      <app-chart-card title="Mapa de Calor — Horario de Pagos" icon="grid_on"
+        subtitle="Concentracion de cobros por dia y hora" tooltip="0=Lun ... 6=Dom">
+        <ng-container *ngIf="heatmapChart.length; else noHeatmap">
+          <div class="chart-wrap chart-wrap--heatmap">
+            <ngx-charts-heat-map [animations]="false" [results]="heatmapChart" [scheme]="heatmapScheme"
+              [xAxis]="true" [yAxis]="true" [gradient]="true"
+              [legend]="true" [legendPosition]="legendBelow">
+            </ngx-charts-heat-map>
+          </div>
+        </ng-container>
+        <ng-template #noHeatmap>
+          <div class="no-data"><mat-icon>grid_off</mat-icon><span>Sin datos de cobros registrados.</span></div>
+        </ng-template>
+      </app-chart-card>
+
+      <app-chart-card title="Rendimiento por Agente" icon="supervisor_account"
+        subtitle="Monto cobrado y cobros procesados por agente" tooltip="Solo cobros en estado Cobrado o Pagado">
+        <ng-container *ngIf="agenteBarChart.length; else noAgente">
+          <div class="chart-wrap chart-wrap--agente">
+            <ngx-charts-bar-horizontal [animations]="false" [results]="agenteBarChart" [scheme]="agenteScheme"
+              [xAxis]="true" [yAxis]="true" [showGridLines]="true"
+              [showDataLabel]="true" [xAxisTickFormatting]="yAxisCurrency">
+            </ngx-charts-bar-horizontal>
+          </div>
+        </ng-container>
+        <ng-template #noAgente>
+          <div class="no-data"><mat-icon>person_off</mat-icon><span>Sin datos de agentes.</span></div>
+        </ng-template>
+        <div class="agente-table" *ngIf="agentes.length">
+          <div class="agente-table__header"><span>Agente</span><span>Cobros</span><span>Demora prom.</span></div>
+          <div class="agente-row" *ngFor="let a of agentes">
+            <span class="agente-row__name">{{ a.nombreAgente }}</span>
+            <span class="agente-row__count">{{ a.cobrosProcesados }}</span>
+            <span class="chip agente-row__tiempo" [class]="tiempoClass(a.tiempoPromedioResDias)">{{ a.tiempoPromedioResDias | number:'1.0-1' }}d</span>
+          </div>
+        </div>
+      </app-chart-card>
+
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="!loading && error" class="page-error">
+    <mat-icon>error_outline</mat-icon><p>{{ error }}</p>
+    <button mat-flat-button color="primary" (click)="load()">Reintentar</button>
+  </div>
+
+</div>
+
