@@ -54,18 +54,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   // Datos para selectores
   monedasSistema = MONEDAS_SISTEMA;
   aseguradorasSistema = ASEGURADORAS_SISTEMA;
-
-  get availableAseguradoras(): Array<{ value: string; label: string }> {
-    const currentValue = this.polizaForm.get('aseguradora')?.value;
-    if (!currentValue || this.aseguradorasSistema.some(a => a.value === currentValue)) {
-      return this.aseguradorasSistema;
-    }
-
-    return [
-      ...this.aseguradorasSistema,
-      { value: currentValue, label: currentValue }
-    ];
-  }
+  aseguradorasOptions = [...ASEGURADORAS_SISTEMA];
 
   private readonly logger = inject(LoggingService);
 
@@ -574,6 +563,9 @@ export class PolizasComponent implements OnInit, AfterViewInit {
   loadPolizaToForm(poliza: Poliza): void {
     const parsed = parseBackendDate(poliza.fechaVigencia);
     const fechaVigencia = parsed ? parsed.toISOString().split('T')[0] : '';
+    const aseguradora = this.normalizeAseguradora(poliza.aseguradora);
+
+    this.syncAseguradoraOptions(aseguradora);
 
     const formValues = {
       perfilId: poliza.perfilId || 1,
@@ -585,7 +577,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
       moneda: poliza.moneda,
       fechaVigencia: fechaVigencia,
       frecuencia: this.normalizeFrecuencia(poliza.frecuencia),
-      aseguradora: this.normalizeAseguradora(poliza.aseguradora),
+      aseguradora,
       placa: poliza.placa || '',
       marca: poliza.marca || '',
       modelo: poliza.modelo || '',
@@ -640,6 +632,19 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     return map[normalized] ?? val.trim();
   }
 
+  private syncAseguradoraOptions(val: string | null | undefined): void {
+    const currentValue = (val ?? '').toString().trim();
+    if (!currentValue || this.aseguradorasSistema.some(a => a.value === currentValue)) {
+      this.aseguradorasOptions = this.aseguradorasSistema;
+      return;
+    }
+
+    this.aseguradorasOptions = [
+      ...this.aseguradorasSistema,
+      { value: currentValue, label: currentValue }
+    ];
+  }
+
   /** Reinicia el estado del formulario y navega al listado */
   resetForm(): void {
     this.resetFormValues();
@@ -651,6 +656,7 @@ export class PolizasComponent implements OnInit, AfterViewInit {
     this.polizaForm.reset();
     this.selectedPoliza = null;
     this.isEditMode = false;
+    this.syncAseguradoraOptions(null);
 
     // Restablecer valores por defecto
     this.polizaForm.patchValue({
