@@ -24,6 +24,7 @@ namespace Infrastructure.Data
         public DbSet<ChatSession> ChatSessions { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
         public DbSet<ReclamoHistorial> ReclamoHistoriales { get; set; }
+        public DbSet<CobroEstadoChangeRequest> CobroEstadoChangeRequests { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -149,6 +150,28 @@ namespace Infrastructure.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.MontoTotal).HasPrecision(18, 2);
                 entity.Property(e => e.MontoCobrado).HasPrecision(18, 2);
+
+                entity.HasQueryFilter(e => !e.IsDeleted);
+            });
+
+            modelBuilder.Entity<CobroEstadoChangeRequest>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.MotivoSolicitud).HasMaxLength(1000);
+                entity.Property(e => e.MotivoDecision).HasMaxLength(1000);
+                entity.Property(e => e.SolicitadoPorNombre).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.SolicitadoPorEmail).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.ResueltoPorNombre).HasMaxLength(200);
+
+                entity.HasIndex(e => e.CobroId);
+                entity.HasIndex(e => e.SolicitadoPorUserId);
+                entity.HasIndex(e => e.EstadoSolicitud);
+                entity.HasIndex(e => e.CreatedAt);
+
+                entity.HasOne(e => e.Cobro)
+                    .WithMany()
+                    .HasForeignKey(e => e.CobroId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasQueryFilter(e => !e.IsDeleted);
             });

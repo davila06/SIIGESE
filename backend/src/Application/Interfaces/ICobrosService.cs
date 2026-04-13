@@ -26,5 +26,10 @@ namespace Application.Interfaces
         Task<GenerarCobrosResultDto> GenerarCobrosAutomaticosAsync(int mesesAdelante = 3);
         Task<GenerarCobrosResultDto> GenerarCobrosPorPolizaAsync(int polizaId, int mesesAdelante = 3);
         Task<(bool Success, string Message)> EnviarEmailCobroAsync(int id);
+        Task<CobroEstadoChangeRequestDto> SolicitarCambioEstadoAsync(int cobroId, EstadoCobro estadoSolicitado, string? motivo, int solicitadoPorUserId, string solicitadoPorNombre, string solicitadoPorEmail);
+        Task<IEnumerable<CobroEstadoChangeRequestDto>> GetSolicitudesPendientesAsync();
+        Task<IEnumerable<CobroEstadoChangeRequestDto>> GetSolicitudesPorSolicitanteAsync(int solicitanteUserId);
+        Task<CobroChangeRequestActionResultDto> AprobarSolicitudCambioEstadoAsync(int requestId, int resueltoPorUserId, string resueltoPorNombre, string? motivo);
+        Task<CobroChangeRequestActionResultDto> RechazarSolicitudCambioEstadoAsync(int requestId, int resueltoPorUserId, string resueltoPorNombre, string? motivo);
     }
 }

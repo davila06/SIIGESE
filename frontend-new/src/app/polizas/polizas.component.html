@@ -4,7 +4,7 @@
     <mat-tab-group #tabGroup class="polizas-tabs" animationDuration="200ms"
                    (selectedIndexChange)="onTabChange($event)">
 
-      <!-- â•â•â• Tab 0 â€” Lista de PÃ³lizas â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+      <!-- Tab 0 - Lista de Pólizas -->
       <mat-tab label="Pólizas">
         <div class="tab-content">
 
@@ -276,13 +276,13 @@
         </div>
       </mat-tab>
 
-      <!-- â•â•â• Tab 1 â€” Nueva / Editar PÃ³liza â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+      <!-- Tab 1 - Nueva / Editar Póliza -->
       <mat-tab [label]="formTabLabel">
         <div class="tab-content">
 
           <mat-card class="form-section" #formSection [class.is-edit-mode]="isEditMode">
 
-            <!-- Ribbon ediciÃ³n -->
+            <!-- Ribbon edición -->
             <div *ngIf="isEditMode && selectedPoliza" class="form-header-edit"
                  [class.form-header-skeleton]="formLoadingState === 'loading'">
               <div class="edit-avatar">
@@ -452,7 +452,7 @@
                   </button>
                   <button mat-stroked-button type="button" (click)="resetForm()">
                     <mat-icon>{{isEditMode ? 'cancel' : 'clear'}}</mat-icon>
-                    {{isEditMode ? 'Cancelar EdiciÃ³n' : 'Limpiar Formulario'}}
+                    {{isEditMode ? 'Cancelar Edición' : 'Limpiar Formulario'}}
                   </button>
                 </div>
 

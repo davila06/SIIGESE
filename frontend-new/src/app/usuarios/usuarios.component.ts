@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, inject } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
@@ -19,6 +19,7 @@ import { User, CreateUser, UpdateUser, Role } from '../interfaces/user.interface
 import { ApiService } from '../services/api.service';
 import { AuthService } from '../services/auth.service';
 import { LoggingService } from '../services/logging.service';
+import { parseBackendDate } from '../shared/constants/currency.constants';
 
 @Component({
   selector: 'app-usuarios',
@@ -40,8 +41,7 @@ import { LoggingService } from '../services/logging.service';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    MatDialogModule,
-    DatePipe
+    MatDialogModule
   ],
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.scss']
@@ -253,6 +253,22 @@ export class UsuariosComponent implements OnInit, AfterViewInit {
       case 'user': return 'warn';
       default: return 'primary';
     }
+  }
+
+  formatLastLogin(lastLoginAt?: string | null): string {
+    const parsed = parseBackendDate(lastLoginAt);
+    if (!parsed) {
+      return 'Nunca';
+    }
+
+    return new Intl.DateTimeFormat('es-CR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(parsed);
   }
 
   onSubmit() {

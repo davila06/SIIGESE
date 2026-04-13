@@ -33,6 +33,7 @@
                 (click)="toggleSidebar()" 
                 class="sidebar-toggle"
                 *ngIf="!isMobile"
+          aria-label="Alternar menú lateral"
                 [matTooltip]="isCollapsed ? 'Expandir men&uacute;' : 'Colapsar men&uacute;'"
                 matTooltipPosition="right">
           <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
@@ -205,7 +206,7 @@
     <mat-sidenav-content class="main-content" #sidenavContent>
       <!-- Mobile Header -->
       <mat-toolbar class="mobile-toolbar" *ngIf="isMobile">
-        <button mat-icon-button (click)="sidenav.toggle()">
+        <button mat-icon-button (click)="sidenav.toggle()" aria-label="Abrir o cerrar menú móvil">
           <mat-icon>menu</mat-icon>
         </button>
         <div class="mobile-title">
@@ -257,7 +258,7 @@
             <span class="pm-email">{{ user.email }}</span>
             <span class="pm-role">{{ user.roles[0]?.name || 'Usuario' }}</span>
             <span class="pm-last-login" *ngIf="user.lastLoginAt">
-              &Uacute;ltimo acceso: {{ user.lastLoginAt | date:'dd/MM/yyyy HH:mm' }}
+              &Uacute;ltimo acceso: {{ formatLastLogin(user.lastLoginAt) }}
             </span>
           </div>
         </div>

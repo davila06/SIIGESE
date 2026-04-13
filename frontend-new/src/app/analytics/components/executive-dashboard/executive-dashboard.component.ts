@@ -34,6 +34,7 @@ export class ExecutiveDashboardComponent implements OnInit {
   data: ExecutiveDashboardDto | null = null;
   loading = true;
   error = '';
+  showSecondaryKpis = false;
 
   // ── Color schemes ──────────────────────────────────────────────────────────
   readonly legendBelow = LegendPosition.Below;
@@ -132,4 +133,8 @@ export class ExecutiveDashboardComponent implements OnInit {
     }).format(v);
 
   percentFormat = (v: number) => `${v.toFixed(0)}%`;
+
+  toggleSecondaryKpis(): void {
+    this.showSecondaryKpis = !this.showSecondaryKpis;
+  }
 }

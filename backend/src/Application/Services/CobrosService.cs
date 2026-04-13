@@ -138,6 +138,7 @@ namespace Application.Services
             };
 
             var createdCobro = await _cobroRepository.AddAsync(cobro);
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<CobroDto>(createdCobro);
         }
 
@@ -147,11 +148,22 @@ namespace Application.Services
             if (cobro == null)
                 throw new ArgumentException($"Cobro con ID {id} no encontrado");
 
-            _mapper.Map(request, cobro);
+            // Update only mutable fields from the update contract.
+            cobro.Estado = request.Estado;
+            cobro.MetodoPago = request.MetodoPago;
+            cobro.Observaciones = request.Observaciones ?? string.Empty;
+
+            if (request.MontoCobrado.HasValue)
+                cobro.MontoCobrado = request.MontoCobrado.Value;
+
+            if (request.FechaCobro.HasValue)
+                cobro.FechaCobro = request.FechaCobro.Value;
+
             cobro.UpdatedAt = DateTime.UtcNow;
             cobro.UpdatedBy = "Sistema";
 
             await _cobroRepository.UpdateAsync(cobro);
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<CobroDto>(cobro);
         }
 
@@ -170,6 +182,7 @@ namespace Application.Services
             cobro.UpdatedBy = "Sistema";
 
             await _cobroRepository.UpdateAsync(cobro);
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<CobroDto>(cobro);
         }
 
@@ -199,6 +212,7 @@ namespace Application.Services
         public async Task DeleteCobroAsync(int id)
         {
             await _cobroRepository.DeleteAsync(id);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<(bool Success, string Message)> EnviarEmailCobroAsync(int id)
@@ -234,6 +248,141 @@ namespace Application.Services
             return (true, $"Correo enviado exitosamente a {cobro.CorreoElectronico}");
         }
 
+        public async Task<CobroEstadoChangeRequestDto> SolicitarCambioEstadoAsync(
+            int cobroId,
+            EstadoCobro estadoSolicitado,
+            string? motivo,
+            int solicitadoPorUserId,
+            string solicitadoPorNombre,
+            string solicitadoPorEmail)
+        {
+            var cobro = await _cobroRepository.GetByIdAsync(cobroId);
+            if (cobro == null)
+                throw new ArgumentException($"Cobro con ID {cobroId} no encontrado");
+
+            if (cobro.Estado == estadoSolicitado)
+                throw new InvalidOperationException("El estado solicitado es igual al estado actual del cobro");
+
+            var existePendiente = await _unitOfWork.CobroEstadoChangeRequests.ExistePendienteParaCobroAsync(cobroId);
+            if (existePendiente)
+                throw new InvalidOperationException("Ya existe una solicitud pendiente para este cobro");
+
+            var request = new CobroEstadoChangeRequest
+            {
+                CobroId = cobro.Id,
+                EstadoActual = cobro.Estado,
+                EstadoSolicitado = estadoSolicitado,
+                EstadoSolicitud = EstadoSolicitudCambioCobro.Pendiente,
+                MotivoSolicitud = string.IsNullOrWhiteSpace(motivo) ? null : motivo.Trim(),
+                SolicitadoPorUserId = solicitadoPorUserId,
+                SolicitadoPorNombre = solicitadoPorNombre,
+                SolicitadoPorEmail = solicitadoPorEmail,
+                CreatedAt = DateTime.UtcNow,
+                CreatedBy = solicitadoPorNombre,
+                IsDeleted = false
+            };
+
+            await _unitOfWork.CobroEstadoChangeRequests.AddAsync(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            var persisted = await _unitOfWork.CobroEstadoChangeRequests.GetByIdAsync(request.Id)
+                ?? throw new InvalidOperationException("No se pudo recuperar la solicitud creada");
+
+            return MapRequestToDto(persisted);
+        }
+
+        public async Task<IEnumerable<CobroEstadoChangeRequestDto>> GetSolicitudesPendientesAsync()
+        {
+            var requests = await _unitOfWork.CobroEstadoChangeRequests.GetPendientesAsync();
+            return requests.Select(MapRequestToDto).ToList();
+        }
+
+        public async Task<IEnumerable<CobroEstadoChangeRequestDto>> GetSolicitudesPorSolicitanteAsync(int solicitanteUserId)
+        {
+            var requests = await _unitOfWork.CobroEstadoChangeRequests.GetBySolicitanteAsync(solicitanteUserId);
+            return requests.Select(MapRequestToDto).ToList();
+        }
+
+        public async Task<CobroChangeRequestActionResultDto> AprobarSolicitudCambioEstadoAsync(
+            int requestId,
+            int resueltoPorUserId,
+            string resueltoPorNombre,
+            string? motivo)
+        {
+            var request = await _unitOfWork.CobroEstadoChangeRequests.GetByIdAsync(requestId);
+            if (request == null)
+                throw new ArgumentException($"Solicitud con ID {requestId} no encontrada");
+
+            if (request.EstadoSolicitud != EstadoSolicitudCambioCobro.Pendiente)
+                throw new InvalidOperationException("La solicitud ya fue resuelta");
+
+            var cobro = await _cobroRepository.GetByIdAsync(request.CobroId);
+            if (cobro == null)
+                throw new ArgumentException($"Cobro con ID {request.CobroId} no encontrado");
+
+            cobro.Estado = request.EstadoSolicitado;
+            cobro.UpdatedAt = DateTime.UtcNow;
+            cobro.UpdatedBy = resueltoPorNombre;
+
+            request.EstadoSolicitud = EstadoSolicitudCambioCobro.Aprobada;
+            request.ResueltoPorUserId = resueltoPorUserId;
+            request.ResueltoPorNombre = resueltoPorNombre;
+            request.ResueltoAt = DateTime.UtcNow;
+            request.MotivoDecision = string.IsNullOrWhiteSpace(motivo) ? null : motivo.Trim();
+            request.UpdatedBy = resueltoPorNombre;
+            request.UpdatedAt = DateTime.UtcNow;
+
+            await _cobroRepository.UpdateAsync(cobro);
+            await _unitOfWork.CobroEstadoChangeRequests.UpdateAsync(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            var updatedRequest = await _unitOfWork.CobroEstadoChangeRequests.GetByIdAsync(request.Id)
+                ?? throw new InvalidOperationException("No se pudo recuperar la solicitud actualizada");
+
+            return new CobroChangeRequestActionResultDto
+            {
+                Request = MapRequestToDto(updatedRequest),
+                Cobro = _mapper.Map<CobroDto>(cobro)
+            };
+        }
+
+        public async Task<CobroChangeRequestActionResultDto> RechazarSolicitudCambioEstadoAsync(
+            int requestId,
+            int resueltoPorUserId,
+            string resueltoPorNombre,
+            string? motivo)
+        {
+            var request = await _unitOfWork.CobroEstadoChangeRequests.GetByIdAsync(requestId);
+            if (request == null)
+                throw new ArgumentException($"Solicitud con ID {requestId} no encontrada");
+
+            if (request.EstadoSolicitud != EstadoSolicitudCambioCobro.Pendiente)
+                throw new InvalidOperationException("La solicitud ya fue resuelta");
+
+            request.EstadoSolicitud = EstadoSolicitudCambioCobro.Rechazada;
+            request.ResueltoPorUserId = resueltoPorUserId;
+            request.ResueltoPorNombre = resueltoPorNombre;
+            request.ResueltoAt = DateTime.UtcNow;
+            request.MotivoDecision = string.IsNullOrWhiteSpace(motivo) ? "Solicitud rechazada" : motivo.Trim();
+            request.UpdatedBy = resueltoPorNombre;
+            request.UpdatedAt = DateTime.UtcNow;
+
+            await _unitOfWork.CobroEstadoChangeRequests.UpdateAsync(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            var cobro = await _cobroRepository.GetByIdAsync(request.CobroId)
+                ?? throw new InvalidOperationException("No se encontró el cobro asociado");
+
+            var updatedRequest = await _unitOfWork.CobroEstadoChangeRequests.GetByIdAsync(request.Id)
+                ?? throw new InvalidOperationException("No se pudo recuperar la solicitud actualizada");
+
+            return new CobroChangeRequestActionResultDto
+            {
+                Request = MapRequestToDto(updatedRequest),
+                Cobro = _mapper.Map<CobroDto>(cobro)
+            };
+        }
+
         public async Task<CobroDto> CancelarCobroAsync(int id, string? motivo = null)
         {
             var cobro = await _cobroRepository.GetByIdAsync(id);
@@ -250,6 +399,7 @@ namespace Application.Services
             cobro.UpdatedBy = "Sistema";
 
             await _cobroRepository.UpdateAsync(cobro);
+            await _unitOfWork.SaveChangesAsync();
             return _mapper.Map<CobroDto>(cobro);
         }
 
@@ -437,6 +587,30 @@ namespace Application.Services
                 "QUINCENAL" or "BIWEEKLY" or "15 DIAS" => fecha.AddDays(15),
                 "SEMANAL" or "WEEKLY" or "WEEK" or "SEMANA" => fecha.AddDays(7),
                 _ => fecha.AddMonths(1) // Por defecto mensual
+            };
+        }
+
+        private static CobroEstadoChangeRequestDto MapRequestToDto(CobroEstadoChangeRequest request)
+        {
+            return new CobroEstadoChangeRequestDto
+            {
+                Id = request.Id,
+                CobroId = request.CobroId,
+                NumeroRecibo = request.Cobro?.NumeroRecibo ?? string.Empty,
+                NumeroPoliza = request.Cobro?.NumeroPoliza ?? string.Empty,
+                ClienteNombreCompleto = request.Cobro?.ClienteNombreCompleto ?? string.Empty,
+                EstadoActual = request.EstadoActual,
+                EstadoSolicitado = request.EstadoSolicitado,
+                EstadoSolicitud = request.EstadoSolicitud,
+                MotivoSolicitud = request.MotivoSolicitud,
+                MotivoDecision = request.MotivoDecision,
+                SolicitadoPorUserId = request.SolicitadoPorUserId,
+                SolicitadoPorNombre = request.SolicitadoPorNombre,
+                SolicitadoPorEmail = request.SolicitadoPorEmail,
+                ResueltoPorUserId = request.ResueltoPorUserId,
+                ResueltoPorNombre = request.ResueltoPorNombre,
+                CreatedAt = request.CreatedAt,
+                ResueltoAt = request.ResueltoAt
             };
         }
     }

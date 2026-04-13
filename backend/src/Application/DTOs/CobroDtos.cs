@@ -53,4 +53,42 @@ namespace Application.DTOs
     {
         public string? Motivo { get; set; }
     }
+
+    public class SolicitarCambioEstadoCobroDto
+    {
+        public EstadoCobro EstadoSolicitado { get; set; }
+        public string? Motivo { get; set; }
+    }
+
+    public class ResolverCambioEstadoCobroDto
+    {
+        public string? Motivo { get; set; }
+    }
+
+    public class CobroEstadoChangeRequestDto
+    {
+        public int Id { get; set; }
+        public int CobroId { get; set; }
+        public string NumeroRecibo { get; set; } = string.Empty;
+        public string NumeroPoliza { get; set; } = string.Empty;
+        public string ClienteNombreCompleto { get; set; } = string.Empty;
+        public EstadoCobro EstadoActual { get; set; }
+        public EstadoCobro EstadoSolicitado { get; set; }
+        public EstadoSolicitudCambioCobro EstadoSolicitud { get; set; }
+        public string? MotivoSolicitud { get; set; }
+        public string? MotivoDecision { get; set; }
+        public int SolicitadoPorUserId { get; set; }
+        public string SolicitadoPorNombre { get; set; } = string.Empty;
+        public string SolicitadoPorEmail { get; set; } = string.Empty;
+        public int? ResueltoPorUserId { get; set; }
+        public string? ResueltoPorNombre { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? ResueltoAt { get; set; }
+    }
+
+    public class CobroChangeRequestActionResultDto
+    {
+        public CobroEstadoChangeRequestDto Request { get; set; } = new();
+        public CobroDto Cobro { get; set; } = new();
+    }
 }

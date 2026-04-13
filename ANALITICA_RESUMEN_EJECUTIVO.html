@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SINSEG — Analítica de Datos: Resumen Ejecutivo</title>
+  <style>
+    :root {
+      --primary:   #0f172a;
+      --accent:    #3b82f6;
+      --accent2:   #06b6d4;
+      --surface:   #1e293b;
+      --border:    #334155;
+      --text:      #e2e8f0;
+      --muted:     #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--primary);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      padding: 2rem 1rem 4rem;
+    }
+    .page { max-width: 900px; margin: 0 auto; }
+
+    header {
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    header h1 { font-size: 1.9rem; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    header h1 span { color: var(--accent2); }
+    header p.subtitle { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+    .intro {
+      background: var(--surface);
+      border-left: 4px solid var(--accent2);
+      border-radius: 0 8px 8px 0;
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 2.5rem;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+    .intro strong { color: #fff; }
+
+    .module {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 1.6rem;
+      overflow: hidden;
+    }
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .module-badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+    .module-badge.m0  { background: #7c3aed; }
+    .module-badge.m1  { background: #0369a1; }
+    .module-badge.m2  { background: #047857; }
+    .module-badge.m3  { background: #b91c1c; }
+    .module-badge.m4  { background: #c2410c; }
+    .module-badge.m5  { background: #0f766e; }
+    .module-badge.m6  { background: #1d4ed8; }
+    .module-badge.m7  { background: #7e22ce; }
+    .module-badge.m8  { background: #0e7490; }
+    .module-badge.m9  { background: #be185d; }
+    .module-badge.m14 { background: #b45309; }
+
+    .module-title { font-size: 1rem; font-weight: 600; color: #f1f5f9; }
+    .module-title small {
+      display: block;
+      font-weight: 400;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 1px;
+    }
+    .module-body {
+      padding: 1.1rem 1.4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 640px) { .module-body { grid-template-columns: 1fr; } }
+
+    .value-block {
+      background: #111827;
+      border-radius: 8px;
+      padding: 0.9rem 1rem;
+    }
+    .value-block .label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 0.5rem;
+    }
+    .value-block.convencional .label { color: var(--muted); }
+    .value-block.obvio .label { color: var(--accent2); }
+    .value-block p { font-size: 0.88rem; color: #cbd5e1; line-height: 1.6; }
+    .value-block p em {
+      color: #fff;
+      font-style: normal;
+      font-weight: 600;
+      background: rgba(59,130,246,0.15);
+      padding: 0 3px;
+      border-radius: 3px;
+    }
+
+    .synthesis { margin-top: 2.5rem; }
+    .synthesis h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th {
+      text-align: left;
+      padding: 0.6rem 1rem;
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 0.7rem 1rem; border-bottom: 1px solid #1e293b; color: #cbd5e1; vertical-align: top; }
+    td:first-child { font-weight: 700; color: #fff; white-space: nowrap; }
+    tr:hover td { background: rgba(255,255,255,0.03); }
+
+    footer {
+      margin-top: 2.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+    @media print {
+      body { background: #fff; color: #000; }
+      .module { border: 1px solid #ccc; page-break-inside: avoid; }
+      .value-block { background: #f8fafc; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <h1>SINSEG — <span>Analítica de Datos</span>: Resumen Ejecutivo</h1>
+    <p class="subtitle">Abril 2026 &nbsp;·&nbsp; Sistema de brokeraje de seguros &nbsp;·&nbsp; Costa Rica</p>
+  </header>
+
+  <div class="intro">
+    Un broker no fabrica seguros — <strong>vende tiempo, confianza y conocimiento</strong>. La analítica transforma los datos de operación diaria (cobros, pólizas, reclamos, emails) en ventaja competitiva concreta: saber antes que el cliente que su póliza va a caducar, saber antes que el contador que el flujo de caja del próximo mes será bajo, y saber antes que la gerencia que un agente está al borde del agotamiento.
+  </div>
+
+  <!-- M0 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m0">M0</span>
+      <div class="module-title">Dashboard Ejecutivo <small>La "señal vital" del negocio</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Vista única con 23 KPIs en tiempo real, cinco gráficos interactivos y un panel de alertas proactivas con código de colores. Cualquier gerente puede ver cómo va el mes sin llamar a nadie.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>Las <em>alertas proactivas</em> son el verdadero diferenciador. El sistema no espera que alguien consulte — avisa automáticamente: cobros vencidos &gt;30 días, pólizas por caducar en 15 días, reclamos críticos sin asignar. Cada alerta no atendida es dinero medible: una póliza no renovada a tiempo es prima perdida para siempre.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M1 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m1">M1</span>
+      <div class="module-title">Analítica de Cobros <small>Donde vive el flujo de caja</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Siete visualizaciones: curva mensual esperado vs cobrado, aging report, métodos de pago, proyección de cash flow a 3 meses, heatmap de horarios, top 10 deudores y rendimiento por agente. Saber cuánto se debe y quién lo debe.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>El <em>heatmap de horarios de pago</em> (7 días × 24 horas) revela cuándo paga el cliente costarricense y permite sincronizar recordatorios con esos momentos exactos, sin enviar un solo correo adicional. El <em>Aging Report</em> de 5 colores es también herramienta contable: el segmento +90 días debe pasar a provisión de incobrables — dato que hoy no existe visualmente para nadie.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M2 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m2">M2</span>
+      <div class="module-title">Analítica de Pólizas <small>Radiografía del portafolio</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Seis vistas: distribución por aseguradora/tipo/modalidad/frecuencia, radar comparativo, timeline de vencimientos a 12 meses, análisis de retención/churn, histograma de prima y mapa de concentración de riesgo.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>El <em>radar comparativo de aseguradoras</em> cruza 5 dimensiones simultáneas (prima, volumen, tasa de reclamos, tasa de cobro, antigüedad) — argumento visual para renegociar comisiones. El <em>mapa de concentración de riesgo</em> detecta sobre-exposición: 60 % de cartera en una aseguradora puede hundir el negocio ante un cambio regulatorio.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M3 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m3">M3</span>
+      <div class="module-title">Analítica de Reclamos <small>Cumplimiento, costos y reputación</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Siete visualizaciones: funnel por etapa, SLA compliance, loss ratio por aseguradora, tiempos de resolución, heatmap estacional, análisis monto reclamado vs aprobado y rendimiento por agente.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>El <em>Loss Ratio por aseguradora</em> (monto aprobado / prima total) expone carteras no rentables: un ratio de 85 % vs benchmark 50 % significa que el broker asume costos operativos sin retorno. El <em>SLA compliance</em> tiene dimensión legal: los plazos son regulados por SUGESE y el incumplimiento deriva en multas. El módulo convierte eso en un semáforo visible antes de que ocurra.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M4 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m4">M4</span>
+      <div class="module-title">Analítica de Cotizaciones <small>El embudo de ventas</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Cinco visualizaciones: funnel de conversión, velocidad de cierre, pipeline de valor, análisis de cotizaciones perdidas y ticket promedio por tipo de seguro × modalidad.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>La <em>velocidad de conversión</em> + desviación estándar permite alertas automáticas: cualquier cotización que supere µ + 2σ días sin movimiento recibe seguimiento. Esto implementa un CRM de ventas sin necesitar Salesforce. El <em>pipeline de valor</em> proyecta prima anual de todo lo pendiente — número concreto para forecast ante aseguradoras.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M5 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m5">M5</span>
+      <div class="module-title">Analítica de Comunicaciones <small>El canal medido</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Cinco análisis: tasa de entrega por tipo, volumen temporal, heatmap de horario óptimo, correlación email→cobro y cobertura de notificaciones.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>La <em>correlación email → cobro</em> cuantifica el ROI del canal en dinero real recuperado, no en "aperturas". Si el 45 % paga en &lt;3 días tras recibir email y solo el 12 % paga sin él, el canal tiene retorno demostrable. Ese argumento es vendible para cualquier decisión de inversión tecnológica futura.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M6 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m6">M6</span>
+      <div class="module-title">Analítica Operacional <small>El equipo como sistema</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Cinco vistas: heatmap de productividad por agente (12 semanas), distribución de carga de reclamos, sesiones del chat IA, actividad de usuarios y tiempos de respuesta del sistema.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>La <em>detección de concentración crítica</em> (un agente con ≥ 40 % de reclamos activos) es riesgo operacional real: si ese agente renuncia, el SLA de medio portafolio colapsa. El <em>análisis del chat IA</em> revela fricción repetitiva: si el 30 % de sesiones pregunta lo mismo, la solución es documentación, no más respuestas del chat.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M7 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m7">M7</span>
+      <div class="module-title">Analítica Predictiva <small>Ver el futuro con los datos del pasado</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Cinco modelos estadísticos ligeros: score de riesgo de morosidad, predicción estacional de reclamos, detección de anomalías en cobros, lead scoring de renovación y forecast de prima con intervalo de confianza al 90 %.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>El <em>score de morosidad</em> (0–100) puede integrarse en la política de descuentos: score ≥ 80 no necesita incentivo para pagar; score &lt; 30, sí. El <em>lead scoring de renovación</em> concentra el esfuerzo donde hay mayor probabilidad + mayor ticket. El <em>forecast con IC 90 %</em> da un rango realista — no un número puntual falso — para compromisos ante aseguradoras.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M8 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m8">M8</span>
+      <div class="module-title">Reportes Exportables <small>La inteligencia que sale del sistema</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Cuatro reportes en PDF/Excel generados bajo demanda o automáticamente el día 1 de cada mes: cartera por aseguradora, morosidad, SLA de reclamos y estado del portafolio.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>El reporte mensual automático crea un <em>artefacto de gobernanza</em>: registro histórico de cómo estaba el negocio cada mes. Con 12 meses acumulados, la empresa tiene evidencia estructurada para auditorías, negociación con aseguradoras y argumentación ante inversores o bancos. Es la diferencia entre un broker que "siente" que creció y uno que puede <em>demostrarlo con números</em>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M9 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m9">M9</span>
+      <div class="module-title">Cliente 360° <small>La ficha completa del asegurado</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Vista unificada buscable por cédula o nombre: pólizas activas/inactivas, últimos 20 cobros, reclamos históricos, LTV, prima mensual activa, score de lealtad (0–100), score de riesgo (0–100) con semáforo Verde/Amarillo/Rojo y gráfica del LTV acumulado mes a mes.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>El <em>score de lealtad</em> permite decidir en segundos si vale ofrecer un descuento de retención o si el cliente ya es fiel por convicción. El <em>score de riesgo</em> identifica candidatos a cobro preventivo antes de que escalen. El <em>LTV</em> (cobrado − reclamado) responde la pregunta que ningún broker mediano puede contestar sin una hoja de cálculo: ¿este cliente vale la pena?</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- M14 -->
+  <div class="module">
+    <div class="module-header">
+      <span class="module-badge m14">M14</span>
+      <div class="module-title">Agenda Inteligente <small>El día del agente, priorizado</small></div>
+    </div>
+    <div class="module-body">
+      <div class="value-block convencional">
+        <div class="label">Valor convencional</div>
+        <p>Lista de tareas diaria automática en 5 secciones con código de colores: cobros vencidos, pólizas que vencen hoy/mañana, reclamos críticos activos, leads calientes (score ≥ 50, vencen en 7 días) y cotizaciones sin movimiento &gt; 5 días. Cada ítem enlaza directamente al registro.</p>
+      </div>
+      <div class="value-block obvio">
+        <div class="label">Valor fuera de lo obvio</div>
+        <p>La <em>ordenación por valor de cartera</em> en cobros vencidos asegura que si el agente solo puede hacer 5 llamadas hoy, llamará a los 5 clientes con mayor prima acumulada — maximiza el dinero recuperado por hora trabajada. Los <em>leads calientes</em> convierten el análisis predictivo de M7 en una acción concreta de hoy. En la práctica, es un CRM de prioridades sin necesitar ningún CRM externo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYNTHESIS TABLE -->
+  <div class="synthesis">
+    <h2>Síntesis estratégica</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Dimensión</th>
+          <th>Lo que da la analítica</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Liquidez</td><td>M1 + M7.5: forecast de cash flow con intervalo de confianza</td></tr>
+        <tr><td>Retención</td><td>M2.4 + M7.4: churn detectado y leads priorizados</td></tr>
+        <tr><td>Riesgo legal</td><td>M3.2: SLA de reclamos monitoreado en tiempo real</td></tr>
+        <tr><td>Rentabilidad</td><td>M3.3 + M5.4: loss ratio y ROI del canal email medidos</td></tr>
+        <tr><td>Productividad</td><td>M6.1 + M6.2 + M14: carga equitativa, agentes priorizados por valor</td></tr>
+        <tr><td>Crecimiento</td><td>M4.3 + M8: pipeline de ventas y evidencia histórica</td></tr>
+        <tr><td>Conocimiento del cliente</td><td>M9: LTV, scores de lealtad/riesgo, historial unificado</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    La analítica no cambia lo que hace el broker — cambia la velocidad y precisión con la que toma decisiones.
+  </footer>
+
+</div>
+</body>
+</html>
+
+## Por qué importa la analítica en un broker de seguros
+
+Un broker no fabrica seguros — **vende tiempo, confianza y conocimiento**. La analítica transforma los datos de operación diaria (cobros, pólizas, reclamos, emails) en ventaja competitiva concreta: saber antes que el cliente que su póliza va a caducar, saber antes que el contador que el flujo de caja del próximo mes será bajo, y saber antes que la gerencia que un agente está al borde del agotamiento. A continuación, los nueve módulos implementados y lo que significan para el negocio.
+
+---
+
+## M0 · Dashboard Ejecutivo — La "señal vital" del negocio
+
+**Qué es:** Vista única con 23 KPIs en tiempo real, cinco gráficos interactivos y un panel de alertas proactivas con código de colores (rojo/naranja/amarillo/verde).
+
+**Valor convencional:** Cualquier gerente puede ver cómo va el mes sin llamar a nadie.
+
+**Valor fuera de lo obvio:** Las alertas proactivas son el verdadero diferenciador. El sistema *no espera que alguien consulte* — avisa automáticamente: cobros vencidos sin gestión > 30 días, pólizas por caducar en 15 días, reclamos críticos sin asignar. Esto convierte el software en un *asistente activo*, no en un repositorio pasivo. Cada alerta no atendida es dinero medible: una póliza no renovada a tiempo es prima perdida para siempre.
+
+---
+
+## M1 · Analítica de Cobros — Donde vive el flujo de caja
+
+**Qué es:** Siete visualizaciones sobre el ciclo de cobro: curva mensual esperado vs cobrado, aging report (antigüedad de deuda), métodos de pago, proyección de cash flow a 3 meses, heatmap de horarios de pago, top 10 deudores y rendimiento por agente.
+
+**Valor convencional:** Saber cuánto se debe y quién lo debe.
+
+**Valor fuera de lo obvio:** El *heatmap de horarios de pago* (7 días × 24 horas) revela cuándo paga realmente el cliente costarricense — y permite sincronizar los recordatorios de cobro con esos momentos exactos, aumentando la tasa de conversión del email sin enviar un solo correo adicional. El *Aging Report* con cinco colores por antigüedad es también una herramienta contable: el segmento +90 días debe pasar a provisión de incobrables, y ese dato hoy no existe de forma visual para nadie en la empresa.
+
+---
+
+## M2 · Analítica de Pólizas — Radiografía del portafolio
+
+**Qué es:** Seis vistas sobre la composición del portafolio: distribución por aseguradora/tipo/modalidad/frecuencia, radar comparativo de aseguradoras, timeline de vencimientos a 12 meses, análisis de retención/churn, histograma de prima y mapa de concentración de riesgo.
+
+**Valor convencional:** Saber qué pólizas hay y cuántas.
+
+**Valor fuera de lo obvio:** El *radar comparativo de aseguradoras* cruza cinco dimensiones simultáneas (prima promedio, volumen, tasa de reclamos, tasa de cobro, antigüedad). Esto le da al broker un argumento visual y objetivo para renegociar comisiones — o para dejar de recomendar activamente a una aseguradora con bajo rendimiento. El *mapa de concentración de riesgo* detecta sobre-exposición: si el 60 % de la cartera está en una sola aseguradora, un cambio regulatorio en ella puede hundir el negocio completo.
+
+---
+
+## M3 · Analítica de Reclamos — Cumplimiento, costos y reputación
+
+**Qué es:** Siete visualizaciones sobre el ciclo de reclamos: funnel por etapa, cumplimiento de SLA, loss ratio por aseguradora, tiempos de resolución, heatmap estacional, análisis monto reclamado vs aprobado y rendimiento por agente.
+
+**Valor convencional:** Saber cuántos reclamos hay abiertos.
+
+**Valor fuera de lo obvio:** El *Loss Ratio por aseguradora* (monto aprobado / prima total de esa cartera) expone algo que pocas empresas traquean: si INS tiene un loss ratio de 85 % mientras el benchmark de mercado es 50 %, esa cartera no es rentable — y el broker está asumiendo costos operativos de reclamos sin ganancia real. El *SLA compliance* tiene dimensión legal en Costa Rica: los plazos de respuesta son regulados, y un reclamo crítico resuelto fuera de plazo puede derivar en multas de SUGESE. El módulo convierte eso en un semáforo visible antes de que ocurra.
+
+---
+
+## M4 · Analítica de Cotizaciones — El embudo de ventas
+
+**Qué es:** Cinco visualizaciones sobre conversión: funnel desde cotización hasta póliza activa, velocidad de cierre, valor del pipeline, análisis de cotizaciones perdidas y ticket promedio por tipo de seguro × modalidad.
+
+**Valor convencional:** Ver cuántas cotizaciones se convirtieron en ventas.
+
+**Valor fuera de lo obvio:** La *velocidad de conversión* (histograma de días hasta cierre) más la desviación estándar permite definir un umbral automático de alerta: cualquier cotización que supere µ + 2σ días sin movimiento recibe una notificación de seguimiento. Esto implementa un CRM de ventas sin necesitar Salesforce. El *pipeline de valor* proyecta la prima anual de todo lo pendiente, dándole a la dirección un número concreto para hablar de forecast de ingresos con las aseguradoras.
+
+---
+
+## M5 · Analítica de Comunicaciones — El canal medido
+
+**Qué es:** Cinco análisis sobre el canal de email: tasa de entrega por tipo, volumen temporal, heatmap de horario óptimo, correlación email→cobro (ROI), y cobertura de notificaciones.
+
+**Valor convencional:** Saber si los emails llegaron.
+
+**Valor fuera de lo obvio:** La *correlación email → cobro* es probablemente el cálculo más valioso del módulo. Mide cuántos cobros vencidos que recibieron un recordatorio por email se pagaron en < 3 días, 4-7 días, > 7 días, o nunca — versus cobros sin email. Ese porcentaje de uplift cuantifica el ROI del canal en dinero real recuperado, y justifica (o no justifica) la inversión en el servicio de email. Si el 45 % paga en < 3 días después del email y solo el 12 % paga sin él, el sistema de email tiene un retorno demostrable. Ese argumento es vendible internamente para cualquier decisión de inversión tecnológica futura.
+
+---
+
+## M6 · Analítica Operacional — El equipo como sistema
+
+**Qué es:** Cinco vistas sobre el rendimiento interno: heatmap de productividad por agente (12 semanas), distribución de carga de reclamos, sesiones del chat IA, actividad de usuarios y tiempos de respuesta del sistema.
+
+**Valor convencional:** Ver si los agentes están trabajando.
+
+**Valor fuera de lo obvio:** La *detección de concentración crítica* (un agente con ≥ 40 % de reclamos activos) no es solo un dato de RRHH — es un riesgo operacional real. Si ese agente enferma o renuncia, el SLA de medio portafolio colapsa. El *análisis del chat IA* revela las preguntas más frecuentes de los agentes: si el 30 % de sesiones pregunta lo mismo, esa fricción debería resolverse con documentación o automatización, no con respuestas repetitivas del chat.
+
+---
+
+## M7 · Analítica Predictiva — Ver el futuro con los datos del pasado
+
+**Qué es:** Cinco modelos estadísticos ligeros (sin framework de ML): score de riesgo de morosidad, predicción estacional de reclamos, detección de anomalías en cobros, lead scoring de renovación y forecast de prima mensual con intervalo de confianza.
+
+**Valor convencional:** Tener proyecciones.
+
+**Valor fuera de lo obvio:** El *score de morosidad por póliza* (0-100, calculado por cinco factores ponderados) puede integrarse directamente en la decisión de ofrecer descuento por pago anticipado: un cliente con score ≥ 80 no necesita incentivo para pagar; uno con score < 30 sí. El *lead scoring de renovación* prioriza las 20 pólizas más valiosas a renovar *esta semana*, concentrando el esfuerzo del agente donde hay mayor probabilidad de retención y mayor ticket. El *forecast con intervalo de confianza al 90 %* da a la dirección un rango realista (no un número puntual falso) para compromisos frente a las aseguradoras.
+
+---
+
+## M8 · Reportes Exportables — La inteligencia que sale del sistema
+
+**Qué es:** Cuatro reportes en PDF/Excel generados bajo demanda o automáticamente el día 1 de cada mes: cartera por aseguradora, morosidad, SLA de reclamos y estado del portafolio.
+
+**Valor convencional:** Tener documentos para presentar en reuniones.
+
+**Valor fuera de lo obvio:** La automatización del reporte mensual de portafolio (generado y enviado por email a los Admin el día 1 de cada mes) elimina una tarea administrativa recurrente y crea un *artefacto de gobernanza*: hay registro histórico de cómo estaba el negocio cada mes. Con 12 meses de reportes acumulados, la empresa tiene información estructurada para auditorías, para negociar con aseguradoras y para argumentar su crecimiento frente a posibles inversores o frente a bancos. Es la diferencia entre un broker que "siente" que creció y uno que puede *demostrarlo con números*.
+
+---
+
+## M9 · Cliente 360° — La ficha completa del asegurado
+
+**Qué es:** Vista unificada de un cliente buscable por cédula o nombre. Consolida en una sola pantalla: todas sus pólizas activas/inactivas, últimos 20 cobros con estado y días vencidos, reclamos históricos, LTV (valor de vida del cliente), prima mensual activa, score de lealtad (0–100) y score de riesgo (0–100) con categoría semafórica Verde/Amarillo/Rojo. Incluye una mini-gráfica del LTV acumulado mes a mes.
+
+**Valor convencional:** Ver todo lo de un cliente en un lugar sin abrir cuatro pantallas distintas.
+
+**Valor fuera de lo obvio:** Los dos scores calculados automáticamente son los elementos más potentes. El *score de lealtad* (basado en antigüedad, historial de pago puntual, número de pólizas, ausencia de reclamos) permite al agente decidir en segundos si vale la pena ofrecer un descuento de retención o si el cliente ya es fiel por convicción. El *score de riesgo* identifica clientes con alta tasa de vencidos o cobros sin gestión > 30 días — candidatos a cobro preventivo antes de que escalen. El LTV calculado (`total cobrado − total reclamado`) responde en tiempo real la pregunta que ningún broker de tamaño mediano puede contestar hoy sin una hoja de cálculo: *¿este cliente vale la pena?*
+
+---
+
+## M14 · Agenda Inteligente — El día del agente, priorizado
+
+**Qué es:** Vista personal del agente que genera automáticamente su lista de tareas del día, ordenada por urgencia en cinco secciones con código de colores: (1) cobros vencidos de los clientes con mayor prima acumulada, (2) pólizas que vencen hoy o mañana, (3) reclamos críticos/altos activos, (4) "leads calientes" con score ≥ 50 por vencer en 7 días, (5) cotizaciones pendientes sin movimiento por más de 5 días. Cada ítem incluye un enlace directo al registro correspondiente.
+
+**Valor convencional:** Tener una lista de pendientes organizada.
+
+**Valor fuera de lo obvio:** La *ordenación por valor de cartera* en la sección de cobros vencidos es la decisión más inteligente del módulo: si el agente solo puede hacer cinco llamadas de cobranza hoy, el sistema le asegura que llamará primero a los cinco clientes con mayor prima acumulada, no al que llegó primero a la lista. Esto maximiza el dinero recuperado por hora trabajada. Los "leads calientes" aplican el mismo scoring de M7.4 (póliza pronto a vencer + sin cobros vencidos + múltiples pólizas + email activo) pero cruzado con la urgencia del *día*, convirtiendo el análisis predictivo en una acción concreta de hoy. La Agenda Inteligente es, en la práctica, un CRM de prioridades sin necesitar ningún CRM externo.
+
+---
+
+## Síntesis estratégica
+
+| Dimensión | Lo que da la analítica |
+|-----------|------------------------|
+| **Liquidez** | M1 + M7.5: forecast de cash flow con IC |
+| **Retención** | M2.4 + M7.4: churn detectado y leads priorizados |
+| **Riesgo legal** | M3.2: SLA de reclamos monitoreado en tiempo real |
+| **Rentabilidad** | M3.3 + M5.4: loss ratio y ROI del canal email medidos |
+| **Productividad** | M6.1 + M6.2 + M14: carga equitativa, agentes priorizados por valor |
+| **Crecimiento** | M4.3 + M8: pipeline de ventas y evidencia histórica |
+| **Conocimiento del cliente** | M9: LTV, scores de lealtad/riesgo, historial unificado |
+
+> La analítica no cambia lo que hace el broker — cambia la velocidad y precisión con la que toma decisiones.

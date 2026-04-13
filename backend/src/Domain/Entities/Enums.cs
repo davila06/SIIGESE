@@ -38,6 +38,13 @@ namespace Domain.Entities
         Cancelado
     }
 
+    public enum EstadoSolicitudCambioCobro
+    {
+        Pendiente,
+        Aprobada,
+        Rechazada
+    }
+
     public enum MetodoPago
     {
         NoDefinido,

@@ -5,7 +5,7 @@
       <mat-icon class="page-header__icon">people</mat-icon>
       <div>
         <h1 class="page-header__title">Dashboard Operacional</h1>
-        <span class="page-header__subtitle">Carga de agentes, actividad de usuarios y mÃ©tricas de IA Chat</span>
+        <span class="page-header__subtitle">Carga de agentes, actividad de usuarios y métricas de IA Chat</span>
       </div>
     </div>
     <button mat-stroked-button (click)="load()" [disabled]="loading">
@@ -44,14 +44,14 @@
         <mat-icon>chat</mat-icon>
         <div>
           <span class="kpi-mini__value">{{ data.chatIA.mensajesPorSesionPromedio | number:'1.1-1' }}</span>
-          <span class="kpi-mini__label">Mensajes / sesion</span>
+          <span class="kpi-mini__label">Mensajes / sesión</span>
         </div>
       </div>
       <div class="kpi-mini kpi-mini--success">
         <mat-icon>check_circle</mat-icon>
         <div>
           <span class="kpi-mini__value">{{ data.chatIA.tasaSatisfaccion | number:'1.1-1' }}%</span>
-          <span class="kpi-mini__label">Satisfaccion chat</span>
+          <span class="kpi-mini__label">Satisfacción chat</span>
         </div>
       </div>
       <div class="kpi-mini kpi-mini--warning">
@@ -67,7 +67,7 @@
     <div class="grid-2col section-gap">
 
       <app-chart-card title="Carga de Trabajo por Agente" icon="assignment_ind"
-        subtitle="Reclamos activos vs criticos">
+        subtitle="Reclamos activos vs críticos">
         <ngx-charts-bar-vertical-2d [animations]="false"
           [results]="cargaChart"
           [scheme]="colorScheme"
@@ -79,7 +79,7 @@
       </app-chart-card>
 
       <app-chart-card title="Score SLA por Agente" icon="grade"
-        tooltip="Porcentaje de reclamos dentro del tiempo lÃ­mite SLA por agente">
+        tooltip="Porcentaje de reclamos dentro del tiempo límite SLA por agente">
         <ngx-charts-bar-horizontal [animations]="false"
           [results]="slaAgenteChart"
           [scheme]="slaColors"
@@ -108,7 +108,7 @@
           <td mat-cell *matCellDef="let a">{{ a.reclamosAltaPrioridad }}</td>
         </ng-container>
         <ng-container matColumnDef="criticos">
-          <th mat-header-cell *matHeaderCellDef>Criticos</th>
+          <th mat-header-cell *matHeaderCellDef>Críticos</th>
           <td mat-cell *matCellDef="let a">{{ a.reclamosCriticos }}</td>
         </ng-container>
         <ng-container matColumnDef="acciones12w">
@@ -185,11 +185,11 @@
           <td mat-cell *matCellDef="let u">{{ u.accionesAyer | number }}</td>
         </ng-container>
         <ng-container matColumnDef="ultimo">
-          <th mat-header-cell *matHeaderCellDef>Ultimo login</th>
+          <th mat-header-cell *matHeaderCellDef>Último login</th>
           <td mat-cell *matCellDef="let u">{{ u.ultimoLogin ? (u.ultimoLogin | date:'dd/MM/yyyy HH:mm') : 'Sin registro' }}</td>
         </ng-container>
         <ng-container matColumnDef="dias">
-          <th mat-header-cell *matHeaderCellDef>Dias sin acceso</th>
+          <th mat-header-cell *matHeaderCellDef>Días sin acceso</th>
           <td mat-cell *matCellDef="let u">
             <span class="chip" [class]="accesoClass(u.diasSinAcceso)">{{ u.diasSinAcceso }}</span>
           </td>

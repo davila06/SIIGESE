@@ -18,6 +18,7 @@
       </div>
       <button mat-icon-button class="new-chat-btn"
               (click)="createNewSession()"
+              aria-label="Crear nueva conversación"
               matTooltip="Nueva conversación">
         <mat-icon>edit_square</mat-icon>
       </button>
@@ -100,6 +101,7 @@
     <!-- ── Top bar ──────────────────────────────────────────────────────── -->
     <header class="chat-topbar">
       <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle"
+              aria-label="Mostrar u ocultar panel de conversaciones"
               [matTooltip]="isSidebarOpen ? 'Ocultar panel' : 'Mostrar panel'">
         <mat-icon>{{ isSidebarOpen ? 'menu_open' : 'menu' }}</mat-icon>
       </button>
@@ -121,7 +123,7 @@
       </div>
 
       <div class="topbar-actions">
-        <button mat-icon-button matTooltip="Nueva conversación" (click)="createNewSession()">
+        <button mat-icon-button matTooltip="Nueva conversación" aria-label="Crear nueva conversación" (click)="createNewSession()">
           <mat-icon>add_comment</mat-icon>
         </button>
       </div>
@@ -323,12 +325,14 @@
                 <button mat-icon-button class="reaction-btn"
                         [class.active-like]="message.reactionScore === 1"
                         (click)="reactToMessage(message, 1)"
+                        [attr.aria-label]="'Marcar respuesta como útil en mensaje ' + message.id"
                         matTooltip="Útil">
                   <mat-icon>thumb_up</mat-icon>
                 </button>
                 <button mat-icon-button class="reaction-btn"
                         [class.active-dislike]="message.reactionScore === -1"
                         (click)="reactToMessage(message, -1)"
+                        [attr.aria-label]="'Marcar respuesta como no útil en mensaje ' + message.id"
                         matTooltip="No útil">
                   <mat-icon>thumb_down</mat-icon>
                 </button>
@@ -380,6 +384,7 @@
                   class="send-btn"
                   [disabled]="!messageControl.value?.trim() || isSendingMessage"
                   (click)="sendMessage()"
+              aria-label="Enviar mensaje"
                   [matTooltip]="isSendingMessage ? 'Enviando...' : 'Enviar mensaje (Enter)'">
             <mat-spinner *ngIf="isSendingMessage" diameter="20"></mat-spinner>
             <mat-icon *ngIf="!isSendingMessage">send</mat-icon>

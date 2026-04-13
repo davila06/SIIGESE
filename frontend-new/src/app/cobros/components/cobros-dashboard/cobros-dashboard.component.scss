@@ -139,6 +139,24 @@
     overflow: hidden;
   }
 
+  .dashboard-header-compact {
+    margin-bottom: 12px;
+    padding: 8px 8px 0;
+  }
+
+  .section-title {
+    font-size: 1.15rem !important;
+    margin: 0 !important;
+  }
+
+  .empty-state-compact {
+    padding: 16px 8px;
+  }
+
+  .btn-inline-gap {
+    margin-left: 8px;
+  }
+
   // ── Tabs ────────────────────────────────────────────────────────────────────
   .cobros-tabs {
     ::ng-deep .mat-mdc-tab-header {
@@ -366,6 +384,14 @@
     }
   }
 
+  .btn-estado {
+    color: var(--color-text-secondary) !important;
+
+    &:hover {
+      background-color: var(--color-surface-2);
+    }
+  }
+
   .btn-vencido {
     color: var(--color-warning) !important;
     &:hover { background-color: var(--color-warning-bg); }
@@ -374,6 +400,43 @@
   .btn-reactivar {
     color: var(--color-success) !important;
     &:hover { background-color: var(--color-success-bg); }
+  }
+
+  // ── Estado menu (overlay) ─────────────────────────────────────────────────
+  // Scoped panel class avoids collisions with global menu overrides.
+  ::ng-deep .cobro-estado-menu-panel.mat-mdc-menu-panel {
+    min-width: 210px !important;
+    background-color: var(--color-surface) !important;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md) !important;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  ::ng-deep .cobro-estado-menu-panel .mat-mdc-menu-content {
+    padding: 6px 0 !important;
+  }
+
+  ::ng-deep .cobro-estado-menu-panel .mat-mdc-menu-item {
+    min-height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px;
+    line-height: 1.2 !important;
+    white-space: nowrap;
+  }
+
+  ::ng-deep .cobro-estado-menu-panel .mat-mdc-menu-item mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+  }
+
+  ::ng-deep .cobro-estado-menu-panel .menu-estado-item-label {
+    font-size: 14px;
+    color: var(--color-text-primary);
   }
 
   // ── Semáforo column ───────────────────────────────────────────────────────────
@@ -398,6 +461,19 @@
     &.semaforo-amarillo { background-color: var(--status-pending); box-shadow: 0 0 6px rgba(255,230,0,0.5); }
     &.semaforo-rojo    { background-color: var(--status-overdue); box-shadow: 0 0 6px rgba(255,32,96,0.5); }
     &.semaforo-gris    { background-color: var(--status-cancelled); }
+  }
+
+  .estado-actual-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+  }
+
+  .estado-actual-dot {
+    width: 10px;
+    height: 10px;
+    box-shadow: none;
   }
 
   // ── No data row ──────────────────────────────────────────────────────────────

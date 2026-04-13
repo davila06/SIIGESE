@@ -8,6 +8,7 @@ import { AuthService } from './services/auth.service';
 import { User } from './interfaces/user.interface';
 import { TitleService } from './services/title.service';
 import { ThemeService } from './services/theme.service';
+import { parseBackendDate } from './shared/constants/currency.constants';
 
 interface AnalyticsMenuItem {
   label: string;
@@ -518,6 +519,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     return moduleMap[segments[0]] || 'IADS IAsistente Digital de Servicios';
+  }
+
+  formatLastLogin(lastLoginAt?: string | null): string {
+    const parsed = parseBackendDate(lastLoginAt);
+    if (!parsed) {
+      return 'Sin registro';
+    }
+
+    return new Intl.DateTimeFormat('es-CR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }).format(parsed);
   }
 
   private loadAnalyticsExpandedState(): boolean {

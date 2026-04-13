@@ -14,6 +14,7 @@ namespace Domain.Interfaces
         IReclamoRepository Reclamos { get; }
         ICotizacionRepository Cotizaciones { get; }
         IEmailLogRepository EmailLogs { get; }
+        ICobroEstadoChangeRequestRepository CobroEstadoChangeRequests { get; }
 
         Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();

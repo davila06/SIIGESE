@@ -271,6 +271,7 @@
                   mat-icon-button 
                   color="primary"
                   (click)="verDetalle(reclamo)"
+                  [attr.aria-label]="'Ver detalle del reclamo ' + reclamo.numeroReclamo"
                   matTooltip="Ver detalle">
                   <mat-icon>visibility</mat-icon>
                 </button>
@@ -280,6 +281,7 @@
                   color="accent"
                   *ngIf="reclamo.estado !== EstadoReclamo.Cerrado"
                   (click)="cambiarEstado(reclamo)"
+                  [attr.aria-label]="'Cambiar estado del reclamo ' + reclamo.numeroReclamo"
                   matTooltip="Cambiar estado">
                   <mat-icon>edit</mat-icon>
                 </button>
@@ -289,6 +291,7 @@
                   color="warn"
                   *ngIf="!reclamo.usuarioAsignadoNombre"
                   (click)="asignarReclamo(reclamo)"
+                  [attr.aria-label]="'Asignar responsable al reclamo ' + reclamo.numeroReclamo"
                   matTooltip="Asignar reclamo">
                   <mat-icon>person_add</mat-icon>
                 </button>
@@ -296,6 +299,7 @@
                 <button 
                   mat-icon-button 
                   (click)="subirDocumento(reclamo)"
+                  [attr.aria-label]="'Subir documento al reclamo ' + reclamo.numeroReclamo"
                   matTooltip="Subir documento">
                   <mat-icon>attach_file</mat-icon>
                 </button>

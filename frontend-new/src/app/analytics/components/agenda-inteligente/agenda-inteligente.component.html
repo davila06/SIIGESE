@@ -117,6 +117,7 @@
 
             <div class="item-actions">
               <a mat-icon-button [routerLink]="item.navLink" *ngIf="item.navLink"
+                 [attr.aria-label]="'Ir a detalle de ' + item.tipo"
                  [matTooltip]="'Ir a ' + item.tipo" color="primary">
                 <mat-icon>arrow_forward</mat-icon>
               </a>

@@ -38,9 +38,10 @@ export interface CobroGenerado {
 
 export enum EstadoCobro {
   Pendiente = 0,
-  Cobrado = 1,
-  Vencido = 2,
-  Cancelado = 3
+  Pagado = 1,
+  Cobrado = 2,
+  Vencido = 3,
+  Cancelado = 4
 }
 
 export enum MetodoPago {
@@ -77,10 +78,51 @@ export interface CobroStats {
   montoPorVencer: number;
 }
 
+export enum EstadoSolicitudCambioCobro {
+  Pendiente = 0,
+  Aprobada = 1,
+  Rechazada = 2
+}
+
+export interface SolicitarCambioEstadoCobroRequest {
+  estadoSolicitado: EstadoCobro;
+  motivo?: string;
+}
+
+export interface ResolverCambioEstadoCobroRequest {
+  motivo?: string;
+}
+
+export interface CobroEstadoChangeRequest {
+  id: number;
+  cobroId: number;
+  numeroRecibo: string;
+  numeroPoliza: string;
+  clienteNombreCompleto: string;
+  estadoActual: EstadoCobro;
+  estadoSolicitado: EstadoCobro;
+  estadoSolicitud: EstadoSolicitudCambioCobro;
+  motivoSolicitud?: string;
+  motivoDecision?: string;
+  solicitadoPorUserId: number;
+  solicitadoPorNombre: string;
+  solicitadoPorEmail: string;
+  resueltoPorUserId?: number;
+  resueltoPorNombre?: string;
+  createdAt: Date;
+  resueltoAt?: Date;
+}
+
+export interface CobroChangeRequestActionResult {
+  request: CobroEstadoChangeRequest;
+  cobro: Cobro;
+}
+
 // Funciones helper para convertir enums a labels
 export function getEstadoCobroLabel(estado: EstadoCobro): string {
   switch (estado) {
     case EstadoCobro.Pendiente: return 'Pendiente';
+    case EstadoCobro.Pagado: return 'Cobrado';
     case EstadoCobro.Cobrado: return 'Cobrado';
     case EstadoCobro.Vencido: return 'Vencido';
     case EstadoCobro.Cancelado: return 'Cancelado';
@@ -95,6 +137,15 @@ export function getMetodoPagoLabel(metodo: MetodoPago): string {
     case MetodoPago.Cheque: return 'Cheque';
     case MetodoPago.TarjetaCredito: return 'Tarjeta de Crédito';
     case MetodoPago.TarjetaDebito: return 'Tarjeta de Débito';
+    default: return 'Desconocido';
+  }
+}
+
+export function getEstadoSolicitudLabel(estado: EstadoSolicitudCambioCobro): string {
+  switch (estado) {
+    case EstadoSolicitudCambioCobro.Pendiente: return 'Pendiente';
+    case EstadoSolicitudCambioCobro.Aprobada: return 'Aprobada';
+    case EstadoSolicitudCambioCobro.Rechazada: return 'Rechazada';
     default: return 'Desconocido';
   }
 }

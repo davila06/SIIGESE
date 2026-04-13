@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.SignalR;
 using Application.DTOs;
 using Application.Interfaces;
 using Domain.Entities;
+using Domain.Interfaces;
+using System.Security.Claims;
 using System.Linq;
+using WebApi.Hubs;
 
 namespace WebApi.Controllers
 {
@@ -15,11 +19,19 @@ namespace WebApi.Controllers
     {
         private readonly ICobrosService _cobrosService;
         private readonly ILogger<CobrosController> _logger;
+        private readonly IUserRepository _userRepository;
+        private readonly IHubContext<ChatHub> _hubContext;
 
-        public CobrosController(ICobrosService cobrosService, ILogger<CobrosController> logger)
+        public CobrosController(
+            ICobrosService cobrosService,
+            ILogger<CobrosController> logger,
+            IUserRepository userRepository,
+            IHubContext<ChatHub> hubContext)
         {
             _cobrosService = cobrosService;
             _logger = logger;
+            _userRepository = userRepository;
+            _hubContext = hubContext;
         }
 
         /// <summary>
@@ -263,6 +275,7 @@ namespace WebApi.Controllers
         /// Actualiza un cobro
         /// </summary>
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CobroDto>> Update(int id, [FromBody] ActualizarCobroDto request)
         {
             try
@@ -292,9 +305,153 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
+        /// Solicita cambio de estado para un cobro (usuarios no admin)
+        /// </summary>
+        [HttpPost("{id}/estado-change-requests")]
+        public async Task<ActionResult<CobroEstadoChangeRequestDto>> SolicitarCambioEstado(int id, [FromBody] SolicitarCambioEstadoCobroDto request)
+        {
+            try
+            {
+                if (User.IsInRole("Admin"))
+                {
+                    return BadRequest("Los usuarios Admin pueden cambiar estado directamente.");
+                }
+
+                var userId = GetCurrentUserId();
+                var userName = GetCurrentUserName();
+                var userEmail = GetCurrentUserEmail();
+
+                var created = await _cobrosService.SolicitarCambioEstadoAsync(
+                    id,
+                    request.EstadoSolicitado,
+                    request.Motivo,
+                    userId,
+                    userName,
+                    userEmail);
+
+                await NotificarAdminsSolicitudPendienteAsync(created, userName);
+                return Ok(created);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creando solicitud de cambio de estado para cobro {CobroId}", id);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Lista solicitudes pendientes de cambio de estado (solo Admin)
+        /// </summary>
+        [HttpGet("estado-change-requests/pendientes")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<CobroEstadoChangeRequestDto>>> GetSolicitudesPendientes()
+        {
+            try
+            {
+                var solicitudes = await _cobrosService.GetSolicitudesPendientesAsync();
+                return Ok(solicitudes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo solicitudes pendientes de cambio de estado");
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Lista solicitudes de cambio realizadas por el usuario autenticado
+        /// </summary>
+        [HttpGet("estado-change-requests/mis-solicitudes")]
+        public async Task<ActionResult<IEnumerable<CobroEstadoChangeRequestDto>>> GetMisSolicitudes()
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                var solicitudes = await _cobrosService.GetSolicitudesPorSolicitanteAsync(userId);
+                return Ok(solicitudes);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error obteniendo solicitudes del usuario autenticado");
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Aprueba una solicitud de cambio de estado (solo Admin)
+        /// </summary>
+        [HttpPost("estado-change-requests/{requestId}/aprobar")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<CobroChangeRequestActionResultDto>> AprobarSolicitud(int requestId, [FromBody] ResolverCambioEstadoCobroDto? request = null)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                var userName = GetCurrentUserName();
+                var result = await _cobrosService.AprobarSolicitudCambioEstadoAsync(requestId, userId, userName, request?.Motivo);
+
+                await NotificarSolicitanteResolucionAsync(result.Request, true);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error aprobando solicitud de cambio de estado {RequestId}", requestId);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
+        /// Rechaza una solicitud de cambio de estado (solo Admin)
+        /// </summary>
+        [HttpPost("estado-change-requests/{requestId}/rechazar")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<CobroChangeRequestActionResultDto>> RechazarSolicitud(int requestId, [FromBody] ResolverCambioEstadoCobroDto? request = null)
+        {
+            try
+            {
+                var userId = GetCurrentUserId();
+                var userName = GetCurrentUserName();
+                var result = await _cobrosService.RechazarSolicitudCambioEstadoAsync(requestId, userId, userName, request?.Motivo);
+
+                await NotificarSolicitanteResolucionAsync(result.Request, false);
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error rechazando solicitud de cambio de estado {RequestId}", requestId);
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        /// <summary>
         /// Registra el pago de un cobro
         /// </summary>
         [HttpPost("registrar-pago")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CobroDto>> RegistrarPago([FromBody] RegistrarCobroRequestDto request)
         {
             try
@@ -353,6 +510,7 @@ namespace WebApi.Controllers
         /// Registra el pago de un cobro (endpoint REST por ID)
         /// </summary>
         [HttpPut("{id}/registrar")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CobroDto>> RegistrarPagoById(int id, [FromBody] RegistrarCobroRequestDto request)
         {
             try
@@ -390,6 +548,7 @@ namespace WebApi.Controllers
         /// Cancela un cobro por ID
         /// </summary>
         [HttpPut("{id}/cancelar")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<CobroDto>> CancelarById(int id, [FromBody] CancelarCobroDto? request = null)
         {
             try
@@ -511,6 +670,97 @@ namespace WebApi.Controllers
             {
                 _logger.LogError(ex, "Error enviando email para cobro con ID {Id}", id);
                 return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        private int GetCurrentUserId()
+        {
+            var value = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(value, out var userId))
+            {
+                throw new UnauthorizedAccessException("No se encontró el ID del usuario autenticado");
+            }
+
+            return userId;
+        }
+
+        private string GetCurrentUserName()
+        {
+            return User.FindFirst(ClaimTypes.Name)?.Value
+                ?? User.Identity?.Name
+                ?? "Usuario";
+        }
+
+        private string GetCurrentUserEmail()
+        {
+            return User.FindFirst(ClaimTypes.Email)?.Value
+                ?? "sin-email@sinseg.local";
+        }
+
+        private async Task NotificarAdminsSolicitudPendienteAsync(CobroEstadoChangeRequestDto request, string requestedBy)
+        {
+            try
+            {
+                var admins = await _userRepository.GetUsersWithRolesAsync();
+                var adminIds = admins
+                    .Where(u => u.UserRoles.Any(ur => ur.Role.Name == "Admin"))
+                    .Select(u => u.Id)
+                    .Distinct()
+                    .ToList();
+
+                var payload = new
+                {
+                    type = "cobro-change-request-created",
+                    requestId = request.Id,
+                    cobroId = request.CobroId,
+                    numeroRecibo = request.NumeroRecibo,
+                    numeroPoliza = request.NumeroPoliza,
+                    estadoActual = request.EstadoActual.ToString(),
+                    estadoSolicitado = request.EstadoSolicitado.ToString(),
+                    requestedBy,
+                    createdAt = request.CreatedAt,
+                    message = $"Nueva solicitud de cambio de estado para cobro {request.NumeroRecibo}."
+                };
+
+                var tasks = adminIds.Select(adminId =>
+                    _hubContext.Clients.Group($"user-{adminId}")
+                        .SendAsync("CobroEstadoChangeRequestNotification", payload));
+
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "No se pudo enviar push a admins para solicitud {RequestId}", request.Id);
+            }
+        }
+
+        private async Task NotificarSolicitanteResolucionAsync(CobroEstadoChangeRequestDto request, bool aprobada)
+        {
+            try
+            {
+                var payload = new
+                {
+                    type = aprobada ? "cobro-change-request-approved" : "cobro-change-request-rejected",
+                    requestId = request.Id,
+                    cobroId = request.CobroId,
+                    numeroRecibo = request.NumeroRecibo,
+                    estadoActual = request.EstadoActual.ToString(),
+                    estadoSolicitado = request.EstadoSolicitado.ToString(),
+                    estadoSolicitud = request.EstadoSolicitud.ToString(),
+                    resolvedBy = request.ResueltoPorNombre,
+                    resolvedAt = request.ResueltoAt,
+                    reason = request.MotivoDecision,
+                    message = aprobada
+                        ? $"Tu solicitud para el cobro {request.NumeroRecibo} fue aprobada."
+                        : $"Tu solicitud para el cobro {request.NumeroRecibo} fue rechazada."
+                };
+
+                await _hubContext.Clients.Group($"user-{request.SolicitadoPorUserId}")
+                    .SendAsync("CobroEstadoChangeRequestNotification", payload);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "No se pudo enviar push de resolución para solicitud {RequestId}", request.Id);
             }
         }
     }

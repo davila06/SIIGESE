@@ -127,7 +127,7 @@
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let d">
-              <a mat-icon-button [routerLink]="['/cobros/detalle', d.cobroId]" matTooltip="Ver cobro">
+              <a mat-icon-button [routerLink]="['/cobros/detalle', d.cobroId]" [attr.aria-label]="'Ver detalle del cobro del cliente ' + d.clienteNombre" matTooltip="Ver cobro">
                 <mat-icon>open_in_new</mat-icon>
               </a>
             </td>

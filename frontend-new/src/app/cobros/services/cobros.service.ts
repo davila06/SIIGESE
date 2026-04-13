@@ -10,8 +10,11 @@ import {
   RegistrarCobroRequest, 
   CobroStats,
   EstadoCobro,
-  MetodoPago,
-  GenerarCobrosResult
+  GenerarCobrosResult,
+  CobroEstadoChangeRequest,
+  SolicitarCambioEstadoCobroRequest,
+  ResolverCambioEstadoCobroRequest,
+  CobroChangeRequestActionResult
 } from '../interfaces/cobro.interface';
 
 @Injectable({
@@ -20,7 +23,7 @@ import {
 export class CobrosService {
   private readonly apiUrl = `${environment.apiUrl}/cobros`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   /** Normaliza un cobro recibido del API: convierte DateTime.MinValue ("0001-...") en undefined */
   private normalizeCobro(cobro: Cobro): Cobro {
@@ -28,6 +31,25 @@ export class CobrosService {
     return {
       ...cobro,
       fechaCobro: (fechaCobro && fechaCobro.getFullYear() > 1) ? fechaCobro : undefined
+    };
+  }
+
+  private normalizeRequest(request: CobroEstadoChangeRequest): CobroEstadoChangeRequest {
+    return {
+      ...request,
+      createdAt: parseBackendDate(request.createdAt) ?? new Date(request.createdAt),
+      resueltoAt: request.resueltoAt ? (parseBackendDate(request.resueltoAt) ?? new Date(request.resueltoAt)) : undefined
+    };
+  }
+
+  private normalizeStats(stats: any): CobroStats {
+    return {
+      totalPendientes: Number(stats?.totalPendientes ?? stats?.cobrosPendientes ?? 0),
+      totalCobrados: Number(stats?.totalCobrados ?? stats?.cobrosPagados ?? 0),
+      totalVencidos: Number(stats?.totalVencidos ?? stats?.cobrosVencidos ?? 0),
+      montoTotalPendiente: Number(stats?.montoTotalPendiente ?? 0),
+      montoTotalCobrado: Number(stats?.montoTotalCobrado ?? 0),
+      montoPorVencer: Number(stats?.montoPorVencer ?? 0)
     };
   }
 
@@ -69,7 +91,9 @@ export class CobrosService {
 
   // Obtener estadísticas de cobros
   getCobroStats(): Observable<CobroStats> {
-    return this.http.get<CobroStats>(`${this.apiUrl}/stats`);
+    return this.http.get<any>(`${this.apiUrl}/stats`).pipe(
+      map(stats => this.normalizeStats(stats))
+    );
   }
 
   // Obtener cobros por frecuencia de póliza (MENSUAL, TRIMESTRAL, SEMESTRAL, ANUAL, etc.)
@@ -127,5 +151,46 @@ export class CobrosService {
   // Cambiar estado de un cobro directamente
   cambiarEstadoCobro(id: number, estado: EstadoCobro): Observable<Cobro> {
     return this.http.put<Cobro>(`${this.apiUrl}/${id}`, { id, estado });
+  }
+
+  // Solicitar cambio de estado (no-admin)
+  solicitarCambioEstadoCobro(id: number, body: SolicitarCambioEstadoCobroRequest): Observable<CobroEstadoChangeRequest> {
+    return this.http.post<CobroEstadoChangeRequest>(`${this.apiUrl}/${id}/estado-change-requests`, body).pipe(
+      map(request => this.normalizeRequest(request))
+    );
+  }
+
+  // Listar solicitudes pendientes (admin)
+  getSolicitudesPendientesCambioEstado(): Observable<CobroEstadoChangeRequest[]> {
+    return this.http.get<CobroEstadoChangeRequest[]>(`${this.apiUrl}/estado-change-requests/pendientes`).pipe(
+      map(items => items.map(item => this.normalizeRequest(item)))
+    );
+  }
+
+  // Listar mis solicitudes (usuario autenticado)
+  getMisSolicitudesCambioEstado(): Observable<CobroEstadoChangeRequest[]> {
+    return this.http.get<CobroEstadoChangeRequest[]>(`${this.apiUrl}/estado-change-requests/mis-solicitudes`).pipe(
+      map(items => items.map(item => this.normalizeRequest(item)))
+    );
+  }
+
+  aprobarSolicitudCambioEstado(requestId: number, body?: ResolverCambioEstadoCobroRequest): Observable<CobroChangeRequestActionResult> {
+    return this.http.post<CobroChangeRequestActionResult>(`${this.apiUrl}/estado-change-requests/${requestId}/aprobar`, body ?? {}).pipe(
+      map(result => ({
+        ...result,
+        request: this.normalizeRequest(result.request),
+        cobro: this.normalizeCobro(result.cobro)
+      }))
+    );
+  }
+
+  rechazarSolicitudCambioEstado(requestId: number, body?: ResolverCambioEstadoCobroRequest): Observable<CobroChangeRequestActionResult> {
+    return this.http.post<CobroChangeRequestActionResult>(`${this.apiUrl}/estado-change-requests/${requestId}/rechazar`, body ?? {}).pipe(
+      map(result => ({
+        ...result,
+        request: this.normalizeRequest(result.request),
+        cobro: this.normalizeCobro(result.cobro)
+      }))
+    );
   }
 }

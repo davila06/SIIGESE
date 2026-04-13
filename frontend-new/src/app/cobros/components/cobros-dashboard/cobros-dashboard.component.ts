@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, AfterViewInit, QueryList, ViewChildren, inject } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy, AfterViewInit, QueryList, ViewChildren, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -16,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
 import { 
   Cobro, 
   CobroStats, 
@@ -23,7 +24,11 @@ import {
   EstadoCobro, 
   MetodoPago,
   getEstadoCobroLabel,
-  getMetodoPagoLabel
+  getMetodoPagoLabel,
+  CobroEstadoChangeRequest,
+  EstadoSolicitudCambioCobro,
+  ResolverCambioEstadoCobroRequest,
+  getEstadoSolicitudLabel as getEstadoSolicitudLabelText
 } from '../../interfaces/cobro.interface';
 import { CobrosService } from '../../services/cobros.service';
 import { CURRENCY_CONSTANTS, MONEDAS_SISTEMA, formatCurrencyByCode, parseBackendDate } from '../../../shared/constants/currency.constants';
@@ -31,6 +36,9 @@ import { ExportService, ExportColumn } from '../../../shared/services/export.ser
 import { ExportDialogComponent, ExportDialogData, ExportDialogResult } from '../../../shared/components/export-dialog/export-dialog.component';
 import { LoggingService } from '../../../services/logging.service';
 import { CountUpDirective } from '../../../shared/directives/count-up.directive';
+import { AuthService } from '../../../services/auth.service';
+import { CobrosPushService } from '../../services/cobros-push.service';
+import { Subject, takeUntil } from 'rxjs';
 
 export interface PeriodicidadTab {
   label: string;
@@ -61,23 +69,24 @@ export interface PeriodicidadTab {
     MatTooltipModule,
     MatTabsModule,
     MatBadgeModule,
+    MatMenuModule,
     CountUpDirective
   ],
   templateUrl: './cobros-dashboard.component.html',
   styleUrls: ['./cobros-dashboard.component.scss']
 })
-export class CobrosDashboardComponent implements OnInit, AfterViewInit {
+export class CobrosDashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
   @ViewChildren(MatSort) sorts!: QueryList<MatSort>;
 
   displayedColumns: string[] = [
     'semaforo',
+    'estadoActual',
     'acciones',
     'numeroPoliza',
     'cliente',
     'fechaVencimiento',
-    'montoTotal',
-    'estado'
+    'montoTotal'
   ];
 
   // ─── Tabs de periodicidad ───────────────────────────────────────────────────
@@ -97,6 +106,12 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   filtroEstadoMap: Map<number, number | null> = new Map(); // tabIndex → estado filter
   searchValueMap: Map<number, string> = new Map();         // tabIndex → search string
   emailSendingMap: Map<number, boolean> = new Map();       // cobro.id → sending state
+  solicitudesPendientes: CobroEstadoChangeRequest[] = [];
+  misSolicitudes: CobroEstadoChangeRequest[] = [];
+  loadingSolicitudes = false;
+  solicitudActionLoadingMap: Map<number, boolean> = new Map();
+  esAdmin = false;
+  EstadoSolicitudCambioCobro = EstadoSolicitudCambioCobro;
 
   // Enums para el template
   EstadoCobro = EstadoCobro;
@@ -105,6 +120,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   // Constantes de moneda para el template
   CURRENCY_CONSTANTS = CURRENCY_CONSTANTS;
   MONEDAS_SISTEMA = MONEDAS_SISTEMA;
+  private readonly destroy$ = new Subject<void>();
 
   private readonly logger = inject(LoggingService);
 
@@ -113,17 +129,28 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     private readonly snackBar: MatSnackBar,
     private readonly router: Router,
     private readonly dialog: MatDialog,
-    private readonly exportService: ExportService
+    private readonly exportService: ExportService,
+    private readonly authService: AuthService,
+    private readonly cobrosPushService: CobrosPushService
   ) { 
   }
 
   ngOnInit(): void {
+    this.esAdmin = this.authService.isAdmin();
     this.loadStats();
     this.loadTab(0); // Cargar el primer tab (Próximos) al inicio
+    this.loadSolicitudes();
+    this.startPushNotifications();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.cobrosPushService.stop();
   }
 
   ngAfterViewInit(): void {
-    // Paginators/sorts se asignan dinámicamente en loadTab
+    this.assignPaginatorSort(this.selectedTabIndex);
   }
 
   // ─── Carga de tabs ──────────────────────────────────────────────────────────
@@ -216,7 +243,11 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
     this.filtroEstadoMap.set(tabIndex, estado);
     const tab = this.periodicidadTabs[tabIndex];
     const base = tab.cobros;
-    tab.dataSource.data = estado === null ? base : base.filter(c => c.estado === estado);
+    tab.dataSource.data = estado === null
+      ? base
+      : (estado === EstadoCobro.Cobrado
+          ? base.filter(c => c.estado === EstadoCobro.Cobrado || c.estado === EstadoCobro.Pagado)
+          : base.filter(c => c.estado === estado));
     if (tab.dataSource.paginator) tab.dataSource.paginator.firstPage();
   }
 
@@ -289,6 +320,11 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   }
 
   cambiarEstado(cobro: Cobro, nuevoEstado: EstadoCobro): void {
+    if (!this.esAdmin) {
+      this.solicitarCambioEstado(cobro, nuevoEstado);
+      return;
+    }
+
     this.cobrosService.cambiarEstadoCobro(cobro.id, nuevoEstado).subscribe({
       next: () => {
         this.showMessage('Estado actualizado correctamente');
@@ -299,6 +335,157 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
         this.showMessage('Error al cambiar estado: ' + (err?.error?.message || err?.message || 'Error desconocido'));
       }
     });
+  }
+
+  private solicitarCambioEstado(cobro: Cobro, nuevoEstado: EstadoCobro): void {
+    import('../solicitar-cambio-estado-dialog/solicitar-cambio-estado-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.SolicitarCambioEstadoDialogComponent, {
+        width: '520px',
+        disableClose: true,
+        data: {
+          cobro,
+          estadoActualLabel: this.getEstadoLabel(cobro.estado),
+          estadoSolicitadoLabel: this.getEstadoLabel(nuevoEstado)
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((motivo: string | undefined) => {
+        if (motivo === undefined) {
+          return;
+        }
+
+        this.cobrosService.solicitarCambioEstadoCobro(cobro.id, {
+          estadoSolicitado: nuevoEstado,
+          motivo
+        }).subscribe({
+          next: () => {
+            this.showMessage('Solicitud enviada a aprobación de un admin');
+            this.loadSolicitudes();
+          },
+          error: (err) => {
+            this.showMessage('Error al solicitar cambio: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+          }
+        });
+      });
+    });
+  }
+
+  loadSolicitudes(): void {
+    this.loadingSolicitudes = true;
+
+    const request$ = this.esAdmin
+      ? this.cobrosService.getSolicitudesPendientesCambioEstado()
+      : this.cobrosService.getMisSolicitudesCambioEstado();
+
+    request$.subscribe({
+      next: (items) => {
+        if (this.esAdmin) {
+          this.solicitudesPendientes = items;
+        } else {
+          this.misSolicitudes = items;
+        }
+
+        this.loadingSolicitudes = false;
+      },
+      error: () => {
+        this.loadingSolicitudes = false;
+      }
+    });
+  }
+
+  aprobarSolicitud(request: CobroEstadoChangeRequest): void {
+    this.setSolicitudActionLoading(request.id, true);
+    this.cobrosService.aprobarSolicitudCambioEstado(request.id, { motivo: 'Aprobada por administrador' }).subscribe({
+      next: () => {
+        this.showMessage('Solicitud aprobada y estado actualizado');
+        this.setSolicitudActionLoading(request.id, false);
+        this.loadSolicitudes();
+        this.reloadCurrentTab();
+        this.loadStats();
+      },
+      error: (err) => {
+        this.setSolicitudActionLoading(request.id, false);
+        this.showMessage('Error al aprobar solicitud: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+      }
+    });
+  }
+
+  rechazarSolicitud(request: CobroEstadoChangeRequest): void {
+    import('../solicitar-cambio-estado-dialog/solicitar-cambio-estado-dialog.component').then(m => {
+      const dialogRef = this.dialog.open(m.SolicitarCambioEstadoDialogComponent, {
+        width: '520px',
+        disableClose: true,
+        data: {
+          cobro: null,
+          estadoActualLabel: 'Rechazo',
+          estadoSolicitadoLabel: 'Solicitud',
+          title: 'Motivo de rechazo',
+          description: 'Ingresa el motivo del rechazo para auditoría y retroalimentación del solicitante.',
+          submitLabel: 'Rechazar solicitud'
+        }
+      });
+
+      dialogRef.afterClosed().subscribe((motivo: string | undefined) => {
+        if (!motivo) {
+          return;
+        }
+
+        this.setSolicitudActionLoading(request.id, true);
+        const body: ResolverCambioEstadoCobroRequest = { motivo };
+        this.cobrosService.rechazarSolicitudCambioEstado(request.id, body).subscribe({
+          next: () => {
+            this.showMessage('Solicitud rechazada');
+            this.setSolicitudActionLoading(request.id, false);
+            this.loadSolicitudes();
+          },
+          error: (err) => {
+            this.setSolicitudActionLoading(request.id, false);
+            this.showMessage('Error al rechazar solicitud: ' + (err?.error?.message || err?.message || 'Error desconocido'));
+          }
+        });
+      });
+    });
+  }
+
+  isSolicitudActionLoading(requestId: number): boolean {
+    return this.solicitudActionLoadingMap.get(requestId) ?? false;
+  }
+
+  private setSolicitudActionLoading(requestId: number, loading: boolean): void {
+    this.solicitudActionLoadingMap.set(requestId, loading);
+  }
+
+  getEstadoSolicitudLabel(estado: EstadoSolicitudCambioCobro): string {
+    return getEstadoSolicitudLabelText(estado);
+  }
+
+  private startPushNotifications(): void {
+    this.cobrosPushService.start();
+    this.cobrosPushService.notification$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        if (!event) {
+          return;
+        }
+
+        this.showMessage(event.message);
+        this.loadSolicitudes();
+        if (this.esAdmin) {
+          this.reloadCurrentTab();
+          this.loadStats();
+        }
+      });
+  }
+
+  getEstadosDisponibles(cobro: Cobro): EstadoCobro[] {
+    const estados = [
+      EstadoCobro.Pendiente,
+      EstadoCobro.Cobrado,
+      EstadoCobro.Vencido,
+      EstadoCobro.Cancelado
+    ];
+
+    return estados.filter(estado => estado !== cobro.estado);
   }
 
   getSemaforoClass(cobro: Cobro): string {
@@ -389,6 +576,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   getEstadoIcon(estado: EstadoCobro): string {
     switch (estado) {
       case EstadoCobro.Pendiente:  return 'schedule';
+      case EstadoCobro.Pagado:     return 'check_circle';
       case EstadoCobro.Cobrado:    return 'check_circle';
       case EstadoCobro.Vencido:    return 'warning';
       case EstadoCobro.Cancelado:  return 'cancel';
@@ -399,6 +587,7 @@ export class CobrosDashboardComponent implements OnInit, AfterViewInit {
   getEstadoBadgeClass(estado: EstadoCobro): string {
     switch (estado) {
       case EstadoCobro.Pendiente:  return 'badge-pendiente';
+      case EstadoCobro.Pagado:     return 'badge-cobrado';
       case EstadoCobro.Cobrado:    return 'badge-cobrado';
       case EstadoCobro.Vencido:    return 'badge-vencido';
       case EstadoCobro.Cancelado:  return 'badge-cancelado';
